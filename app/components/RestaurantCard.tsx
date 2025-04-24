@@ -1,4 +1,4 @@
-import { Restaurant } from '@/types'
+import { Restaurant } from '../types'
 import { MapPin, Clock, DollarSign, ExternalLink, ChefHat } from 'lucide-react'
 
 interface RestaurantCardProps {
