@@ -42,35 +42,37 @@ const cuisineMenuItems: { [key: string]: any[] } = {
   ]
 }
 
-// Common menu selectors for different website structures
+// Enhanced menu selectors for better scraping
 const menuSelectors = [
-  // Wen Cheng II specific selectors
-  '.menu-list',           // Common in Chinese restaurant websites
-  '.dish-list',          // Alternative for Chinese restaurants
-  '.food-menu',          // Generic menu container
-  '.menu-category',      // Menu sections
-  '.menu-section',       // Alternative section selector
+  // Generic menu containers
+  '.menu',
+  '#menu',
+  '[class*="menu"]',
+  '[id*="menu"]',
+  // Common menu section patterns
+  '.menu-section',
+  '.category',
+  '.food-category',
   // Common menu item patterns
   '.menu-item',
-  '.menu__item',
-  '.food-item',
   '.dish',
-  '.item',
-  // Specific restaurant platforms
-  '.restaurant-menu-item',
-  '.menu-section-item',
-  '.menu-card',
-  '.menu-list-item',
-  // Generic patterns
-  'article',
-  '.product',
-  '.menu-content',
-  // Additional Chinese restaurant patterns
-  '.chinese-menu',
-  '.asian-menu',
-  '.noodle-dishes',
-  '.rice-dishes',
-  '.soup-dishes'
+  '.food-item',
+  // Price patterns
+  '.price',
+  '.item-price',
+  '[class*="price"]',
+  // Description patterns
+  '.description',
+  '.item-description',
+  '[class*="description"]',
+  // Common restaurant website patterns
+  '.food-menu',
+  '.restaurant-menu',
+  '.online-menu',
+  // Dynamic content patterns
+  '[data-menu-item]',
+  '[data-dish]',
+  '[data-food-item]'
 ]
 
 // Price patterns to look for
@@ -316,49 +318,42 @@ async function getMenuFromMultipleSources(restaurant: any): Promise<MenuData> {
     };
   }
 
-  // Try OpenMenu first if API key is available
-  if (OPENMENU_API_KEY) {
-    console.log('Trying OpenMenu API...');
-    const openMenuData = await getOpenMenuData(restaurant.name, restaurant.address);
-    if (openMenuData) {
-      console.log('Found menu data from OpenMenu');
-      return openMenuData;
-    }
-    console.log('No menu found in OpenMenu');
-  }
-  
-  // Try each source in order
-  const sources = [
-    {
-      name: 'structured',
-      getData: () => extractStructuredData(restaurant.website)
-    },
-    {
-      name: 'website',
-      getData: () => extractMenuFromWebsite(restaurant.website)
-    }
-  ];
-  
-  // Try each source until we get menu items
-  for (const source of sources) {
-    console.log(`Trying ${source.name} data source...`);
-    const menuItems = await source.getData();
-    if (menuItems.length > 0) {
-      console.log(`Found ${menuItems.length} menu items from ${source.name} source`);
+  try {
+    // Try structured data first
+    console.log('Attempting to extract structured data...');
+    const structuredMenuItems = await extractStructuredData(restaurant.website);
+    if (structuredMenuItems.length > 0) {
+      console.log(`Found ${structuredMenuItems.length} menu items from structured data`);
       return {
-        menu: menuItems,
-        source: source.name
+        menu: structuredMenuItems,
+        source: 'website'
       };
     }
-    console.log(`No menu items found from ${source.name} source`);
+
+    // Try website scraping
+    console.log('Attempting to scrape website...');
+    const scrapedMenuItems = await extractMenuFromWebsite(restaurant.website);
+    if (scrapedMenuItems.length > 0) {
+      console.log(`Found ${scrapedMenuItems.length} menu items from website scraping`);
+      return {
+        menu: scrapedMenuItems,
+        source: 'website'
+      };
+    }
+
+    // Fall back to sample menu
+    console.log('No menu found from website, using sample menu');
+    return {
+      menu: cuisineMenuItems[getCuisineType(restaurant)] || cuisineMenuItems.default,
+      source: 'sample'
+    };
+  } catch (error) {
+    console.error('Error getting menu:', error);
+    return {
+      menu: cuisineMenuItems[getCuisineType(restaurant)] || cuisineMenuItems.default,
+      source: 'sample'
+    };
   }
-  
-  // If no sources provided menu items, use sample menu
-  console.log('No menu found from any source, using sample menu');
-  return {
-    menu: cuisineMenuItems[getCuisineType(restaurant)] || cuisineMenuItems.default,
-    source: 'sample'
-  };
 }
 
 async function getGooglePlaceDetails(placeId: string) {
