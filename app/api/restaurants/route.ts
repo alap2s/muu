@@ -115,6 +115,20 @@ interface Restaurant {
   googleMapsUrl?: string;
 }
 
+interface MenuItem {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  category?: string;
+  dietaryRestrictions?: string[];
+}
+
+interface MenuData {
+  menu: MenuItem[];
+  source: string;
+}
+
 async function getOpenMenuData(restaurantName: string, address: string) {
   if (!OPENMENU_API_KEY) return null
 
@@ -150,183 +164,201 @@ async function getOpenMenuData(restaurantName: string, address: string) {
   }
 }
 
-async function extractMenuFromWebsite(url: string) {
+async function extractStructuredData(url: string): Promise<MenuItem[]> {
   try {
-    console.log('Attempting to scrape menu from:', url)
+    console.log('Extracting structured data from:', url);
+    const response = await fetch(url);
+    const html = await response.text();
+    const $ = cheerio.load(html);
     
-    // Special handling for Wen Cheng website
-    if (url.includes('wenchengnoodles.com')) {
-      // Try to find the menu page URL
-      const response = await fetch(url)
-      const html = await response.text()
-      const $ = cheerio.load(html)
-      
-      // Look for the menu/food page link
-      const menuLink = $('a[href*="food"], a[href*="menu"]').first().attr('href')
-      if (menuLink) {
-        const menuUrl = menuLink.startsWith('http') ? menuLink : new URL(menuLink, url).href
-        console.log('Found menu page:', menuUrl)
-        return await scrapeWenChengMenu(menuUrl)
+    const menuItems: MenuItem[] = [];
+    
+    // Look for structured data
+    $('script[type="application/ld+json"]').each((_, element) => {
+      try {
+        const data = JSON.parse($(element).html() || '');
+        if (data.hasMenu || data['@type'] === 'Restaurant' || data.menu) {
+          if (Array.isArray(data.hasMenu)) {
+            data.hasMenu.forEach((item: any) => {
+              if (item.name && item.offers?.price) {
+                menuItems.push({
+                  id: `structured-${menuItems.length}`,
+                  name: item.name,
+                  description: item.description,
+                  price: parseFloat(item.offers.price),
+                  category: item.category,
+                  dietaryRestrictions: getDietaryRestrictions(item)
+                });
+              }
+            });
+          }
+        }
+      } catch (e) {
+        console.error('Error parsing structured data:', e);
       }
-    }
+    });
     
-    // Regular website scraping
-    const response = await fetch(url)
-    const html = await response.text()
-    console.log('Website response status:', response.status)
-    const $ = cheerio.load(html)
+    console.log('Found structured menu items:', menuItems.length);
+    return menuItems;
+  } catch (error) {
+    console.error('Error extracting structured data:', error);
+    return [];
+  }
+}
+
+function getDietaryRestrictions(item: any): string[] {
+  const restrictions: string[] = [];
+  const text = JSON.stringify(item).toLowerCase();
+  
+  if (text.includes('vegetarian')) restrictions.push('vegetarian');
+  if (text.includes('vegan')) restrictions.push('vegan');
+  if (text.includes('gluten-free') || text.includes('gluten free')) restrictions.push('gluten-free');
+  if (text.includes('spicy') || text.includes('hot')) restrictions.push('spicy');
+  
+  return restrictions;
+}
+
+async function extractMenuFromWebsite(url: string): Promise<MenuItem[]> {
+  try {
+    console.log('Attempting to scrape menu from:', url);
+    const response = await fetch(url);
+    const html = await response.text();
+    const $ = cheerio.load(html);
     
-    const menuItems: any[] = []
+    const menuItems: MenuItem[] = [];
     
     // Try each selector pattern
     for (const selector of menuSelectors) {
-      console.log('Trying selector:', selector)
-      const elements = $(selector)
-      console.log('Found elements:', elements.length)
+      console.log('Trying selector:', selector);
+      const elements = $(selector);
+      console.log('Found elements:', elements.length);
       
       elements.each((_, element) => {
-        const $element = $(element)
+        const $element = $(element);
         
-        // Extract name (try different possible locations)
-        const name = $element.find('h3, h4, .item-name, .dish-name, .title').text().trim() ||
-                    $element.find('strong, b').text().trim() ||
-                    $element.text().split('\n')[0].trim()
+        // Get text content and clean it
+        const text = $element.text().trim().replace(/\s+/g, ' ');
         
-        if (!name) {
-          console.log('No name found for element')
-          return
-        }
+        // Look for price patterns
+        let price = 0;
+        let name = '';
         
-        // Extract description
-        const description = $element.find('p, .description, .item-desc').text().trim() ||
-                          $element.find('span:not(.price)').text().trim()
-        
-        // Extract price
-        let price = 0
-        const priceText = $element.find('.price, .cost, .amount').text().trim() ||
-                         $element.text()
+        // Try different price patterns
+        const pricePatterns = [
+          /[\$€£]\s*\d+\.?\d*/,
+          /\d+\.?\d*\s*[\$€£]/,
+          /\d+[.,]\d{2}/
+        ];
         
         for (const pattern of pricePatterns) {
-          const match = priceText.match(pattern)
+          const match = text.match(pattern);
           if (match) {
-            price = parseFloat(match[0].replace(/[^0-9.]/g, ''))
-            break
+            price = parseFloat(match[0].replace(/[^\d.]/g, ''));
+            name = text.replace(match[0], '').trim();
+            break;
           }
         }
         
-        // Extract dietary restrictions
-        const restrictions: string[] = []
-        const text = $element.text().toLowerCase()
-        
-        for (const [restriction, indicators] of Object.entries(dietaryIndicators)) {
-          if (indicators.some(indicator => text.includes(indicator))) {
-            restrictions.push(restriction)
+        // If no price found in text, look for specific price elements
+        if (!price) {
+          const priceElement = $element.find('[class*="price"], [class*="cost"], .amount').first();
+          if (priceElement.length) {
+            const priceText = priceElement.text().trim();
+            const match = priceText.match(/[\$€£]?\s*\d+\.?\d*/);
+            if (match) {
+              price = parseFloat(match[0].replace(/[^\d.]/g, ''));
+              name = text.replace(priceText, '').trim();
+            }
           }
         }
         
-        // Only add if we found at least a name and price
+        // Get description
+        const description = $element.find('p, .description, [class*="desc"]').text().trim();
+        
+        // Get dietary restrictions
+        const restrictions = getDietaryRestrictions({ description: text });
+        
         if (name && price > 0) {
-          console.log('Found menu item:', { name, price, description })
           menuItems.push({
             id: `item-${menuItems.length + 1}`,
             name,
             description: description || undefined,
             price,
             dietaryRestrictions: restrictions.length > 0 ? restrictions : undefined
-          })
-        } else {
-          console.log('Skipping item - missing name or price:', { name, price })
+          });
         }
-      })
+      });
       
       // If we found items with this selector, stop trying others
       if (menuItems.length > 0) {
-        console.log('Found menu items with selector:', selector)
-        break
+        console.log('Found menu items with selector:', selector);
+        break;
       }
     }
     
-    console.log('Total menu items found:', menuItems.length)
-    return {
-      menu: menuItems,
-      source: 'website'
-    }
+    console.log('Total menu items found:', menuItems.length);
+    return menuItems;
   } catch (error) {
-    console.error('Error scraping menu from website:', error)
-    return null
+    console.error('Error scraping menu from website:', error);
+    return [];
   }
 }
 
-async function scrapeWenChengMenu(url: string) {
-  try {
-    console.log('Scraping Wen Cheng menu from:', url)
-    const response = await fetch(url)
-    const html = await response.text()
-    const $ = cheerio.load(html)
-    
-    const menuItems: any[] = []
-    
-    // Based on the website structure, look for menu items
-    $('.menu-item, .dish, .food-item').each((_, element) => {
-      const $element = $(element)
-      
-      // Extract name
-      const name = $element.find('h3, h4, .title').text().trim()
-      if (!name) return
-      
-      // Extract description
-      const description = $element.find('p, .description').text().trim()
-      
-      // Extract price
-      let price = 0
-      const priceText = $element.find('.price, .cost').text().trim()
-      const priceMatch = priceText.match(/\d+\.?\d*/)
-      if (priceMatch) {
-        price = parseFloat(priceMatch[0])
-      }
-      
-      // Extract dietary restrictions
-      const restrictions: string[] = []
-      const text = $element.text().toLowerCase()
-      if (text.includes('vegetarian') || text.includes('veg')) restrictions.push('vegetarian')
-      if (text.includes('vegan')) restrictions.push('vegan')
-      if (text.includes('spicy') || text.includes('hot')) restrictions.push('spicy')
-      
-      if (name) {
-        menuItems.push({
-          id: `item-${menuItems.length + 1}`,
-          name,
-          description: description || undefined,
-          price: price || 0,
-          dietaryRestrictions: restrictions.length > 0 ? restrictions : undefined
-        })
-      }
-    })
-    
-    // If no items found with specific selectors, try to find any text that looks like menu items
-    if (menuItems.length === 0) {
-      $('p, h3, h4').each((_, element) => {
-        const text = $(element).text().trim()
-        if (text && text.length > 3 && !text.includes('©') && !text.includes('reserved')) {
-          menuItems.push({
-            id: `item-${menuItems.length + 1}`,
-            name: text,
-            price: 0,
-            source: 'website'
-          })
-        }
-      })
-    }
-    
-    console.log('Found Wen Cheng menu items:', menuItems.length)
+async function getMenuFromMultipleSources(restaurant: any): Promise<MenuData> {
+  console.log(`Getting menu from multiple sources for: ${restaurant.name}`);
+  console.log(`Restaurant website: ${restaurant.website}`);
+  
+  if (!restaurant.website) {
+    console.log('No website available, using sample menu');
     return {
-      menu: menuItems,
-      source: 'website'
-    }
-  } catch (error) {
-    console.error('Error scraping Wen Cheng menu:', error)
-    return null
+      menu: cuisineMenuItems[getCuisineType(restaurant)] || cuisineMenuItems.default,
+      source: 'sample'
+    };
   }
+
+  // Try OpenMenu first if API key is available
+  if (OPENMENU_API_KEY) {
+    console.log('Trying OpenMenu API...');
+    const openMenuData = await getOpenMenuData(restaurant.name, restaurant.address);
+    if (openMenuData) {
+      console.log('Found menu data from OpenMenu');
+      return openMenuData;
+    }
+    console.log('No menu found in OpenMenu');
+  }
+  
+  // Try each source in order
+  const sources = [
+    {
+      name: 'structured',
+      getData: () => extractStructuredData(restaurant.website)
+    },
+    {
+      name: 'website',
+      getData: () => extractMenuFromWebsite(restaurant.website)
+    }
+  ];
+  
+  // Try each source until we get menu items
+  for (const source of sources) {
+    console.log(`Trying ${source.name} data source...`);
+    const menuItems = await source.getData();
+    if (menuItems.length > 0) {
+      console.log(`Found ${menuItems.length} menu items from ${source.name} source`);
+      return {
+        menu: menuItems,
+        source: source.name
+      };
+    }
+    console.log(`No menu items found from ${source.name} source`);
+  }
+  
+  // If no sources provided menu items, use sample menu
+  console.log('No menu found from any source, using sample menu');
+  return {
+    menu: cuisineMenuItems[getCuisineType(restaurant)] || cuisineMenuItems.default,
+    source: 'sample'
+  };
 }
 
 async function getGooglePlaceDetails(placeId: string) {
@@ -375,8 +407,7 @@ async function searchWithGooglePlaces(lat: string, lng: string, radius: number) 
     `${GOOGLE_PLACES_URL}?location=${lat},${lng}&radius=${radius}&type=restaurant&key=${GOOGLE_API_KEY}`
   )
   const data = await response.json()
-  console.log('Google Places search response:', JSON.stringify(data, null, 2))
-
+  
   if (data.status !== 'OK') {
     throw new Error('Failed to fetch from Google Places')
   }
@@ -384,26 +415,10 @@ async function searchWithGooglePlaces(lat: string, lng: string, radius: number) 
   const restaurants = await Promise.all(data.results.map(async (place: any) => {
     console.log('Processing restaurant:', place.name)
     const details = await getGooglePlaceDetails(place.place_id)
-    const cuisineType = getCuisineType(details || place)
+    const restaurant = { ...place, ...details }
     
-    let menuData = null
-    
-    // Try to get menu from website if available
-    if (details?.website) {
-      console.log('Found website for', place.name, ':', details.website)
-      menuData = await extractMenuFromWebsite(details.website)
-    } else {
-      console.log('No website found for', place.name)
-    }
-    
-    // If no menu data from website, use sample menu
-    if (!menuData) {
-      console.log('Using sample menu for', place.name)
-      menuData = {
-        menu: cuisineMenuItems[cuisineType] || cuisineMenuItems.default,
-        source: 'sample'
-      }
-    }
+    // Get menu from multiple sources
+    const menuData = await getMenuFromMultipleSources(restaurant)
 
     return {
       id: place.place_id,
@@ -498,59 +513,7 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return parseFloat((R * c).toFixed(1))
 }
 
-// Add this test function at the top of the file, after the imports
-async function testWenChengSearch() {
-  try {
-    console.log('Testing Wen Cheng search...')
-    
-    // Coordinates for Berlin (where Wen Cheng is located)
-    const lat = '52.52970739998559'
-    const lng = '13.4115627923982'
-    const radius = 500 // meters
-    
-    // Search for restaurants
-    const response = await fetch(
-      `${GOOGLE_PLACES_URL}?location=${lat},${lng}&radius=${radius}&type=restaurant&key=${GOOGLE_API_KEY}`
-    )
-    const data = await response.json()
-    
-    // Find Wen Cheng in the results
-    const wenCheng = data.results.find((place: any) => 
-      place.name.toLowerCase().includes('wen cheng') || 
-      place.name.toLowerCase().includes('wencheng')
-    )
-    
-    if (wenCheng) {
-      console.log('Found Wen Cheng:', wenCheng.name)
-      console.log('Place ID:', wenCheng.place_id)
-      
-      // Get detailed information
-      const detailsResponse = await fetch(
-        `${GOOGLE_PLACE_DETAILS_URL}?place_id=${wenCheng.place_id}&fields=website,url,price_level,types,cuisine,name,formatted_address&key=${GOOGLE_API_KEY}`
-      )
-      const detailsData = await detailsResponse.json()
-      
-      console.log('Wen Cheng details:', JSON.stringify(detailsData.result, null, 2))
-      
-      if (detailsData.result.website) {
-        console.log('Attempting to scrape menu from:', detailsData.result.website)
-        const menuData = await extractMenuFromWebsite(detailsData.result.website)
-        console.log('Menu data:', JSON.stringify(menuData, null, 2))
-      }
-    } else {
-      console.log('Wen Cheng not found in search results')
-      console.log('Search results:', data.results.map((r: any) => r.name))
-    }
-  } catch (error) {
-    console.error('Test error:', error)
-  }
-}
-
-// Modify the GET function to include the test
 export async function GET(request: Request) {
-  // Run the test first
-  await testWenChengSearch()
-  
   const { searchParams } = new URL(request.url)
   const lat = searchParams.get('lat')
   const lng = searchParams.get('lng')
