@@ -5,8 +5,11 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Menoo - Find Nearby Restaurant Menus',
-  description: 'Discover menus from restaurants near you',
+  title: 'Restaurant Menu Finder',
+  description: 'Find nearby restaurants and their menus',
+  icons: {
+    icon: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({

@@ -1,0 +1,278 @@
+{
+  "restaurants": [
+    {
+      "id": "ristorante-firenze",
+      "name": "Ristorante Firenze",
+      "address": "Florastraße 27, 13187 Berlin",
+      "coordinates": {
+        "lat": 52.56720981565345,
+        "lng": 13.403590162044386
+      },
+      "website": "https://www.firenze-ristorante.de/Speisekarte",
+      "menu": {
+        "categories": [
+          {
+            "name": "Aperitivi",
+            "items": [
+              {
+                "id": "aperitivi-1",
+                "name": "Prosecco",
+                "description": "Trocken",
+                "price": 6.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "aperitivi-2",
+                "name": "Campari Orange",
+                "description": "4cl",
+                "price": 7.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "aperitivi-3",
+                "name": "Aperol Spritz",
+                "description": "4cl",
+                "price": 7.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Insalata",
+            "items": [
+              {
+                "id": "insalata-1",
+                "name": "Insalata mista di Stagione",
+                "description": "Gemischter Salat der Saison",
+                "price": 8.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "insalata-2",
+                "name": "Insalata Pecorino",
+                "description": "Gemischter Salat mit Schafskäse",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "insalata-3",
+                "name": "Insalata di Tonno",
+                "description": "Gemischter Salat mit Thunfisch und Ei",
+                "price": 13.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "insalata-4",
+                "name": "Insalata di Polo",
+                "description": "Gemischter Salat mit Hähnchenbruststreifen und Champignons in warmer Balsamico-Essigsauce",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Antipasti",
+            "items": [
+              {
+                "id": "antipasti-1",
+                "name": "Antipasto Misto",
+                "description": "Gemischte Vorspeise vegetarisch",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "antipasti-2",
+                "name": "Antipasto Primavera",
+                "description": "Mariniertes Rinderfilet und Lachs-Carpaccio mit Zitrone, Meeresfrüchte, Olivenöl und Parmesan",
+                "price": 16.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "antipasti-3",
+                "name": "Carpaccio di Manzo",
+                "description": "Mariniertes Rinderfilet hauchdünn-geschnitten auf einem Rucolabett mit Champignons, Zitrone, Olivenöl und Parmesan",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "antipasti-4",
+                "name": "Mozzarella di Bufala",
+                "description": "Büffelmozzarella mit Kirschtomaten und frischem Basilikum",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Zuppe",
+            "items": [
+              {
+                "id": "zuppe-1",
+                "name": "Zuppa di Pomodoro",
+                "description": "Tomatencremesuppe mit Basilikum",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "zuppe-2",
+                "name": "Minestrone",
+                "description": "Gemüsesuppe mit Olivenöl extra Vergine",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Pizza",
+            "items": [
+              {
+                "id": "pizza-1",
+                "name": "Pizza Margherita",
+                "description": "Mit Mozzarella und Basilikum",
+                "price": 10.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-2",
+                "name": "Pizza Quattro Stagioni",
+                "description": "Mit Mozzarella, Schinken, Champignons, Peperoni und Artischocken",
+                "price": 13.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pizza-3",
+                "name": "Pizza ai Frutti di Mare",
+                "description": "Mit Mozzarella, Meeresfrüchten und Knoblauch",
+                "price": 15.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pizza-4",
+                "name": "Pizza Vegetaria",
+                "description": "Mit Mozzarella und verschiedenen Gemüsesorten der Saison",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-5",
+                "name": "Pizza con Tartufo Nero",
+                "description": "Büffelmozzarella, Trüffel, Kirschtomaten und Rucola",
+                "price": 18.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Pasta",
+            "items": [
+              {
+                "id": "pasta-1",
+                "name": "Spaghetti al Pomodoro",
+                "description": "Tomatensauce",
+                "price": 11.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pasta-2",
+                "name": "Spaghetti Carbonara",
+                "description": "Speck Pancetta Italiana | Ei | Parmesan",
+                "price": 13.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pasta-3",
+                "name": "Spaghetti ai Frutti di Mare",
+                "description": "Meeresfrüchten | Tomatensauce",
+                "price": 16.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pasta-4",
+                "name": "Pasta Parmigiano Tartufo Nero",
+                "description": "Bandnudeln aus dem Parmesanlaib mit schwarzem Trüffel",
+                "price": 19.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Carni",
+            "items": [
+              {
+                "id": "carni-1",
+                "name": "Scaloppa alla Milanese",
+                "description": "Paniertes Schnitzel Mailändische Art",
+                "price": 18.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "carni-2",
+                "name": "Saltimbocca alla Romana",
+                "description": "Medaillons vom Schweinefilet mit Parmaschinken und Salbei in Weißweinsauce",
+                "price": 21.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Bistecca & Filetto",
+            "items": [
+              {
+                "id": "bistecca-1",
+                "name": "Bistecca alla Griglia",
+                "description": "Frisches Rumpsteak vom Grill mit Kräuterbutter",
+                "price": 25.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "filetto-1",
+                "name": "Filetto alla Griglia",
+                "description": "Frisches Rinderfiletsteak vom Grill mit Kräuterbutter",
+                "price": 32.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Pesce",
+            "items": [
+              {
+                "id": "pesce-1",
+                "name": "Scampi alla Griglia",
+                "description": "Großgarnelen gegrillt mit Knoblauch und Zitrone",
+                "price": 24.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pesce-2",
+                "name": "Salmone alla Griglia",
+                "description": "Frisches Lachsfilet gegrillt mit Zitrone",
+                "price": 22.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dolci",
+            "items": [
+              {
+                "id": "dolci-1",
+                "name": "Tiramisù",
+                "description": "Schichten von Löffelbiskuits und einer Creme aus Mascarpone mit kaltem Espresso (alkoholfrei)",
+                "price": 7.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "dolci-2",
+                "name": "Panna Cotta",
+                "description": "Mit Himbeeren an einer Himbeersauce",
+                "price": 6.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+} 

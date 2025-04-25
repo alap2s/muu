@@ -17,7 +17,7 @@ export interface Restaurant {
   openNow?: boolean
   photos?: { reference: string }[]
   menu?: MenuItem[]
-  menuSource?: 'openmenu' | 'website' | 'sample'
+  menuSource?: 'website' | 'sample'
   website?: string
   googleMapsUrl?: string
   cuisine?: string
