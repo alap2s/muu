@@ -56,10 +56,24 @@ interface FrontendRestaurant {
   menuSource: 'database' | 'sample'
 }
 
-// Read the restaurant menu database
-const restaurantMenus: RestaurantDatabase = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), 'data', 'restaurant-menus.json'), 'utf-8')
-)
+// Read the restaurant menu database with error handling
+function getRestaurantMenus(): RestaurantDatabase {
+  try {
+    const filePath = path.join(process.cwd(), 'data', 'restaurant-menus.json')
+    console.log('Reading restaurant data from:', filePath)
+    
+    if (!fs.existsSync(filePath)) {
+      console.error('Restaurant data file not found at:', filePath)
+      throw new Error('Restaurant data file not found')
+    }
+    
+    const data = fs.readFileSync(filePath, 'utf-8')
+    return JSON.parse(data)
+  } catch (error) {
+    console.error('Error reading restaurant data:', error)
+    throw error
+  }
+}
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371
@@ -108,6 +122,9 @@ export async function GET(request: Request) {
     const userLng = parseFloat(lng)
     const searchRadius = parseFloat(radius)
 
+    // Get restaurant data
+    const restaurantMenus = getRestaurantMenus()
+
     // Filter restaurants within the search radius
     const nearbyRestaurants = restaurantMenus.restaurants
       .map((restaurant: Restaurant) => ({
@@ -132,7 +149,10 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ restaurants: nearbyRestaurants })
   } catch (error) {
-    console.error('Error fetching restaurants:', error)
-    return NextResponse.json({ error: 'Failed to fetch restaurants' }, { status: 500 })
+    console.error('Error in restaurant API:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch restaurants', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    )
   }
 } 

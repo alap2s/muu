@@ -11,6 +11,9 @@ module.exports = {
         primary: "#4F46E5",
         secondary: "#10B981",
       },
+      fontFamily: {
+        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+      },
     },
   },
   plugins: [],

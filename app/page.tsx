@@ -217,7 +217,7 @@ export default function Home() {
             <div className="flex-1">
               <div className="relative w-full">
                 <select
-                  className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
+                  className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] font-mono truncate"
                   value={selectedRestaurant?.id || ''}
                   onChange={(e) => {
                     const restaurant = restaurants.find(r => r.id === e.target.value)
@@ -247,13 +247,13 @@ export default function Home() {
                     ref={el => categoryRefs.current[category] = el}
                   >
                     <div className="flex">
-                      <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                      <div className="w-8 h-12 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20 bg-[#F4F2F8]" />
                       <div className="flex-1">
-                        <h3 className="font-medium text-[#6237FF] h-12 flex items-center px-4 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20">
+                        <h3 className="font-medium text-[#6237FF] h-12 flex items-center px-4 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20 font-mono">
                           {category}
                         </h3>
                       </div>
-                      <div className="w-8 h-12 bg-[#F4F2F8]" />
+                      <div className="w-8 h-12 border-b border-[#6237FF]/20 bg-[#F4F2F8]" />
                     </div>
                     <div className="space-y-0">
                       {items.map((item) => (
@@ -265,7 +265,7 @@ export default function Home() {
                           <div className="flex">
                             <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
                             <div className="flex-1">
-                              <div className="flex justify-between items-start p-4 border-r border-[#6237FF]/20">
+                              <div className="flex justify-between items-start p-4 border-r border-[#6237FF]/20 font-mono">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
                                     <h4 className="font-medium text-[#1e1e1e]">
@@ -303,7 +303,7 @@ export default function Home() {
                     href={selectedRestaurant.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#6237FF] hover:underline"
+                    className="text-[#6237FF] hover:underline font-mono"
                   >
                     Visit Restaurant Website
                   </a>
@@ -328,7 +328,7 @@ export default function Home() {
                             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
                           }
                         }}
-                        className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
+                        className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] font-mono truncate"
                       >
                         {categories.map((category) => (
                           <option key={category} value={category} className="truncate">
@@ -342,7 +342,7 @@ export default function Home() {
                   )}
                   <div className="relative flex-1">
                     <select
-                      className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
+                      className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] font-mono truncate"
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                     >
