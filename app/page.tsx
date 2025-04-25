@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Vegan, Filter, ChevronDown } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, ChefHat, Squirrel } from 'lucide-react'
 
 interface MenuItem {
   id: string
@@ -30,9 +30,19 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<string>('all')
   const [selectedGroup, setSelectedGroup] = useState<string>('')
-  const [isScrolling, setIsScrolling] = useState(false)
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   const menuRef = useRef<HTMLDivElement>(null)
-  const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+
+  const toggleItemExpansion = (itemId: string) => {
+    const newExpandedItems = new Set(expandedItems)
+    if (expandedItems.has(itemId)) {
+      newExpandedItems.delete(itemId)
+    } else {
+      newExpandedItems.add(itemId)
+    }
+    setExpandedItems(newExpandedItems)
+  }
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -76,53 +86,37 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!menuRef.current || isScrolling) return
+      if (!menuRef.current) return
 
-      const menuContainer = menuRef.current
-      const scrollTop = menuContainer.scrollTop
-      const containerHeight = menuContainer.clientHeight
+      const menuTop = menuRef.current.getBoundingClientRect().top
+      const menuItems = Object.entries(categoryRefs.current)
+      
+      let closestCategory = ''
+      let smallestDistance = Infinity
 
-      // Find the current visible group
-      let currentGroup = ''
-      for (const [group, ref] of Object.entries(groupRefs.current)) {
-        if (ref) {
-          const rect = ref.getBoundingClientRect()
-          const menuRect = menuContainer.getBoundingClientRect()
-          const relativeTop = rect.top - menuRect.top
-
-          if (relativeTop <= 0 && relativeTop + rect.height > 0) {
-            currentGroup = group
-            break
-          }
+      for (const [category, element] of menuItems) {
+        if (!element) continue
+        
+        const itemTop = element.getBoundingClientRect().top
+        const distance = Math.abs(itemTop - menuTop - 100) // 100px offset from top
+        
+        if (distance < smallestDistance) {
+          smallestDistance = distance
+          closestCategory = category
         }
       }
 
-      if (currentGroup && currentGroup !== selectedGroup) {
-        setSelectedGroup(currentGroup)
+      if (closestCategory && closestCategory !== selectedGroup) {
+        setSelectedGroup(closestCategory)
       }
     }
 
-    const menuContainer = menuRef.current
-    if (menuContainer) {
-      menuContainer.addEventListener('scroll', handleScroll)
-      return () => menuContainer.removeEventListener('scroll', handleScroll)
+    const menuElement = menuRef.current
+    if (menuElement) {
+      menuElement.addEventListener('scroll', handleScroll)
+      return () => menuElement.removeEventListener('scroll', handleScroll)
     }
-  }, [selectedGroup, isScrolling])
-
-  const scrollToGroup = (group: string) => {
-    setIsScrolling(true)
-    const groupElement = groupRefs.current[group]
-    if (groupElement && menuRef.current) {
-      const menuContainer = menuRef.current
-      const groupTop = groupElement.offsetTop
-      menuContainer.scrollTo({
-        top: groupTop,
-        behavior: 'smooth'
-      })
-      setSelectedGroup(group)
-      setTimeout(() => setIsScrolling(false), 500)
-    }
-  }
+  }, [selectedGroup])
 
   const fetchRestaurants = async () => {
     if (!location) return
@@ -162,10 +156,54 @@ export default function Home() {
     return acc
   }, {} as { [key: string]: MenuItem[] }) || {}
 
+  const categories = Object.keys(groupedMenu)
+
+  const getDietaryIcons = (item: MenuItem) => {
+    const icons = []
+    const name = item.name.toLowerCase()
+    const description = item.description?.toLowerCase() || ''
+
+    if (item.dietaryRestrictions.includes('vegetarian')) {
+      icons.push(<Milk key="milk" className="w-4 h-4 text-[#1e1e1e]" />)
+    }
+    if (item.dietaryRestrictions.includes('vegan')) {
+      icons.push(<Leaf key="leaf" className="w-4 h-4 text-[#1e1e1e]" />)
+    }
+    if (item.dietaryRestrictions.includes('nuts')) {
+      icons.push(<Nut key="nut" className="w-4 h-4 text-[#1e1e1e]" />)
+    }
+    if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
+      if (name.includes('chicken') || description.includes('chicken') || 
+          name.includes('hähnchen') || description.includes('hähnchen')) {
+        icons.push(<Bird key="bird" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else if (name.includes('egg') || description.includes('egg') ||
+                 name.includes('ei') || description.includes('ei')) {
+        icons.push(<Egg key="egg" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else if (name.includes('fish') || description.includes('fish') ||
+                 name.includes('fisch') || description.includes('fisch')) {
+        icons.push(<Fish key="fish" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else if (name.includes('ham') || description.includes('ham') ||
+                 name.includes('schinken') || description.includes('schinken')) {
+        icons.push(<Beef key="ham" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else {
+        icons.push(<Bird key="meat" className="w-4 h-4 text-[#1e1e1e]" />)
+      }
+    }
+    return icons
+  }
+
   return (
-    <div className="min-h-screen p-4 max-w-4xl mx-auto">
+    <div className="min-h-screen max-w-4xl mx-auto">
+      <div className="flex">
+        <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+        <div className="flex-1 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8] flex items-center justify-center">
+          <Squirrel className="w-6 h-6 text-[#6237FF]" />
+        </div>
+        <div className="w-8 h-12 bg-[#F4F2F8]" />
+      </div>
+      
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4">
           {error}
         </div>
       )}
@@ -173,87 +211,85 @@ export default function Home() {
       {loading ? (
         <div className="text-center py-8">Loading restaurants...</div>
       ) : restaurants.length > 0 ? (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <div className="relative w-full sm:w-auto">
-              <select
-                className="w-full sm:w-auto p-2 rounded border pl-8 pr-4 appearance-none bg-white"
-                value={selectedRestaurant?.id || ''}
-                onChange={(e) => {
-                  const restaurant = restaurants.find(r => r.id === e.target.value)
-                  if (restaurant) setSelectedRestaurant(restaurant)
-                }}
-              >
-                <option value="" disabled>Select a restaurant</option>
-                {restaurants.map((restaurant) => (
-                  <option key={restaurant.id} value={restaurant.id}>
-                    {restaurant.name} ({restaurant.distance} km away)
-                  </option>
-                ))}
-              </select>
-              <MapPin className="w-4 h-4 text-gray-500 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="space-y-0">
+          <div className="flex border-t border-[#6237FF]/20 border-b border-[#6237FF]/20">
+            <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+            <div className="flex-1">
+              <div className="relative w-full">
+                <select
+                  className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
+                  value={selectedRestaurant?.id || ''}
+                  onChange={(e) => {
+                    const restaurant = restaurants.find(r => r.id === e.target.value)
+                    if (restaurant) setSelectedRestaurant(restaurant)
+                  }}
+                >
+                  <option value="" disabled className="truncate">Select a restaurant</option>
+                  {restaurants.map(restaurant => (
+                    <option key={restaurant.id} value={restaurant.id} className="truncate">
+                      {restaurant.name} ({restaurant.distance} km away)
+                    </option>
+                  ))}
+                </select>
+                <ChefHat className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
-            <div className="relative w-full sm:w-auto">
-              <select
-                className="w-full sm:w-auto p-2 rounded border pl-8 pr-4 appearance-none bg-white"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-              >
-                <option value="all">All Items</option>
-                <option value="vegetarian">Vegetarian</option>
-                <option value="vegan">Vegan</option>
-              </select>
-              <Filter className="w-4 h-4 text-gray-500 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
+            <div className="w-8 h-12 bg-[#F4F2F8]" />
           </div>
 
           {selectedRestaurant && (
-            <div className="bg-white rounded-lg shadow-md p-4">
-              <div
-                ref={menuRef}
-                className="overflow-y-auto max-h-[60vh] pr-4"
-              >
+            <div className="bg-[#F4F2F8]" ref={menuRef}>
+              <div className="space-y-0">
                 {Object.entries(groupedMenu).map(([category, items]) => (
-                  <div
-                    key={category}
-                    ref={(el) => (groupRefs.current[category] = el)}
-                    className="mb-6"
+                  <div 
+                    key={category} 
+                    ref={el => categoryRefs.current[category] = el}
                   >
-                    <h3 className="text-xl font-semibold mb-3 sticky top-0 bg-white py-2">
-                      {category}
-                    </h3>
-                    <div className="space-y-4">
+                    <div className="flex">
+                      <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                      <div className="flex-1">
+                        <h3 className="font-medium text-[#6237FF] h-12 flex items-center px-4 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20">
+                          {category}
+                        </h3>
+                      </div>
+                      <div className="w-8 h-12 bg-[#F4F2F8]" />
+                    </div>
+                    <div className="space-y-0">
                       {items.map((item) => (
-                        <div key={item.id} className="border-b pb-4">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h4 className="font-medium">{item.name}</h4>
-                              {item.description && (
-                                <p className="text-gray-600 text-sm mt-1">
-                                  {item.description}
-                                </p>
-                              )}
+                        <div 
+                          key={item.id} 
+                          className="border-b border-[#6237FF]/20 cursor-pointer"
+                          onClick={() => toggleItemExpansion(item.id)}
+                        >
+                          <div className="flex">
+                            <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start p-4 border-r border-[#6237FF]/20">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h4 className="font-medium text-[#1e1e1e]">
+                                      <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
+                                        {item.name}
+                                      </span>
+                                    </h4>
+                                    <div className="flex gap-2 items-center">
+                                      {getDietaryIcons(item)}
+                                    </div>
+                                  </div>
+                                  {item.description && (
+                                    <p className={`text-[#1e1e1e]/50 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
+                                      {item.description}
+                                    </p>
+                                  )}
+                                </div>
+                                <span className="font-medium ml-4 text-[#1e1e1e]">
+                                  €{item.price.toFixed(2)}
+                                </span>
+                              </div>
                             </div>
-                            <span className="font-medium">
-                              €{item.price.toFixed(2)}
-                            </span>
+                            <div className="w-8 bg-[#F4F2F8]" />
                           </div>
-                          {item.dietaryRestrictions.length > 0 && (
-                            <div className="flex gap-2 mt-2">
-                              {item.dietaryRestrictions.includes('vegetarian') && (
-                                <span className="flex items-center text-green-600 text-sm">
-                                  <Leaf className="w-4 h-4 mr-1" />
-                                  Vegetarian
-                                </span>
-                              )}
-                              {item.dietaryRestrictions.includes('vegan') && (
-                                <span className="flex items-center text-green-600 text-sm">
-                                  <Vegan className="w-4 h-4 mr-1" />
-                                  Vegan
-                                </span>
-                              )}
-                            </div>
-                          )}
                         </div>
                       ))}
                     </div>
@@ -262,12 +298,12 @@ export default function Home() {
               </div>
 
               {selectedRestaurant.website && (
-                <div className="mt-4 text-center">
+                <div className="mt-4 text-center pb-4">
                   <a
                     href={selectedRestaurant.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
+                    className="text-[#6237FF] hover:underline"
                   >
                     Visit Restaurant Website
                   </a>
@@ -275,31 +311,62 @@ export default function Home() {
               )}
             </div>
           )}
+
+          <div className="sticky bottom-0 bg-[#F4F2F8] z-10">
+            <div className="flex border-t border-[#6237FF]/20 border-b border-[#6237FF]/20">
+              <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+              <div className="flex-1">
+                <div className="flex">
+                  {categories.length > 0 && (
+                    <div className="relative flex-1">
+                      <select
+                        value={selectedGroup}
+                        onChange={(e) => {
+                          setSelectedGroup(e.target.value)
+                          const element = categoryRefs.current[e.target.value]
+                          if (element) {
+                            element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                          }
+                        }}
+                        className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
+                      >
+                        {categories.map((category) => (
+                          <option key={category} value={category} className="truncate">
+                            {category}
+                          </option>
+                        ))}
+                      </select>
+                      <Layers className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+                  )}
+                  <div className="relative flex-1">
+                    <select
+                      className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
+                      value={filter}
+                      onChange={(e) => setFilter(e.target.value)}
+                    >
+                      <option value="all" className="truncate">All Items</option>
+                      <option value="vegetarian" className="truncate">Vegetarian</option>
+                      <option value="vegan" className="truncate">Vegan</option>
+                    </select>
+                    <Filter className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+              <div className="w-8 h-12 bg-[#F4F2F8]" />
+            </div>
+            <div className="flex border-b border-[#6237FF]/20">
+              <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+              <div className="flex-1 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+              <div className="w-8 h-12 bg-[#F4F2F8]" />
+            </div>
+          </div>
         </div>
       ) : (
         <div className="text-center py-8 text-gray-500">
           No restaurants found nearby
-        </div>
-      )}
-
-      {Object.keys(groupedMenu).length > 0 && (
-        <div className="fixed bottom-4 right-4">
-          <div className="relative">
-            <select
-              value={selectedGroup}
-              onChange={(e) => scrollToGroup(e.target.value)}
-              className="appearance-none bg-white border rounded-lg p-3 pr-10 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {Object.keys(groupedMenu).map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-              <ChevronDown className="w-4 h-4 text-gray-500" />
-            </div>
-          </div>
         </div>
       )}
     </div>
