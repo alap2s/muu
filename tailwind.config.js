@@ -8,8 +8,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#4F46E5",
-        secondary: "#10B981",
+        primary: "#6237FF",
+        "primary-light": "#F4F2F8",
+        "primary-border": "rgba(98, 55, 255, 0.2)",
+        text: {
+          primary: "#1e1e1e",
+          secondary: "rgba(30, 30, 30, 0.5)",
+        }
       },
       fontFamily: {
         mono: ['var(--font-jetbrains-mono)', 'monospace'],

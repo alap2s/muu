@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, ChefHat, Squirrel } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, ChefHat, Squirrel, Check } from 'lucide-react'
+import { Dropdown, GridRow } from '@/app/design-system'
 
 interface MenuItem {
   id: string
@@ -31,6 +32,12 @@ export default function Home() {
   const [filter, setFilter] = useState<string>('all')
   const [selectedGroup, setSelectedGroup] = useState<string>('')
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  const [language, setLanguage] = useState<'EN' | 'DE'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('language') as 'EN' | 'DE') || 'EN'
+    }
+    return 'EN'
+  })
   const menuRef = useRef<HTMLDivElement>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
@@ -43,6 +50,12 @@ export default function Home() {
     }
     setExpandedItems(newExpandedItems)
   }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('language', language)
+    }
+  }, [language])
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -213,29 +226,29 @@ export default function Home() {
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
           <div className="flex border-t border-[#6237FF]/20 border-b border-[#6237FF]/20">
-            <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-            <div className="flex-1">
-              <div className="relative w-full">
-                <select
-                  className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] font-mono truncate"
-                  value={selectedRestaurant?.id || ''}
-                  onChange={(e) => {
-                    const restaurant = restaurants.find(r => r.id === e.target.value)
-                    if (restaurant) setSelectedRestaurant(restaurant)
-                  }}
-                >
-                  <option value="" disabled className="truncate">Select a restaurant</option>
-                  {restaurants.map(restaurant => (
-                    <option key={restaurant.id} value={restaurant.id} className="truncate">
-                      {restaurant.name} ({restaurant.distance} km away)
-                    </option>
-                  ))}
-                </select>
-                <ChefHat className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
+            <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8] flex-none" />
+            <div className="flex-1 min-w-0">
+              <Dropdown
+                value={selectedRestaurant?.id || ''}
+                onChange={(value) => {
+                  const restaurant = restaurants.find(r => r.id === value)
+                  if (restaurant) setSelectedRestaurant(restaurant)
+                }}
+                options={restaurants.map(restaurant => ({
+                  value: restaurant.id,
+                  label: `${restaurant.name} (${restaurant.distance} km away)`
+                }))}
+                leftIcon={<ChefHat className="w-4 h-4 text-primary" strokeWidth={2} />}
+                position="bottom"
+              />
             </div>
-            <div className="w-8 h-12 bg-[#F4F2F8]" />
+            <button 
+              className="w-12 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8] text-[#6237FF] font-mono flex items-center justify-center flex-none"
+              onClick={() => setLanguage(prev => prev === 'EN' ? 'DE' : 'EN')}
+            >
+              {language}
+            </button>
+            <div className="w-8 h-12 bg-[#F4F2F8] flex-none" />
           </div>
 
           {selectedRestaurant && (
@@ -247,49 +260,43 @@ export default function Home() {
                     ref={el => categoryRefs.current[category] = el}
                   >
                     <div className="flex">
-                      <div className="w-8 h-12 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20 bg-[#F4F2F8]" />
-                      <div className="flex-1">
-                        <h3 className="font-medium text-[#6237FF] h-12 flex items-center px-4 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20 font-mono">
-                          {category}
-                        </h3>
-                      </div>
+                      <div className="w-8 h-12 border-r border-b border-[#6237FF]/20 bg-[#F4F2F8]" />
+                      <h3 className="flex-1 font-medium text-primary h-12 flex items-center px-4 border-r border-b border-[#6237FF]/20 font-mono">
+                        {category}
+                      </h3>
                       <div className="w-8 h-12 border-b border-[#6237FF]/20 bg-[#F4F2F8]" />
                     </div>
                     <div className="space-y-0">
                       {items.map((item) => (
                         <div 
                           key={item.id} 
-                          className="border-b border-[#6237FF]/20 cursor-pointer"
+                          className="flex min-h-[64px] border-b border-[#6237FF]/20 cursor-pointer"
                           onClick={() => toggleItemExpansion(item.id)}
                         >
-                          <div className="flex">
-                            <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                          <div className="w-8 min-h-full border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                          <div className="flex-1 flex justify-between items-start p-4 border-r border-[#6237FF]/20 font-mono">
                             <div className="flex-1">
-                              <div className="flex justify-between items-start p-4 border-r border-[#6237FF]/20 font-mono">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2">
-                                    <h4 className="font-medium text-[#1e1e1e]">
-                                      <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
-                                        {item.name}
-                                      </span>
-                                    </h4>
-                                    <div className="flex gap-2 items-center">
-                                      {getDietaryIcons(item)}
-                                    </div>
-                                  </div>
-                                  {item.description && (
-                                    <p className={`text-[#1e1e1e]/50 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
-                                      {item.description}
-                                    </p>
-                                  )}
+                              <div className="flex items-center gap-2">
+                                <h4 className="font-medium text-text-primary">
+                                  <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
+                                    {item.name}
+                                  </span>
+                                </h4>
+                                <div className="flex gap-2 items-center">
+                                  {getDietaryIcons(item)}
                                 </div>
-                                <span className="font-medium ml-4 text-[#1e1e1e]">
-                                  €{item.price.toFixed(2)}
-                                </span>
                               </div>
+                              {item.description && (
+                                <p className={`text-text-secondary text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
+                                  {item.description}
+                                </p>
+                              )}
                             </div>
-                            <div className="w-8 bg-[#F4F2F8]" />
+                            <span className="font-medium ml-4 text-text-primary">
+                              €{item.price.toFixed(2)}
+                            </span>
                           </div>
+                          <div className="w-8 min-h-full bg-[#F4F2F8]" />
                         </div>
                       ))}
                     </div>
@@ -298,69 +305,76 @@ export default function Home() {
               </div>
 
               {selectedRestaurant.website && (
-                <div className="mt-4 text-center pb-4">
-                  <a
-                    href={selectedRestaurant.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#6237FF] hover:underline font-mono"
-                  >
-                    Visit Restaurant Website
-                  </a>
+                <div className="flex">
+                  <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                  <div className="flex-1 border-r border-[#6237FF]/20 text-center py-4">
+                    <a
+                      href={selectedRestaurant.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#1e1e1e] hover:underline font-mono underline text-sm"
+                    >
+                      Visit Restaurant Website
+                    </a>
+                  </div>
+                  <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
                 </div>
               )}
             </div>
           )}
 
-          <div className="sticky bottom-0 bg-[#F4F2F8] z-10">
-            <div className="flex border-t border-[#6237FF]/20 border-b border-[#6237FF]/20">
-              <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-              <div className="flex-1">
-                <div className="flex">
+          <div className="sticky bottom-0 bg-primary-light z-10">
+            <div className="border-t border-[#6237FF]/20 border-b">
+              <div className="flex">
+                <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                <div className="flex-1 flex">
                   {categories.length > 0 && (
-                    <div className="relative flex-1">
-                      <select
+                    <div className="flex-1">
+                      <Dropdown
                         value={selectedGroup}
-                        onChange={(e) => {
-                          setSelectedGroup(e.target.value)
-                          const element = categoryRefs.current[e.target.value]
+                        onChange={(value) => {
+                          setSelectedGroup(value)
+                          const element = categoryRefs.current[value]
                           if (element) {
                             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
                           }
                         }}
-                        className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] font-mono truncate"
-                      >
-                        {categories.map((category) => (
-                          <option key={category} value={category} className="truncate">
-                            {category}
-                          </option>
-                        ))}
-                      </select>
-                      <Layers className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                      <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        options={categories.map(category => ({
+                          value: category,
+                          label: category
+                        }))}
+                        leftIcon={<Layers className="w-4 h-4 text-primary" strokeWidth={2} />}
+                        position="top"
+                      />
                     </div>
                   )}
-                  <div className="relative flex-1">
-                    <select
-                      className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] font-mono truncate"
+                  <div className="flex-1">
+                    <Dropdown
                       value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                    >
-                      <option value="all" className="truncate">All Items</option>
-                      <option value="vegetarian" className="truncate">Vegetarian</option>
-                      <option value="vegan" className="truncate">Vegan</option>
-                    </select>
-                    <Filter className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      onChange={(value) => setFilter(value)}
+                      options={[
+                        { value: 'all', label: 'All Items' },
+                        { value: 'vegetarian', label: 'Vegetarian' },
+                        { value: 'vegan', label: 'Vegan' }
+                      ]}
+                      leftIcon={<Filter className="w-4 h-4 text-primary" strokeWidth={2} />}
+                      position="top"
+                      align="right"
+                    />
                   </div>
                 </div>
+                <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
               </div>
-              <div className="w-8 h-12 bg-[#F4F2F8]" />
             </div>
-            <div className="flex border-b border-[#6237FF]/20">
-              <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-              <div className="flex-1 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-              <div className="w-8 h-12 bg-[#F4F2F8]" />
+            <div className="border-b border-[#6237FF]/20">
+              <div className="flex h-8">
+                <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                <div className="flex-1 flex">
+                  <div className="flex-1 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                  <div className="flex-1 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                </div>
+                <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+              </div>
             </div>
           </div>
         </div>

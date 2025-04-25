@@ -1,24 +1,15 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { JetBrains_Mono } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
-const jetBrainsMono = JetBrains_Mono({ 
-  subsets: ['latin'],
-  variable: '--font-jetbrains-mono'
-})
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Menoo',
-  description: 'Restaurant Menu App',
+  title: 'Restaurant Menu Finder',
+  description: 'Find nearby restaurants and their menus',
   icons: {
-    icon: [
-      {
-        url: '/squirrel.svg',
-        type: 'image/svg+xml'
-      }
-    ]
-  }
+    icon: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
@@ -28,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} ${jetBrainsMono.variable}`}>{children}</body>
+      <body className={`${jetbrainsMono.className} bg-[#F4F2F8]`}>{children}</body>
     </html>
   )
 } 
