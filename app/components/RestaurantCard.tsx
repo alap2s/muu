@@ -1,15 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { Restaurant } from '../types'
+import { Restaurant, MenuItem } from '../types'
 import { MapPin, Clock, DollarSign, ExternalLink, ChefHat, Leaf, Vegan, Filter, ChevronDown } from 'lucide-react'
-
-interface MenuItem {
-  id: string
-  name: string
-  description?: string
-  price: number
-  category: string
-  dietaryRestrictions: string[]
-}
 
 interface RestaurantCardProps {
   restaurant: Restaurant
@@ -23,7 +14,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   // Get unique categories from menu items
-  const categories = Array.from(new Set((restaurant.menu || []).map(item => item.category)))
+  const categories = Array.from(new Set((restaurant.menu || []).map(item => item.category || '')))
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -83,10 +74,11 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
 
   // Group menu items by category
   const groupedMenu = (restaurant.menu || []).reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = []
+    const category = item.category || 'Uncategorized'
+    if (!acc[category]) {
+      acc[category] = []
     }
-    acc[item.category].push(item)
+    acc[category].push(item)
     return acc
   }, {} as { [key: string]: MenuItem[] })
 
@@ -154,7 +146,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
                         €{item.price.toFixed(2)}
                       </span>
                     </div>
-                    {item.dietaryRestrictions.length > 0 && (
+                    {item.dietaryRestrictions && item.dietaryRestrictions.length > 0 && (
                       <div className="flex gap-2 mt-2">
                         {item.dietaryRestrictions.includes('vegetarian') && (
                           <span className="flex items-center text-green-600 text-sm">

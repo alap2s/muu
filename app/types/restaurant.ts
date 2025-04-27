@@ -22,5 +22,5 @@ export interface Restaurant {
     lng: number;
   };
   website: string;
-  menu: MenuItem[];
+  menu?: MenuItem[];
 } 
