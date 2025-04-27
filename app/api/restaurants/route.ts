@@ -1,14 +1,7 @@
 import { NextResponse } from 'next/server'
 import * as fs from 'fs'
 import * as path from 'path'
-
-interface MenuItem {
-  id: string
-  name: string
-  description?: string
-  price: number
-  dietaryRestrictions: string[]
-}
+import { MenuItem } from '@/app/types/restaurant'
 
 interface MenuCategory {
   name: string
@@ -87,14 +80,43 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return parseFloat((R * c).toFixed(1))
 }
 
+function transformMenuItemToFrontendFormat(menuItem: MenuItem): FrontendMenuItem {
+  const dietaryRestrictions = menuItem.dietaryRestrictions || [];
+
+  // Add dietary info flags to restrictions if they exist
+  if (menuItem.dietaryInfo) {
+    if (menuItem.dietaryInfo.isVegetarian) {
+      dietaryRestrictions.push('vegetarian');
+    }
+    if (menuItem.dietaryInfo.isVegan) {
+      dietaryRestrictions.push('vegan');
+    }
+    if (menuItem.dietaryInfo.hasVegetarianOption) {
+      dietaryRestrictions.push('vegetarian-option');
+    }
+    if (menuItem.dietaryInfo.hasVeganOption) {
+      dietaryRestrictions.push('vegan-option');
+    }
+  }
+
+  return {
+    id: menuItem.id,
+    name: menuItem.name,
+    description: menuItem.description || '',
+    price: menuItem.price,
+    category: menuItem.category || '',
+    dietaryRestrictions: Array.from(new Set(dietaryRestrictions)) // Remove duplicates
+  };
+}
+
 function transformToFrontendFormat(restaurant: RestaurantWithDistance): FrontendRestaurant {
   // Transform the categorized menu items into a flat array
   const menuItems = restaurant.menu.categories.flatMap(category => 
     category.items.map(item => ({
-      ...item,
+      ...transformMenuItemToFrontendFormat(item),
       category: category.name
     }))
-  )
+  );
 
   return {
     id: restaurant.id,

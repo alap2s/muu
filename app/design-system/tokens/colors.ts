@@ -1,4 +1,7 @@
 export const colors = {
+  main: '#FF373A',
+  text: '#1e1e1e',
+  border: 'rgba(255, 55, 58, 0.2)', // #FF373A at 20% opacity
   primary: {
     main: '#6237FF',
     light: '#F4F2F8',

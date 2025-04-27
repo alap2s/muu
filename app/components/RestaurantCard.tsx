@@ -23,7 +23,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   // Get unique categories from menu items
-  const categories = Array.from(new Set(restaurant.menu.map(item => item.category)))
+  const categories = Array.from(new Set((restaurant.menu || []).map(item => item.category)))
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -82,7 +82,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   }
 
   // Group menu items by category
-  const groupedMenu = restaurant.menu.reduce((acc, item) => {
+  const groupedMenu = (restaurant.menu || []).reduce((acc, item) => {
     if (!acc[item.category]) {
       acc[item.category] = []
     }

@@ -1,5 +1,366 @@
 {
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2024-03-21",
+    "dietaryFlags": {
+      "isVegetarian": "Suitable for vegetarians",
+      "isVegan": "Suitable for vegans",
+      "hasVegetarianOption": "Can be made vegetarian",
+      "hasVeganOption": "Can be made vegan"
+    },
+    "allergens": {
+      "A": "Glutenhaltiges Getreide",
+      "A1": "Weizen",
+      "B": "Krebstiere",
+      "C": "Eier",
+      "D": "Fische",
+      "E": "Erdnüsse",
+      "F": "Sojabohnen",
+      "G": "Milch/Laktose",
+      "H": "Schalenfrüchte",
+      "I": "Sellerie",
+      "J": "Senf",
+      "K": "Sesam",
+      "L": "Sulfite",
+      "M": "Lupinen",
+      "N": "Weichtiere",
+      "O": "Garnelen",
+      "P": "Tintenfisch",
+      "Q": "Oktopus"
+    }
+  },
   "restaurants": [
+    {
+      "id": "roji-taste-of-japan-pankow",
+      "name": "Roji - Taste of Japan Pankow",
+      "address": "Florastraße 27, 13187 Berlin",
+      "coordinates": {
+        "lat": 52.56720981565345,
+        "lng": 13.403590162044386
+      },
+      "website": "https://pankow-delivery.roji-berlin.de/",
+      "type": "japanese",
+      "menu": {
+        "categories": [
+          {
+            "id": "beliebte-gerichte",
+            "name": "Beliebte Gerichte",
+            "description": "Popular dishes",
+            "items": [
+              {
+                "id": "beliebte-1",
+                "name": "Platte für 2",
+                "description": "Sushi Platte für 2 Personen",
+                "price": 39.90,
+                "allergens": ["A", "D", "C", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": false,
+                  "isVegan": false
+                }
+              },
+              {
+                "id": "beliebte-2",
+                "name": "Amazing Friendship®",
+                "description": "8 Stück California Roll, 8 Stück Philadelphia Roll, 8 Stück Spicy Tuna Roll",
+                "price": 29.90,
+                "allergens": ["A", "D", "C", "F", "G"],
+                "dietaryInfo": {
+                  "isVegetarian": false,
+                  "isVegan": false
+                }
+              },
+              {
+                "id": "beliebte-3",
+                "name": "Volcano Tuna",
+                "description": "Gebratener Thunfisch mit scharfer Sauce",
+                "price": 19.90,
+                "allergens": ["A", "D", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": false,
+                  "isVegan": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "salate",
+            "name": "Salate",
+            "description": "Fresh salads",
+            "items": [
+              {
+                "id": "salate-1",
+                "name": "Edamame",
+                "description": "Gekochte Sojabohnen mit Meersalz",
+                "price": 4.90,
+                "allergens": ["F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "salate-2",
+                "name": "Kimchi Salat",
+                "description": "Scharfer koreanischer Salat",
+                "price": 5.90,
+                "allergens": ["F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "salate-3",
+                "name": "Spinat Salat",
+                "description": "Mit Sesamdressing",
+                "price": 6.90,
+                "allergens": ["K"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "salate-4",
+                "name": "Wakame Salat",
+                "description": "Algensalat",
+                "price": 5.90,
+                "allergens": [],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              }
+            ]
+          },
+          {
+            "id": "donburi",
+            "name": "Donburi",
+            "description": "Japanese rice bowls",
+            "items": [
+              {
+                "id": "donburi-1",
+                "name": "Veggie Don",
+                "description": "Gebratenes Gemüse mit Reis",
+                "price": 12.90,
+                "allergens": ["A", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "donburi-2",
+                "name": "Tofu Teriyaki Don",
+                "description": "Gebratener Tofu mit Teriyaki Sauce und Reis",
+                "price": 13.90,
+                "allergens": ["A", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              }
+            ]
+          },
+          {
+            "id": "vegetarisches-nigiri",
+            "name": "Vegetarisches Nigiri",
+            "description": "Vegetarian nigiri sushi",
+            "items": [
+              {
+                "id": "nigiri-1",
+                "name": "Avocado Nigiri",
+                "description": "2 Stück",
+                "price": 4.90,
+                "allergens": ["A"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "nigiri-2",
+                "name": "Tamago Nigiri",
+                "description": "2 Stück",
+                "price": 4.90,
+                "allergens": ["A", "C"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": false
+                }
+              },
+              {
+                "id": "nigiri-3",
+                "name": "Inari Nigiri",
+                "description": "2 Stück",
+                "price": 4.90,
+                "allergens": ["A", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              }
+            ]
+          },
+          {
+            "id": "vegetarisches-maki",
+            "name": "Vegetarisches Maki",
+            "description": "Vegetarian maki rolls",
+            "items": [
+              {
+                "id": "maki-1",
+                "name": "Kappa Maki",
+                "description": "6 Stück",
+                "price": 4.90,
+                "allergens": ["A"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "maki-2",
+                "name": "Avocado Maki",
+                "description": "6 Stück",
+                "price": 4.90,
+                "allergens": ["A"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "maki-3",
+                "name": "Oshinko Maki",
+                "description": "6 Stück",
+                "price": 4.90,
+                "allergens": ["A"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "maki-4",
+                "name": "Tamago Maki",
+                "description": "6 Stück",
+                "price": 4.90,
+                "allergens": ["A", "C"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": false
+                }
+              }
+            ]
+          },
+          {
+            "id": "veggi-special-rolls",
+            "name": "Veggi Special Rolls",
+            "description": "Vegetarian special rolls",
+            "items": [
+              {
+                "id": "rolls-1",
+                "name": "Veggie Tempura Roll",
+                "description": "8 Stück",
+                "price": 8.90,
+                "allergens": ["A", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "rolls-2",
+                "name": "Green Roll",
+                "description": "8 Stück",
+                "price": 8.90,
+                "allergens": ["A"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              },
+              {
+                "id": "rolls-3",
+                "name": "Tofu Crunch Roll",
+                "description": "8 Stück",
+                "price": 8.90,
+                "allergens": ["A", "F"],
+                "dietaryInfo": {
+                  "isVegetarian": true,
+                  "isVegan": true
+                }
+              }
+            ]
+          },
+          {
+            "id": "main-dishes",
+            "name": "Main Dishes",
+            "description": "Hauptgerichte",
+            "items": [
+              {
+                "id": "main-1",
+                "name": "Noodle Bowl",
+                "description": "Reisnudel Bowl mit Salat, Kräuter, Erdnüsse und Röstzwiebeln, serviert mit einer Limetten Vinaigrette",
+                "price": 16.00,
+                "options": [
+                  {
+                    "name": "Rind",
+                    "price": 16.00,
+                    "dietaryInfo": {
+                      "isVegetarian": false,
+                      "isVegan": false
+                    }
+                  },
+                  {
+                    "name": "Tofu",
+                    "price": 16.00,
+                    "dietaryInfo": {
+                      "isVegetarian": true,
+                      "isVegan": true
+                    }
+                  }
+                ],
+                "allergens": [],
+                "dietaryInfo": {
+                  "hasVegetarianOption": true,
+                  "hasVeganOption": true
+                }
+              },
+              {
+                "id": "main-2",
+                "name": "Big Peanut",
+                "description": "Cremiges Currygericht mit Kokosmilch und Erdnuss auf Gemüse und Wildkräutersalat, serviert mit Reis oder Reisbandudeln",
+                "price": 16.00,
+                "options": [
+                  {
+                    "name": "Gegrillte Hühnerschenkel",
+                    "price": 16.00,
+                    "dietaryInfo": {
+                      "isVegetarian": false,
+                      "isVegan": false
+                    }
+                  },
+                  {
+                    "name": "Tofu",
+                    "price": 16.00,
+                    "dietaryInfo": {
+                      "isVegetarian": true,
+                      "isVegan": true
+                    }
+                  }
+                ],
+                "allergens": ["E"],
+                "dietaryInfo": {
+                  "hasVegetarianOption": true,
+                  "hasVeganOption": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "id": "ristorante-firenze",
       "name": "Ristorante Firenze",
