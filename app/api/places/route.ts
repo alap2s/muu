@@ -78,7 +78,11 @@ export async function GET(request: Request) {
 
     if (!response.ok) {
       const errorText = await response.text()
-      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`)
+      console.error('OpenStreetMap API error:', errorText)
+      return NextResponse.json(
+        { error: 'Failed to fetch restaurants from OpenStreetMap' },
+        { status: 500 }
+      )
     }
 
     const data: OSMResponse = await response.json()
@@ -103,14 +107,11 @@ export async function GET(request: Request) {
         cuisine: node.tags.cuisine
       }))
 
-    return NextResponse.json({
-      restaurants,
-      nextPageToken: null // OSM doesn't support pagination
-    })
+    return NextResponse.json(restaurants)
   } catch (error) {
-    console.error('Error in Places API route:', error)
+    console.error('Error in places API:', error)
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch places' },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

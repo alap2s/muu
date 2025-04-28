@@ -99,12 +99,10 @@ export function Dropdown({
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
               key={option.value}
-              className={`px-4 py-3 cursor-pointer hover:bg-[#FF373A]/10 flex items-center justify-between ${
-                option.value === value ? 'bg-[#FF373A]/10' : ''
+              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 ${
+                option.disabled ? 'opacity-50 cursor-not-allowed' : ''
               } ${
                 index === 0 ? 'border-t-0' : 'border-t border-[#FF373A]/20'
-              } ${
-                index === filteredOptions.length - 1 ? 'border-b-0' : ''
               }`}
               onClick={() => {
                 if (!option.disabled) {
@@ -124,11 +122,7 @@ export function Dropdown({
                   )}
                 </div>
               </div>
-              {option.rightContent && (
-                <div className="flex-none ml-2">
-                  {option.rightContent}
-                </div>
-              )}
+              {option.rightContent && <div className="flex-none ml-2">{option.rightContent}</div>}
             </div>
           ))}
         </div>
