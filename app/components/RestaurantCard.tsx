@@ -14,7 +14,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
 
   // Get unique categories from menu items
-  const categories = Array.from(new Set((restaurant.menu || []).map(item => item.category || '')))
+  const categories = Array.from(new Set(restaurant.menu?.map(item => item.category).filter((category): category is string => category !== undefined) ?? []))
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -73,12 +73,14 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   }
 
   // Group menu items by category
-  const groupedMenu = (restaurant.menu || []).reduce((acc, item) => {
-    const category = item.category || 'Uncategorized'
-    if (!acc[category]) {
-      acc[category] = []
+  const groupedMenu = (restaurant.menu ?? []).reduce((acc, item) => {
+    const category = item.category
+    if (category) {
+      if (!acc[category]) {
+        acc[category] = []
+      }
+      acc[category].push(item)
     }
-    acc[category].push(item)
     return acc
   }, {} as { [key: string]: MenuItem[] })
 
@@ -124,7 +126,13 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
           {Object.entries(groupedMenu).map(([category, items]) => (
             <div
               key={category}
-              ref={(el) => (groupRefs.current[category] = el)}
+              ref={el => {
+                if (el) {
+                  groupRefs.current[category] = el
+                } else {
+                  delete groupRefs.current[category]
+                }
+              }}
               className="mb-6"
             >
               <h3 className="text-xl font-semibold mb-3 sticky top-0 bg-white py-2">

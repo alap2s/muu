@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server'
-import * as fs from 'fs'
+import * as fs from 'fs/promises'
 import * as path from 'path'
-import { MenuItem } from '@/app/types/restaurant'
+
+interface MenuItem {
+  id: string
+  name: string
+  description?: string
+  price: number
+  dietaryRestrictions: string[]
+}
 
 interface MenuCategory {
   name: string
@@ -49,22 +56,22 @@ interface FrontendRestaurant {
   menuSource: 'database' | 'sample'
 }
 
-// Read the restaurant menu database with error handling
-function getRestaurantMenus(): RestaurantDatabase {
+// Read the restaurant menu database
+let restaurantMenus: RestaurantDatabase | null = null
+
+async function loadRestaurantData() {
+  if (restaurantMenus) return restaurantMenus
+  
   try {
-    const filePath = path.join(process.cwd(), 'data', 'restaurant-menus.json')
-    console.log('Reading restaurant data from:', filePath)
-    
-    if (!fs.existsSync(filePath)) {
-      console.error('Restaurant data file not found at:', filePath)
-      throw new Error('Restaurant data file not found')
-    }
-    
-    const data = fs.readFileSync(filePath, 'utf-8')
-    return JSON.parse(data)
+    const data = await fs.readFile(
+      path.join(process.cwd(), 'data', 'restaurant-menus.json'),
+      'utf-8'
+    )
+    restaurantMenus = JSON.parse(data)
+    return restaurantMenus
   } catch (error) {
-    console.error('Error reading restaurant data:', error)
-    throw error
+    console.error('Error loading restaurant data:', error)
+    throw new Error('Failed to load restaurant data')
   }
 }
 
@@ -80,43 +87,14 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return parseFloat((R * c).toFixed(1))
 }
 
-function transformMenuItemToFrontendFormat(menuItem: MenuItem): FrontendMenuItem {
-  const dietaryRestrictions = menuItem.dietaryRestrictions || [];
-
-  // Add dietary info flags to restrictions if they exist
-  if (menuItem.dietaryInfo) {
-    if (menuItem.dietaryInfo.isVegetarian) {
-      dietaryRestrictions.push('vegetarian');
-    }
-    if (menuItem.dietaryInfo.isVegan) {
-      dietaryRestrictions.push('vegan');
-    }
-    if (menuItem.dietaryInfo.hasVegetarianOption) {
-      dietaryRestrictions.push('vegetarian-option');
-    }
-    if (menuItem.dietaryInfo.hasVeganOption) {
-      dietaryRestrictions.push('vegan-option');
-    }
-  }
-
-  return {
-    id: menuItem.id,
-    name: menuItem.name,
-    description: menuItem.description || '',
-    price: menuItem.price,
-    category: menuItem.category || '',
-    dietaryRestrictions: Array.from(new Set(dietaryRestrictions)) // Remove duplicates
-  };
-}
-
 function transformToFrontendFormat(restaurant: RestaurantWithDistance): FrontendRestaurant {
   // Transform the categorized menu items into a flat array
   const menuItems = restaurant.menu.categories.flatMap(category => 
     category.items.map(item => ({
-      ...transformMenuItemToFrontendFormat(item),
+      ...item,
       category: category.name
     }))
-  );
+  )
 
   return {
     id: restaurant.id,
@@ -144,11 +122,14 @@ export async function GET(request: Request) {
     const userLng = parseFloat(lng)
     const searchRadius = parseFloat(radius)
 
-    // Get restaurant data
-    const restaurantMenus = getRestaurantMenus()
+    // Load restaurant data
+    const restaurantData = await loadRestaurantData()
+    if (!restaurantData) {
+      throw new Error('Restaurant data not available')
+    }
 
     // Filter restaurants within the search radius
-    const nearbyRestaurants = restaurantMenus.restaurants
+    const nearbyRestaurants = restaurantData.restaurants
       .map((restaurant: Restaurant) => ({
         ...restaurant,
         distance: calculateDistance(
@@ -159,7 +140,7 @@ export async function GET(request: Request) {
         )
       }))
       .filter((restaurant: RestaurantWithDistance) => restaurant.distance <= searchRadius)
-      .sort((a: RestaurantWithDistance, b: RestaurantWithDistance) => a.distance - b.distance)
+      .sort((a: RestaurantWithDistance, b: RestaurantWithDistance) => b.distance - a.distance)
       .map(transformToFrontendFormat)
 
     console.log('Found restaurants:', nearbyRestaurants.map(r => ({
@@ -171,10 +152,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ restaurants: nearbyRestaurants })
   } catch (error) {
-    console.error('Error in restaurant API:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch restaurants', details: error instanceof Error ? error.message : 'Unknown error' },
-      { status: 500 }
-    )
+    console.error('Error fetching restaurants:', error)
+    return NextResponse.json({ error: 'Failed to fetch restaurants' }, { status: 500 })
   }
 } 

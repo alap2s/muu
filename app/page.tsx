@@ -1,10 +1,18 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, ListFilter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, Check, List } from 'lucide-react'
-import { Dropdown, GridRow } from '@/app/design-system'
-import { MenuItem } from './types/restaurant'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List } from 'lucide-react'
+import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
+
+interface MenuItem {
+  id: string
+  name: string
+  description?: string
+  price: number
+  category: string
+  dietaryRestrictions: string[]
+}
 
 interface Restaurant {
   id: string
@@ -13,36 +21,17 @@ interface Restaurant {
   distance: number
   website: string
   menu: MenuItem[]
-  menuSource: 'database' | 'sample'
+  menuSource?: 'database' | 'sample'
+  rating?: number
+  totalRatings?: number
 }
 
-function getFilteredMenuItems(menu: MenuItem[], filter: string) {
-  if (!filter || filter === 'all') return menu;
-  return menu.filter(item => item?.dietaryRestrictions?.includes(filter) || false);
-}
-
-function getFilterCounts(menu: MenuItem[]) {
-  return {
-    all: menu.length,
-    vegetarian: menu.filter(item => item?.dietaryRestrictions?.includes('vegetarian') || false).length,
-    vegan: menu.filter(item => item?.dietaryRestrictions?.includes('vegan') || false).length
-  };
-}
-
-interface CategoryItemCounts {
-  [key: string]: number
-}
-
-interface CategoryRef {
-  [key: string]: HTMLDivElement | null
-}
-
-function getCategoryItemCounts(menu: MenuItem[]): CategoryItemCounts {
-  return menu.reduce((acc, item) => {
-    const category = item.category || 'Uncategorized'
-    acc[category] = (acc[category] || 0) + 1
-    return acc
-  }, {} as CategoryItemCounts)
+interface PlaceRestaurant {
+  id: string
+  name: string
+  address: string
+  rating?: number
+  totalRatings?: number
 }
 
 export default function Home() {
@@ -51,9 +40,11 @@ export default function Home() {
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [selectedFilter, setSelectedFilter] = useState<string>('all')
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [filter, setFilter] = useState<string>('all')
+  const [selectedGroup, setSelectedGroup] = useState<string>('')
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  const menuRef = useRef<HTMLDivElement>(null)
+  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
   const [language, setLanguage] = useState<'EN' | 'DE'>(() => {
     if (typeof window !== 'undefined') {
       return (localStorage.getItem('language') as 'EN' | 'DE') || 'EN'
@@ -66,8 +57,6 @@ export default function Home() {
     }
     return false
   })
-  const menuRef = useRef<HTMLDivElement>(null)
-  const categoryRefs = useRef<CategoryRef>({})
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -78,18 +67,6 @@ export default function Home() {
     }
     setExpandedItems(newExpandedItems)
   }
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('language', language)
-    }
-  }, [language])
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('notifications', notifications.toString())
-    }
-  }, [notifications])
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -123,6 +100,15 @@ export default function Home() {
   }, [restaurants])
 
   useEffect(() => {
+    if (selectedRestaurant && Array.isArray(selectedRestaurant.menu) && selectedRestaurant.menu.length > 0) {
+      const categories = Array.from(new Set(selectedRestaurant.menu.map(item => item.category)))
+      if (categories.length > 0) {
+        setSelectedGroup(categories[0])
+      }
+    }
+  }, [selectedRestaurant])
+
+  useEffect(() => {
     const handleScroll = () => {
       if (!menuRef.current) return
 
@@ -144,8 +130,8 @@ export default function Home() {
         }
       }
 
-      if (closestCategory && closestCategory !== selectedCategory) {
-        setSelectedCategory(closestCategory)
+      if (closestCategory && closestCategory !== selectedGroup) {
+        setSelectedGroup(closestCategory)
       }
     }
 
@@ -154,7 +140,7 @@ export default function Home() {
       menuElement.addEventListener('scroll', handleScroll)
       return () => menuElement.removeEventListener('scroll', handleScroll)
     }
-  }, [selectedCategory])
+  }, [selectedGroup])
 
   const fetchRestaurants = async () => {
     if (!location) return
@@ -163,16 +149,29 @@ export default function Home() {
     setError(null)
 
     try {
-      const response = await fetch(
-        `/api/restaurants?lat=${location.lat}&lng=${location.lng}&radius=0.5`
+      // Fetch restaurants from our database
+      const dbResponse = await fetch(
+        `/api/restaurants?lat=${location.lat}&lng=${location.lng}&radius=1`
       )
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch restaurants')
+      if (!dbResponse.ok) {
+        throw new Error('Failed to fetch restaurants from database')
       }
 
-      const data = await response.json()
-      setRestaurants(data.restaurants)
+      const dbData = await dbResponse.json()
+      
+      // Only use restaurants from our database and limit to closest 10
+      const sortedRestaurants = dbData.restaurants
+        .filter((r: Restaurant) => r.menuSource === 'database')
+        .sort((a: Restaurant, b: Restaurant) => b.distance - a.distance)
+        .slice(0, 10)
+
+      setRestaurants(sortedRestaurants)
+      
+      // Auto-select the closest restaurant (last in the array since we're sorting in descending order)
+      if (sortedRestaurants.length > 0) {
+        setSelectedRestaurant(sortedRestaurants[sortedRestaurants.length - 1])
+      }
     } catch (err) {
       console.error('Error fetching restaurants:', err)
       setError('Failed to load restaurants. Please try again later.')
@@ -181,61 +180,52 @@ export default function Home() {
     }
   }
 
-  const menu = selectedRestaurant?.menu || [];
-  const filterCounts = getFilterCounts(menu);
-  const filteredMenu = getFilteredMenuItems(menu, selectedFilter);
-  const categoryItemCounts = getCategoryItemCounts(filteredMenu);
+  const filteredMenu = selectedRestaurant?.menu.filter((item) => {
+    if (filter === 'all') return true
+    return item.dietaryRestrictions.includes(filter)
+  })
 
-  const dietaryOptions = [
-    { value: 'all', label: `All (${filterCounts.all})` },
-    { value: 'vegetarian', label: `Vegetarian (${filterCounts.vegetarian})`, disabled: filterCounts.vegetarian === 0 },
-    { value: 'vegan', label: `Vegan (${filterCounts.vegan})`, disabled: filterCounts.vegan === 0 }
-  ];
+  const groupedMenu = filteredMenu?.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = []
+    }
+    acc[item.category].push(item)
+    return acc
+  }, {} as { [key: string]: MenuItem[] }) || {}
 
-  const categoryOptions = [
-    { value: 'all', label: `All Categories (${filteredMenu.length})` },
-    ...Array.from(new Set(filteredMenu.map(item => item.category)))
-      .filter((category): category is string => !!category) // Type guard to ensure non-null
-      .map(category => ({
-        value: category,
-        label: `${category} (${categoryItemCounts[category] || 0})`
-      }))
-  ];
+  const categories = Object.keys(groupedMenu)
 
   const getDietaryIcons = (item: MenuItem) => {
     const icons = []
     const name = item.name.toLowerCase()
     const description = item.description?.toLowerCase() || ''
-    const dietaryRestrictions = item.dietaryRestrictions || []
 
-    if (dietaryRestrictions.includes('vegetarian')) {
+    if (item.dietaryRestrictions.includes('vegetarian')) {
       icons.push(<Milk key="milk" className="w-4 h-4 text-[#1e1e1e]" />)
     }
-    if (dietaryRestrictions.includes('vegan')) {
+    if (item.dietaryRestrictions.includes('vegan')) {
       icons.push(<Leaf key="leaf" className="w-4 h-4 text-[#1e1e1e]" />)
     }
-    if (dietaryRestrictions.includes('nuts')) {
+    if (item.dietaryRestrictions.includes('nuts')) {
       icons.push(<Nut key="nut" className="w-4 h-4 text-[#1e1e1e]" />)
     }
-    if (!dietaryRestrictions.includes('vegetarian') && !dietaryRestrictions.includes('vegan')) {
+    if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
       if (name.includes('chicken') || description.includes('chicken') || 
           name.includes('hähnchen') || description.includes('hähnchen')) {
         icons.push(<Bird key="bird" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else if (name.includes('egg') || description.includes('egg') ||
+                 name.includes('ei') || description.includes('ei')) {
+        icons.push(<Egg key="egg" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else if (name.includes('fish') || description.includes('fish') ||
+                 name.includes('fisch') || description.includes('fisch')) {
+        icons.push(<Fish key="fish" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else if (name.includes('ham') || description.includes('ham') ||
+                 name.includes('schinken') || description.includes('schinken')) {
+        icons.push(<Beef key="ham" className="w-4 h-4 text-[#1e1e1e]" />)
+      } else {
+        icons.push(<Bird key="meat" className="w-4 h-4 text-[#1e1e1e]" />)
       }
     }
-    if (name.includes('beef') || description.includes('beef') || 
-        name.includes('rind') || description.includes('rind')) {
-      icons.push(<Beef key="beef" className="w-4 h-4 text-[#1e1e1e]" />)
-    }
-    if (name.includes('fish') || description.includes('fish') || 
-        name.includes('fisch') || description.includes('fisch')) {
-      icons.push(<Fish key="fish" className="w-4 h-4 text-[#1e1e1e]" />)
-    }
-    if (name.includes('egg') || description.includes('egg') || 
-        name.includes('ei') || description.includes('ei')) {
-      icons.push(<Egg key="egg" className="w-4 h-4 text-[#1e1e1e]" />)
-    }
-
     return icons
   }
 
@@ -255,10 +245,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen max-w-4xl mx-auto">
-      <div className="flex">
+      <div className="flex border-b border-[#FF373A]/20">
         <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-        <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center justify-center">
-          <Squirrel className="w-6 h-6 text-[#FF373A]" />
+        <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center pl-4">
+          <span className="text-[18px] font-bold text-[#FF373A]">Menoo</span>
+        </div>
+        <div className="w-12 h-12 bg-[#F4F2F8] flex-none">
+          <SettingsMenu
+            language={language}
+            onLanguageChange={setLanguage}
+            notifications={notifications}
+            onNotificationsChange={setNotifications}
+            onShare={handleShare}
+          />
         </div>
         <div className="w-8 h-12 bg-[#F4F2F8]" />
       </div>
@@ -273,136 +272,90 @@ export default function Home() {
         <div className="text-center py-8">Loading restaurants...</div>
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
-          <div className="flex border-t border-[#FF373A]/20 border-b border-[#FF373A]/20">
-            <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none" />
-            <div className="flex-1 min-w-0">
-              <Dropdown
-                value={selectedRestaurant?.id || ''}
-                onChange={(value) => {
-                  const restaurant = restaurants.find(r => r.id === value)
-                  if (restaurant) setSelectedRestaurant(restaurant)
-                }}
-                options={restaurants.map(restaurant => ({
-                  value: restaurant.id,
-                  label: `${restaurant.name} (${restaurant.distance} km away)`
-                }))}
-                leftIcon={<Store className="w-4 h-4 text-primary" strokeWidth={2} />}
-                position="bottom"
-              />
-            </div>
-            <div className="w-12 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none">
-              <SettingsMenu
-                language={language}
-                onLanguageChange={setLanguage}
-                notifications={notifications}
-                onNotificationsChange={setNotifications}
-                onShare={handleShare}
-              />
-            </div>
-            <div className="w-8 h-12 bg-[#F4F2F8]" />
-          </div>
-
           {selectedRestaurant && (
             <div className="bg-[#F4F2F8] pb-20" ref={menuRef}>
               <div className="space-y-0">
-                {Object.entries(filteredMenu.reduce((acc, item) => {
-                  const category = item.category || 'Uncategorized'
-                  if (!acc[category]) {
-                    acc[category] = []
-                  }
-                  acc[category].push(item)
-                  return acc
-                }, {} as { [key: string]: MenuItem[] })).length > 0 ? (
-                  Object.entries(filteredMenu.reduce((acc, item) => {
-                    const category = item.category || 'Uncategorized'
-                    if (!acc[category]) {
-                      acc[category] = []
-                    }
-                    acc[category].push(item)
-                    return acc
-                  }, {} as { [key: string]: MenuItem[] })).map(([category, items]) => (
-                    <div 
-                      key={category} 
-                      ref={(el) => {
-                        if (categoryRefs.current) {
-                          categoryRefs.current[category] = el
-                        }
-                      }}
-                    >
-                      <div className="flex">
-                        <div className="w-8 h-12 border-r border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
-                        <h3 className="flex-1 font-medium text-primary h-12 flex items-center px-4 border-r border-b border-[#FF373A]/20 font-mono">
+                {Object.entries(groupedMenu).map(([category, items]) => (
+                  <div 
+                    key={category} 
+                    ref={(el) => {
+                      if (categoryRefs.current) {
+                        categoryRefs.current[category] = el
+                      }
+                    }}
+                  >
+                    <div className="flex">
+                      <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                      <div className="flex-1">
+                        <h3 className="font-medium text-sm text-[#FF373A] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20">
                           {category}
                         </h3>
-                        <div className="w-8 h-12 border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
                       </div>
-                      <div className="space-y-0">
-                        {items.map((item) => (
-                          <div 
-                            key={item.id} 
-                            className="flex min-h-[64px] border-b border-[#FF373A]/20 cursor-pointer"
-                            onClick={() => toggleItemExpansion(item.id)}
-                          >
-                            <div className="w-8 min-h-full border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                            <div className="flex-1 flex justify-between items-start p-4 border-r border-[#FF373A]/20 font-mono">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2">
-                                  <h4 className="font-medium text-text-primary">
-                                    <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
-                                      {item.name}
-                                    </span>
-                                  </h4>
-                                  <div className="flex gap-2 items-center">
-                                    {getDietaryIcons(item)}
+                      <div className="w-8 h-12 bg-[#F4F2F8]" />
+                    </div>
+                    <div className="space-y-0">
+                      {items.map((item) => (
+                        <div 
+                          key={item.id} 
+                          className="border-b border-[#FF373A]/20 cursor-pointer"
+                          onClick={() => toggleItemExpansion(item.id)}
+                        >
+                          <div className="flex">
+                            <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start p-4 border-r border-[#FF373A]/20">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <h4 className="font-medium text-[#1e1e1e]">
+                                      <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
+                                        {item.name}
+                                      </span>
+                                    </h4>
+                                    <div className="flex gap-2 items-center">
+                                      {getDietaryIcons(item)}
+                                    </div>
                                   </div>
+                                  {item.description && (
+                                    <p className={`text-[#1e1e1e]/50 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
+                                      {item.description}
+                                    </p>
+                                  )}
                                 </div>
-                                {item.description && (
-                                  <p className={`text-text-secondary text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
-                                    {item.description}
-                                  </p>
-                                )}
+                                <span className="font-medium ml-4 text-[#1e1e1e]">
+                                  €{item.price.toFixed(2)}
+                                </span>
                               </div>
-                              <span className="font-medium ml-4 text-text-primary">
-                                €{item.price.toFixed(2)}
-                              </span>
                             </div>
-                            <div className="w-8 min-h-full bg-[#F4F2F8]" />
+                            <div className="w-8 bg-[#F4F2F8]" />
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                  ))
-                ) : (
-                  <div className="flex flex-1">
-                    <div className="w-8 h-full border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                    <div className="flex-1 flex flex-col items-center justify-center p-8 border-r border-[#FF373A]/20 min-h-[calc(100vh-13rem)]">
-                      <Leaf className="w-12 h-12 text-[#FF373A]/40 mb-4" />
-                      <h3 className="text-lg font-medium text-text-primary mb-2">No items found</h3>
-                      <p className="text-text-secondary text-center">
-                        {selectedFilter === 'all' 
-                          ? "This restaurant doesn't have any menu items yet."
-                          : `No ${selectedFilter} items available. Try a different filter or check back later.`}
-                      </p>
-                    </div>
-                    <div className="w-8 h-full bg-[#F4F2F8]" />
                   </div>
-                )}
+                ))}
               </div>
 
               {selectedRestaurant.website && (
-                <div className="flex h-12">
-                  <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  <div className="flex-1 border-r border-[#FF373A]/20 text-center flex items-center justify-center">
-                    <a
-                      href={selectedRestaurant.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-[#1e1e1e] hover:underline font-mono underline text-sm"
-                    >
-                      Visit Restaurant Website
-                    </a>
+                <div>
+                  <div className="flex">
+                    <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="flex-1 h-12 flex items-center justify-center border-r border-[#FF373A]/20">
+                      <a
+                        href={selectedRestaurant.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#1e1e1e] hover:underline underline"
+                      >
+                        Visit Restaurant Website
+                      </a>
+                    </div>
+                    <div className="w-8 bg-[#F4F2F8]" />
                   </div>
-                  <div className="w-8 bg-[#F4F2F8]" />
+                  <div className="flex h-8">
+                    <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="w-8 bg-[#F4F2F8]" />
+                  </div>
                 </div>
               )}
             </div>
@@ -416,27 +369,57 @@ export default function Home() {
                   <div className="flex-1 flex min-w-0">
                     <div className="flex-1 min-w-0">
                       <Dropdown
-                        value={selectedCategory}
+                        value={selectedRestaurant?.id || ''}
                         onChange={(value) => {
-                          setSelectedCategory(value)
+                          const restaurant = restaurants.find(r => r.id === value)
+                          if (restaurant) setSelectedRestaurant(restaurant)
+                        }}
+                        options={restaurants.map(restaurant => ({
+                          value: restaurant.id,
+                          label: `${restaurant.name} (${restaurant.distance} km)`
+                        }))}
+                        leftIcon={<Store className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        position="top"
+                      />
+                    </div>
+                    <div className="flex-none w-12 border-l border-[#FF373A]/20">
+                      <Dropdown
+                        value={selectedGroup}
+                        onChange={(value) => {
+                          setSelectedGroup(value)
                           const element = categoryRefs.current[value]
                           if (element) {
                             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
                           }
                         }}
-                        options={categoryOptions}
-                        leftIcon={<List className="w-4 h-4 text-primary" strokeWidth={2} />}
+                        options={categories.map(category => ({
+                          value: category,
+                          label: category
+                        }))}
+                        leftIcon={<Layers className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
                         position="top"
+                        hideChevron={true}
+                        className="justify-center"
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-none w-12 border-l border-[#FF373A]/20">
                       <Dropdown
-                        value={selectedFilter}
-                        onChange={(value) => setSelectedFilter(value)}
-                        options={dietaryOptions}
-                        leftIcon={<ListFilter className="w-4 h-4 text-primary" strokeWidth={2} />}
+                        value={filter}
+                        onChange={setFilter}
+                        options={[
+                          { value: 'all', label: 'All' },
+                          { value: 'vegetarian', label: 'Vegetarian' },
+                          { value: 'vegan', label: 'Vegan' }
+                        ]}
+                        leftIcon={
+                          filter === 'all' ? <Filter className="w-4 h-4 text-[#FF373A]" strokeWidth={2} /> :
+                          filter === 'vegetarian' ? <Milk className="w-4 h-4 text-[#FF373A]" strokeWidth={2} /> :
+                          <Leaf className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />
+                        }
                         position="top"
                         align="right"
+                        hideChevron={true}
+                        className="justify-center"
                       />
                     </div>
                   </div>
@@ -446,10 +429,7 @@ export default function Home() {
               <div className="border-b border-[#FF373A]/20">
                 <div className="flex h-8">
                   <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  <div className="flex-1 flex">
-                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  </div>
+                  <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                   <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                 </div>
               </div>
@@ -457,8 +437,18 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="text-center py-8 text-gray-500">
-          No restaurants found nearby
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-48px)] space-y-4">
+          <p className="text-[#1e1e1e]/70">No restaurants found nearby</p>
+          <button
+            type="button"
+            className="h-12 px-4 appearance-none bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-center border border-[#FF373A]/20 hover:bg-[#FF373A]/5 transition-colors"
+            onClick={() => {
+              // TODO: Implement add restaurant functionality
+              console.log('Add restaurant clicked')
+            }}
+          >
+            Add restaurant menu
+          </button>
         </div>
       )}
     </div>
