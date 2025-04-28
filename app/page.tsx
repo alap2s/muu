@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, ChefHat, Squirrel, Check, List } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, ListFilter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, Check, List } from 'lucide-react'
 import { Dropdown, GridRow } from '@/app/design-system'
 import { MenuItem } from './types/restaurant'
+import { SettingsMenu } from './components/SettingsMenu'
 
 interface Restaurant {
   id: string
@@ -28,14 +29,20 @@ function getFilterCounts(menu: MenuItem[]) {
   };
 }
 
-function getCategoryItemCounts(menu: MenuItem[]) {
-  const counts: Record<string, number> = {};
-  menu.forEach(item => {
-    if (item.category) {
-      counts[item.category] = (counts[item.category] || 0) + 1;
-    }
-  });
-  return counts;
+interface CategoryItemCounts {
+  [key: string]: number
+}
+
+interface CategoryRef {
+  [key: string]: HTMLDivElement | null
+}
+
+function getCategoryItemCounts(menu: MenuItem[]): CategoryItemCounts {
+  return menu.reduce((acc, item) => {
+    const category = item.category || 'Uncategorized'
+    acc[category] = (acc[category] || 0) + 1
+    return acc
+  }, {} as CategoryItemCounts)
 }
 
 export default function Home() {
@@ -53,8 +60,14 @@ export default function Home() {
     }
     return 'EN'
   })
+  const [notifications, setNotifications] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('notifications') === 'true'
+    }
+    return false
+  })
   const menuRef = useRef<HTMLDivElement>(null)
-  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const categoryRefs = useRef<CategoryRef>({})
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -71,6 +84,12 @@ export default function Home() {
       localStorage.setItem('language', language)
     }
   }, [language])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('notifications', notifications.toString())
+    }
+  }, [notifications])
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -176,7 +195,7 @@ export default function Home() {
   const categoryOptions = [
     { value: 'all', label: `All Categories (${filteredMenu.length})` },
     ...Array.from(new Set(filteredMenu.map(item => item.category)))
-      .filter(category => category) // Filter out empty categories
+      .filter((category): category is string => !!category) // Type guard to ensure non-null
       .map(category => ({
         value: category,
         label: `${category} (${categoryItemCounts[category] || 0})`
@@ -220,6 +239,20 @@ export default function Home() {
     return icons
   }
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Menoo',
+          text: 'Check out Menoo - A free app standardized restaurant menu app.',
+          url: window.location.href,
+        })
+      } catch (error) {
+        console.error('Error sharing:', error)
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen max-w-4xl mx-auto">
       <div className="flex">
@@ -253,16 +286,19 @@ export default function Home() {
                   value: restaurant.id,
                   label: `${restaurant.name} (${restaurant.distance} km away)`
                 }))}
-                leftIcon={<ChefHat className="w-4 h-4 text-primary" strokeWidth={2} />}
+                leftIcon={<Store className="w-4 h-4 text-primary" strokeWidth={2} />}
                 position="bottom"
               />
             </div>
-            <button 
-              className="w-12 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-center flex-none"
-              onClick={() => setLanguage(prev => prev === 'EN' ? 'DE' : 'EN')}
-            >
-              {language}
-            </button>
+            <div className="w-12 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none">
+              <SettingsMenu
+                language={language}
+                onLanguageChange={setLanguage}
+                notifications={notifications}
+                onNotificationsChange={setNotifications}
+                onShare={handleShare}
+              />
+            </div>
             <div className="w-8 h-12 bg-[#F4F2F8]" />
           </div>
 
@@ -270,22 +306,28 @@ export default function Home() {
             <div className="bg-[#F4F2F8] pb-20" ref={menuRef}>
               <div className="space-y-0">
                 {Object.entries(filteredMenu.reduce((acc, item) => {
-                  if (!acc[item.category]) {
-                    acc[item.category] = []
+                  const category = item.category || 'Uncategorized'
+                  if (!acc[category]) {
+                    acc[category] = []
                   }
-                  acc[item.category].push(item)
+                  acc[category].push(item)
                   return acc
                 }, {} as { [key: string]: MenuItem[] })).length > 0 ? (
                   Object.entries(filteredMenu.reduce((acc, item) => {
-                    if (!acc[item.category]) {
-                      acc[item.category] = []
+                    const category = item.category || 'Uncategorized'
+                    if (!acc[category]) {
+                      acc[category] = []
                     }
-                    acc[item.category].push(item)
+                    acc[category].push(item)
                     return acc
                   }, {} as { [key: string]: MenuItem[] })).map(([category, items]) => (
                     <div 
                       key={category} 
-                      ref={el => categoryRefs.current[category] = el}
+                      ref={(el) => {
+                        if (categoryRefs.current) {
+                          categoryRefs.current[category] = el
+                        }
+                      }}
                     >
                       <div className="flex">
                         <div className="w-8 h-12 border-r border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
@@ -392,7 +434,7 @@ export default function Home() {
                         value={selectedFilter}
                         onChange={(value) => setSelectedFilter(value)}
                         options={dietaryOptions}
-                        leftIcon={<Filter className="w-4 h-4 text-primary" strokeWidth={2} />}
+                        leftIcon={<ListFilter className="w-4 h-4 text-primary" strokeWidth={2} />}
                         position="top"
                         align="right"
                       />

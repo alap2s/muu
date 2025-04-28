@@ -7,6 +7,7 @@ interface Option {
   value: string
   label: string
   disabled?: boolean
+  rightContent?: React.ReactNode
 }
 
 interface DropdownProps {
@@ -101,7 +102,9 @@ export function Dropdown({ value, onChange, options, leftIcon, className = '', p
               }}
             >
               <span className="truncate">{option.label}</span>
-              {option.value === value && !option.disabled && (
+              {option.rightContent ? (
+                option.rightContent
+              ) : option.value === value && !option.disabled && (
                 <Check className="w-4 h-4 text-[#FF373A] flex-none ml-4" strokeWidth={2} />
               )}
             </button>
