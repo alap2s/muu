@@ -140,7 +140,7 @@ export async function GET(request: Request) {
         )
       }))
       .filter((restaurant: RestaurantWithDistance) => restaurant.distance <= searchRadius)
-      .sort((a: RestaurantWithDistance, b: RestaurantWithDistance) => a.distance - b.distance)
+      .sort((a: RestaurantWithDistance, b: RestaurantWithDistance) => b.distance - a.distance)
       .map(transformToFrontendFormat)
 
     console.log('Found restaurants:', nearbyRestaurants.map(r => ({

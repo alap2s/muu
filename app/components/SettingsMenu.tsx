@@ -59,30 +59,8 @@ export function SettingsMenu({
     {
       value: 'notifications',
       label: 'Notifications',
-      rightContent: (
-        <div className="flex gap-2">
-          <button 
-            className={`px-2 py-1 ${!notifications ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
-            onClick={(e) => {
-              e.stopPropagation()
-              setNotifications(false)
-              onNotificationsChange(false)
-            }}
-          >
-            Off
-          </button>
-          <button 
-            className={`px-2 py-1 ${notifications ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
-            onClick={(e) => {
-              e.stopPropagation()
-              setNotifications(true)
-              onNotificationsChange(true)
-            }}
-          >
-            ON
-          </button>
-        </div>
-      )
+      description: 'Coming soon',
+      hideInList: false
     },
     {
       value: 'share',

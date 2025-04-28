@@ -1,272 +1,501 @@
 {
   "restaurants": [
     {
-      "id": "ristorante-firenze",
-      "name": "Ristorante Firenze",
-      "address": "Florastraße 27, 13187 Berlin",
+      "id": "tossakan-berlin",
+      "name": "Tossakan Berlin",
+      "address": "Schliemannstraße 16, 10437 Berlin",
       "coordinates": {
-        "lat": 52.56720981565345,
-        "lng": 13.403590162044386
+        "lat": 52.543728,
+        "lng": 13.419979
       },
-      "website": "https://www.firenze-ristorante.de/Speisekarte",
+      "website": "https://tossakan-berlin.de",
       "menu": {
         "categories": [
           {
-            "name": "Aperitivi",
+            "name": "SMALL BITES",
             "items": [
               {
-                "id": "aperitivi-1",
-                "name": "Prosecco",
-                "description": "Trocken",
-                "price": 6.90,
+                "id": "small-bites-1",
+                "name": "Tod Man Khao Pod",
+                "description": "Fried Corn Patties with red curry paste, lime leaves, beans and plum sauce",
+                "price": 8.0,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "small-bites-2",
+                "name": "Gui Chai Thod",
+                "description": "Fried Thai Chive Dumplings with pepper, garlic and soy-vinegar",
+                "price": 9.0,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "small-bites-3",
+                "name": "Chup Kai",
+                "description": "Fried Eggplant, Carrots and Beans breaded with egg, served with Nam Prik Gapi sauce (fermented shrimp sauce)",
+                "price": 8.5,
                 "dietaryRestrictions": []
               },
               {
-                "id": "aperitivi-2",
-                "name": "Campari Orange",
-                "description": "4cl",
-                "price": 7.90,
+                "id": "small-bites-4",
+                "name": "Sate",
+                "description": "Chicken Skewers with peanut sauce",
+                "price": 7.0,
                 "dietaryRestrictions": []
               },
               {
-                "id": "aperitivi-3",
+                "id": "small-bites-5",
+                "name": "Chips",
+                "description": "Crispy Chicken Skin with tomatoes, garlic, Thai basil and plum-pineapple sauce",
+                "price": 7.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "small-bites-6",
+                "name": "Kanom Jeeb Gung",
+                "description": "Steamed Dumplings with prawns, chicken, water chestnuts, mushrooms and garlic oil",
+                "price": 8.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "small-bites-7",
+                "name": "Fish Patties",
+                "description": "Fish Boulettes with cucumber-onion salad and plum sauce",
+                "price": 9.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "small-bites-8",
+                "name": "Miang Kham",
+                "description": "4 Pepper Leaf Wraps with ginger, peanuts, lime, chili, coconut and tamarind sauce",
+                "price": 12.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "small-bites-9",
+                "name": "Muh Grob",
+                "description": "Crispy Pork Belly with seafood sauce",
+                "price": 10.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "SOUP",
+            "items": [
+              {
+                "id": "soup-1",
+                "name": "Tom Yam Gai",
+                "description": "Sour spicy lemongrass soup with chicken wings, coriander and shimeji mushrooms",
+                "price": 6.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "soup-2",
+                "name": "Tom Kha Gung",
+                "description": "Coconut milk soup with black tiger prawns, shimeji mushrooms, galangal and onions",
+                "price": 6.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "SALAD",
+            "items": [
+              {
+                "id": "salad-1",
+                "name": "Som Tam",
+                "description": "Green papaya salad with peanuts, long beans, tomatoes and lime-tamarind-sauce",
+                "price": 11.5,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-2",
+                "name": "Laab Kahlam Pi",
+                "description": "Cabbage salad with onion, chili, roasted sticky rice flakes, coriander, mint and lime",
+                "price": 11.5,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-3",
+                "name": "Yam Makeua",
+                "description": "Eggplant salad with shimeji mushrooms, tomatoes, Thai celery, chili, lime and fish sauce",
+                "price": 11.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "salad-4",
+                "name": "Gung Che",
+                "description": "Raw Black Tiger Prawns with coriander, mint and seafood sauce",
+                "price": 14.0,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "CHEF'S CHOICE",
+            "items": [
+              {
+                "id": "chefs-1",
+                "name": "Pad Phed Sikrong",
+                "description": "Pork ribs with chili curry paste, long beans, lime leaves and Thai basil",
+                "price": 16.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "chefs-2",
+                "name": "Kra Pao Nua Tdun",
+                "description": "Braised short beef ribs with spicy Thai basil sauce and fried egg",
+                "price": 19.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "chefs-3",
+                "name": "Gung Chao Wang",
+                "description": "Pan fried Black Tiger Prawns with chili oil, coriander and Kaikem sauce (salted eggs, garlic, chili paste and onions)",
+                "price": 28.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "chefs-4",
+                "name": "Plah Thod",
+                "description": "Fried Sea Bass with tamarind-chili-sauce, coriander and Thai basil",
+                "price": 28.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "chefs-5",
+                "name": "Yam Pla Yang",
+                "description": "Grilled Sea Bass with tomatoes, Thai celery, chili, lime and fish sauce",
+                "price": 28.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "chefs-6",
+                "name": "Plah Lui Suan",
+                "description": "Fried Sea Bass with tamarind-lime-sauce, coriander, red onions, garlic and lemon grass",
+                "price": 29.0,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "CURRY",
+            "items": [
+              {
+                "id": "curry-1",
+                "name": "Gaeng Galam",
+                "description": "Yellow Curry with cauliflower, potato, carrots and onion",
+                "price": 14.5,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "curry-2",
+                "name": "Gaeng Kua Makeua",
+                "description": "Red Curry with grilled eggplant, lychee, peperoni and Thai basil",
+                "price": 15.5,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "curry-3",
+                "name": "Massaman Gai",
+                "description": "Massaman Curry with braised chicken leg, potato, carrots and ginger",
+                "price": 19.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "curry-4",
+                "name": "Kiew Wan Pla",
+                "description": "Green Curry with fish boulettes, Thai eggplant, Thai basil, chili and krachai roots",
+                "price": 19.0,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "CLASSICS",
+            "items": [
+              {
+                "id": "classics-1",
+                "name": "Pad Pak Boong",
+                "description": "Pan fried water spinach with soy sauce, garlic, chili and oyster sauce",
+                "price": 12.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-2",
+                "name": "Galam Nam Pla",
+                "description": "Pan fried Cabbage with peperoni, garlic, chili and fish sauce",
+                "price": 12.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-3",
+                "name": "Muh Paloh",
+                "description": "Pork belly and egg stew with star anise, cinnamon, coriander roots and garlic",
+                "price": 18.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-4",
+                "name": "Makeua Muh Sab",
+                "description": "Pan fried Eggplants with ground pork, garlic, chili, Thai basil and soy bean paste",
+                "price": 18.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-5",
+                "name": "Kra Pao Chicken",
+                "description": "Pan fried minced chicken with spicy Thai basil sauce and fried egg",
+                "price": 15.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-6",
+                "name": "Kra Pao Pork",
+                "description": "Pan fried minced pork with spicy Thai basil sauce and fried egg",
+                "price": 15.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-7",
+                "name": "Leng Saap",
+                "description": "Pork Ribs with green chili sauce, garlic and coriander roots",
+                "price": 15.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-8",
+                "name": "Mama Tom Yam Muh Grob",
+                "description": "Tom Yam Soup with MAMA noodles, egg yolk, lime, shimeji mushrooms and coriander",
+                "price": 26.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-9",
+                "name": "Mama Tom Yam Seafood",
+                "description": "Tom Yam Soup with MAMA noodles, egg yolk, lime, shimeji mushrooms and coriander",
+                "price": 28.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "classics-10",
+                "name": "Pad Pong Kari",
+                "description": "Pan fried yellow curry with Black Tiger Prawns, Thai celery and scrambled eggs",
+                "price": 27.0,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "DESSERT",
+            "items": [
+              {
+                "id": "dessert-1",
+                "name": "Mango Sticky Rice",
+                "description": "Mango, coconut milk, pandan, sticky rice",
+                "price": 8.5,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-2",
+                "name": "Egg Custard Sticky Rice",
+                "description": "Egg custard, pandan, sticky rice, coconut sorbet",
+                "price": 8.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "dessert-3",
+                "name": "Banana Cake",
+                "description": "Banana, coconut, rice flour",
+                "price": 8.5,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "DRINKS",
+            "items": [
+              {
+                "id": "drinks-tea-1",
+                "name": "Ginger Lemongrass Tea",
+                "description": "0.3l",
+                "price": 4.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-tea-2",
+                "name": "Ginger Orange Tea",
+                "description": "0.3l",
+                "price": 4.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-tea-3",
+                "name": "Ginger Pandan Tea",
+                "description": "0.3l",
+                "price": 4.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-tea-4",
+                "name": "Lime Mint Tea",
+                "description": "0.3l",
+                "price": 4.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-homemade-1",
+                "name": "Cha Manao",
+                "description": "Black tea, sugar, lime (0.3l)",
+                "price": 5.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-homemade-2",
+                "name": "Cha Yen",
+                "description": "Black tea, sugar, milk (0.3l)",
+                "price": 5.5,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "drinks-homemade-3",
+                "name": "Nam Manao",
+                "description": "Lime, sugar, mint, soda (0.3l)",
+                "price": 5.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-homemade-4",
+                "name": "Coco Lychee",
+                "description": "Passionfruit, lychee, coconut, soda (0.3l)",
+                "price": 5.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-homemade-5",
+                "name": "Makam Soda",
+                "description": "Tamarind, lime, soda (0.3l)",
+                "price": 5.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-soft-1",
+                "name": "Vöslauer Still/Sparkling",
+                "description": "0.25l/0.75l",
+                "price": 3.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-soft-2",
+                "name": "Coca Cola / Cola Zero / Fanta / Sprite",
+                "description": "0.2l",
+                "price": 3.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-soft-3",
+                "name": "Thomas Henry Spicy Ginger / Ginger Ale",
+                "description": "0.2l",
+                "price": 3.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-juice-1",
+                "name": "Apple Juice",
+                "description": "0.2l",
+                "price": 3.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-juice-2",
+                "name": "Rhubarb Juice",
+                "description": "0.2l",
+                "price": 3.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "BEER",
+            "items": [
+              {
+                "id": "beer-1",
+                "name": "König Ludwig Helles Von Fass",
+                "description": "0.3l/0.5l",
+                "price": 3.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beer-2",
+                "name": "König Ludwig Helles Von Fass",
+                "description": "0.5l",
+                "price": 5.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beer-3",
+                "name": "Singha",
+                "description": "0.33l",
+                "price": 4.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beer-4",
+                "name": "König Ludwig Weiß alcohol free",
+                "description": "0.5l",
+                "price": 5.0,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "WINE",
+            "items": [
+              {
+                "id": "wine-white-1",
+                "name": "Chardonnay 'Sandstein'",
+                "description": "2021, Oliver Zeter, dry (0.2l/0.75l)",
+                "price": 8.0,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "wine-white-2",
+                "name": "Grauburgunder vom Schiefer",
+                "description": "2022, Weingut Marc Josten, dry (0.2l/0.75l)",
+                "price": 8.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "wine-rose-1",
+                "name": "Doktorspiele",
+                "description": "2023, Weingut Dr.Koehler, fruity (0.2l/0.75l)",
+                "price": 7.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "wine-red-1",
+                "name": "Raiza Crianza",
+                "description": "2021, Vicente Gandía, dry & complex (0.2l/0.75l)",
+                "price": 7.5,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "COCKTAILS",
+            "items": [
+              {
+                "id": "cocktails-1",
                 "name": "Aperol Spritz",
-                "description": "4cl",
-                "price": 7.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Insalata",
-            "items": [
-              {
-                "id": "insalata-1",
-                "name": "Insalata mista di Stagione",
-                "description": "Gemischter Salat der Saison",
-                "price": 8.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "insalata-2",
-                "name": "Insalata Pecorino",
-                "description": "Gemischter Salat mit Schafskäse",
-                "price": 12.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "insalata-3",
-                "name": "Insalata di Tonno",
-                "description": "Gemischter Salat mit Thunfisch und Ei",
-                "price": 13.90,
+                "description": "0.2l",
+                "price": 7.5,
                 "dietaryRestrictions": []
               },
               {
-                "id": "insalata-4",
-                "name": "Insalata di Polo",
-                "description": "Gemischter Salat mit Hähnchenbruststreifen und Champignons in warmer Balsamico-Essigsauce",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Antipasti",
-            "items": [
-              {
-                "id": "antipasti-1",
-                "name": "Antipasto Misto",
-                "description": "Gemischte Vorspeise vegetarisch",
-                "price": 12.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "antipasti-2",
-                "name": "Antipasto Primavera",
-                "description": "Mariniertes Rinderfilet und Lachs-Carpaccio mit Zitrone, Meeresfrüchte, Olivenöl und Parmesan",
-                "price": 16.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "antipasti-3",
-                "name": "Carpaccio di Manzo",
-                "description": "Mariniertes Rinderfilet hauchdünn-geschnitten auf einem Rucolabett mit Champignons, Zitrone, Olivenöl und Parmesan",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "antipasti-4",
-                "name": "Mozzarella di Bufala",
-                "description": "Büffelmozzarella mit Kirschtomaten und frischem Basilikum",
-                "price": 12.90,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          },
-          {
-            "name": "Zuppe",
-            "items": [
-              {
-                "id": "zuppe-1",
-                "name": "Zuppa di Pomodoro",
-                "description": "Tomatencremesuppe mit Basilikum",
-                "price": 6.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "zuppe-2",
-                "name": "Minestrone",
-                "description": "Gemüsesuppe mit Olivenöl extra Vergine",
-                "price": 6.90,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          },
-          {
-            "name": "Pizza",
-            "items": [
-              {
-                "id": "pizza-1",
-                "name": "Pizza Margherita",
-                "description": "Mit Mozzarella und Basilikum",
-                "price": 10.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pizza-2",
-                "name": "Pizza Quattro Stagioni",
-                "description": "Mit Mozzarella, Schinken, Champignons, Peperoni und Artischocken",
-                "price": 13.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pizza-3",
-                "name": "Pizza ai Frutti di Mare",
-                "description": "Mit Mozzarella, Meeresfrüchten und Knoblauch",
-                "price": 15.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pizza-4",
-                "name": "Pizza Vegetaria",
-                "description": "Mit Mozzarella und verschiedenen Gemüsesorten der Saison",
-                "price": 12.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pizza-5",
-                "name": "Pizza con Tartufo Nero",
-                "description": "Büffelmozzarella, Trüffel, Kirschtomaten und Rucola",
-                "price": 18.90,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          },
-          {
-            "name": "Pasta",
-            "items": [
-              {
-                "id": "pasta-1",
-                "name": "Spaghetti al Pomodoro",
-                "description": "Tomatensauce",
-                "price": 11.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pasta-2",
-                "name": "Spaghetti Carbonara",
-                "description": "Speck Pancetta Italiana | Ei | Parmesan",
-                "price": 13.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pasta-3",
-                "name": "Spaghetti ai Frutti di Mare",
-                "description": "Meeresfrüchten | Tomatensauce",
-                "price": 16.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pasta-4",
-                "name": "Pasta Parmigiano Tartufo Nero",
-                "description": "Bandnudeln aus dem Parmesanlaib mit schwarzem Trüffel",
-                "price": 19.90,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          },
-          {
-            "name": "Carni",
-            "items": [
-              {
-                "id": "carni-1",
-                "name": "Scaloppa alla Milanese",
-                "description": "Paniertes Schnitzel Mailändische Art",
-                "price": 18.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "carni-2",
-                "name": "Saltimbocca alla Romana",
-                "description": "Medaillons vom Schweinefilet mit Parmaschinken und Salbei in Weißweinsauce",
-                "price": 21.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Bistecca & Filetto",
-            "items": [
-              {
-                "id": "bistecca-1",
-                "name": "Bistecca alla Griglia",
-                "description": "Frisches Rumpsteak vom Grill mit Kräuterbutter",
-                "price": 25.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "filetto-1",
-                "name": "Filetto alla Griglia",
-                "description": "Frisches Rinderfiletsteak vom Grill mit Kräuterbutter",
-                "price": 32.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Pesce",
-            "items": [
-              {
-                "id": "pesce-1",
-                "name": "Scampi alla Griglia",
-                "description": "Großgarnelen gegrillt mit Knoblauch und Zitrone",
-                "price": 24.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pesce-2",
-                "name": "Salmone alla Griglia",
-                "description": "Frisches Lachsfilet gegrillt mit Zitrone",
-                "price": 22.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Dolci",
-            "items": [
-              {
-                "id": "dolci-1",
-                "name": "Tiramisù",
-                "description": "Schichten von Löffelbiskuits und einer Creme aus Mascarpone mit kaltem Espresso (alkoholfrei)",
-                "price": 7.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "dolci-2",
-                "name": "Panna Cotta",
-                "description": "Mit Himbeeren an einer Himbeersauce",
-                "price": 6.90,
+                "id": "cocktails-2",
+                "name": "Gin Tonic",
+                "description": "0.3l",
+                "price": 9.5,
                 "dietaryRestrictions": []
               }
             ]
@@ -275,1296 +504,241 @@
       }
     },
     {
-      "id": "roji-berlin",
-      "name": "Roji - Taste of Japan",
-      "address": "Mühlenstraße 1, 13187 Berlin",
+      "id": "dashi",
+      "name": "DASHI",
+      "address": "Invalidenstraße 112, 10115 Berlin",
       "coordinates": {
-        "lat": 52.567229,
-        "lng": 13.403555
+        "lat": 52.5297,
+        "lng": 13.3873
       },
-      "website": "https://pankow.roji-berlin.de/speisekarte",
+      "website": "https://dashi.de",
       "menu": {
         "categories": [
           {
-            "name": "Beliebte Gerichte",
+            "name": "MAINS",
             "items": [
               {
-                "id": "v11",
-                "name": "Vorspeisen Mix für 2",
-                "description": "Gemischte Vorspeisenplatte von uns für Sie zusammengestellt",
-                "price": 19.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "11",
-                "name": "Salmon Rose® (2 Stk.)",
-                "description": "Flambierter Lachs mit Lachstatar",
-                "price": 4.80,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "12",
-                "name": "Tuna Rose® (2 Stk.)",
-                "description": "Flambierter Thunfisch mit Thunfisch-Tatar",
-                "price": 4.80,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "57",
-                "name": "Amazing Friendship® (8 Stk.)",
-                "description": "Lachs, Avocado, Frischkäse, obendrauf Aal, flambierter Lachs, Lachstatar & Sesam",
-                "price": 16.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "61",
-                "name": "Volcano Tuna (8 Stk.)",
-                "description": "Thunfisch, Avocado, Frischkäse, obendrauf flambierter Thunfisch, Thunfisch-Tatar & Sesam",
-                "price": 16.00,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Salate",
-            "items": [
-              {
-                "id": "a1",
-                "name": "Edamame",
-                "description": "Gedämpfte grüne Sojabohnen mit Meersalz",
-                "price": 5.00,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "a2",
-                "name": "Kimchi Salat",
-                "description": "Scharf eingelegter Chinakohl, Möhren & Lauch",
-                "price": 5.00,
+                "id": "mains-1",
+                "name": "Korokke Curry",
+                "description": "homemade Japanese curry made with dashi, served with steamed rice, pickled red cabbage, spring onions and in-house made golden crumbed potato croquettes",
+                "price": 13.50,
                 "dietaryRestrictions": ["vegetarian"]
               },
               {
-                "id": "a3",
-                "name": "Spinat Salat",
-                "description": "Blanchierter Blattspinat mit Sesamsoße",
-                "price": 5.00,
-                "dietaryRestrictions": ["vegetarian"]
+                "id": "mains-2",
+                "name": "+ Chicken Katsu",
+                "description": "",
+                "price": 4.20,
+                "dietaryRestrictions": []
               },
               {
-                "id": "a4",
-                "name": "Wakame Salat",
-                "description": "Eingelegter Algensalat mit Sesam",
-                "price": 5.00,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
+                "id": "mains-3",
+                "name": "Braised Pork Belly",
+                "description": "Coca-Cola-glazed pork belly, daikon, sugar snaps, served with steamed rice, kimchi cabbage and pickled pearl onions",
+                "price": 14.50,
+                "dietaryRestrictions": []
               },
               {
-                "id": "a5",
-                "name": "ROJI Kaizen Salat",
-                "description": "Gemischte Fischsorten, knusprige Lachshaut, Avocado, gemischter Salat & Dressing",
+                "id": "mains-4",
+                "name": "Chicken Congee",
+                "description": "with pulled corn chicken (+ chicken skin), topped with coriander and spring onions, served with quẩy/youtiao dough stick and Sriracha sauce",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "mains-5",
+                "name": "Shiitake Congee",
+                "description": "tofu, shiitake, wood ear mushroom, topped with coriander and spring onions, served with quẩy/youtiao dough stick and Sriracha sauce",
                 "price": 10.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "mains-6",
+                "name": "Chicken Sando",
+                "description": "crunchy chicken schnitzel, fresh carrots, shiso leaf with thyme ponzu sauce, sandwiched between toasted brioche (our brioche bread from Bekarei contains eggs)",
+                "price": 11.00,
                 "dietaryRestrictions": []
+              },
+              {
+                "id": "mains-7",
+                "name": "Tempeh Sando",
+                "description": "grilled Tempeh (fermented soybeans) with coleslaw with mustard aioli, fresh Trinidadian pineapple chow, coriander, sandwiched between toasted brioche (our brioche bread from Bekarei contains eggs)",
+                "price": 10.00,
+                "dietaryRestrictions": ["vegetarian"]
               }
             ]
           },
           {
-            "name": "Suppen",
+            "name": "SNACKS",
             "items": [
               {
-                "id": "c1",
-                "name": "Miso Shiru",
-                "description": "Würzige Sojasuppe mit Seetang, Tofu & Frühlingszwiebeln",
+                "id": "snacks-1",
+                "name": "Fries",
+                "description": "in-house made, double-fried French fries dusted in nori salt, served with Werder Ketchup",
                 "price": 5.00,
                 "dietaryRestrictions": ["vegetarian"]
               },
               {
-                "id": "c2",
-                "name": "ROJI SPEZIAL SUPPE",
-                "description": "Lachssuppe mit Champignons & Tomaten",
-                "price": 7.00,
-                "dietaryRestrictions": []
+                "id": "snacks-2",
+                "name": "Szechuan Fries",
+                "description": "in-house made, double-fried French fries with Kewpie mayo dip, dusted in Szechuan chili flakes and topped with coriander, served with lime",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian"]
               },
               {
-                "id": "c3",
-                "name": "CHICKEN COCONUT SUPPE",
-                "description": "Hausgemachte, exotische Hühnerbrühe mit Hühnerfleisch, Kokosmilch, Tomaten, Champignons & Koriander",
-                "price": 7.00,
-                "dietaryRestrictions": []
+                "id": "snacks-3",
+                "name": "Two Korokke",
+                "description": "two golden fried crumbed potato croquettes made in-house, served with DASHI's tonkatsu sauce",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegetarian"]
               },
               {
-                "id": "c4",
-                "name": "WANTAN SUPPE",
-                "description": "Hühnerbrühe mit Wantan, gefüllt mit Huhn und Gemüse",
-                "price": 7.00,
+                "id": "snacks-4",
+                "name": "Chicken Katsu",
+                "description": "crispy golden crumbed chicken cutlet served with DASHI's ginger teriyaki sauce",
+                "price": 4.20,
                 "dietaryRestrictions": []
               }
             ]
           },
           {
-            "name": "Donburi",
+            "name": "SALAD",
             "items": [
               {
-                "id": "450",
-                "name": "Sake Don",
-                "description": "Rohes Lachsfilet, Ikura, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
-                "price": 15.00,
+                "id": "salad-1",
+                "name": "Caesar Salad",
+                "description": "with miso parmesan dressing, Thailand dried anchovy, capers, topped with crispy Wonton skin",
+                "price": 8.50,
                 "dietaryRestrictions": []
               },
               {
-                "id": "451",
-                "name": "Sake Yaki Don",
-                "description": "Spiegelei, leicht flambiertes Lachsfilet, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
-                "price": 16.00,
+                "id": "salad-2",
+                "name": "+ Chicken Katsu",
+                "description": "served with lime",
+                "price": 4.20,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "DESSERTS",
+            "items": [
+              {
+                "id": "desserts-1",
+                "name": "Sizzling Brownie",
+                "description": "Hot fudgy Himalayan salt brownie (made in-house with 85% dark chocolate), served with Florida Eis vanilla ice cream, topped with Maraschino cherry",
+                "price": 8.50,
                 "dietaryRestrictions": []
               },
               {
-                "id": "452",
-                "name": "SAKE TERIYAKI DON",
-                "description": "Gegrilltes Lachsfilet mit Haut, Teriyaki Sauce, verschiedenes Gemüse und Salat",
-                "price": 16.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "456",
-                "name": "ROJI Don",
-                "description": "Verschiedenste rohe Fischsorten, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
-                "price": 15.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "457",
-                "name": "VEGGIE DON",
-                "description": "Verschiedene Gemüse Tempura, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
-                "price": 15.00,
+                "id": "desserts-2",
+                "name": "Mango Sago",
+                "description": "Chilled sago pearls in creamy coconut milk, topped with diced mango",
+                "price": 7.50,
                 "dietaryRestrictions": ["vegetarian"]
               }
             ]
           },
           {
-            "name": "Main Dishes",
+            "name": "REFRESHMENTS",
             "items": [
               {
-                "id": "520",
-                "name": "NOODLE BOWL - Rind",
-                "description": "Reisnudel Bowl mit Salat, Kräuter, Erdnüsse und Röstzwiebeln, serviert mit einer Limetten Vinaigrette",
-                "price": 16.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "510",
-                "name": "BIG PEANUT - Hühnerschenkel",
-                "description": "Cremiges Currygericht mit Kokosmilch und Erdnuss auf Gemüse und Wildkräutersalat, serviert mit Reis oder Reisbandudeln",
-                "price": 16.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "500",
-                "name": "OLD but GOLD - Tofu",
-                "description": "Cremiges Currygericht mit Kokosmilch und rotem Curry auf Gemüse und Wildkräutersalat, serviert mit Reis oder Reisbandnudeln",
-                "price": 16.00,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          },
-          {
-            "name": "Teppanyaki",
-            "items": [
-              {
-                "id": "550",
-                "name": "Salmon Yaki (5 STK.)",
-                "description": "Leicht gegrilltes Lachsfilet mit Babyspargel auf Spinat",
-                "price": 10.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "551",
-                "name": "Tuna Yaki (5 STK.)",
-                "description": "Leicht gegrilltes Thunfischfilet mit Babyspargel auf Spinat",
-                "price": 10.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "552",
-                "name": "Ebi Yaki (4 STK.)",
-                "description": "Gegrillte Großgarnelen mit Babypargel auf Spinat",
-                "price": 10.00,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Desserts",
-            "items": [
-              {
-                "id": "n2",
-                "name": "Mochi (3 Stk.)",
-                "description": "Japanische Reiskuchen",
+                "id": "drinks-1",
+                "name": "Traditional Winter Melon Iced Tea",
+                "description": "with grass jelly cubes",
                 "price": 4.50,
                 "dietaryRestrictions": ["vegetarian"]
               },
               {
-                "id": "n4",
-                "name": "Sesambällchen (4 Stk.)",
-                "description": "Traditionelle japanische Sesambällchen",
-                "price": 5.00,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "wen-cheng-prenzlauer-berg",
-      "name": "Wen Cheng",
-      "address": "Schönhauser Allee 65, 10437 Berlin",
-      "coordinates": {
-        "lat": 52.54178,
-        "lng": 13.41434
-      },
-      "website": "https://www.wenchengnoodles.com/menu",
-      "menu": {
-        "categories": [
-          {
-            "name": "Biang Biang Noodles",
-            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
-            "items": [
-              {
-                "id": "b1",
-                "name": "Beef Biang Biang",
-                "description": "Hand-pulled noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b2",
-                "name": "Lamb & Cumin Biang Biang",
-                "description": "Hand-pulled noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b3",
-                "name": "Tofu Biang Biang",
-                "description": "Hand-pulled noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "b4",
-                "name": "Aubergine & Vegan Minced Meat",
-                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
-                "price": 13.90,
+                "id": "drinks-2",
+                "name": "Orzata Limeade",
+                "description": "with makrut lime leaf",
+                "price": 4.50,
                 "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Wen Cheng Noodles",
-            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
-            "items": [
-              {
-                "id": "w1",
-                "name": "Beef Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
               },
               {
-                "id": "w2",
-                "name": "Lamb & Cumin Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w3",
-                "name": "Tofu Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with tofu",
-                "price": 13.90,
+                "id": "drinks-3",
+                "name": "Melon Granita",
+                "description": "served with Maraschino cherry",
+                "price": 7.00,
                 "dietaryRestrictions": ["vegetarian"]
               },
               {
-                "id": "w4",
-                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Bao Buns & Sides",
-            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
-            "items": [
-              {
-                "id": "8",
-                "name": "Fried Chicken Bao",
-                "description": "Steamed bao bun with fried chicken",
-                "price": 6.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "9",
-                "name": "Tofu Bao",
-                "description": "Steamed bao bun with tofu",
-                "price": 6.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "10",
-                "name": "Cucumber Salad",
-                "description": "Fresh cucumber salad with Asian dressing",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Drinks",
-            "items": [
-              {
-                "id": "11",
-                "name": "Vöslauer Sparkling",
-                "description": "Sparkling mineral water",
+                "id": "drinks-4",
+                "name": "Coca-Cola / Zero",
+                "description": "(330ml)",
                 "price": 3.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "13",
-                "name": "Proviant Rhubarb",
-                "description": "Rhubarb soda",
-                "price": 3.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "17",
-                "name": "Coke",
-                "description": "Classic Coca-Cola",
-                "price": 3.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "20",
-                "name": "Shifu Rice Beer",
-                "description": "Asian rice beer",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "wen-cheng-mitte",
-      "name": "Wen Cheng",
-      "address": "Schönhauser Allee 10, 10119 Berlin",
-      "coordinates": {
-        "lat": 52.52991,
-        "lng": 13.41124
-      },
-      "website": "https://www.wenchengnoodles.com/menu",
-      "menu": {
-        "categories": [
-          {
-            "name": "Biang Biang Noodles",
-            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
-            "items": [
-              {
-                "id": "b1",
-                "name": "Beef Biang Biang",
-                "description": "Hand-pulled noodles with beef",
-                "price": 14.90,
                 "dietaryRestrictions": []
               },
               {
-                "id": "b2",
-                "name": "Lamb & Cumin Biang Biang",
-                "description": "Hand-pulled noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b3",
-                "name": "Tofu Biang Biang",
-                "description": "Hand-pulled noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "b4",
-                "name": "Aubergine & Vegan Minced Meat",
-                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Wen Cheng Noodles",
-            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
-            "items": [
-              {
-                "id": "w1",
-                "name": "Beef Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w2",
-                "name": "Lamb & Cumin Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w3",
-                "name": "Tofu Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "w4",
-                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Bao Buns & Sides",
-            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
-            "items": [
-              {
-                "id": "8",
-                "name": "Fried Chicken Bao",
-                "description": "Steamed bao bun with fried chicken",
-                "price": 6.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "9",
-                "name": "Tofu Bao",
-                "description": "Steamed bao bun with tofu",
-                "price": 6.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "10",
-                "name": "Cucumber Salad",
-                "description": "Fresh cucumber salad with Asian dressing",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Drinks",
-            "items": [
-              {
-                "id": "11",
-                "name": "Vöslauer Sparkling",
-                "description": "Sparkling mineral water",
-                "price": 3.50,
+                "id": "drinks-5",
+                "name": "Viva con Agua",
+                "description": "still water / sparkling water (330ml)",
+                "price": 3.00,
                 "dietaryRestrictions": ["vegetarian", "vegan"]
               },
               {
-                "id": "13",
-                "name": "Proviant Rhubarb",
-                "description": "Rhubarb soda",
-                "price": 3.90,
+                "id": "drinks-6",
+                "name": "Filter Coffee",
+                "description": "(Specialty Coffee from Flying Roasters)",
+                "price": 3.00,
                 "dietaryRestrictions": ["vegetarian", "vegan"]
               },
               {
-                "id": "17",
-                "name": "Coke",
-                "description": "Classic Coca-Cola",
-                "price": 3.50,
+                "id": "drinks-7",
+                "name": "Sweet Jujube Tea",
+                "description": "(hot)",
+                "price": 3.00,
                 "dietaryRestrictions": ["vegetarian", "vegan"]
               },
               {
-                "id": "20",
-                "name": "Shifu Rice Beer",
-                "description": "Asian rice beer",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "wen-cheng-friedrichshain",
-      "name": "Wen Cheng",
-      "address": "Simon-Dach-Straße 22, 10245 Berlin",
-      "coordinates": {
-        "lat": 52.51089,
-        "lng": 13.45411
-      },
-      "website": "https://www.wenchengnoodles.com/menu",
-      "menu": {
-        "categories": [
-          {
-            "name": "Biang Biang Noodles",
-            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
-            "items": [
-              {
-                "id": "b1",
-                "name": "Beef Biang Biang",
-                "description": "Hand-pulled noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b2",
-                "name": "Lamb & Cumin Biang Biang",
-                "description": "Hand-pulled noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b3",
-                "name": "Tofu Biang Biang",
-                "description": "Hand-pulled noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "b4",
-                "name": "Aubergine & Vegan Minced Meat",
-                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Wen Cheng Noodles",
-            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
-            "items": [
-              {
-                "id": "w1",
-                "name": "Beef Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w2",
-                "name": "Lamb & Cumin Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w3",
-                "name": "Tofu Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "w4",
-                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Bao Buns & Sides",
-            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
-            "items": [
-              {
-                "id": "8",
-                "name": "Fried Chicken Bao",
-                "description": "Steamed bao bun with fried chicken",
-                "price": 6.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "9",
-                "name": "Tofu Bao",
-                "description": "Steamed bao bun with tofu",
-                "price": 6.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "10",
-                "name": "Cucumber Salad",
-                "description": "Fresh cucumber salad with Asian dressing",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Drinks",
-            "items": [
-              {
-                "id": "11",
-                "name": "Vöslauer Sparkling",
-                "description": "Sparkling mineral water",
-                "price": 3.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "13",
-                "name": "Proviant Rhubarb",
-                "description": "Rhubarb soda",
-                "price": 3.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "17",
-                "name": "Coke",
-                "description": "Classic Coca-Cola",
-                "price": 3.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "20",
-                "name": "Shifu Rice Beer",
-                "description": "Asian rice beer",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "wen-cheng-kreuzberg",
-      "name": "Wen Cheng",
-      "address": "Spreewaldplatz 5, 10999 Berlin",
-      "coordinates": {
-        "lat": 52.49734,
-        "lng": 13.43312
-      },
-      "website": "https://www.wenchengnoodles.com/menu",
-      "menu": {
-        "categories": [
-          {
-            "name": "Biang Biang Noodles",
-            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
-            "items": [
-              {
-                "id": "b1",
-                "name": "Beef Biang Biang",
-                "description": "Hand-pulled noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b2",
-                "name": "Lamb & Cumin Biang Biang",
-                "description": "Hand-pulled noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "b3",
-                "name": "Tofu Biang Biang",
-                "description": "Hand-pulled noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "b4",
-                "name": "Aubergine & Vegan Minced Meat",
-                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Wen Cheng Noodles",
-            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
-            "items": [
-              {
-                "id": "w1",
-                "name": "Beef Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with beef",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w2",
-                "name": "Lamb & Cumin Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with lamb and cumin",
-                "price": 14.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "w3",
-                "name": "Tofu Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with tofu",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "w4",
-                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
-                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Bao Buns & Sides",
-            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
-            "items": [
-              {
-                "id": "8",
-                "name": "Fried Chicken Bao",
-                "description": "Steamed bao bun with fried chicken",
-                "price": 6.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "9",
-                "name": "Tofu Bao",
-                "description": "Steamed bao bun with tofu",
-                "price": 6.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "10",
-                "name": "Cucumber Salad",
-                "description": "Fresh cucumber salad with Asian dressing",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Drinks",
-            "items": [
-              {
-                "id": "11",
-                "name": "Vöslauer Sparkling",
-                "description": "Sparkling mineral water",
-                "price": 3.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "13",
-                "name": "Proviant Rhubarb",
-                "description": "Rhubarb soda",
-                "price": 3.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "17",
-                "name": "Coke",
-                "description": "Classic Coca-Cola",
-                "price": 3.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "20",
-                "name": "Shifu Rice Beer",
-                "description": "Asian rice beer",
-                "price": 4.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "cai-kitchen-berlin",
-      "name": "CAI Kitchen Berlin – Szechuan Vegan Bistro",
-      "address": "Schönhauser Allee 177A, 10119 Berlin",
-      "coordinates": {
-        "lat": 52.53291,
-        "lng": 13.41124
-      },
-      "website": "https://caikitchen.berlin",
-      "menu": {
-        "categories": [
-          {
-            "name": "Popular Classics",
-            "items": [
-              {
-                "id": "mixed-rice-1",
-                "name": "Mixed Rice Bowl",
-                "description": "Mixed rice bowl with masterstock vegetables and homemade pickles",
-                "price": 12.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "noodles-1",
-                "name": "Marinated TanTan Noodles",
-                "description": "Marinated noodles Dan Dan style with vegan minced meat and vegetables",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "noodles-2",
-                "name": "Glass Noodles in Hot & Sour Soup",
-                "description": "Sweet potato glass noodles in hot & sour soup",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan", "gluten-free"]
-              },
-              {
-                "id": "dumplings-1",
-                "name": "Potato-Filled Dumplings With Zhong Sauce",
-                "description": "Vegan dumplings with potato filling in Zhong style sauce",
-                "price": 8.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "polenta-1",
-                "name": "Polenta With Spicy Fermented Black Soybeans Sauce",
-                "description": "Polenta with spicy fermented soybean sauce",
-                "price": 12.90,
-                "dietaryRestrictions": ["vegetarian", "vegan", "gluten-free"]
-              },
-              {
-                "id": "jelly-1",
-                "name": "Mung Bean Jelly With Spicy Sour Sauce",
-                "description": "Mung bean jelly in spicy-sour sauce",
-                "price": 8.90,
-                "dietaryRestrictions": ["vegetarian", "vegan", "gluten-free"]
-              }
-            ]
-          },
-          {
-            "name": "Spicy Noodles",
-            "items": [
-              {
-                "id": "noodles-3",
-                "name": "Extra Spicy Peanut Udon",
-                "description": "Udon noodles in extra spicy peanut sauce",
-                "price": 14.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "noodles-4",
-                "name": "Cold Marinated Sichuan Style Noodles",
-                "description": "Cold noodles marinated in Sichuan housewife style",
-                "price": 13.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Sides",
-            "items": [
-              {
-                "id": "sides-1",
-                "name": "Mixed Vegetable Dumplings",
-                "description": "With chopped chilis and Sichuan pepper sauce",
-                "price": 8.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "sides-2",
-                "name": "Extra Noodle Refill",
-                "description": "Additional portion of noodles for your broth",
-                "price": 3.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "giannis-pastabar",
-      "name": "Pastabar Gianni Gillone",
-      "address": "Schönhauser Allee 186a, 10119 Berlin",
-      "coordinates": {
-        "lat": 52.53291,
-        "lng": 13.41124
-      },
-      "website": "https://www.giannis-pastabar.de",
-      "menu": {
-        "categories": [
-          {
-            "name": "Salate & Vorspeisen",
-            "items": [
-              {
-                "id": "salate-1",
-                "name": "Gemischter Salat mit Käse",
-                "description": "",
-                "price": 7.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "salate-2",
-                "name": "Gemischter Salat mit Thunfisch",
-                "description": "",
-                "price": 7.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "salate-3",
-                "name": "Gemischter Salat mit Hähnchenbrust",
-                "description": "",
-                "price": 8.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "salate-4",
-                "name": "Insalata Fantasia",
-                "description": "mit Antipasti",
-                "price": 8.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "salate-5",
-                "name": "Pulpo Salat",
-                "description": "",
-                "price": 9.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "salate-6",
-                "name": "Vitello Tonnato",
-                "description": "",
-                "price": 10.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Hausgemachte Nudeln",
-            "items": [
-              {
-                "id": "pasta-1",
-                "name": "Pasta al Pomodoro",
-                "description": "Tomaten Sauce",
-                "price": 10.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pasta-2",
-                "name": "Pasta alla Arrabiata",
-                "description": "scharf",
-                "price": 10.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pasta-3",
-                "name": "Pasta alla Carbonara",
-                "description": "",
-                "price": 11.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pasta-4",
-                "name": "Pasta alla Bolognese",
-                "description": "",
-                "price": 11.90,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "pasta-5",
-                "name": "Pasta al Gorgonzola",
-                "description": "",
-                "price": 11.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pasta-6",
-                "name": "Pasta mit Spinat, Champignons und Trüffel Öl",
-                "description": "",
-                "price": 11.90,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "pasta-7",
-                "name": "Pasta mit Wildschweinragout",
-                "description": "",
-                "price": 12.90,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Tages Spezialität",
-            "items": [
-              {
-                "id": "spezial-1",
-                "name": "Hausgemachte Gnocchi mit Gorgonzola",
-                "description": "",
-                "price": 13.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "spezial-2",
-                "name": "Ravioli mit Butter und Salbei",
-                "description": "",
-                "price": 13.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "spezial-3",
-                "name": "Spaghetti alla Bottarga",
-                "description": "mit getrockneten Eiern von Meeräsche",
-                "price": 15.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "spezial-4",
-                "name": "Taglierini mit Trüffel",
-                "description": "",
-                "price": 17.90,
-                "dietaryRestrictions": ["vegetarian"]
-              }
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "id": "standard-serious-pizza",
-      "name": "Standard Serious Pizza",
-      "address": "Torstraße 1, 10119 Berlin",
-      "coordinates": {
-        "lat": 52.5275,
-        "lng": 13.4025
-      },
-      "website": "https://www.standard-berlin.de/",
-      "menu": {
-        "categories": [
-          {
-            "name": "Pizza",
-            "items": [
-              {
-                "id": "standard-pizza-1",
-                "name": "Marinara",
-                "description": "Tomato sauce, garlic, olive oil, oregano",
-                "price": 10.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "standard-pizza-2",
-                "name": "Margherita",
-                "description": "Tomato sauce, Fior di Latte, Parmigiano, basil, olive oil",
-                "price": 13.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-pizza-3",
-                "name": "'Nduja",
-                "description": "Tomato sauce, buffalo mozzarella, Nduja, Tropea onion, basil, olive oil",
-                "price": 17.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-4",
-                "name": "Carciofi dell'Autunno",
-                "description": "Parmesan cream, buffalo mozzarella, artichokes, Capocollo, chives & parsley, olive oil",
-                "price": 19.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-5",
-                "name": "Porcinambur",
-                "description": "Parmesan cream, buffalo mozzarella, porcini mushrooms, Jerusalem artichoke chips, truffle oil, chives",
-                "price": 20.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-6",
-                "name": "L'Ape che Punge",
-                "description": "Buffalo mozzarella, spicy Calabrian salami, chili, honey, basil",
-                "price": 16.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-7",
-                "name": "Cetara",
-                "description": "Tomato sauce, Alici di Cetara, olives, Stracciatella, caper berry, oregano, olive oil",
-                "price": 19.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-8",
-                "name": "Calzone",
-                "description": "Ricotta, Provola, tomato sauce, Ciccioli, salami, pepper, Parmigiano, olive oil",
-                "price": 17.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-9",
-                "name": "Bresaola e Bufala",
-                "description": "Buffalo mozzarella, Bresaola, arugula, Parmesan shavings, lemon, olive oil, basil",
-                "price": 20.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-10",
-                "name": "Polpette napoletane",
-                "description": "Tomato sauce, Fior di Latte, beef meatballs, Ricotta filled crust, olive oil, basil",
-                "price": 19.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-11",
-                "name": "CheeseCheeseCheeseCheese",
-                "description": "Fior di Latte, Gorgonzola, Scamorza, Parmigiano, garlic",
-                "price": 17.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-pizza-12",
-                "name": "New York, New York",
-                "description": "Tomato sauce, pepperoni salami, Fior di Latte, oregano, Parmigiano",
-                "price": 16.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-pizza-13",
-                "name": "Vegana verde",
-                "description": "Pea cream, seasonal vegetables, pesto from semi-dried tomatoes, basil, roasted onion",
-                "price": 17.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Not Pizza",
-            "items": [
-              {
-                "id": "standard-not-pizza-1",
-                "name": "Oliven",
-                "description": "'Nocellara del Belice', marinated",
-                "price": 5.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "standard-not-pizza-2",
-                "name": "Standard Salat",
-                "description": "Fresh and green, homemade bread",
-                "price": 10.90,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "standard-not-pizza-3",
-                "name": "Panzanella Salat",
-                "description": "Roasted bread, olive, cucumber, tomato, onion",
-                "price": 11.50,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              },
-              {
-                "id": "standard-not-pizza-4",
-                "name": "Polpette al sugo",
-                "description": "100% beef, tomato sauce, Parmesan, homemade bread",
-                "price": 10.50,
-                "dietaryRestrictions": []
-              }
-            ]
-          },
-          {
-            "name": "Dessert",
-            "items": [
-              {
-                "id": "standard-dessert-1",
-                "name": "Crème Brulée",
-                "description": "House recipe with rosemary",
-                "price": 9.50,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-dessert-2",
-                "name": "Tiramisu",
-                "description": "Classic or pistachio",
-                "price": 9.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-dessert-3",
-                "name": "Calzone dolce",
-                "description": "Nutella or Ricotta & Nutella",
-                "price": 9.00,
-                "dietaryRestrictions": []
-              },
-              {
-                "id": "standard-dessert-4",
-                "name": "Eis am Stiel",
-                "description": "Paletas, organic, various flavors, Berlin",
-                "price": 4.00,
-                "dietaryRestrictions": ["vegetarian", "vegan"]
-              }
-            ]
-          },
-          {
-            "name": "Drinks",
-            "items": [
-              {
-                "id": "standard-drinks-1",
-                "name": "Helles",
-                "description": "König Ludwig, 0.33L",
-                "price": 5.00,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-2",
-                "name": "Zwickl",
-                "description": "Trumer Privatbrauerei, 0.33L",
-                "price": 5.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-3",
-                "name": "Pils",
-                "description": "BRLO, Berlin, 0.33L",
-                "price": 5.20,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-4",
-                "name": "Serious Cidre",
-                "description": "Berlin, 0.33L",
-                "price": 6.20,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-5",
-                "name": "Aperol Sprizz",
-                "description": "Campari, Limoncello, Ginger",
-                "price": 9.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-6",
-                "name": "Negroni",
-                "description": "Classic or Sbagliato",
-                "price": 10.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-7",
-                "name": "Standard Fizz",
-                "description": "Lime, Sloeberry Gin, Prosecco",
-                "price": 10.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-8",
-                "name": "Coca-Cola",
-                "description": "Light or Zero, 0.2L",
-                "price": 3.50,
-                "dietaryRestrictions": ["vegetarian"]
-              },
-              {
-                "id": "standard-drinks-9",
-                "name": "Mineralwasser",
-                "description": "With or without gas, 0.25L or 0.75L",
+                "id": "drinks-8",
+                "name": "Gunpowder Green Tea",
+                "description": "(hot)",
                 "price": 2.80,
-                "dietaryRestrictions": ["vegetarian"]
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-9",
+                "name": "Nemico (Trebbiano)",
+                "description": "ICARO, Vino Bianco, IT (125ml)",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-10",
+                "name": "Natural wine by the bottle",
+                "description": "(750ml)",
+                "price": 32.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-11",
+                "name": "Heineken",
+                "description": "Pils (250ml)",
+                "price": 3.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-12",
+                "name": "Kirin Ichiban",
+                "description": "First Press (330ml)",
+                "price": 4.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-13",
+                "name": "Shirley Temple",
+                "description": "Grenadine, ginger ale, lime juice (non-alcoholic) (300ml)",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "drinks-14",
+                "name": "Dirty Shirley",
+                "description": "Grenadine, ginger ale, lime juice, vodka (40ml) (300ml)",
+                "price": 7.50,
+                "dietaryRestrictions": []
               }
             ]
           }

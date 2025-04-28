@@ -151,7 +151,7 @@ export default function Home() {
     try {
       // Fetch restaurants from our database
       const dbResponse = await fetch(
-        `/api/restaurants?lat=${location.lat}&lng=${location.lng}&radius=0.5`
+        `/api/restaurants?lat=${location.lat}&lng=${location.lng}&radius=1`
       )
 
       if (!dbResponse.ok) {
@@ -161,12 +161,17 @@ export default function Home() {
       const dbData = await dbResponse.json()
       
       // Only use restaurants from our database and limit to closest 10
-      const allRestaurants = dbData.restaurants
+      const sortedRestaurants = dbData.restaurants
         .filter((r: Restaurant) => r.menuSource === 'database')
-        .sort((a: Restaurant, b: Restaurant) => a.distance - b.distance)
+        .sort((a: Restaurant, b: Restaurant) => b.distance - a.distance)
         .slice(0, 10)
 
-      setRestaurants(allRestaurants)
+      setRestaurants(sortedRestaurants)
+      
+      // Auto-select the closest restaurant (last in the array since we're sorting in descending order)
+      if (sortedRestaurants.length > 0) {
+        setSelectedRestaurant(sortedRestaurants[sortedRestaurants.length - 1])
+      }
     } catch (err) {
       console.error('Error fetching restaurants:', err)
       setError('Failed to load restaurants. Please try again later.')
@@ -242,8 +247,8 @@ export default function Home() {
     <div className="min-h-screen max-w-4xl mx-auto">
       <div className="flex border-b border-[#FF373A]/20">
         <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-        <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center justify-center">
-          <Squirrel className="w-6 h-6 text-[#FF373A]" />
+        <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center pl-4">
+          <span className="text-[18px] font-bold text-[#FF373A]">Menoo</span>
         </div>
         <div className="w-12 h-12 bg-[#F4F2F8] flex-none">
           <SettingsMenu
@@ -371,7 +376,7 @@ export default function Home() {
                         }}
                         options={restaurants.map(restaurant => ({
                           value: restaurant.id,
-                          label: `${restaurant.name} (${restaurant.distance} km away)`
+                          label: `${restaurant.name} (${restaurant.distance} km)`
                         }))}
                         leftIcon={<Store className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
                         position="top"
@@ -391,7 +396,7 @@ export default function Home() {
                           value: category,
                           label: category
                         }))}
-                        leftIcon={<List className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        leftIcon={<Layers className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
                         position="top"
                         hideChevron={true}
                         className="justify-center"

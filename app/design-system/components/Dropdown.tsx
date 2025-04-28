@@ -100,10 +100,8 @@ export function Dropdown({
             <div
               key={option.value}
               className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 ${
-                option.disabled ? 'opacity-50 cursor-not-allowed' : ''
-              } ${
-                index === 0 ? 'border-t-0' : 'border-t border-[#FF373A]/20'
-              }`}
+                option.value === value ? 'bg-[#FF373A]/5' : ''
+              } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => {
                 if (!option.disabled) {
                   onChange(option.value)
@@ -122,7 +120,7 @@ export function Dropdown({
                   )}
                 </div>
               </div>
-              {option.rightContent && <div className="flex-none ml-2">{option.rightContent}</div>}
+              {option.rightContent && <div className="flex-none">{option.rightContent}</div>}
             </div>
           ))}
         </div>
