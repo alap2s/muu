@@ -99,10 +99,12 @@ export function Dropdown({
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
               key={option.value}
-              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 ${
-                option.value === value ? 'bg-[#FF373A]/5' : ''
-              } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''} ${
-                index < filteredOptions.length - 1 ? 'border-b border-[#FF373A]/20' : ''
+              className={`px-4 py-3 cursor-pointer hover:bg-[#FF373A]/10 flex items-center justify-between ${
+                option.value === value ? 'bg-[#FF373A]/10' : ''
+              } ${
+                index === 0 ? 'border-t-0' : 'border-t border-[#FF373A]/20'
+              } ${
+                index === filteredOptions.length - 1 ? 'border-b-0' : ''
               }`}
               onClick={() => {
                 if (!option.disabled) {
@@ -118,11 +120,15 @@ export function Dropdown({
                 <div className="min-w-0">
                   <div className="truncate">{option.label}</div>
                   {option.description && (
-                    <div className="text-sm text-[#1e1e1e]/50">{option.description}</div>
+                    <div className="text-sm text-[#FF373A]/50 truncate">{option.description}</div>
                   )}
                 </div>
               </div>
-              {option.rightContent && <div className="flex-none">{option.rightContent}</div>}
+              {option.rightContent && (
+                <div className="flex-none ml-2">
+                  {option.rightContent}
+                </div>
+              )}
             </div>
           ))}
         </div>
