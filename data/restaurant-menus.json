@@ -1079,6 +1079,497 @@
           }
         ]
       }
+    },
+    {
+      "id": "cai-kitchen-berlin",
+      "name": "CAI Kitchen Berlin – Szechuan Vegan Bistro",
+      "address": "Schönhauser Allee 177A, 10119 Berlin",
+      "coordinates": {
+        "lat": 52.53291,
+        "lng": 13.41124
+      },
+      "website": "https://caikitchen.berlin",
+      "menu": {
+        "categories": [
+          {
+            "name": "Popular Classics",
+            "items": [
+              {
+                "id": "mixed-rice-1",
+                "name": "Mixed Rice Bowl",
+                "description": "Mixed rice bowl with masterstock vegetables and homemade pickles",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodles-1",
+                "name": "Marinated TanTan Noodles",
+                "description": "Marinated noodles Dan Dan style with vegan minced meat and vegetables",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodles-2",
+                "name": "Glass Noodles in Hot & Sour Soup",
+                "description": "Sweet potato glass noodles in hot & sour soup",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan", "gluten-free"]
+              },
+              {
+                "id": "dumplings-1",
+                "name": "Potato-Filled Dumplings With Zhong Sauce",
+                "description": "Vegan dumplings with potato filling in Zhong style sauce",
+                "price": 8.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "polenta-1",
+                "name": "Polenta With Spicy Fermented Black Soybeans Sauce",
+                "description": "Polenta with spicy fermented soybean sauce",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian", "vegan", "gluten-free"]
+              },
+              {
+                "id": "jelly-1",
+                "name": "Mung Bean Jelly With Spicy Sour Sauce",
+                "description": "Mung bean jelly in spicy-sour sauce",
+                "price": 8.90,
+                "dietaryRestrictions": ["vegetarian", "vegan", "gluten-free"]
+              }
+            ]
+          },
+          {
+            "name": "Spicy Noodles",
+            "items": [
+              {
+                "id": "noodles-3",
+                "name": "Extra Spicy Peanut Udon",
+                "description": "Udon noodles in extra spicy peanut sauce",
+                "price": 14.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodles-4",
+                "name": "Cold Marinated Sichuan Style Noodles",
+                "description": "Cold noodles marinated in Sichuan housewife style",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Sides",
+            "items": [
+              {
+                "id": "sides-1",
+                "name": "Mixed Vegetable Dumplings",
+                "description": "With chopped chilis and Sichuan pepper sauce",
+                "price": 8.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "sides-2",
+                "name": "Extra Noodle Refill",
+                "description": "Additional portion of noodles for your broth",
+                "price": 3.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "giannis-pastabar",
+      "name": "Pastabar Gianni Gillone",
+      "address": "Schönhauser Allee 186a, 10119 Berlin",
+      "coordinates": {
+        "lat": 52.53291,
+        "lng": 13.41124
+      },
+      "website": "https://www.giannis-pastabar.de",
+      "menu": {
+        "categories": [
+          {
+            "name": "Salate & Vorspeisen",
+            "items": [
+              {
+                "id": "salate-1",
+                "name": "Gemischter Salat mit Käse",
+                "description": "",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salate-2",
+                "name": "Gemischter Salat mit Thunfisch",
+                "description": "",
+                "price": 7.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "salate-3",
+                "name": "Gemischter Salat mit Hähnchenbrust",
+                "description": "",
+                "price": 8.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "salate-4",
+                "name": "Insalata Fantasia",
+                "description": "mit Antipasti",
+                "price": 8.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "salate-5",
+                "name": "Pulpo Salat",
+                "description": "",
+                "price": 9.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "salate-6",
+                "name": "Vitello Tonnato",
+                "description": "",
+                "price": 10.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Hausgemachte Nudeln",
+            "items": [
+              {
+                "id": "pasta-1",
+                "name": "Pasta al Pomodoro",
+                "description": "Tomaten Sauce",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pasta-2",
+                "name": "Pasta alla Arrabiata",
+                "description": "scharf",
+                "price": 10.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pasta-3",
+                "name": "Pasta alla Carbonara",
+                "description": "",
+                "price": 11.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pasta-4",
+                "name": "Pasta alla Bolognese",
+                "description": "",
+                "price": 11.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pasta-5",
+                "name": "Pasta al Gorgonzola",
+                "description": "",
+                "price": 11.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pasta-6",
+                "name": "Pasta mit Spinat, Champignons und Trüffel Öl",
+                "description": "",
+                "price": 11.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pasta-7",
+                "name": "Pasta mit Wildschweinragout",
+                "description": "",
+                "price": 12.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Tages Spezialität",
+            "items": [
+              {
+                "id": "spezial-1",
+                "name": "Hausgemachte Gnocchi mit Gorgonzola",
+                "description": "",
+                "price": 13.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "spezial-2",
+                "name": "Ravioli mit Butter und Salbei",
+                "description": "",
+                "price": 13.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "spezial-3",
+                "name": "Spaghetti alla Bottarga",
+                "description": "mit getrockneten Eiern von Meeräsche",
+                "price": 15.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "spezial-4",
+                "name": "Taglierini mit Trüffel",
+                "description": "",
+                "price": 17.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "standard-serious-pizza",
+      "name": "Standard Serious Pizza",
+      "address": "Torstraße 1, 10119 Berlin",
+      "coordinates": {
+        "lat": 52.5275,
+        "lng": 13.4025
+      },
+      "website": "https://www.standard-berlin.de/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Pizza",
+            "items": [
+              {
+                "id": "standard-pizza-1",
+                "name": "Marinara",
+                "description": "Tomato sauce, garlic, olive oil, oregano",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "standard-pizza-2",
+                "name": "Margherita",
+                "description": "Tomato sauce, Fior di Latte, Parmigiano, basil, olive oil",
+                "price": 13.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-pizza-3",
+                "name": "'Nduja",
+                "description": "Tomato sauce, buffalo mozzarella, Nduja, Tropea onion, basil, olive oil",
+                "price": 17.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-4",
+                "name": "Carciofi dell'Autunno",
+                "description": "Parmesan cream, buffalo mozzarella, artichokes, Capocollo, chives & parsley, olive oil",
+                "price": 19.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-5",
+                "name": "Porcinambur",
+                "description": "Parmesan cream, buffalo mozzarella, porcini mushrooms, Jerusalem artichoke chips, truffle oil, chives",
+                "price": 20.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-6",
+                "name": "L'Ape che Punge",
+                "description": "Buffalo mozzarella, spicy Calabrian salami, chili, honey, basil",
+                "price": 16.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-7",
+                "name": "Cetara",
+                "description": "Tomato sauce, Alici di Cetara, olives, Stracciatella, caper berry, oregano, olive oil",
+                "price": 19.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-8",
+                "name": "Calzone",
+                "description": "Ricotta, Provola, tomato sauce, Ciccioli, salami, pepper, Parmigiano, olive oil",
+                "price": 17.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-9",
+                "name": "Bresaola e Bufala",
+                "description": "Buffalo mozzarella, Bresaola, arugula, Parmesan shavings, lemon, olive oil, basil",
+                "price": 20.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-10",
+                "name": "Polpette napoletane",
+                "description": "Tomato sauce, Fior di Latte, beef meatballs, Ricotta filled crust, olive oil, basil",
+                "price": 19.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-11",
+                "name": "CheeseCheeseCheeseCheese",
+                "description": "Fior di Latte, Gorgonzola, Scamorza, Parmigiano, garlic",
+                "price": 17.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-pizza-12",
+                "name": "New York, New York",
+                "description": "Tomato sauce, pepperoni salami, Fior di Latte, oregano, Parmigiano",
+                "price": 16.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-pizza-13",
+                "name": "Vegana verde",
+                "description": "Pea cream, seasonal vegetables, pesto from semi-dried tomatoes, basil, roasted onion",
+                "price": 17.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Not Pizza",
+            "items": [
+              {
+                "id": "standard-not-pizza-1",
+                "name": "Oliven",
+                "description": "'Nocellara del Belice', marinated",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "standard-not-pizza-2",
+                "name": "Standard Salat",
+                "description": "Fresh and green, homemade bread",
+                "price": 10.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "standard-not-pizza-3",
+                "name": "Panzanella Salat",
+                "description": "Roasted bread, olive, cucumber, tomato, onion",
+                "price": 11.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "standard-not-pizza-4",
+                "name": "Polpette al sugo",
+                "description": "100% beef, tomato sauce, Parmesan, homemade bread",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dessert",
+            "items": [
+              {
+                "id": "standard-dessert-1",
+                "name": "Crème Brulée",
+                "description": "House recipe with rosemary",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-dessert-2",
+                "name": "Tiramisu",
+                "description": "Classic or pistachio",
+                "price": 9.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-dessert-3",
+                "name": "Calzone dolce",
+                "description": "Nutella or Ricotta & Nutella",
+                "price": 9.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "standard-dessert-4",
+                "name": "Eis am Stiel",
+                "description": "Paletas, organic, various flavors, Berlin",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "standard-drinks-1",
+                "name": "Helles",
+                "description": "König Ludwig, 0.33L",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-2",
+                "name": "Zwickl",
+                "description": "Trumer Privatbrauerei, 0.33L",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-3",
+                "name": "Pils",
+                "description": "BRLO, Berlin, 0.33L",
+                "price": 5.20,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-4",
+                "name": "Serious Cidre",
+                "description": "Berlin, 0.33L",
+                "price": 6.20,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-5",
+                "name": "Aperol Sprizz",
+                "description": "Campari, Limoncello, Ginger",
+                "price": 9.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-6",
+                "name": "Negroni",
+                "description": "Classic or Sbagliato",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-7",
+                "name": "Standard Fizz",
+                "description": "Lime, Sloeberry Gin, Prosecco",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-8",
+                "name": "Coca-Cola",
+                "description": "Light or Zero, 0.2L",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "standard-drinks-9",
+                "name": "Mineralwasser",
+                "description": "With or without gas, 0.25L or 0.75L",
+                "price": 2.80,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 } 

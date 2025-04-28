@@ -1,5 +1,8 @@
+'use client'
+
 import { Menu, Share, X, Mail } from 'lucide-react'
 import { Dropdown } from '../design-system/components/Dropdown'
+import { useEffect, useState } from 'react'
 
 interface SettingsMenuProps {
   language: 'EN' | 'DE'
@@ -10,12 +13,20 @@ interface SettingsMenuProps {
 }
 
 export function SettingsMenu({ 
-  language, 
+  language: initialLanguage, 
   onLanguageChange, 
-  notifications, 
+  notifications: initialNotifications, 
   onNotificationsChange,
   onShare 
 }: SettingsMenuProps) {
+  const [language, setLanguage] = useState<'EN' | 'DE'>('EN')
+  const [notifications, setNotifications] = useState(false)
+
+  useEffect(() => {
+    setLanguage(initialLanguage)
+    setNotifications(initialNotifications)
+  }, [initialLanguage, initialNotifications])
+
   const options = [
     {
       value: 'language',
@@ -26,6 +37,7 @@ export function SettingsMenu({
             className={`px-2 py-1 ${language === 'EN' ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
             onClick={(e) => {
               e.stopPropagation()
+              setLanguage('EN')
               onLanguageChange('EN')
             }}
           >
@@ -35,6 +47,7 @@ export function SettingsMenu({
             className={`px-2 py-1 ${language === 'DE' ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
             onClick={(e) => {
               e.stopPropagation()
+              setLanguage('DE')
               onLanguageChange('DE')
             }}
           >
@@ -52,6 +65,7 @@ export function SettingsMenu({
             className={`px-2 py-1 ${!notifications ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
             onClick={(e) => {
               e.stopPropagation()
+              setNotifications(false)
               onNotificationsChange(false)
             }}
           >
@@ -61,6 +75,7 @@ export function SettingsMenu({
             className={`px-2 py-1 ${notifications ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
             onClick={(e) => {
               e.stopPropagation()
+              setNotifications(true)
               onNotificationsChange(true)
             }}
           >

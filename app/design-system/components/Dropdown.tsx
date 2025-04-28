@@ -39,7 +39,6 @@ export function Dropdown({
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [buttonRect, setButtonRect] = useState<DOMRect | null>(null)
-  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -56,8 +55,6 @@ export function Dropdown({
     if (isOpen && dropdownRef.current) {
       const rect = dropdownRef.current.getBoundingClientRect()
       setButtonRect(rect)
-      setIsTransitioning(true)
-      setTimeout(() => setIsTransitioning(false), 300)
     }
   }, [isOpen])
 
@@ -75,12 +72,12 @@ export function Dropdown({
           <span className="truncate">{selectedOption?.label || 'Select...'}</span>
         </div>
         {!hideChevron && (
-          <ChevronDown className={`w-4 h-4 text-[#FF373A] flex-none transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2} />
+          <ChevronDown className={`w-4 h-4 text-[#FF373A] flex-none ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2} />
         )}
       </button>
 
       <div 
-        className={`fixed inset-0 bg-[#F4F2F8]/50 backdrop-blur-sm z-[9998] transition-all duration-300 ease-in-out ${
+        className={`fixed inset-0 bg-[#F4F2F8]/50 backdrop-blur-sm z-[9998] ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{
@@ -90,8 +87,8 @@ export function Dropdown({
       />
 
       <div 
-        className={`fixed left-0 w-screen z-[9999] transition-all duration-300 ease-in-out ${
-          isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+        className={`fixed left-0 w-screen z-[9999] ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{
           top: position === 'bottom' ? `${buttonRect?.bottom}px` : 'auto',
@@ -100,18 +97,14 @@ export function Dropdown({
       >
         <div className="w-[calc(100vw-64px)] mx-auto bg-[#F4F2F8] border-[#FF373A]/20 border-t border-b border-r border-l">
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
-            <button
+            <div
               key={option.value}
-              type="button"
-              disabled={option.disabled}
-              className={`w-full flex flex-col justify-between items-start px-4 py-3 font-mono hover:bg-[#FF373A]/5 ${
-                option.disabled 
-                  ? 'opacity-50 cursor-not-allowed' 
-                  : option.value === value 
-                    ? 'text-[#FF373A]' 
-                    : 'text-[#1e1e1e]'
-              } ${index === filteredOptions.length - 1 ? '' : 'border-b border-[#FF373A]/20'}`}
-              onClick={(e) => {
+              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 ${
+                option.value === value ? 'bg-[#FF373A]/5' : ''
+              } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''} ${
+                index < filteredOptions.length - 1 ? 'border-b border-[#FF373A]/20' : ''
+              }`}
+              onClick={() => {
                 if (!option.disabled) {
                   onChange(option.value)
                   if (!preventCloseOnOptionClick) {
@@ -120,25 +113,17 @@ export function Dropdown({
                 }
               }}
             >
-              <div className="w-full flex justify-between items-center">
-                <span className="truncate">{option.label}</span>
-                {option.rightContent ? (
-                  option.rightContent
-                ) : option.value === value && !option.disabled && (
-                  <Check className="w-4 h-4 text-[#FF373A] flex-none ml-4" strokeWidth={2} />
-                )}
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                {option.value === value && <Check className="w-4 h-4 text-[#FF373A] flex-none" strokeWidth={2} />}
+                <div className="min-w-0">
+                  <div className="truncate">{option.label}</div>
+                  {option.description && (
+                    <div className="text-sm text-[#1e1e1e]/50">{option.description}</div>
+                  )}
+                </div>
               </div>
-              {option.description && (
-                <p className="text-sm text-[#1e1e1e]/70 mt-2 text-left">{option.description}</p>
-              )}
-              {option.subItems && (
-                <ul className="mt-2 space-y-1 text-sm text-[#1e1e1e]/70 list-disc pl-4">
-                  {option.subItems.map((item, i) => (
-                    <li key={i}>{item}</li>
-                  ))}
-                </ul>
-              )}
-            </button>
+              {option.rightContent && <div className="flex-none">{option.rightContent}</div>}
+            </div>
           ))}
         </div>
       </div>

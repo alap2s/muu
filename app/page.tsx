@@ -159,71 +159,13 @@ export default function Home() {
       }
 
       const dbData = await dbResponse.json()
-      const dbRestaurants: Map<string, Restaurant> = new Map(dbData.restaurants.map((r: Restaurant) => [r.name.toLowerCase(), { ...r, menuSource: 'database' as const }]))
-
-      let allRestaurants = [...dbData.restaurants]
-
-      try {
-        // Try to fetch from Places API, but don't fail if it's not available
-        const placesResponse = await fetch(
-          `/api/places?lat=${location.lat}&lng=${location.lng}&radius=500`
-        )
-
-        if (placesResponse.ok) {
-          const placesData = await placesResponse.json() as { restaurants: PlaceRestaurant[] }
-          
-          // Create a sample menu for restaurants without one in our database
-          const sampleMenu: MenuItem[] = [
-            {
-              id: 'sample-1',
-              name: 'Sample Dish 1',
-              description: 'A delicious sample dish',
-              price: 12.90,
-              category: 'Main Dishes',
-              dietaryRestrictions: ['vegetarian']
-            },
-            {
-              id: 'sample-2',
-              name: 'Sample Dish 2',
-              description: 'Another tasty sample dish',
-              price: 9.90,
-              category: 'Starters',
-              dietaryRestrictions: ['vegan']
-            }
-          ]
-
-          // Merge results, preferring our database entries over Places API
-          const placesRestaurants = placesData.restaurants.map((place: PlaceRestaurant) => {
-            const dbRestaurant = dbRestaurants.get(place.name.toLowerCase())
-            if (dbRestaurant) {
-              return dbRestaurant as Restaurant
-            }
-            return {
-              id: place.id,
-              name: place.name,
-              address: place.address,
-              distance: 0,
-              website: '',
-              menu: sampleMenu,
-              menuSource: 'sample' as const,
-              rating: place.rating,
-              totalRatings: place.totalRatings
-            } as Restaurant
-          })
-
-          // Add Places API restaurants that aren't in our database
-          allRestaurants = [...allRestaurants, ...placesRestaurants.filter(
-            (r: Restaurant) => !dbRestaurants.has(r.name.toLowerCase())
-          )]
-        }
-      } catch (err) {
-        console.warn('Places API not available:', err)
-        // Continue with just the database restaurants
-      }
-
-      // Sort by distance
-      allRestaurants.sort((a, b) => a.distance - b.distance)
       
+      // Only use restaurants from our database and limit to closest 10
+      const allRestaurants = dbData.restaurants
+        .filter((r: Restaurant) => r.menuSource === 'database')
+        .sort((a: Restaurant, b: Restaurant) => a.distance - b.distance)
+        .slice(0, 10)
+
       setRestaurants(allRestaurants)
     } catch (err) {
       console.error('Error fetching restaurants:', err)
@@ -298,10 +240,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen max-w-4xl mx-auto">
-      <div className="flex">
+      <div className="flex border-b border-[#FF373A]/20">
         <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
         <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center justify-center">
           <Squirrel className="w-6 h-6 text-[#FF373A]" />
+        </div>
+        <div className="w-12 h-12 bg-[#F4F2F8] flex-none">
+          <SettingsMenu
+            language={language}
+            onLanguageChange={setLanguage}
+            notifications={notifications}
+            onNotificationsChange={setNotifications}
+            onShare={handleShare}
+          />
         </div>
         <div className="w-8 h-12 bg-[#F4F2F8]" />
       </div>
@@ -316,37 +267,8 @@ export default function Home() {
         <div className="text-center py-8">Loading restaurants...</div>
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
-          <div className="flex border-t border-[#FF373A]/20 border-b border-[#FF373A]/20">
-            <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none" />
-            <div className="flex-1 min-w-0">
-              <Dropdown
-                value={selectedRestaurant?.id || ''}
-                onChange={(value) => {
-                  const restaurant = restaurants.find(r => r.id === value)
-                  if (restaurant) setSelectedRestaurant(restaurant)
-                }}
-                options={restaurants.map(restaurant => ({
-                  value: restaurant.id,
-                  label: `${restaurant.name} (${restaurant.distance} km away)`
-                }))}
-                leftIcon={<Store className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
-                position="bottom"
-              />
-            </div>
-            <div className="w-12 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none">
-              <SettingsMenu
-                language={language}
-                onLanguageChange={setLanguage}
-                notifications={notifications}
-                onNotificationsChange={setNotifications}
-                onShare={handleShare}
-              />
-            </div>
-            <div className="w-8 h-12 bg-[#F4F2F8]" />
-          </div>
-
           {selectedRestaurant && (
-            <div className="bg-[#F4F2F8]" ref={menuRef}>
+            <div className="bg-[#F4F2F8] pb-20" ref={menuRef}>
               <div className="space-y-0">
                 {Object.entries(groupedMenu).map(([category, items]) => (
                   <div 
@@ -360,7 +282,7 @@ export default function Home() {
                     <div className="flex">
                       <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                       <div className="flex-1">
-                        <h3 className="font-medium text-[#FF373A] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20">
+                        <h3 className="font-medium text-sm text-[#FF373A] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20">
                           {category}
                         </h3>
                       </div>
@@ -409,15 +331,26 @@ export default function Home() {
               </div>
 
               {selectedRestaurant.website && (
-                <div className="mt-4 text-center pb-4">
-                  <a
-                    href={selectedRestaurant.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#FF373A] hover:underline"
-                  >
-                    Visit Restaurant Website
-                  </a>
+                <div>
+                  <div className="flex">
+                    <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="flex-1 h-12 flex items-center justify-center border-r border-[#FF373A]/20">
+                      <a
+                        href={selectedRestaurant.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#1e1e1e] hover:underline underline"
+                      >
+                        Visit Restaurant Website
+                      </a>
+                    </div>
+                    <div className="w-8 bg-[#F4F2F8]" />
+                  </div>
+                  <div className="flex h-8">
+                    <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="w-8 bg-[#F4F2F8]" />
+                  </div>
                 </div>
               )}
             </div>
@@ -431,6 +364,21 @@ export default function Home() {
                   <div className="flex-1 flex min-w-0">
                     <div className="flex-1 min-w-0">
                       <Dropdown
+                        value={selectedRestaurant?.id || ''}
+                        onChange={(value) => {
+                          const restaurant = restaurants.find(r => r.id === value)
+                          if (restaurant) setSelectedRestaurant(restaurant)
+                        }}
+                        options={restaurants.map(restaurant => ({
+                          value: restaurant.id,
+                          label: `${restaurant.name} (${restaurant.distance} km away)`
+                        }))}
+                        leftIcon={<Store className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        position="top"
+                      />
+                    </div>
+                    <div className="flex-none w-12 border-l border-[#FF373A]/20">
+                      <Dropdown
                         value={selectedGroup}
                         onChange={(value) => {
                           setSelectedGroup(value)
@@ -439,35 +387,34 @@ export default function Home() {
                             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
                           }
                         }}
-                        options={[
-                          { value: 'all', label: 'All Categories' },
-                          ...categories.map(category => ({
-                            value: category,
-                            label: category
-                          }))
-                        ]}
+                        options={categories.map(category => ({
+                          value: category,
+                          label: category
+                        }))}
                         leftIcon={<List className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
                         position="top"
+                        hideChevron={true}
+                        className="justify-center"
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-none w-12 border-l border-[#FF373A]/20">
                       <Dropdown
                         value={filter}
                         onChange={setFilter}
                         options={[
-                          { value: 'all', label: `All (${selectedRestaurant?.menu.length || 0})` },
-                          { 
-                            value: 'vegetarian', 
-                            label: `Vegetarian (${selectedRestaurant?.menu.filter(item => item.dietaryRestrictions.includes('vegetarian')).length || 0})`
-                          },
-                          { 
-                            value: 'vegan', 
-                            label: `Vegan (${selectedRestaurant?.menu.filter(item => item.dietaryRestrictions.includes('vegan')).length || 0})`
-                          }
+                          { value: 'all', label: 'All' },
+                          { value: 'vegetarian', label: 'Vegetarian' },
+                          { value: 'vegan', label: 'Vegan' }
                         ]}
-                        leftIcon={<Filter className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        leftIcon={
+                          filter === 'all' ? <Filter className="w-4 h-4 text-[#FF373A]" strokeWidth={2} /> :
+                          filter === 'vegetarian' ? <Milk className="w-4 h-4 text-[#FF373A]" strokeWidth={2} /> :
+                          <Leaf className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />
+                        }
                         position="top"
                         align="right"
+                        hideChevron={true}
+                        className="justify-center"
                       />
                     </div>
                   </div>
@@ -477,10 +424,7 @@ export default function Home() {
               <div className="border-b border-[#FF373A]/20">
                 <div className="flex h-8">
                   <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  <div className="flex-1 flex">
-                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  </div>
+                  <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                   <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                 </div>
               </div>

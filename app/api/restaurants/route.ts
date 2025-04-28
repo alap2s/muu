@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import * as fs from 'fs'
+import * as fs from 'fs/promises'
 import * as path from 'path'
 
 interface MenuItem {
@@ -57,9 +57,23 @@ interface FrontendRestaurant {
 }
 
 // Read the restaurant menu database
-const restaurantMenus: RestaurantDatabase = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), 'data', 'restaurant-menus.json'), 'utf-8')
-)
+let restaurantMenus: RestaurantDatabase | null = null
+
+async function loadRestaurantData() {
+  if (restaurantMenus) return restaurantMenus
+  
+  try {
+    const data = await fs.readFile(
+      path.join(process.cwd(), 'data', 'restaurant-menus.json'),
+      'utf-8'
+    )
+    restaurantMenus = JSON.parse(data)
+    return restaurantMenus
+  } catch (error) {
+    console.error('Error loading restaurant data:', error)
+    throw new Error('Failed to load restaurant data')
+  }
+}
 
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371
@@ -108,8 +122,14 @@ export async function GET(request: Request) {
     const userLng = parseFloat(lng)
     const searchRadius = parseFloat(radius)
 
+    // Load restaurant data
+    const restaurantData = await loadRestaurantData()
+    if (!restaurantData) {
+      throw new Error('Restaurant data not available')
+    }
+
     // Filter restaurants within the search radius
-    const nearbyRestaurants = restaurantMenus.restaurants
+    const nearbyRestaurants = restaurantData.restaurants
       .map((restaurant: Restaurant) => ({
         ...restaurant,
         distance: calculateDistance(
