@@ -161,17 +161,12 @@ export default function Home() {
       const dbData = await dbResponse.json()
       
       // Only use restaurants from our database and limit to closest 10
-      const sortedRestaurants = dbData.restaurants
+      const allRestaurants = dbData.restaurants
         .filter((r: Restaurant) => r.menuSource === 'database')
-        .sort((a: Restaurant, b: Restaurant) => b.distance - a.distance)
+        .sort((a: Restaurant, b: Restaurant) => a.distance - b.distance)
         .slice(0, 10)
 
-      setRestaurants(sortedRestaurants)
-      
-      // Auto-select the closest restaurant (last in the array since we're sorting in descending order)
-      if (sortedRestaurants.length > 0) {
-        setSelectedRestaurant(sortedRestaurants[sortedRestaurants.length - 1])
-      }
+      setRestaurants(allRestaurants)
     } catch (err) {
       console.error('Error fetching restaurants:', err)
       setError('Failed to load restaurants. Please try again later.')
