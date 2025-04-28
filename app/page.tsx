@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, ChefHat, Squirrel } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List } from 'lucide-react'
+import { Dropdown } from './design-system/components/Dropdown'
+import { SettingsMenu } from './components/SettingsMenu'
 
 interface MenuItem {
   id: string
@@ -19,7 +21,17 @@ interface Restaurant {
   distance: number
   website: string
   menu: MenuItem[]
-  menuSource: 'database' | 'sample'
+  menuSource?: 'database' | 'sample'
+  rating?: number
+  totalRatings?: number
+}
+
+interface PlaceRestaurant {
+  id: string
+  name: string
+  address: string
+  rating?: number
+  totalRatings?: number
 }
 
 export default function Home() {
@@ -33,6 +45,18 @@ export default function Home() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   const menuRef = useRef<HTMLDivElement>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const [language, setLanguage] = useState<'EN' | 'DE'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('language') as 'EN' | 'DE') || 'EN'
+    }
+    return 'EN'
+  })
+  const [notifications, setNotifications] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('notifications') === 'true'
+    }
+    return false
+  })
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -76,7 +100,7 @@ export default function Home() {
   }, [restaurants])
 
   useEffect(() => {
-    if (selectedRestaurant?.menu.length > 0) {
+    if (selectedRestaurant && Array.isArray(selectedRestaurant.menu) && selectedRestaurant.menu.length > 0) {
       const categories = Array.from(new Set(selectedRestaurant.menu.map(item => item.category)))
       if (categories.length > 0) {
         setSelectedGroup(categories[0])
@@ -125,16 +149,82 @@ export default function Home() {
     setError(null)
 
     try {
-      const response = await fetch(
+      // Fetch restaurants from our database
+      const dbResponse = await fetch(
         `/api/restaurants?lat=${location.lat}&lng=${location.lng}&radius=0.5`
       )
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch restaurants')
+      if (!dbResponse.ok) {
+        throw new Error('Failed to fetch restaurants from database')
       }
 
-      const data = await response.json()
-      setRestaurants(data.restaurants)
+      const dbData = await dbResponse.json()
+      const dbRestaurants: Map<string, Restaurant> = new Map(dbData.restaurants.map((r: Restaurant) => [r.name.toLowerCase(), { ...r, menuSource: 'database' as const }]))
+
+      let allRestaurants = [...dbData.restaurants]
+
+      try {
+        // Try to fetch from Places API, but don't fail if it's not available
+        const placesResponse = await fetch(
+          `/api/places?lat=${location.lat}&lng=${location.lng}&radius=500`
+        )
+
+        if (placesResponse.ok) {
+          const placesData = await placesResponse.json() as { restaurants: PlaceRestaurant[] }
+          
+          // Create a sample menu for restaurants without one in our database
+          const sampleMenu: MenuItem[] = [
+            {
+              id: 'sample-1',
+              name: 'Sample Dish 1',
+              description: 'A delicious sample dish',
+              price: 12.90,
+              category: 'Main Dishes',
+              dietaryRestrictions: ['vegetarian']
+            },
+            {
+              id: 'sample-2',
+              name: 'Sample Dish 2',
+              description: 'Another tasty sample dish',
+              price: 9.90,
+              category: 'Starters',
+              dietaryRestrictions: ['vegan']
+            }
+          ]
+
+          // Merge results, preferring our database entries over Places API
+          const placesRestaurants = placesData.restaurants.map((place: PlaceRestaurant) => {
+            const dbRestaurant = dbRestaurants.get(place.name.toLowerCase())
+            if (dbRestaurant) {
+              return dbRestaurant as Restaurant
+            }
+            return {
+              id: place.id,
+              name: place.name,
+              address: place.address,
+              distance: 0,
+              website: '',
+              menu: sampleMenu,
+              menuSource: 'sample' as const,
+              rating: place.rating,
+              totalRatings: place.totalRatings
+            } as Restaurant
+          })
+
+          // Add Places API restaurants that aren't in our database
+          allRestaurants = [...allRestaurants, ...placesRestaurants.filter(
+            (r: Restaurant) => !dbRestaurants.has(r.name.toLowerCase())
+          )]
+        }
+      } catch (err) {
+        console.warn('Places API not available:', err)
+        // Continue with just the database restaurants
+      }
+
+      // Sort by distance
+      allRestaurants.sort((a, b) => a.distance - b.distance)
+      
+      setRestaurants(allRestaurants)
     } catch (err) {
       console.error('Error fetching restaurants:', err)
       setError('Failed to load restaurants. Please try again later.')
@@ -192,12 +282,26 @@ export default function Home() {
     return icons
   }
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Menoo',
+          text: 'Check out Menoo - A free app standardized restaurant menu app.',
+          url: window.location.href,
+        })
+      } catch (error) {
+        console.error('Error sharing:', error)
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen max-w-4xl mx-auto">
       <div className="flex">
-        <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-        <div className="flex-1 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8] flex items-center justify-center">
-          <Squirrel className="w-6 h-6 text-[#6237FF]" />
+        <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+        <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center justify-center">
+          <Squirrel className="w-6 h-6 text-[#FF373A]" />
         </div>
         <div className="w-8 h-12 bg-[#F4F2F8]" />
       </div>
@@ -212,28 +316,31 @@ export default function Home() {
         <div className="text-center py-8">Loading restaurants...</div>
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
-          <div className="flex border-t border-[#6237FF]/20 border-b border-[#6237FF]/20">
-            <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-            <div className="flex-1">
-              <div className="relative w-full">
-                <select
-                  className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
-                  value={selectedRestaurant?.id || ''}
-                  onChange={(e) => {
-                    const restaurant = restaurants.find(r => r.id === e.target.value)
-                    if (restaurant) setSelectedRestaurant(restaurant)
-                  }}
-                >
-                  <option value="" disabled className="truncate">Select a restaurant</option>
-                  {restaurants.map(restaurant => (
-                    <option key={restaurant.id} value={restaurant.id} className="truncate">
-                      {restaurant.name} ({restaurant.distance} km away)
-                    </option>
-                  ))}
-                </select>
-                <ChefHat className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
+          <div className="flex border-t border-[#FF373A]/20 border-b border-[#FF373A]/20">
+            <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none" />
+            <div className="flex-1 min-w-0">
+              <Dropdown
+                value={selectedRestaurant?.id || ''}
+                onChange={(value) => {
+                  const restaurant = restaurants.find(r => r.id === value)
+                  if (restaurant) setSelectedRestaurant(restaurant)
+                }}
+                options={restaurants.map(restaurant => ({
+                  value: restaurant.id,
+                  label: `${restaurant.name} (${restaurant.distance} km away)`
+                }))}
+                leftIcon={<Store className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                position="bottom"
+              />
+            </div>
+            <div className="w-12 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex-none">
+              <SettingsMenu
+                language={language}
+                onLanguageChange={setLanguage}
+                notifications={notifications}
+                onNotificationsChange={setNotifications}
+                onShare={handleShare}
+              />
             </div>
             <div className="w-8 h-12 bg-[#F4F2F8]" />
           </div>
@@ -244,12 +351,16 @@ export default function Home() {
                 {Object.entries(groupedMenu).map(([category, items]) => (
                   <div 
                     key={category} 
-                    ref={el => categoryRefs.current[category] = el}
+                    ref={(el) => {
+                      if (categoryRefs.current) {
+                        categoryRefs.current[category] = el
+                      }
+                    }}
                   >
                     <div className="flex">
-                      <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                      <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                       <div className="flex-1">
-                        <h3 className="font-medium text-[#6237FF] h-12 flex items-center px-4 border-r border-[#6237FF]/20 border-b border-[#6237FF]/20">
+                        <h3 className="font-medium text-[#FF373A] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20">
                           {category}
                         </h3>
                       </div>
@@ -259,13 +370,13 @@ export default function Home() {
                       {items.map((item) => (
                         <div 
                           key={item.id} 
-                          className="border-b border-[#6237FF]/20 cursor-pointer"
+                          className="border-b border-[#FF373A]/20 cursor-pointer"
                           onClick={() => toggleItemExpansion(item.id)}
                         >
                           <div className="flex">
-                            <div className="w-8 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
+                            <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                             <div className="flex-1">
-                              <div className="flex justify-between items-start p-4 border-r border-[#6237FF]/20">
+                              <div className="flex justify-between items-start p-4 border-r border-[#FF373A]/20">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
                                     <h4 className="font-medium text-[#1e1e1e]">
@@ -303,7 +414,7 @@ export default function Home() {
                     href={selectedRestaurant.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#6237FF] hover:underline"
+                    className="text-[#FF373A] hover:underline"
                   >
                     Visit Restaurant Website
                   </a>
@@ -312,61 +423,83 @@ export default function Home() {
             </div>
           )}
 
-          <div className="sticky bottom-0 bg-[#F4F2F8] z-10">
-            <div className="flex border-t border-[#6237FF]/20 border-b border-[#6237FF]/20">
-              <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-              <div className="flex-1">
-                <div className="flex">
-                  {categories.length > 0 && (
-                    <div className="relative flex-1">
-                      <select
+          <div className="fixed bottom-0 left-0 right-0 bg-primary-light z-50">
+            <div className="max-w-4xl mx-auto">
+              <div className="border-t border-[#FF373A]/20 border-b">
+                <div className="flex w-full">
+                  <div className="w-8 flex-none border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                  <div className="flex-1 flex min-w-0">
+                    <div className="flex-1 min-w-0">
+                      <Dropdown
                         value={selectedGroup}
-                        onChange={(e) => {
-                          setSelectedGroup(e.target.value)
-                          const element = categoryRefs.current[e.target.value]
+                        onChange={(value) => {
+                          setSelectedGroup(value)
+                          const element = categoryRefs.current[value]
                           if (element) {
                             element.scrollIntoView({ behavior: 'smooth', block: 'start' })
                           }
                         }}
-                        className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
-                      >
-                        {categories.map((category) => (
-                          <option key={category} value={category} className="truncate">
-                            {category}
-                          </option>
-                        ))}
-                      </select>
-                      <Layers className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                      <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        options={[
+                          { value: 'all', label: 'All Categories' },
+                          ...categories.map(category => ({
+                            value: category,
+                            label: category
+                          }))
+                        ]}
+                        leftIcon={<List className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        position="top"
+                      />
                     </div>
-                  )}
-                  <div className="relative flex-1">
-                    <select
-                      className="w-full h-12 border-r border-[#6237FF]/20 pl-8 pr-4 appearance-none bg-[#F4F2F8] text-[#6237FF] truncate"
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                    >
-                      <option value="all" className="truncate">All Items</option>
-                      <option value="vegetarian" className="truncate">Vegetarian</option>
-                      <option value="vegan" className="truncate">Vegan</option>
-                    </select>
-                    <Filter className="w-4 h-4 text-[#6237FF] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                    <ChevronDown className="w-4 h-4 text-[#6237FF] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <div className="flex-1 min-w-0">
+                      <Dropdown
+                        value={filter}
+                        onChange={setFilter}
+                        options={[
+                          { value: 'all', label: `All (${selectedRestaurant?.menu.length || 0})` },
+                          { 
+                            value: 'vegetarian', 
+                            label: `Vegetarian (${selectedRestaurant?.menu.filter(item => item.dietaryRestrictions.includes('vegetarian')).length || 0})`
+                          },
+                          { 
+                            value: 'vegan', 
+                            label: `Vegan (${selectedRestaurant?.menu.filter(item => item.dietaryRestrictions.includes('vegan')).length || 0})`
+                          }
+                        ]}
+                        leftIcon={<Filter className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        position="top"
+                        align="right"
+                      />
+                    </div>
                   </div>
+                  <div className="w-8 flex-none bg-[#F4F2F8]" />
                 </div>
               </div>
-              <div className="w-8 h-12 bg-[#F4F2F8]" />
-            </div>
-            <div className="flex border-b border-[#6237FF]/20">
-              <div className="w-8 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-              <div className="flex-1 h-12 border-r border-[#6237FF]/20 bg-[#F4F2F8]" />
-              <div className="w-8 h-12 bg-[#F4F2F8]" />
+              <div className="border-b border-[#FF373A]/20">
+                <div className="flex h-8">
+                  <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                  <div className="flex-1 flex">
+                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                  </div>
+                  <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="text-center py-8 text-gray-500">
-          No restaurants found nearby
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-48px)] space-y-4">
+          <p className="text-[#1e1e1e]/70">No restaurants found nearby</p>
+          <button
+            type="button"
+            className="h-12 px-4 appearance-none bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-center border border-[#FF373A]/20 hover:bg-[#FF373A]/5 transition-colors"
+            onClick={() => {
+              // TODO: Implement add restaurant functionality
+              console.log('Add restaurant clicked')
+            }}
+          >
+            Add restaurant menu
+          </button>
         </div>
       )}
     </div>

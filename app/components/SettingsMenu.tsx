@@ -1,5 +1,5 @@
 import { Menu, Share, X, Mail } from 'lucide-react'
-import { Dropdown } from '@/app/design-system'
+import { Dropdown } from '../design-system/components/Dropdown'
 
 interface SettingsMenuProps {
   language: 'EN' | 'DE'

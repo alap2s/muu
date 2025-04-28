@@ -273,6 +273,812 @@
           }
         ]
       }
+    },
+    {
+      "id": "roji-berlin",
+      "name": "Roji - Taste of Japan",
+      "address": "Mühlenstraße 1, 13187 Berlin",
+      "coordinates": {
+        "lat": 52.567229,
+        "lng": 13.403555
+      },
+      "website": "https://pankow.roji-berlin.de/speisekarte",
+      "menu": {
+        "categories": [
+          {
+            "name": "Beliebte Gerichte",
+            "items": [
+              {
+                "id": "v11",
+                "name": "Vorspeisen Mix für 2",
+                "description": "Gemischte Vorspeisenplatte von uns für Sie zusammengestellt",
+                "price": 19.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "11",
+                "name": "Salmon Rose® (2 Stk.)",
+                "description": "Flambierter Lachs mit Lachstatar",
+                "price": 4.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "12",
+                "name": "Tuna Rose® (2 Stk.)",
+                "description": "Flambierter Thunfisch mit Thunfisch-Tatar",
+                "price": 4.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "57",
+                "name": "Amazing Friendship® (8 Stk.)",
+                "description": "Lachs, Avocado, Frischkäse, obendrauf Aal, flambierter Lachs, Lachstatar & Sesam",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "61",
+                "name": "Volcano Tuna (8 Stk.)",
+                "description": "Thunfisch, Avocado, Frischkäse, obendrauf flambierter Thunfisch, Thunfisch-Tatar & Sesam",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Salate",
+            "items": [
+              {
+                "id": "a1",
+                "name": "Edamame",
+                "description": "Gedämpfte grüne Sojabohnen mit Meersalz",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "a2",
+                "name": "Kimchi Salat",
+                "description": "Scharf eingelegter Chinakohl, Möhren & Lauch",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "a3",
+                "name": "Spinat Salat",
+                "description": "Blanchierter Blattspinat mit Sesamsoße",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "a4",
+                "name": "Wakame Salat",
+                "description": "Eingelegter Algensalat mit Sesam",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "a5",
+                "name": "ROJI Kaizen Salat",
+                "description": "Gemischte Fischsorten, knusprige Lachshaut, Avocado, gemischter Salat & Dressing",
+                "price": 10.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Suppen",
+            "items": [
+              {
+                "id": "c1",
+                "name": "Miso Shiru",
+                "description": "Würzige Sojasuppe mit Seetang, Tofu & Frühlingszwiebeln",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "c2",
+                "name": "ROJI SPEZIAL SUPPE",
+                "description": "Lachssuppe mit Champignons & Tomaten",
+                "price": 7.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "c3",
+                "name": "CHICKEN COCONUT SUPPE",
+                "description": "Hausgemachte, exotische Hühnerbrühe mit Hühnerfleisch, Kokosmilch, Tomaten, Champignons & Koriander",
+                "price": 7.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "c4",
+                "name": "WANTAN SUPPE",
+                "description": "Hühnerbrühe mit Wantan, gefüllt mit Huhn und Gemüse",
+                "price": 7.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Donburi",
+            "items": [
+              {
+                "id": "450",
+                "name": "Sake Don",
+                "description": "Rohes Lachsfilet, Ikura, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "451",
+                "name": "Sake Yaki Don",
+                "description": "Spiegelei, leicht flambiertes Lachsfilet, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "452",
+                "name": "SAKE TERIYAKI DON",
+                "description": "Gegrilltes Lachsfilet mit Haut, Teriyaki Sauce, verschiedenes Gemüse und Salat",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "456",
+                "name": "ROJI Don",
+                "description": "Verschiedenste rohe Fischsorten, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "457",
+                "name": "VEGGIE DON",
+                "description": "Verschiedene Gemüse Tempura, Gemüse, Kaiserschoten, Shiitake, Oshinko & Sesam",
+                "price": 15.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Main Dishes",
+            "items": [
+              {
+                "id": "520",
+                "name": "NOODLE BOWL - Rind",
+                "description": "Reisnudel Bowl mit Salat, Kräuter, Erdnüsse und Röstzwiebeln, serviert mit einer Limetten Vinaigrette",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "510",
+                "name": "BIG PEANUT - Hühnerschenkel",
+                "description": "Cremiges Currygericht mit Kokosmilch und Erdnuss auf Gemüse und Wildkräutersalat, serviert mit Reis oder Reisbandudeln",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "500",
+                "name": "OLD but GOLD - Tofu",
+                "description": "Cremiges Currygericht mit Kokosmilch und rotem Curry auf Gemüse und Wildkräutersalat, serviert mit Reis oder Reisbandnudeln",
+                "price": 16.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Teppanyaki",
+            "items": [
+              {
+                "id": "550",
+                "name": "Salmon Yaki (5 STK.)",
+                "description": "Leicht gegrilltes Lachsfilet mit Babyspargel auf Spinat",
+                "price": 10.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "551",
+                "name": "Tuna Yaki (5 STK.)",
+                "description": "Leicht gegrilltes Thunfischfilet mit Babyspargel auf Spinat",
+                "price": 10.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "552",
+                "name": "Ebi Yaki (4 STK.)",
+                "description": "Gegrillte Großgarnelen mit Babypargel auf Spinat",
+                "price": 10.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Desserts",
+            "items": [
+              {
+                "id": "n2",
+                "name": "Mochi (3 Stk.)",
+                "description": "Japanische Reiskuchen",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "n4",
+                "name": "Sesambällchen (4 Stk.)",
+                "description": "Traditionelle japanische Sesambällchen",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "wen-cheng-prenzlauer-berg",
+      "name": "Wen Cheng",
+      "address": "Schönhauser Allee 65, 10437 Berlin",
+      "coordinates": {
+        "lat": 52.54178,
+        "lng": 13.41434
+      },
+      "website": "https://www.wenchengnoodles.com/menu",
+      "menu": {
+        "categories": [
+          {
+            "name": "Biang Biang Noodles",
+            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
+            "items": [
+              {
+                "id": "b1",
+                "name": "Beef Biang Biang",
+                "description": "Hand-pulled noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b2",
+                "name": "Lamb & Cumin Biang Biang",
+                "description": "Hand-pulled noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b3",
+                "name": "Tofu Biang Biang",
+                "description": "Hand-pulled noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "b4",
+                "name": "Aubergine & Vegan Minced Meat",
+                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Wen Cheng Noodles",
+            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
+            "items": [
+              {
+                "id": "w1",
+                "name": "Beef Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w2",
+                "name": "Lamb & Cumin Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w3",
+                "name": "Tofu Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "w4",
+                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Bao Buns & Sides",
+            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
+            "items": [
+              {
+                "id": "8",
+                "name": "Fried Chicken Bao",
+                "description": "Steamed bao bun with fried chicken",
+                "price": 6.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "9",
+                "name": "Tofu Bao",
+                "description": "Steamed bao bun with tofu",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "10",
+                "name": "Cucumber Salad",
+                "description": "Fresh cucumber salad with Asian dressing",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "11",
+                "name": "Vöslauer Sparkling",
+                "description": "Sparkling mineral water",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "13",
+                "name": "Proviant Rhubarb",
+                "description": "Rhubarb soda",
+                "price": 3.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "17",
+                "name": "Coke",
+                "description": "Classic Coca-Cola",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "20",
+                "name": "Shifu Rice Beer",
+                "description": "Asian rice beer",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "wen-cheng-mitte",
+      "name": "Wen Cheng",
+      "address": "Schönhauser Allee 10, 10119 Berlin",
+      "coordinates": {
+        "lat": 52.52991,
+        "lng": 13.41124
+      },
+      "website": "https://www.wenchengnoodles.com/menu",
+      "menu": {
+        "categories": [
+          {
+            "name": "Biang Biang Noodles",
+            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
+            "items": [
+              {
+                "id": "b1",
+                "name": "Beef Biang Biang",
+                "description": "Hand-pulled noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b2",
+                "name": "Lamb & Cumin Biang Biang",
+                "description": "Hand-pulled noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b3",
+                "name": "Tofu Biang Biang",
+                "description": "Hand-pulled noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "b4",
+                "name": "Aubergine & Vegan Minced Meat",
+                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Wen Cheng Noodles",
+            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
+            "items": [
+              {
+                "id": "w1",
+                "name": "Beef Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w2",
+                "name": "Lamb & Cumin Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w3",
+                "name": "Tofu Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "w4",
+                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Bao Buns & Sides",
+            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
+            "items": [
+              {
+                "id": "8",
+                "name": "Fried Chicken Bao",
+                "description": "Steamed bao bun with fried chicken",
+                "price": 6.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "9",
+                "name": "Tofu Bao",
+                "description": "Steamed bao bun with tofu",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "10",
+                "name": "Cucumber Salad",
+                "description": "Fresh cucumber salad with Asian dressing",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "11",
+                "name": "Vöslauer Sparkling",
+                "description": "Sparkling mineral water",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "13",
+                "name": "Proviant Rhubarb",
+                "description": "Rhubarb soda",
+                "price": 3.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "17",
+                "name": "Coke",
+                "description": "Classic Coca-Cola",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "20",
+                "name": "Shifu Rice Beer",
+                "description": "Asian rice beer",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "wen-cheng-friedrichshain",
+      "name": "Wen Cheng",
+      "address": "Simon-Dach-Straße 22, 10245 Berlin",
+      "coordinates": {
+        "lat": 52.51089,
+        "lng": 13.45411
+      },
+      "website": "https://www.wenchengnoodles.com/menu",
+      "menu": {
+        "categories": [
+          {
+            "name": "Biang Biang Noodles",
+            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
+            "items": [
+              {
+                "id": "b1",
+                "name": "Beef Biang Biang",
+                "description": "Hand-pulled noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b2",
+                "name": "Lamb & Cumin Biang Biang",
+                "description": "Hand-pulled noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b3",
+                "name": "Tofu Biang Biang",
+                "description": "Hand-pulled noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "b4",
+                "name": "Aubergine & Vegan Minced Meat",
+                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Wen Cheng Noodles",
+            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
+            "items": [
+              {
+                "id": "w1",
+                "name": "Beef Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w2",
+                "name": "Lamb & Cumin Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w3",
+                "name": "Tofu Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "w4",
+                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Bao Buns & Sides",
+            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
+            "items": [
+              {
+                "id": "8",
+                "name": "Fried Chicken Bao",
+                "description": "Steamed bao bun with fried chicken",
+                "price": 6.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "9",
+                "name": "Tofu Bao",
+                "description": "Steamed bao bun with tofu",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "10",
+                "name": "Cucumber Salad",
+                "description": "Fresh cucumber salad with Asian dressing",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "11",
+                "name": "Vöslauer Sparkling",
+                "description": "Sparkling mineral water",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "13",
+                "name": "Proviant Rhubarb",
+                "description": "Rhubarb soda",
+                "price": 3.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "17",
+                "name": "Coke",
+                "description": "Classic Coca-Cola",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "20",
+                "name": "Shifu Rice Beer",
+                "description": "Asian rice beer",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "wen-cheng-kreuzberg",
+      "name": "Wen Cheng",
+      "address": "Spreewaldplatz 5, 10999 Berlin",
+      "coordinates": {
+        "lat": 52.49734,
+        "lng": 13.43312
+      },
+      "website": "https://www.wenchengnoodles.com/menu",
+      "menu": {
+        "categories": [
+          {
+            "name": "Biang Biang Noodles",
+            "description": "All Biang Biang noodles are seasoned with chilli, garlic, coriander, sichuan pepper and drizzled with hot oil.",
+            "items": [
+              {
+                "id": "b1",
+                "name": "Beef Biang Biang",
+                "description": "Hand-pulled noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b2",
+                "name": "Lamb & Cumin Biang Biang",
+                "description": "Hand-pulled noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b3",
+                "name": "Tofu Biang Biang",
+                "description": "Hand-pulled noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "b4",
+                "name": "Aubergine & Vegan Minced Meat",
+                "description": "Hand-pulled noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Wen Cheng Noodles",
+            "description": "All Wen Cheng Noodle dishes are served with homemade stew, coriander, Asian pickled vegetables and mild Szechuan chilli oil.",
+            "items": [
+              {
+                "id": "w1",
+                "name": "Beef Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with beef",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w2",
+                "name": "Lamb & Cumin Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with lamb and cumin",
+                "price": 14.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "w3",
+                "name": "Tofu Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with tofu",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "w4",
+                "name": "Aubergine & Vegan Minced Meat Wen Cheng Noodles",
+                "description": "Milder and sweeter noodles with aubergine and vegan minced meat",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Bao Buns & Sides",
+            "description": "All Bao Bun dishes are prepared with pickled vegetables, coriander and szechuan aioli.",
+            "items": [
+              {
+                "id": "8",
+                "name": "Fried Chicken Bao",
+                "description": "Steamed bao bun with fried chicken",
+                "price": 6.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "9",
+                "name": "Tofu Bao",
+                "description": "Steamed bao bun with tofu",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "10",
+                "name": "Cucumber Salad",
+                "description": "Fresh cucumber salad with Asian dressing",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "11",
+                "name": "Vöslauer Sparkling",
+                "description": "Sparkling mineral water",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "13",
+                "name": "Proviant Rhubarb",
+                "description": "Rhubarb soda",
+                "price": 3.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "17",
+                "name": "Coke",
+                "description": "Classic Coca-Cola",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "20",
+                "name": "Shifu Rice Beer",
+                "description": "Asian rice beer",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 } 
