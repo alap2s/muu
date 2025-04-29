@@ -3,17 +3,19 @@ export const colors = {
   text: '#1e1e1e',
   border: 'rgba(255, 55, 58, 0.2)', // #FF373A at 20% opacity
   primary: {
-    main: '#6237FF',
-    light: '#F4F2F8',
-    border: 'rgba(98, 55, 255, 0.2)', // #6237FF at 20% opacity
+    main: '#FF373A',
+    light: 'rgba(255, 55, 58, 0.1)', // #FF373A at 10% opacity
+    dark: '#CC2C2E',
   },
-  text: {
-    primary: '#1e1e1e',
-    secondary: 'rgba(30, 30, 30, 0.5)', // #1e1e1e at 50% opacity
+  secondary: {
+    main: '#6237FF',
+    light: 'rgba(98, 55, 255, 0.1)', // #6237FF at 10% opacity
+    dark: '#4E2CCC',
   },
   background: {
     main: '#FFFFFF',
     light: '#F4F2F8',
+    dark: '#1E1E1E',
   },
   status: {
     error: '#FF3737',

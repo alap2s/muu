@@ -2,7 +2,12 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 
-const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'] })
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: false
+})
 
 export const metadata: Metadata = {
   title: 'Restaurant Menu Finder',

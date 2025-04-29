@@ -26,14 +26,6 @@ interface Restaurant {
   totalRatings?: number
 }
 
-interface PlaceRestaurant {
-  id: string
-  name: string
-  address: string
-  rating?: number
-  totalRatings?: number
-}
-
 export default function Home() {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
@@ -359,7 +351,7 @@ export default function Home() {
           <div className="fixed bottom-0 left-0 right-0 bg-primary-light z-50">
             <div className="max-w-4xl mx-auto">
               <div className="border-t border-[#FF373A]/20 border-b">
-                <div className="flex w-full">
+                <div className="flex w-full border-t border-[#FF373A]/20">
                   <div className="w-8 flex-none border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                   <div className="flex-1 flex min-w-0">
                     <div className="flex-1 min-w-0">

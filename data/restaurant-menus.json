@@ -1939,6 +1939,598 @@
           }
         ]
       }
+    },
+    {
+      "id": "coccodrillo",
+      "name": "Coccodrillo",
+      "address": "Kastanienallee 12, 10435 Berlin",
+      "coordinates": {
+        "lat": 52.5397,
+        "lng": 13.4132
+      },
+      "website": "https://menu.bigsquadra.com/coccodrillo/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Antipasti",
+            "items": [
+              {
+                "id": "antipasti-1",
+                "name": "Bruschetta al Pomodoro",
+                "description": "Tomaten, Basilikum, Knoblauch, Olivenöl",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "antipasti-2",
+                "name": "Carpaccio di Manzo",
+                "description": "Rindercarpaccio, Rucola, Parmesan, Trüffelöl",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "antipasti-3",
+                "name": "Carpaccio di Salmone",
+                "description": "Lachscarpaccio, Rucola, Zitrone, Olivenöl",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "antipasti-4",
+                "name": "Tartare di Manzo",
+                "description": "Rindertartar, Eigelb, Kapern, Zwiebeln",
+                "price": 15.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Insalate",
+            "items": [
+              {
+                "id": "insalate-1",
+                "name": "Insalata Mista",
+                "description": "Gemischter Salat, Tomaten, Gurken, Oliven",
+                "price": 9.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "insalate-2",
+                "name": "Insalata di Pollo",
+                "description": "Hähnchenbrust, gemischter Salat, Tomaten, Parmesan",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "insalate-3",
+                "name": "Insalata di Tonno",
+                "description": "Thunfisch, gemischter Salat, Tomaten, Oliven",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Pasta",
+            "items": [
+              {
+                "id": "pasta-1",
+                "name": "Spaghetti Carbonara",
+                "description": "Spaghetti, Ei, Guanciale, Pecorino, Pfeffer",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pasta-2",
+                "name": "Penne all'Arrabbiata",
+                "description": "Penne, Tomatensauce, Chili, Knoblauch",
+                "price": 12.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pasta-3",
+                "name": "Tagliatelle al Ragù",
+                "description": "Tagliatelle, Bolognese-Sauce",
+                "price": 15.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pasta-4",
+                "name": "Gnocchi al Gorgonzola",
+                "description": "Gnocchi, Gorgonzola-Sauce, Walnüsse",
+                "price": 14.50,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Pizza",
+            "items": [
+              {
+                "id": "pizza-1",
+                "name": "Margherita",
+                "description": "Tomatensauce, Mozzarella, Basilikum",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-2",
+                "name": "Marinara",
+                "description": "Tomatensauce, Knoblauch, Oregano",
+                "price": 9.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-3",
+                "name": "Prosciutto e Funghi",
+                "description": "Tomatensauce, Mozzarella, Schinken, Champignons",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pizza-4",
+                "name": "Quattro Formaggi",
+                "description": "Tomatensauce, Mozzarella, Gorgonzola, Parmesan, Pecorino",
+                "price": 14.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-5",
+                "name": "Diavola",
+                "description": "Tomatensauce, Mozzarella, Salami, Chili",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pizza-6",
+                "name": "Calzone",
+                "description": "Gefüllte Pizza mit Tomatensauce, Mozzarella, Schinken, Champignons",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Secondi",
+            "items": [
+              {
+                "id": "secondi-1",
+                "name": "Filetto di Manzo",
+                "description": "Rinderfilet, Rosmarinkartoffeln, Gemüse",
+                "price": 28.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "secondi-2",
+                "name": "Salmone alla Griglia",
+                "description": "Lachsfilet, Gemüse, Zitrone",
+                "price": 22.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "secondi-3",
+                "name": "Pollo alla Griglia",
+                "description": "Hähnchenbrust, Rosmarinkartoffeln, Gemüse",
+                "price": 18.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dolci",
+            "items": [
+              {
+                "id": "dolci-1",
+                "name": "Tiramisu",
+                "description": "Klassisches Tiramisu",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dolci-2",
+                "name": "Panna Cotta",
+                "description": "Panna Cotta mit Beeren",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dolci-3",
+                "name": "Gelato",
+                "description": "Hausgemachtes Eis",
+                "price": 6.50,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "knoedelwirtschaft-nord",
+      "name": "Knödelwirtschaft NORD",
+      "address": "Stargarder Str. 3, 10437 Berlin",
+      "coordinates": {
+        "lat": 52.5492,
+        "lng": 13.4125
+      },
+      "website": "http://www.knoedelwirtschaft.de/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Klassische Knödel",
+            "items": [
+              {
+                "id": "knoedel-1",
+                "name": "Semmelknödel",
+                "description": "Traditionelle Semmelknödel",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "knoedel-2",
+                "name": "Kartoffelknödel",
+                "description": "Klassische Kartoffelknödel",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "knoedel-3",
+                "name": "Topfenknödel",
+                "description": "Topfenknödel mit Vanillesauce",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Knödelgerichte",
+            "items": [
+              {
+                "id": "gericht-1",
+                "name": "Knödel mit Gulasch",
+                "description": "Semmelknödel mit Rindergulasch",
+                "price": 12.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "gericht-2",
+                "name": "Knödel mit Pilzsauce",
+                "description": "Semmelknödel mit cremiger Pilzsauce",
+                "price": 11.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "gericht-3",
+                "name": "Knödel mit Sauerkraut",
+                "description": "Semmelknödel mit Sauerkraut und Speck",
+                "price": 11.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Beilagen",
+            "items": [
+              {
+                "id": "beilage-1",
+                "name": "Salat",
+                "description": "Gemischter Salat",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "beilage-2",
+                "name": "Pommes",
+                "description": "Hausgemachte Pommes",
+                "price": 4.90,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "restaurant-tsomi",
+      "name": "Restaurant Tsomi",
+      "address": "Kollwitzstraße 66, 10435 Berlin",
+      "coordinates": {
+        "lat": 52.5362,
+        "lng": 13.4167
+      },
+      "website": "https://restaurant-tsomi.de/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Vorspeisen",
+            "items": [
+              {
+                "id": "vorspeise-1",
+                "name": "Tsomi Vorspeisenplatte",
+                "description": "Auswahl verschiedener georgischer Vorspeisen",
+                "price": 15.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "vorspeise-2",
+                "name": "Badridschani",
+                "description": "Gefüllte Auberginen mit Walnuss-Knoblauch-Füllung",
+                "price": 8.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "vorspeise-3",
+                "name": "Chinkali",
+                "description": "Georgische Teigtaschen mit Fleischfüllung",
+                "price": 9.90,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Hauptgerichte",
+            "items": [
+              {
+                "id": "haupt-1",
+                "name": "Chachapuri",
+                "description": "Georgisches Käsebrot mit Ei",
+                "price": 12.90,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "haupt-2",
+                "name": "Ostri",
+                "description": "Scharfes Rindfleischragout mit Tomaten und Paprika",
+                "price": 16.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "haupt-3",
+                "name": "Lobio",
+                "description": "Georgische Bohneneintopf mit Koriander und Walnüssen",
+                "price": 13.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Desserts",
+            "items": [
+              {
+                "id": "dessert-1",
+                "name": "Churchkhela",
+                "description": "Traditionelle georgische Süßigkeit aus Nüssen und Traubensaft",
+                "price": 6.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "dessert-2",
+                "name": "Pelamushi",
+                "description": "Georgischer Traubensaft-Pudding",
+                "price": 5.90,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "house-of-small-wonder",
+      "name": "House of Small Wonder",
+      "address": "Johannisstraße 20, 10117 Berlin",
+      "coordinates": {
+        "lat": 52.5256,
+        "lng": 13.3936
+      },
+      "website": "https://houseofsmallwonder.de/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Breakfast",
+            "items": [
+              {
+                "id": "breakfast-1",
+                "name": "Japanese Breakfast",
+                "description": "Miso soup, rice, grilled fish, pickles, and tamagoyaki",
+                "price": 16.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "breakfast-2",
+                "name": "Avocado Toast",
+                "description": "Sourdough bread with avocado, poached egg, and chili flakes",
+                "price": 12.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "breakfast-3",
+                "name": "French Toast",
+                "description": "Brioche with maple syrup, fresh berries, and whipped cream",
+                "price": 11.50,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Lunch",
+            "items": [
+              {
+                "id": "lunch-1",
+                "name": "Katsu Sando",
+                "description": "Japanese-style pork cutlet sandwich with tonkatsu sauce",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lunch-2",
+                "name": "Salmon Bowl",
+                "description": "Grilled salmon with rice, vegetables, and miso dressing",
+                "price": 15.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lunch-3",
+                "name": "Vegetable Curry",
+                "description": "Japanese-style vegetable curry with rice",
+                "price": 13.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "drinks-1",
+                "name": "Matcha Latte",
+                "description": "Traditional Japanese green tea latte",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "drinks-2",
+                "name": "Hojicha Latte",
+                "description": "Roasted green tea latte",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "drinks-3",
+                "name": "Yuzu Lemonade",
+                "description": "Refreshing Japanese citrus drink",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "november-brasserie",
+      "name": "NOVEMBER Brasserie",
+      "address": "Husemannstraße 15, 10435 Berlin",
+      "coordinates": {
+        "lat": 52.5400,
+        "lng": 13.4100
+      },
+      "website": "https://november-brasserie.com/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Vorspeisen",
+            "items": [
+              {
+                "id": "vorspeisen-1",
+                "name": "Tartar vom Rind",
+                "description": "mit Senf, Kapern, Zwiebeln und Toast",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "vorspeisen-2",
+                "name": "Gebratene Jakobsmuscheln",
+                "description": "mit Fenchel und Safran",
+                "price": 15.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "vorspeisen-3",
+                "name": "Gebratene Entenleber",
+                "description": "mit Apfel und Balsamico",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Hauptgerichte",
+            "items": [
+              {
+                "id": "haupt-1",
+                "name": "Entenbrust",
+                "description": "mit Rotkohl und Kartoffelgratin",
+                "price": 24.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "haupt-2",
+                "name": "Rinderfilet",
+                "description": "mit grünen Bohnen und Kartoffelgratin",
+                "price": 28.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "haupt-3",
+                "name": "Gebratene Seezunge",
+                "description": "mit Spinat und Kartoffelgratin",
+                "price": 26.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "haupt-4",
+                "name": "Vegetarisches Risotto",
+                "description": "mit saisonalem Gemüse",
+                "price": 18.50,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Desserts",
+            "items": [
+              {
+                "id": "dessert-1",
+                "name": "Crème Brûlée",
+                "description": "mit Vanille",
+                "price": 8.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-2",
+                "name": "Schokoladenmousse",
+                "description": "mit Sahne",
+                "price": 8.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-3",
+                "name": "Käseplatte",
+                "description": "Auswahl verschiedener Käsesorten",
+                "price": 12.50,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Getränke",
+            "items": [
+              {
+                "id": "getraenke-1",
+                "name": "Hauswein",
+                "description": "Glas",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "getraenke-2",
+                "name": "Bier",
+                "description": "0,5l",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "getraenke-3",
+                "name": "Mineralwasser",
+                "description": "0,75l",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 } 

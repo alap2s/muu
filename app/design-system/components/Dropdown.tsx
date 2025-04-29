@@ -100,10 +100,8 @@ export function Dropdown({
             <div
               key={option.value}
               className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 ${
-                option.disabled ? 'opacity-50 cursor-not-allowed' : ''
-              } ${
-                index === 0 ? 'border-t-0' : 'border-t border-[#FF373A]/20'
-              }`}
+                option.value === value ? 'bg-[#FF373A]/10' : ''
+              } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => {
                 if (!option.disabled) {
                   onChange(option.value)
@@ -116,13 +114,13 @@ export function Dropdown({
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 {option.value === value && <Check className="w-4 h-4 text-[#FF373A] flex-none" strokeWidth={2} />}
                 <div className="min-w-0">
-                  <div className={`truncate ${option.value === value ? 'text-[#FF373A]' : ''}`}>{option.label}</div>
+                  <div className="truncate">{option.label}</div>
                   {option.description && (
-                    <div className="text-sm text-[#1e1e1e]/50 mt-1">{option.description}</div>
+                    <div className="text-sm text-[#FF373A]/70 truncate">{option.description}</div>
                   )}
                 </div>
               </div>
-              {option.rightContent && <div className="flex-none ml-2">{option.rightContent}</div>}
+              {option.rightContent && <div className="flex-none">{option.rightContent}</div>}
             </div>
           ))}
         </div>
