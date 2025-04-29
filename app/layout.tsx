@@ -1,6 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
+import { Toaster } from 'react-hot-toast'
 
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ['latin'],
@@ -8,6 +10,8 @@ const jetbrainsMono = JetBrains_Mono({
   preload: true,
   adjustFontFallback: false
 })
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Restaurant Menu Finder',
@@ -24,7 +28,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${jetbrainsMono.className} bg-[#F4F2F8]`}>{children}</body>
+      <body className={`${jetbrainsMono.className} bg-[#F4F2F8]`}>
+        {children}
+        <Toaster position="bottom-center" />
+      </body>
     </html>
   )
 } 

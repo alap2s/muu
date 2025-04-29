@@ -2531,6 +2531,1148 @@
           }
         ]
       }
+    },
+    {
+      "id": "julius-berlin",
+      "name": "Julius",
+      "address": "Gerichtstraße 31, 13347 Berlin",
+      "coordinates": {
+        "lat": 52.54434,
+        "lng": 13.37138
+      },
+      "website": "https://juliusberlin.de/",
+      "menu": {
+        "categories": [
+          {
+            "name": "To Start",
+            "items": [
+              {
+                "id": "to-start-1",
+                "name": "Grilled L'Etoile Oyster with Wagyu Beef Fat and Limequat",
+                "description": "",
+                "price": 6.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "to-start-2",
+                "name": "Sashimi of dry-aged Pink Bream, Grey Mullet and Horse Mackerel with House Pickles",
+                "description": "",
+                "price": 32.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "to-start-3",
+                "name": "Salad of Baby Kale and Mustard Leaves with Bigfruit Lime, Danish Blue and Cep Emulsion",
+                "description": "",
+                "price": 18.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "to-start-4",
+                "name": "Raw Scallop from Brittany with Cedrat de Pomme and Ponzu",
+                "description": "",
+                "price": 20.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "to-start-5",
+                "name": "Uni Toast with Petit Violet Sea Urchin from Brittany on house-made Sourdough",
+                "description": "",
+                "price": 20.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "to-start-6",
+                "name": "Cured and seared Mackerel with Oyster Emulsion and Watercress",
+                "description": "",
+                "price": 14.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "to-start-7",
+                "name": "Winter Mushroom Tempura with Citrus Ponzu and grated Radish",
+                "description": "",
+                "price": 19.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "to-start-8",
+                "name": "Lamb Belly Karaage (70g) with Ramson Ponzu, Meyer Lemon and shaved Kombu",
+                "description": "",
+                "price": 20.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "to-start-9",
+                "name": "Slow cooked Wagyu Short Rib with pickled Elderberries, Mizuna and Karashi",
+                "description": "",
+                "price": 24.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Caviar",
+            "items": [
+              {
+                "id": "caviar-1",
+                "name": "Umai Caviar 10g",
+                "description": "add a tin of Organic Caviar from N25",
+                "price": 25.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "caviar-2",
+                "name": "Umai Caviar 30g",
+                "description": "add a tin of Organic Caviar from N25",
+                "price": 75.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "caviar-3",
+                "name": "Oscestra Caviar 30g",
+                "description": "add a tin of Organic Caviar from N25",
+                "price": 95.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Bread",
+            "items": [
+              {
+                "id": "bread-1",
+                "name": "House-made Sourdough Bread with whipped Butter from Käserei Bauhofer in Allgäu",
+                "description": "",
+                "price": 9.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Vegetables & Grains",
+            "items": [
+              {
+                "id": "veg-1",
+                "name": "Vinegared Potato Purée with grilled Brassicas and Shiitake Dashi",
+                "description": "",
+                "price": 15.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "veg-2",
+                "name": "Roasted, smoked Butternut Pumpkin with Gros Glénan Sea Urchin, White Miso and Pumpkin Beurre Blanc",
+                "description": "",
+                "price": 25.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "veg-3",
+                "name": "Pointed Cabbage steamed with Trout Roe, Cream and Fireweed Oil",
+                "description": "add a 5g of Organic Caviar from N25 for 15 Euro extra",
+                "price": 20.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "veg-4",
+                "name": "Whole King Oyster Mushroom with Mayumi's Karashi Shiitake",
+                "description": "",
+                "price": 24.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "veg-5",
+                "name": "Koji Rice Risotto with grilled Maitake Mushroom",
+                "description": "",
+                "price": 22.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "veg-6",
+                "name": "Buckwheat Noodle in Miso Winter Vegetable Broth with Ginger and Kumquat",
+                "description": "",
+                "price": 14.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Meat & Fish",
+            "items": [
+              {
+                "id": "meat-1",
+                "name": "Whole Sole for Two with salted Meyer Lemon and Pil Pil Sauce",
+                "description": "",
+                "price": 42.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "meat-2",
+                "name": "Entrecôte of Wagyu Beef (200g) from Austria with fresh Radicchio and Anchovy Emulsion",
+                "description": "",
+                "price": 65.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "meat-3",
+                "name": "Goat's Milk fed Spring Chicken with caramelised Cream and grilled Brassica",
+                "description": "",
+                "price": 35.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dessert",
+            "items": [
+              {
+                "id": "dessert-1",
+                "name": "ernst's Colostrum Ice Cream with Shoyu Caramel",
+                "description": "",
+                "price": 14.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "dessert-2",
+                "name": "Crepe with Mandarin Sorbet, Pastry Cream and 70% Jamaican Chocolate",
+                "description": "",
+                "price": 12.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "gorgonzola-club",
+      "name": "Gorgonzola Club",
+      "address": "Dresdener Str. 121, 10999 Berlin",
+      "coordinates": {
+        "lat": 52.49703,
+        "lng": 13.42824
+      },
+      "website": "http://www.gorgonzolaclub.de/",
+      "menu": {
+        "categories": [
+          {
+            "id": "soups",
+            "name": "Soups",
+            "items": [
+              {
+                "id": "soup-1",
+                "name": "Minestrone",
+                "description": "",
+                "price": 4.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "soup-2",
+                "name": "Tomato Soup",
+                "description": "",
+                "price": 4.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "starters",
+            "name": "Starters",
+            "items": [
+              {
+                "id": "starter-1",
+                "name": "Olives",
+                "description": "",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "starter-2",
+                "name": "Focaccia",
+                "description": "Pizza bread with rosemary",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "starter-3",
+                "name": "Focaccia con Feta",
+                "description": "Pizza bread with feta and rosemary",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "starter-4",
+                "name": "Bruscaccia",
+                "description": "Pizza bread with tomato cubes",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "starter-5",
+                "name": "Bruscaccia à la Timi",
+                "description": "Pizza bread with tomato cubes & feta",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "starter-6",
+                "name": "Gemüse-Antipasti",
+                "description": "King-size mushrooms stuffed with spinach and gorgonzola blue cheese, artichoke hearts, palm hearts, king-size capers, tomatoes stuffed with mozzarella and pesto, marinated vegetables, cipollini (marinated onions), melon",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "starter-7",
+                "name": "Ham from Parma with melon",
+                "description": "",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "starter-8",
+                "name": "Carpaccio",
+                "description": "Thinly sliced fillet of beef with parmesan shavings, mushrooms, rucola, vinaigrette",
+                "price": 14.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "starter-9",
+                "name": "Bresaola",
+                "description": "Air-dried fillet of beef with cold-pressed olive oil, lemon and freshly ground pepper",
+                "price": 13.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "starter-10",
+                "name": "Antipasti misto",
+                "description": "King-size mushrooms stuffed with spinach and gorgonzola blue cheese, artichoke hearts, palm hearts, king-size capers, tomatoes stuffed with mozzarella and pesto, marinated vegetables, cipollini (marinated onions), ham from Parma, melon, salami milanese, salsiccia, bresaola",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "salads",
+            "name": "Salads",
+            "items": [
+              {
+                "id": "salad-1",
+                "name": "Small-sized mixed salad",
+                "description": "",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-2",
+                "name": "Large-sized mixed salad",
+                "description": "",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-3",
+                "name": "Small-sized mixed salad",
+                "description": "With walnut-gorgonzola blue cheese dressing",
+                "price": 6.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-4",
+                "name": "Large-sized mixed salad",
+                "description": "With walnut-gorgonzola blue cheese dressing",
+                "price": 8.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-5",
+                "name": "Small-sized mixed salad with feta",
+                "description": "",
+                "price": 6.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-6",
+                "name": "Large-sized mixed salad with feta",
+                "description": "",
+                "price": 8.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-7",
+                "name": "Spinach salad with sautéed mushrooms",
+                "description": "",
+                "price": 8.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-8",
+                "name": "Rucola salad with parmesan shavings",
+                "description": "With cold-pressed olive oil, lemon, freshly ground pepper",
+                "price": 8.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "salad-9",
+                "name": "Mozzarella Caprese",
+                "description": "Mozzarella, tomatoes on the vine, basil",
+                "price": 7.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "id": "pasta",
+            "name": "Pasta",
+            "items": [
+              {
+                "id": "spaghetti-1",
+                "name": "Aglio e olio",
+                "description": "Cold-pressed olive oil, garlic, parsley, red chili peppers",
+                "price": 10.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "spaghetti-2",
+                "name": "Ragù",
+                "description": "Beef ragout (Bolognese)",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "spaghetti-3",
+                "name": "Puttanesca",
+                "description": "Tomatoes, bell peppers, olives, anchovies, capers, onions (spicy!)",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "spaghetti-4",
+                "name": "Pesto",
+                "description": "Basil, roasted pine nuts, parmesan, olive oil",
+                "price": 11.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "spaghetti-5",
+                "name": "Amatriciana",
+                "description": "Tomatoes, bacon, onions, red chili peppers (spicy!)",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "gnocchi-1",
+                "name": "Salvia",
+                "description": "Sage-parmesan butter",
+                "price": 12.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "gnocchi-2",
+                "name": "Basilico",
+                "description": "Fresh basil, parmesan butter",
+                "price": 12.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "gnocchi-3",
+                "name": "Gorgonzola sauce",
+                "description": "",
+                "price": 12.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "ravioli-1",
+                "name": "Fresh Ravioli stuffed with ricotta and spinach - Alla Arrabiata",
+                "description": "Onions, capers, olives, garlic, chili (very spicy!)",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "ravioli-2",
+                "name": "Fresh Ravioli stuffed with ricotta and spinach - Salvia",
+                "description": "Sage-parmesan butter",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "ravioli-3",
+                "name": "Fresh Ravioli stuffed with ricotta and spinach - Basilico",
+                "description": "Fresh basil, parmesan butter",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "ravioli-4",
+                "name": "Fresh Ravioli stuffed with ricotta and spinach - Gorgonzola sauce",
+                "description": "",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "id": "pizza",
+            "name": "Pizza",
+            "items": [
+              {
+                "id": "pizza-1",
+                "name": "Margherita",
+                "description": "Tomatensauce, Mozzarella, Basilikum",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-2",
+                "name": "Marinara",
+                "description": "Tomatensauce, Knoblauch, Oregano",
+                "price": 9.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-3",
+                "name": "Prosciutto e Funghi",
+                "description": "Tomatensauce, Mozzarella, Schinken, Champignons",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pizza-4",
+                "name": "Quattro Formaggi",
+                "description": "Tomatensauce, Mozzarella, Gorgonzola, Parmesan, Pecorino",
+                "price": 14.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "pizza-5",
+                "name": "Diavola",
+                "description": "Tomatensauce, Mozzarella, Salami, Chili",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "pizza-6",
+                "name": "Calzone",
+                "description": "Gefüllte Pizza mit Tomatensauce, Mozzarella, Schinken, Champignons",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "secondi",
+            "name": "Secondi",
+            "items": [
+              {
+                "id": "secondi-1",
+                "name": "Filetto di Manzo",
+                "description": "Rinderfilet, Rosmarinkartoffeln, Gemüse",
+                "price": 28.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "secondi-2",
+                "name": "Salmone alla Griglia",
+                "description": "Lachsfilet, Gemüse, Zitrone",
+                "price": 22.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "secondi-3",
+                "name": "Pollo alla Griglia",
+                "description": "Hähnchenbrust, Rosmarinkartoffeln, Gemüse",
+                "price": 18.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "dolci",
+            "name": "Dolci",
+            "items": [
+              {
+                "id": "dolci-1",
+                "name": "Tiramisu",
+                "description": "Klassisches Tiramisu",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dolci-2",
+                "name": "Panna Cotta",
+                "description": "Panna Cotta mit Beeren",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dolci-3",
+                "name": "Gelato",
+                "description": "Hausgemachtes Eis",
+                "price": 6.50,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "id": "beverages",
+            "name": "Beverages",
+            "items": [
+              {
+                "id": "beverage-1",
+                "name": "Prosecco",
+                "description": "By the glass",
+                "price": 0.11,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beverage-2",
+                "name": "Champagne",
+                "description": "",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beverage-3",
+                "name": "Aperol",
+                "description": "",
+                "price": 5.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beverage-4",
+                "name": "Negroni",
+                "description": "Classic or Sbagliato",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "beverage-5",
+                "name": "Standard Fizz",
+                "description": "Lime, Sloeberry Gin, Prosecco",
+                "price": 10.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "beverage-6",
+                "name": "Coca-Cola",
+                "description": "Light or Zero, 0.2L",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "beverage-7",
+                "name": "Mineralwasser",
+                "description": "With or without gas, 0.25L or 0.75L",
+                "price": 2.80,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "id": "wine",
+            "name": "Wine",
+            "items": [
+              {
+                "id": "white-1",
+                "name": "Grüner Veltliner",
+                "description": "Burgenland, Österreich",
+                "price": 6.50,
+                "priceLarge": 16.00,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "white-2",
+                "name": "Grillo",
+                "description": "Sizilien",
+                "price": 7.00,
+                "priceLarge": 17.00,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "white-3",
+                "name": "Pinot Grigio del Veneto",
+                "description": "Klassischer Grauburgunder",
+                "price": 7.00,
+                "priceLarge": 17.00,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "red-1",
+                "name": "Nero D'Avola",
+                "description": "Sizilien",
+                "price": 7.00,
+                "priceLarge": 17.00,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "red-2",
+                "name": "Navajas",
+                "description": "Rioja",
+                "price": 7.00,
+                "priceLarge": 17.00,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "red-3",
+                "name": "Primitivo",
+                "description": "Quattro Venti, Salento",
+                "price": 7.00,
+                "priceLarge": 17.00,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "other-1",
+                "name": "Cidre",
+                "description": "French cider",
+                "price": 4.50,
+                "priceLarge": 10.50,
+                "size": "0,2l",
+                "sizeLarge": "0,5l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "other-2",
+                "name": "Weinschorle",
+                "description": "White wine + sparkling water",
+                "price": 6.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "other-3",
+                "name": "Spritz",
+                "description": "White wine, sparkling water, Aperol",
+                "price": 7.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "buya-ramen-kreuzberg",
+      "name": "Buya Ramen Factory",
+      "address": "Reichenberger Straße 36, 10999 Berlin",
+      "coordinates": {
+        "lat": 52.49703,
+        "lng": 13.42824
+      },
+      "website": "https://buyarestaurants.com/buya-ramen-kreuzberg.html",
+      "menu": {
+        "categories": [
+          {
+            "id": "izakaya-plates",
+            "name": "Izakaya Plates",
+            "description": "Japanese tapas to share",
+            "items": [
+              {
+                "id": "izakaya-1",
+                "name": "Otsumami Cabbage Salad",
+                "description": "otsumami cabbage + shio kombu + sesame oilsauce",
+                "price": 4.00,
+                "priceLarge": 6.00,
+                "dietaryRestrictions": ["vegetarian", "gluten-free"]
+              },
+              {
+                "id": "izakaya-2",
+                "name": "Wakame Salad",
+                "description": "Wakame + Edamame + soy + Cucumber + white sesame",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "izakaya-3",
+                "name": "Edamame",
+                "description": "steamed edamame + sea salt",
+                "price": 4.00,
+                "priceLarge": 6.00,
+                "dietaryRestrictions": ["vegetarian", "gluten-free"]
+              },
+              {
+                "id": "izakaya-4",
+                "name": "Agebitashi Aubergine",
+                "description": "sautéed aubergine + shoyu dressing + ginger + green onions + peanuts",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "izakaya-5",
+                "name": "Vegan Sui-Gyoza",
+                "description": "lotus roots + bok choy + mushroom + green onion + ponzu + summer tabera",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "izakaya-6",
+                "name": "Chāshū",
+                "description": "pork belly + summer tabera + tomato crisp",
+                "price": 5.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "ramen",
+            "name": "Ramen",
+            "description": "homemade, traditional Japanese ramen",
+            "items": [
+              {
+                "id": "ramen-1",
+                "name": "TanTan Ramen",
+                "description": "tantan broth + peanuts + chilli oil + ground miso pork + green onion",
+                "price": 12.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "ramen-2",
+                "name": "Yuzu Shio Ramen",
+                "description": "yuzu shio broth + tofu chāshū + shiitake mushroom + green onion + bok choy + chilli strings",
+                "price": 11.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "ramen-3",
+                "name": "Vegan TanTan Ramen",
+                "description": "tantan broth + miso soy meat + peanuts + chilli oil + tabera",
+                "price": 12.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "ramen-4",
+                "name": "Chāshū Pork Ramen",
+                "description": "tonkotsu + chāshū + green onion + kikurage + mushroom + ajitama egg + black garlic oil",
+                "price": 12.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "ramen-5",
+                "name": "Crispy Duck Ramen",
+                "description": "tonkotsu broth + crispy duck + bokchoy + tomato crisp + ajitama egg + green onion + black garlic oil",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "ramen-6",
+                "name": "Vegan Tonkotsu",
+                "description": "vegan tonkotsu + tofu chāshū + green onion + kikurage mushroom + black garlic oil",
+                "price": 12.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "ramen-7",
+                "name": "Ukon Spicy Pork Ramen",
+                "description": "turmeric tonkotsu broth + chāshū + ajitama egg + kikurage + Buya spicy red paste",
+                "price": 13.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "ramen-8",
+                "name": "Cold Ramen salad",
+                "description": "cold tantan broth + ground miso pork + peanutsscallion + spicy oil",
+                "price": 9.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "ramen-addons",
+            "name": "Ramen Add-Ons",
+            "items": [
+              {
+                "id": "addon-1",
+                "name": "Noodles",
+                "price": 3.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "addon-2",
+                "name": "Ajitama Egg",
+                "price": 1.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "addon-3",
+                "name": "Bok-choi",
+                "price": 1.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-4",
+                "name": "Tofu",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-5",
+                "name": "Chashu",
+                "price": 4.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "addon-6",
+                "name": "Duck",
+                "price": 4.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "addon-7",
+                "name": "Black garlic oil",
+                "price": 1.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-8",
+                "name": "Peanuts",
+                "price": 1.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-9",
+                "name": "Shitake mushrooms",
+                "price": 1.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-10",
+                "name": "Kikurage mushrooms",
+                "price": 2.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-11",
+                "name": "Miso soy meat",
+                "price": 2.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "addon-12",
+                "name": "Buya Spicy red paste",
+                "price": 2.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "id": "desserts",
+            "name": "Dessert",
+            "items": [
+              {
+                "id": "dessert-1",
+                "name": "Mochi Ice cream",
+                "description": "ask our server for the daily flavors",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-2",
+                "name": "Vegan Ice-Cream",
+                "description": "from our friends of Tribecca Berlin + ask our server for the daily flavors",
+                "price": 6.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "id": "wine",
+            "name": "Wine",
+            "items": [
+              {
+                "id": "wine-sparkling-1",
+                "name": "Smarazen 2018",
+                "description": "Mariotti, White Pet-Nat Emilia Romagna, Italy",
+                "price": 5.50,
+                "priceBottle": 25.00,
+                "size": "0,15l",
+                "sizeBottle": "0,75l",
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "wine-white-1",
+                "name": "Grauer Burgunder",
+                "description": "Hauck, Pinot Gris Rhinehessen Hiils, Deutschland",
+                "price": 5.00,
+                "priceBottle": 20.00,
+                "size": "0,15l",
+                "sizeBottle": "0,75l",
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "wine-white-2",
+                "name": "Ottavio Rube Bianco",
+                "description": "Valli Unite, Cortese, Malvasia, Timorasso Oltrepò Pavese, Italy",
+                "price": 5.00,
+                "priceBottle": 22.00,
+                "size": "0,15l",
+                "sizeBottle": "0,75l",
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "wine-white-3",
+                "name": "Nik Weis",
+                "description": "St. Urbans-Hof, Schiefer Riesling Mosel, Deutschland",
+                "price": 6.00,
+                "priceBottle": 26.00,
+                "size": "0,15l",
+                "sizeBottle": "0,75l",
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "wine-orange-1",
+                "name": "Jamón Jamón [Orange]",
+                "description": "Rogue Vine Los Amigos, Semillon Itata, Chile",
+                "price": 8.00,
+                "priceBottle": 48.00,
+                "size": "0,15l",
+                "sizeBottle": "0,75l",
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "wine-red-1",
+                "name": "Pipeño Tinto",
+                "description": "Viñateros Bravos Pais Itata, Chile",
+                "price": 6.00,
+                "priceBottle": 28.00,
+                "size": "0,2l",
+                "sizeBottle": "1L",
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "wine-red-2",
+                "name": "Pour Ma Gueule",
+                "description": "Clos de Fous, Pinot Noir Itata, Chile",
+                "price": 6.00,
+                "priceBottle": 26.00,
+                "size": "0,15l",
+                "sizeBottle": "0,75l",
+                "dietaryRestrictions": ["vegan"]
+              }
+            ]
+          },
+          {
+            "id": "sake",
+            "name": "Sake",
+            "items": [
+              {
+                "id": "sake-1",
+                "name": "Enter Black Dot, 'Black Cup'",
+                "description": "Honjozo 180ml",
+                "price": 9.00,
+                "size": "0,2l",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "sake-2",
+                "name": "Yeti Sake",
+                "description": "Honjozo 180ml",
+                "price": 9.00,
+                "size": "0,2l",
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "id": "kombucha",
+            "name": "Manu's Raw Kombucha",
+            "items": [
+              {
+                "id": "kombucha-1",
+                "name": "Pure",
+                "price": 4.50,
+                "size": "0,33l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "kombucha-2",
+                "name": "Mint",
+                "price": 4.50,
+                "size": "0,33l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "kombucha-3",
+                "name": "Ginger",
+                "price": 4.50,
+                "size": "0,33l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "id": "ice-tea",
+            "name": "Manu's Cold Brew Ice Tea",
+            "items": [
+              {
+                "id": "ice-tea-1",
+                "name": "Lemongrass",
+                "price": 4.00,
+                "size": "0,33l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "ice-tea-2",
+                "name": "Tuareg Mint",
+                "price": 4.00,
+                "size": "0,33l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "id": "soft-drinks",
+            "name": "Soda & Water",
+            "items": [
+              {
+                "id": "soda-1",
+                "name": "Fritz Cola",
+                "price": 3.50,
+                "size": "0,2l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "soda-2",
+                "name": "Fritz Cola Zero",
+                "price": 3.50,
+                "size": "0,2l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "soda-3",
+                "name": "Yuzu Kimino",
+                "price": 5.00,
+                "size": "0,2l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "soda-4",
+                "name": "Apfelschorle",
+                "price": 3.50,
+                "size": "0,2l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "water-1",
+                "name": "Water",
+                "price": 3.00,
+                "priceLarge": 5.00,
+                "size": "0,2l",
+                "sizeLarge": "0,75l",
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 } 

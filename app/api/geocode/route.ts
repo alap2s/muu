@@ -2,34 +2,32 @@ import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const lat = searchParams.get('lat')
-  const lng = searchParams.get('lng')
+  const address = searchParams.get('address')
 
-  if (!lat || !lng) {
-    return NextResponse.json({ error: 'Missing coordinates' }, { status: 400 })
+  if (!address) {
+    return NextResponse.json({ error: 'Address is required' }, { status: 400 })
   }
 
   try {
-    // Using OpenStreetMap's Nominatim service (free, no API key required)
     const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
       {
         headers: {
-          'User-Agent': 'Menoo Restaurant Finder'
+          'User-Agent': 'Menoo Restaurant Finder (menoo@example.com)'  // Replace with your contact info
         }
       }
     )
-
+    
     const data = await response.json()
     
-    if (data.error) {
-      return NextResponse.json({ error: 'Failed to get address' }, { status: 500 })
+    if (data && data.length > 0) {
+      const { lat, lon: lng } = data[0]
+      return NextResponse.json({ coordinates: { lat: parseFloat(lat), lng: parseFloat(lng) } })
+    } else {
+      return NextResponse.json({ error: 'Could not geocode address' }, { status: 400 })
     }
-
-    const address = data.display_name
-    return NextResponse.json({ address })
   } catch (error) {
-    console.error('Geocoding error:', error)
-    return NextResponse.json({ error: 'Failed to get address' }, { status: 500 })
+    console.error('Error geocoding address:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 } 
