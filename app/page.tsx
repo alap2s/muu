@@ -232,7 +232,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen max-w-4xl mx-auto">
-      <div className="flex border-b border-[#FF373A]/20">
+      <div className="flex border-b border-[#FF373A]/20 sticky top-0 bg-[#F4F2F8] z-50">
         <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
         <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center pl-4">
           <span className="text-[18px] font-bold text-[#FF373A]">Menoo</span>
@@ -272,13 +272,13 @@ export default function Home() {
                     }}
                   >
                     <div className="flex">
-                      <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                      <div className="w-8 h-12 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
                       <div className="flex-1">
-                        <h3 className="font-medium text-sm text-[#FF373A] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20">
+                        <h3 className="font-extrabold text-[10px] text-[#1e1e1e] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20 uppercase">
                           {category}
                         </h3>
                       </div>
-                      <div className="w-8 h-12 bg-[#F4F2F8]" />
+                      <div className="w-8 h-12 border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
                     </div>
                     <div className="space-y-0">
                       {items.map((item) => (
@@ -293,7 +293,7 @@ export default function Home() {
                               <div className="flex justify-between items-start p-4 border-r border-[#FF373A]/20">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
-                                    <h4 className="font-medium text-[#1e1e1e]">
+                                    <h4 className="font-medium text-sm text-[#1e1e1e]">
                                       <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
                                         {item.name}
                                       </span>
@@ -413,7 +413,7 @@ export default function Home() {
                   <div className="w-8 flex-none bg-[#F4F2F8]" />
                 </div>
               </div>
-              <div className="border-b border-[#FF373A]/20">
+              <div className="border-b border-[#FF373A]/20 hidden md:block">
                 <div className="flex h-8">
                   <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
                   <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />

@@ -64,7 +64,7 @@ export function Dropdown({
     <div className="relative w-full" ref={dropdownRef}>
       <button
         type="button"
-        className={`w-full h-12 border-r border-[#FF373A]/20 pl-4 pr-4 appearance-none bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-between ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
+        className={`w-full h-12 border-r border-[#FF373A]/20 pl-4 pr-4 appearance-none bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-between text-sm ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -99,7 +99,7 @@ export function Dropdown({
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
               key={option.value}
-              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 ${
+              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 border-b border-[#FF373A]/20 last:border-b-0 ${
                 option.value === value ? 'bg-[#FF373A]/10' : ''
               } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => {

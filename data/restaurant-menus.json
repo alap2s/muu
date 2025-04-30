@@ -3673,6 +3673,226 @@
           }
         ]
       }
+    },
+    {
+      "id": "dotori-berlin",
+      "name": "Dotori - Korean Anju Bar",
+      "address": "Gustav-Adolf-Straße 159, 13086 Berlin",
+      "coordinates": {
+        "lat": 52.55743,
+        "lng": 13.43356
+      },
+      "website": "https://www.dotori.berlin",
+      "menu": {
+        "categories": [
+          {
+            "name": "Main Dishes",
+            "items": [
+              {
+                "id": "main-1",
+                "name": "Pajeon",
+                "description": "Crispy pan-fried scallion pancake in the style of Jeolla province",
+                "price": 17.12,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "main-2",
+                "name": "Seafood Pajeon",
+                "description": "Pajeon pancake with mixed seafood",
+                "price": 13.12,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-3",
+                "name": "Kimchijeon",
+                "description": "An anju classic - crispy pancake with aged kimchi",
+                "price": 13.12,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-4",
+                "name": "Dalkgalbi",
+                "description": "Spicy chicken stirfry from Chuncheon",
+                "price": 17.12,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-5",
+                "name": "Mala Ddeokbokki",
+                "description": "Rice cakes in mala cream sauce. Ddeokbokki's trendy evolution",
+                "price": 16.12,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "main-6",
+                "name": "Banquet Noodles",
+                "description": "Sweet potato glass noodles with veggies & mushrooms",
+                "price": 17.12,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Dessert",
+            "items": [
+              {
+                "id": "dessert-1",
+                "name": "Jasmine Panna Cotta",
+                "description": "Red bean, pine nuts, yakgwa crumble",
+                "price": 9.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-2",
+                "name": "Mochi - Chocolate",
+                "description": "Glutinous rice cakes filled with ice cream or sorbet",
+                "price": 3.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-3",
+                "name": "Mochi - Pistachio",
+                "description": "Glutinous rice cakes filled with ice cream or sorbet",
+                "price": 3.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "dessert-4",
+                "name": "Mochi - Mango",
+                "description": "Glutinous rice cakes filled with ice cream or sorbet",
+                "price": 3.00,
+                "dietaryRestrictions": ["vegetarian"]
+              }
+            ]
+          },
+          {
+            "name": "Korean Alcohol",
+            "items": [
+              {
+                "id": "soju-1",
+                "name": "LeeGangJu 19",
+                "description": "Historic recipe with pear & ginger",
+                "price": 40.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "soju-2",
+                "name": "Hwayo Soju",
+                "description": "Artisinal soju aged in earthenware",
+                "price": 36.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "soju-3",
+                "name": "Jinro Is Back",
+                "description": "It's not anju without soju",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "takju-1",
+                "name": "Yunguna Makkoli",
+                "description": "Bright, dry, tart & fizzy",
+                "price": 51.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "takju-2",
+                "name": "Yunguna Takju",
+                "description": "Creamy & tropical",
+                "price": 54.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "takju-3",
+                "name": "Kuk-Sun-Dang Makkoli",
+                "description": "Creamy & lightly sparkling rice wine",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Natural Wine",
+            "items": [
+              {
+                "id": "bubbles-1",
+                "name": "Veverka Whaam Pet Nat 2024",
+                "description": "Energetic & fun",
+                "price": 45.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "white-1",
+                "name": "Jiří Bárta Pinot Blanc 2021",
+                "description": "Smooth & buttery",
+                "price": 45.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "orange-1",
+                "name": "Danilo Marcucci BiancO",
+                "description": "Fresh & herbal",
+                "price": 42.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Craft Beer",
+            "items": [
+              {
+                "id": "beer-1",
+                "name": "Berliner Berg Pilsner",
+                "description": "Simple & easy-drinking",
+                "price": 5.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beer-2",
+                "name": "Berliner Berg Pale Ale",
+                "description": "Super drinkable!",
+                "price": 5.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "beer-3",
+                "name": "Fuerst Wiacek Pilsner",
+                "description": "Nice & clean pils",
+                "price": 6.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Non-Alcoholic",
+            "items": [
+              {
+                "id": "soft-1",
+                "name": "Proviant Limonade",
+                "description": "Yummy & made in Berlin",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "soft-2",
+                "name": "Spreequell Sparkling Water",
+                "description": "Berlin-based & carbon-neutral",
+                "price": 5.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "alt-1",
+                "name": "Far & Søn Hibiscus",
+                "description": "Rich taste of summer berries produced from organic hibiscus flowers",
+                "price": 45.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          }
+        ]
+      },
+      "menuSource": "database"
     }
   ]
 } 
