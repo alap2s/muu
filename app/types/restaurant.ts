@@ -1,3 +1,11 @@
+export interface MenuItem {
+  id: string
+  name: string
+  description?: string
+  price: number
+  dietaryRestrictions: string[]
+}
+
 export interface Restaurant {
   id: string
   name: string
