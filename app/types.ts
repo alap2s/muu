@@ -21,4 +21,5 @@ export interface Restaurant {
   website?: string
   googleMapsUrl?: string
   cuisine?: string
+  lastUpdated?: string
 } 
