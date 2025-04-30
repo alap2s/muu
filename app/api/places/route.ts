@@ -22,10 +22,10 @@ interface OSMResponse {
 
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
-    const lat = searchParams.get('lat')
-    const lng = searchParams.get('lng')
-    const radius = searchParams.get('radius')
+    const url = new URL(request.url)
+    const lat = url.searchParams.get('lat')
+    const lng = url.searchParams.get('lng')
+    const radius = url.searchParams.get('radius')
 
     // Validate required parameters
     if (!lat || !lng || !radius) {
