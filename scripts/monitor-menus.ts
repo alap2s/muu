@@ -30,9 +30,9 @@ const menuParsers: { [key: string]: (html: string) => { [key: string]: string } 
   default: (html: string) => {
     const sections: { [key: string]: string } = {}
     const patterns = [
-      { name: 'appetizers', regex: /<h2[^>]*>Appetizers<\/h2>.*?<ul[^>]*>(.*?)<\/ul>/is },
-      { name: 'mains', regex: /<h2[^>]*>Main Courses<\/h2>.*?<ul[^>]*>(.*?)<\/ul>/is },
-      { name: 'desserts', regex: /<h2[^>]*>Desserts<\/h2>.*?<ul[^>]*>(.*?)<\/ul>/is }
+      { name: 'appetizers', regex: /<h2[^>]*>Appetizers<\/h2>[\s\S]*?<ul[^>]*>([\s\S]*?)<\/ul>/i },
+      { name: 'mains', regex: /<h2[^>]*>Main Courses<\/h2>[\s\S]*?<ul[^>]*>([\s\S]*?)<\/ul>/i },
+      { name: 'desserts', regex: /<h2[^>]*>Desserts<\/h2>[\s\S]*?<ul[^>]*>([\s\S]*?)<\/ul>/i }
     ]
 
     for (const pattern of patterns) {
@@ -49,9 +49,9 @@ const menuParsers: { [key: string]: (html: string) => { [key: string]: string } 
   'wen-cheng': (html: string) => {
     const sections: { [key: string]: string } = {}
     const patterns = [
-      { name: 'noodles', regex: /<h3[^>]*>Noodles<\/h3>.*?<div[^>]*class="menu-item"[^>]*>(.*?)<\/div>/gis },
-      { name: 'rice', regex: /<h3[^>]*>Rice Dishes<\/h3>.*?<div[^>]*class="menu-item"[^>]*>(.*?)<\/div>/gis },
-      { name: 'sides', regex: /<h3[^>]*>Sides<\/h3>.*?<div[^>]*class="menu-item"[^>]*>(.*?)<\/div>/gis }
+      { name: 'noodles', regex: /<h3[^>]*>Noodles<\/h3>[\s\S]*?<div[^>]*class="menu-item"[^>]*>([\s\S]*?)<\/div>/gi },
+      { name: 'rice', regex: /<h3[^>]*>Rice Dishes<\/h3>[\s\S]*?<div[^>]*class="menu-item"[^>]*>([\s\S]*?)<\/div>/gi },
+      { name: 'sides', regex: /<h3[^>]*>Sides<\/h3>[\s\S]*?<div[^>]*class="menu-item"[^>]*>([\s\S]*?)<\/div>/gi }
     ]
 
     for (const pattern of patterns) {
