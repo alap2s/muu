@@ -232,6 +232,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-primary-light dark:bg-dark-background-main">
+      {/* Notch spacer row for safe area */}
+      <div
+        className="flex justify-center"
+        style={{ height: 'env(safe-area-inset-top)' }}
+      >
+        <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/20 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
+        <div className="flex-1 max-w-4xl bg-primary-light dark:bg-dark-background-main" />
+        <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
+      </div>
       <div
         className="flex flex-col border-b border-primary-border/10 dark:border-dark-primary-border/20 sticky top-0 bg-primary-light dark:bg-dark-background-main z-50"
         style={{ paddingTop: 'env(safe-area-inset-top)' }}
