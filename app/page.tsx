@@ -232,7 +232,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-primary-light dark:bg-dark-background-main">
-      <div className="flex flex-col border-b border-primary-border/10 dark:border-dark-primary-border/20 sticky top-0 bg-primary-light dark:bg-dark-background-main z-50">
+      <div
+        className="flex flex-col border-b border-primary-border/10 dark:border-dark-primary-border/20 sticky top-0 bg-primary-light dark:bg-dark-background-main z-50"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
         <div className="flex justify-center">
           <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
           <div className="flex-1 max-w-4xl flex items-center justify-between h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main pl-4 pr-0">
