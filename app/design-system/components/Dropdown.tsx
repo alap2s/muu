@@ -41,14 +41,16 @@ export function Dropdown({
   const [buttonRect, setButtonRect] = useState<DOMRect | null>(null)
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [])
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export function Dropdown({
     <div className="relative w-full md:max-w-4xl md:mx-auto" ref={dropdownRef}>
       <button
         type="button"
-        className={`w-full h-12 border-r border-primary-border/10 dark:border-dark-primary-border/10 pl-4 pr-4 appearance-none bg-primary-light dark:bg-dark-background-main text-primary dark:text-dark-primary font-mono flex items-center justify-between text-sm ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
+        className={`w-full h-12 border-r border-primary-border/10 dark:border-dark-primary-border/12 pl-4 pr-4 appearance-none bg-primary-light dark:bg-dark-background-main text-primary dark:text-dark-primary font-mono flex items-center justify-between text-sm ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -72,12 +74,15 @@ export function Dropdown({
           <span className="truncate">{selectedOption?.label || 'Select...'}</span>
         </div>
         {!hideChevron && (
-          <ChevronDown className={`w-4 h-4 text-primary dark:text-dark-primary flex-none ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2} />
+          <ChevronDown
+            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            strokeWidth={2}
+          />
         )}
       </button>
 
       <div 
-        className={`fixed inset-0 bg-primary-light/50 dark:bg-dark-background-main/70 backdrop-blur-sm z-[9998] ${
+        className={`fixed inset-0 bg-primary-light/50 dark:bg-dark-background-main/70 backdrop-blur-sm z-[9998] transition-opacity duration-200 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{
@@ -87,7 +92,7 @@ export function Dropdown({
       />
 
       <div 
-        className={`fixed left-0 w-screen z-[9999] ${
+        className={`fixed left-0 w-screen z-[9999] transition-opacity duration-200 ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{
@@ -99,7 +104,7 @@ export function Dropdown({
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
               key={option.value}
-              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-primary/5 dark:hover:bg-dark-primary/10 border-b border-primary-border/10 dark:border-dark-primary-border/10 last:border-b-0 ${
+              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-primary/5 dark:hover:bg-dark-primary/10 border-b border-primary-border/10 dark:border-dark-primary-border/10 last:border-b-0 transition-colors ${
                 option.value === value ? 'bg-primary/10 dark:bg-dark-primary/10' : ''
               } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => {

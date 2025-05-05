@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List } from 'lucide-react'
 import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
+import { A2HSBanner } from './components/A2HSBanner'
 
 interface MenuItem {
   id: string
@@ -232,6 +233,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-primary-light dark:bg-dark-background-main">
+      <A2HSBanner />
       {/* Notch spacer row for safe area */}
       <div
         className="flex justify-center"
