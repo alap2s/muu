@@ -1,119 +1,115 @@
-import { useEffect, useState } from 'react'
+'use client'
 
-function isIos() {
-  return (
-    /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase()) &&
-    !window.navigator.standalone
-  )
+import { useState, useEffect } from 'react'
+
+interface NavigatorWithStandalone extends Navigator {
+  standalone?: boolean
 }
 
-function isInStandaloneMode() {
-  // @ts-ignore
-  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone
+const isStandalone = () => {
+  if (typeof window === 'undefined') return false
+  return window.matchMedia('(display-mode: standalone)').matches || 
+         (window.navigator as NavigatorWithStandalone).standalone
+}
+
+const isIosDevice = () => {
+  if (typeof window === 'undefined') return false
+  return /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())
+}
+
+const isAndroidDevice = () => {
+  if (typeof window === 'undefined') return false
+  return /android/.test(window.navigator.userAgent.toLowerCase())
 }
 
 export function A2HSBanner() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
   const [showBanner, setShowBanner] = useState(false)
-  const [isIosDevice, setIsIosDevice] = useState(false)
-  const [isInstalled, setIsInstalled] = useState(false)
+  const [isIos, setIsIos] = useState(false)
+  const [isAndroid, setIsAndroid] = useState(false)
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
 
   useEffect(() => {
-    // Check if app is already installed
-    const checkIfInstalled = () => {
-      const installed = isInStandaloneMode()
-      setIsInstalled(installed)
-      if (installed) {
-        setShowBanner(false)
-      }
-    }
+    const ios = isIosDevice()
+    const android = isAndroidDevice()
+    setIsIos(ios)
+    setIsAndroid(android)
 
-    // Initial check
-    checkIfInstalled()
-
-    // Listen for changes in display mode
-    const mediaQuery = window.matchMedia('(display-mode: standalone)')
-    const handleChange = () => {
-      checkIfInstalled()
-    }
-    mediaQuery.addEventListener('change', handleChange)
-
-    let timeoutId: NodeJS.Timeout
-
-    // Android: Listen for beforeinstallprompt
-    const handler = (e: any) => {
+    // Handle Android installation prompt
+    const handleBeforeInstallPrompt = (e: any) => {
       e.preventDefault()
       setDeferredPrompt(e)
-      // Set a 10-second delay before showing the banner
-      timeoutId = setTimeout(() => {
-        if (!isInstalled) {
-          setShowBanner(true)
-        }
-      }, 10000)
+      setShowBanner(true)
     }
-    window.addEventListener('beforeinstallprompt', handler)
 
-    // iOS: Detect Safari
-    if (isIos() && !isInstalled) {
-      setIsIosDevice(true)
-      // Set a 10-second delay before showing the banner
-      timeoutId = setTimeout(() => {
-        if (!isInstalled) {
-          setShowBanner(true)
-        }
-      }, 10000)
+    if (android) {
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    } else if (ios) {
+      setShowBanner(!isStandalone())
     }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler)
-      mediaQuery.removeEventListener('change', handleChange)
-      if (timeoutId) {
-        clearTimeout(timeoutId)
+      if (android) {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
       }
     }
-  }, [isInstalled])
+  }, [])
 
-  if (!showBanner || isInstalled) return null
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt()
+      const { outcome } = await deferredPrompt.userChoice
+      if (outcome === 'accepted') {
+        setShowBanner(false)
+      }
+      setDeferredPrompt(null)
+    }
+  }
+
+  if (!showBanner) return null
 
   return (
-    <div className="fixed bottom-20 left-0 right-0 z-[9999] flex justify-center md:hidden">
-      <div className="w-full max-w-4xl">
-        <div className="flex justify-center">
-          <div className="w-8 border-r border-primary-border/40 dark:border-dark-primary-border/40 bg-primary-light dark:bg-dark-background-main" />
-          <div className="flex-1 border-r border-primary-border/40 dark:border-dark-primary-border/40 bg-primary-light dark:bg-dark-background-main">
-            <div className="flex flex-col p-4 border-t border-b border-primary-border/40 dark:border-dark-primary-border/40">
-              <div className="text-sm text-[#1e1e1e] dark:text-dark-text-primary mb-3">
-                {isIosDevice ? (
-                  'Add Menoo to your home screen: Tap Share then Add to Home Screen'
-                ) : (
-                  'Install Menoo for a better experience.'
-                )}
+    <div className="fixed bottom-[80px] left-0 right-0 bg-primary-light dark:bg-dark-background-main z-[100]">
+      <div className="max-w-4xl mx-auto">
+        <div className="border-t border-primary-border/10 dark:border-dark-primary-border/20">
+          <div className="flex w-full border-b border-primary-border/10 dark:border-dark-primary-border/20">
+            <div className="w-8 flex-none border-r border-primary-border/40 dark:border-dark-primary-border/40 bg-primary-light dark:bg-dark-background-main" />
+            <div className="flex-1 flex flex-col min-w-0 p-4 border-l border-r border-t border-b border-primary-border/40 dark:border-dark-primary-border/40">
+              <div className="flex-1 min-w-0 mb-4">
+                <p className="text-sm text-primary dark:text-dark-text-primary">
+                  {isIos ? (
+                    <>
+                      To install this app on your iPhone:
+                      <br />
+                      1. Tap the Share button
+                      <br />
+                      2. Tap "Add to Home Screen"
+                    </>
+                  ) : isAndroid ? (
+                    'Install Menoo for better experience'
+                  ) : (
+                    'Add this app to your home screen for the best experience'
+                  )}
+                </p>
               </div>
-              <div className="flex justify-between items-center">
-                {!isIosDevice && (
+              <div className="flex items-center justify-end">
+                {isAndroid && (
                   <button
-                    className="px-3 py-1 bg-primary text-white text-xs font-bold hover:bg-primary/80"
-                    onClick={async () => {
-                      if (deferredPrompt) {
-                        deferredPrompt.prompt()
-                        setShowBanner(false)
-                      }
-                    }}
+                    onClick={handleInstall}
+                    className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary/90"
                   >
-                    Add to Home Screen
+                    Install
                   </button>
                 )}
                 <button
-                  className="text-[#1e1e1e]/50 dark:text-dark-text-primary/70 text-xs font-medium"
                   onClick={() => setShowBanner(false)}
-                  aria-label="Dismiss"
+                  className="text-primary dark:text-dark-text-primary text-sm font-medium ml-4"
                 >
                   Dismiss
                 </button>
               </div>
             </div>
+            <div className="w-8 flex-none bg-primary-light dark:bg-dark-background-main" />
           </div>
-          <div className="w-8 bg-primary-light dark:bg-dark-background-main" />
         </div>
       </div>
     </div>
