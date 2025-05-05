@@ -189,29 +189,29 @@ export default function Home() {
     const description = item.description?.toLowerCase() || ''
 
     if (item.dietaryRestrictions.includes('vegetarian')) {
-      icons.push(<Milk key="milk" className="w-4 h-4 text-[#1e1e1e]" />)
+      icons.push(<Milk key="milk" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
     }
     if (item.dietaryRestrictions.includes('vegan')) {
-      icons.push(<Leaf key="leaf" className="w-4 h-4 text-[#1e1e1e]" />)
+      icons.push(<Leaf key="leaf" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
     }
     if (item.dietaryRestrictions.includes('nuts')) {
-      icons.push(<Nut key="nut" className="w-4 h-4 text-[#1e1e1e]" />)
+      icons.push(<Nut key="nut" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
     }
     if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
       if (name.includes('chicken') || description.includes('chicken') || 
           name.includes('hähnchen') || description.includes('hähnchen')) {
-        icons.push(<Bird key="bird" className="w-4 h-4 text-[#1e1e1e]" />)
+        icons.push(<Bird key="bird" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
       } else if (name.includes('egg') || description.includes('egg') ||
                  name.includes('ei') || description.includes('ei')) {
-        icons.push(<Egg key="egg" className="w-4 h-4 text-[#1e1e1e]" />)
+        icons.push(<Egg key="egg" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
       } else if (name.includes('fish') || description.includes('fish') ||
                  name.includes('fisch') || description.includes('fisch')) {
-        icons.push(<Fish key="fish" className="w-4 h-4 text-[#1e1e1e]" />)
+        icons.push(<Fish key="fish" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
       } else if (name.includes('ham') || description.includes('ham') ||
                  name.includes('schinken') || description.includes('schinken')) {
-        icons.push(<Beef key="ham" className="w-4 h-4 text-[#1e1e1e]" />)
+        icons.push(<Beef key="ham" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
       } else {
-        icons.push(<Bird key="meat" className="w-4 h-4 text-[#1e1e1e]" />)
+        icons.push(<Bird key="meat" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
       }
     }
     return icons
@@ -357,7 +357,7 @@ export default function Home() {
                     <div className="flex justify-center">
                       <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
                       <div className="flex-1 max-w-4xl">
-                        <h3 className="font-extrabold text-[10px] text-[#1e1e1e] dark:text-dark-text-primary h-12 flex items-center px-4 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 uppercase">
+                        <h3 className="font-extrabold text-[10px] text-primary dark:text-dark-text-primary h-12 flex items-center px-4 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 uppercase">
                           {category}
                         </h3>
                       </div>
@@ -376,7 +376,7 @@ export default function Home() {
                               <div className="flex justify-between items-start p-4 border-r border-primary-border/10 dark:border-dark-primary-border/20">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
-                                    <h4 className="font-medium text-sm text-[#1e1e1e] dark:text-dark-text-primary">
+                                    <h4 className="font-medium text-sm text-primary dark:text-dark-text-primary">
                                       <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
                                         {item.name}
                                       </span>
@@ -386,12 +386,12 @@ export default function Home() {
                                     </div>
                                   </div>
                                   {item.description && (
-                                    <p className={`text-[#1e1e1e]/50 dark:text-dark-text-primary/70 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
+                                    <p className={`text-primary/50 dark:text-dark-text-primary/70 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
                                       {item.description}
                                     </p>
                                   )}
                                 </div>
-                                <span className="font-medium ml-4 text-[#1e1e1e] dark:text-dark-text-primary">
+                                <span className="font-medium ml-4 text-primary dark:text-dark-text-primary">
                                   €{item.price.toFixed(2)}
                                 </span>
                               </div>
