@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${jetbrainsMono.className} bg-[#F4F2F8]`}>
+      <body className={`${jetbrainsMono.className} bg-[#F8F6F4] dark:bg-[#181818] text-[#1e1e1e] dark:text-[#F8F6F4]`}>
         {children}
         <Toaster position="bottom-center" />
       </body>

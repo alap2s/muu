@@ -128,29 +128,22 @@ export async function GET(request: Request) {
       throw new Error('Restaurant data not available')
     }
 
-    // Filter restaurants within the search radius
-    const nearbyRestaurants = restaurantData.restaurants
+    // Get all restaurants without distance filtering
+    const allRestaurants = restaurantData.restaurants
       .map((restaurant: Restaurant) => ({
         ...restaurant,
-        distance: calculateDistance(
-          userLat,
-          userLng,
-          restaurant.coordinates.lat,
-          restaurant.coordinates.lng
-        )
+        distance: 0 // Set distance to 0 for all restaurants
       }))
-      .filter((restaurant: RestaurantWithDistance) => restaurant.distance <= searchRadius)
-      .sort((a: RestaurantWithDistance, b: RestaurantWithDistance) => a.distance - b.distance)
       .map(transformToFrontendFormat)
 
-    console.log('Found restaurants:', nearbyRestaurants.map(r => ({
+    console.log('Found restaurants:', allRestaurants.map(r => ({
       name: r.name,
       distance: r.distance,
       menuItems: r.menu.length,
       menuSource: r.menuSource
     })))
 
-    return NextResponse.json({ restaurants: nearbyRestaurants })
+    return NextResponse.json({ restaurants: allRestaurants })
   } catch (error) {
     console.error('Error fetching restaurants:', error)
     return NextResponse.json({ error: 'Failed to fetch restaurants' }, { status: 500 })

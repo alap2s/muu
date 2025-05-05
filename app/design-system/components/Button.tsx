@@ -15,8 +15,8 @@ export function Button({
 }: ButtonProps) {
   const baseStyles = "h-12 px-6 rounded-lg font-mono transition-colors flex items-center justify-center"
   const variantStyles = {
-    primary: "bg-[#FF373A] text-white hover:bg-[#FF373A]/90",
-    secondary: "bg-[#F4F2F8] text-[#FF373A] border border-[#FF373A]/20 hover:border-[#FF373A]"
+    primary: "bg-[#E34114] text-white hover:bg-[#E34114]/90",
+    secondary: "bg-[#F4F2F8] text-[#E34114] border border-[#E34114]/20 hover:border-[#E34114]"
   }
 
   return (

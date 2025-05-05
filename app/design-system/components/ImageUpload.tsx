@@ -51,18 +51,18 @@ export function ImageUpload({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-mono text-[#FF373A] mb-2">
+        <label className="block text-sm font-mono text-[#E34114] mb-2">
           {label}
         </label>
       )}
       
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed border-[#FF373A]/20 rounded-lg p-8 text-center cursor-pointer transition-colors
-          ${isDragActive ? 'border-[#FF373A] bg-[#FF373A]/5' : 'hover:border-[#FF373A]/50'}`}
+        className={`border-2 border-dashed border-[#E34114]/20 rounded-lg p-8 text-center cursor-pointer transition-colors
+          ${isDragActive ? 'border-[#E34114] bg-[#E34114]/5' : 'hover:border-[#E34114]/50'}`}
       >
         <input {...getInputProps()} />
-        <p className="font-mono text-[#FF373A]/70">
+        <p className="font-mono text-[#E34114]/70">
           {isDragActive
             ? 'Drop the files here...'
             : description || 'Drag & drop files here, or click to select files'}
@@ -82,7 +82,7 @@ export function ImageUpload({
                 onClick={() => removeFile(index)}
                 className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                <X size={16} className="text-[#FF373A]" />
+                <X size={16} className="text-[#E34114]" />
               </button>
             </div>
           ))}

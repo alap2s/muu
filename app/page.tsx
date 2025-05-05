@@ -231,36 +231,105 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen max-w-4xl mx-auto">
-      <div className="flex border-b border-[#FF373A]/20 sticky top-0 bg-[#F4F2F8] z-50">
-        <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-        <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center pl-4">
-          <span className="text-[18px] font-bold text-[#FF373A]">Menoo</span>
+    <div className="min-h-screen bg-primary-light dark:bg-dark-background-main">
+      <div className="flex flex-col border-b border-primary-border/10 dark:border-dark-primary-border/10 sticky top-0 bg-primary-light dark:bg-dark-background-main z-50">
+        <div className="flex justify-center">
+          <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+          <div className="flex-1 max-w-4xl flex items-center justify-between h-12 border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main pl-4 pr-0">
+            <span className="text-[18px] font-bold text-primary dark:text-dark-primary">Menoo</span>
+            <div className="w-12 h-12 flex items-center justify-center border-l border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main">
+              <SettingsMenu
+                language={language}
+                onLanguageChange={setLanguage}
+                notifications={notifications}
+                onNotificationsChange={setNotifications}
+                onShare={handleShare}
+              />
+            </div>
+          </div>
+          <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 bg-primary-light dark:bg-dark-background-main" />
         </div>
-        <div className="w-12 h-12 bg-[#F4F2F8] flex-none">
-          <SettingsMenu
-            language={language}
-            onLanguageChange={setLanguage}
-            notifications={notifications}
-            onNotificationsChange={setNotifications}
-            onShare={handleShare}
-          />
+        <div className="hidden md:flex border-t border-primary-border/10 dark:border-dark-primary-border/10 justify-center">
+          <div className="w-8 md:w-[calc((100vw-1024px)/2)] flex-none border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+          <div className="flex-1 flex min-w-0 max-w-4xl">
+            <div className="flex-1 min-w-0">
+              <Dropdown
+                value={selectedRestaurant?.id || ''}
+                onChange={(value) => {
+                  const restaurant = restaurants.find(r => r.id === value)
+                  if (restaurant) setSelectedRestaurant(restaurant)
+                }}
+                options={restaurants.map(restaurant => ({
+                  value: restaurant.id,
+                  label: `${restaurant.name} (${restaurant.distance} km)`
+                }))}
+                leftIcon={<Store className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+                position="bottom"
+              />
+            </div>
+            <div className="flex-none w-12">
+              <Dropdown
+                value={selectedGroup}
+                onChange={(value) => {
+                  setSelectedGroup(value)
+                  const element = categoryRefs.current[value]
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }
+                }}
+                options={categories.map(category => ({
+                  value: category,
+                  label: category
+                }))}
+                leftIcon={<Layers className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+                position="bottom"
+                hideChevron={true}
+                className="justify-center"
+              />
+            </div>
+            <div className="flex-none w-12">
+              <Dropdown
+                value={filter}
+                onChange={setFilter}
+                options={[
+                  { value: 'all', label: 'All' },
+                  { value: 'vegetarian', label: 'Vegetarian' },
+                  { value: 'vegan', label: 'Vegan' }
+                ]}
+                leftIcon={
+                  filter === 'all' ? <Filter className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
+                  filter === 'vegetarian' ? <Milk className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
+                  <Leaf className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />
+                }
+                position="bottom"
+                align="right"
+                hideChevron={true}
+                className="justify-center"
+              />
+            </div>
+          </div>
+          <div className="w-8 md:w-[calc((100vw-1024px)/2)] flex-none bg-primary-light dark:bg-dark-background-main" />
         </div>
-        <div className="w-8 h-12 bg-[#F4F2F8]" />
       </div>
       
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4">
-          {error}
+        <div className="flex justify-center">
+          <div className="max-w-4xl w-full">
+            <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 mb-4">
+              {error}
+            </div>
+          </div>
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-8">Loading restaurants...</div>
+        <div className="flex justify-center">
+          <div className="max-w-4xl w-full text-center py-8">Loading restaurants...</div>
+        </div>
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
           {selectedRestaurant && (
-            <div className="bg-[#F4F2F8] pb-20" ref={menuRef}>
+            <div className="bg-primary-light dark:bg-dark-background-main pb-20" ref={menuRef}>
               <div className="space-y-0">
                 {Object.entries(groupedMenu).map(([category, items]) => (
                   <div 
@@ -271,29 +340,29 @@ export default function Home() {
                       }
                     }}
                   >
-                    <div className="flex">
-                      <div className="w-8 h-12 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
-                      <div className="flex-1">
-                        <h3 className="font-extrabold text-[10px] text-[#1e1e1e] h-12 flex items-center px-4 border-r border-[#FF373A]/20 border-b border-[#FF373A]/20 uppercase">
+                    <div className="flex justify-center">
+                      <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/10 border-b border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+                      <div className="flex-1 max-w-4xl">
+                        <h3 className="font-extrabold text-[10px] text-[#1e1e1e] dark:text-dark-text-primary h-12 flex items-center px-4 border-r border-primary-border/10 dark:border-dark-primary-border/10 border-b border-primary-border/10 dark:border-dark-primary-border/10 uppercase">
                           {category}
                         </h3>
                       </div>
-                      <div className="w-8 h-12 border-b border-[#FF373A]/20 bg-[#F4F2F8]" />
+                      <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-b border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
                     </div>
                     <div className="space-y-0">
                       {items.map((item) => (
                         <div 
                           key={item.id} 
-                          className="border-b border-[#FF373A]/20 cursor-pointer"
+                          className="border-b border-primary-border/10 dark:border-dark-primary-border/10 cursor-pointer"
                           onClick={() => toggleItemExpansion(item.id)}
                         >
-                          <div className="flex">
-                            <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                            <div className="flex-1">
-                              <div className="flex justify-between items-start p-4 border-r border-[#FF373A]/20">
+                          <div className="flex justify-center">
+                            <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+                            <div className="flex-1 max-w-4xl">
+                              <div className="flex justify-between items-start p-4 border-r border-primary-border/10 dark:border-dark-primary-border/10">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
-                                    <h4 className="font-medium text-sm text-[#1e1e1e]">
+                                    <h4 className="font-medium text-sm text-[#1e1e1e] dark:text-dark-text-primary">
                                       <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
                                         {item.name}
                                       </span>
@@ -303,17 +372,17 @@ export default function Home() {
                                     </div>
                                   </div>
                                   {item.description && (
-                                    <p className={`text-[#1e1e1e]/50 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
+                                    <p className={`text-[#1e1e1e]/50 dark:text-dark-text-primary/70 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
                                       {item.description}
                                     </p>
                                   )}
                                 </div>
-                                <span className="font-medium ml-4 text-[#1e1e1e]">
+                                <span className="font-medium ml-4 text-[#1e1e1e] dark:text-dark-primary">
                                   €{item.price.toFixed(2)}
                                 </span>
                               </div>
                             </div>
-                            <div className="w-8 bg-[#F4F2F8]" />
+                            <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
                           </div>
                         </div>
                       ))}
@@ -324,35 +393,35 @@ export default function Home() {
 
               {selectedRestaurant.website && (
                 <div>
-                  <div className="flex">
-                    <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                    <div className="flex-1 h-12 flex items-center justify-center border-r border-[#FF373A]/20">
+                  <div className="flex justify-center">
+                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+                    <div className="flex-1 h-12 flex items-center justify-center border-r border-primary-border/10 dark:border-dark-primary-border/10 max-w-4xl">
                       <a
                         href={selectedRestaurant.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[#1e1e1e] hover:underline underline"
+                        className="text-primary dark:text-dark-text-primary hover:underline underline"
                       >
                         Visit Restaurant Website
                       </a>
                     </div>
-                    <div className="w-8 bg-[#F4F2F8]" />
+                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
                   </div>
-                  <div className="flex h-8">
-                    <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                    <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                    <div className="w-8 bg-[#F4F2F8]" />
+                  <div className="flex justify-center h-8">
+                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+                    <div className="flex-1 border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main max-w-4xl" />
+                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
                   </div>
                 </div>
               )}
             </div>
           )}
 
-          <div className="fixed bottom-0 left-0 right-0 bg-primary-light z-50">
+          <div className="fixed bottom-0 left-0 right-0 bg-primary-light dark:bg-dark-background-main z-50 md:hidden">
             <div className="max-w-4xl mx-auto">
-              <div className="border-t border-[#FF373A]/20 border-b">
-                <div className="flex w-full border-t border-[#FF373A]/20">
-                  <div className="w-8 flex-none border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+              <div className="border-t border-primary-border/10 dark:border-dark-primary-border/10">
+                <div className="flex w-full border-b border-primary-border/10 dark:border-dark-primary-border/10">
+                  <div className="w-8 flex-none border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
                   <div className="flex-1 flex min-w-0">
                     <div className="flex-1 min-w-0">
                       <Dropdown
@@ -365,11 +434,11 @@ export default function Home() {
                           value: restaurant.id,
                           label: `${restaurant.name} (${restaurant.distance} km)`
                         }))}
-                        leftIcon={<Store className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        leftIcon={<Store className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
                         position="top"
                       />
                     </div>
-                    <div className="flex-none w-12 border-l border-[#FF373A]/20">
+                    <div className="flex-none w-12">
                       <Dropdown
                         value={selectedGroup}
                         onChange={(value) => {
@@ -383,13 +452,13 @@ export default function Home() {
                           value: category,
                           label: category
                         }))}
-                        leftIcon={<Layers className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+                        leftIcon={<Layers className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
                         position="top"
                         hideChevron={true}
                         className="justify-center"
                       />
                     </div>
-                    <div className="flex-none w-12 border-l border-[#FF373A]/20">
+                    <div className="flex-none w-12">
                       <Dropdown
                         value={filter}
                         onChange={setFilter}
@@ -399,9 +468,9 @@ export default function Home() {
                           { value: 'vegan', label: 'Vegan' }
                         ]}
                         leftIcon={
-                          filter === 'all' ? <Filter className="w-4 h-4 text-[#FF373A]" strokeWidth={2} /> :
-                          filter === 'vegetarian' ? <Milk className="w-4 h-4 text-[#FF373A]" strokeWidth={2} /> :
-                          <Leaf className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />
+                          filter === 'all' ? <Filter className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
+                          filter === 'vegetarian' ? <Milk className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
+                          <Leaf className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />
                         }
                         position="top"
                         align="right"
@@ -410,14 +479,14 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  <div className="w-8 flex-none bg-[#F4F2F8]" />
+                  <div className="w-8 flex-none bg-primary-light dark:bg-dark-background-main" />
                 </div>
               </div>
-              <div className="border-b border-[#FF373A]/20 hidden md:block">
+              <div className="border-b border-primary-border/10 dark:border-dark-primary-border/10">
                 <div className="flex h-8">
-                  <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  <div className="flex-1 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
-                  <div className="w-8 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
+                  <div className="w-8 border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+                  <div className="flex-1 border-r border-primary-border/10 dark:border-dark-primary-border/10 bg-primary-light dark:bg-dark-background-main" />
+                  <div className="w-8 bg-primary-light dark:bg-dark-background-main" />
                 </div>
               </div>
             </div>
@@ -425,10 +494,10 @@ export default function Home() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-48px)] space-y-4">
-          <p className="text-[#1e1e1e]/70">No restaurants found nearby</p>
+          <p className="text-primary/50 dark:text-dark-text-primary/70">No restaurants found nearby</p>
           <button
             type="button"
-            className="h-12 px-4 appearance-none bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-center border border-[#FF373A]/20 hover:bg-[#FF373A]/5 transition-colors"
+            className="h-12 px-4 appearance-none bg-primary-light dark:bg-dark-background-main text-primary dark:text-dark-primary font-mono flex items-center justify-center border border-primary-border/10 dark:border-dark-primary-border/10 hover:bg-primary/5 dark:hover:bg-dark-primary/10 transition-colors"
             onClick={() => {
               // TODO: Implement add restaurant functionality
               console.log('Add restaurant clicked')

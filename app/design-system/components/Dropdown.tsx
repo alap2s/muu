@@ -64,7 +64,7 @@ export function Dropdown({
     <div className="relative w-full" ref={dropdownRef}>
       <button
         type="button"
-        className={`w-full h-12 border-r border-[#FF373A]/20 pl-4 pr-4 appearance-none bg-[#F4F2F8] text-[#FF373A] font-mono flex items-center justify-between text-sm ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
+        className={`w-full h-12 border-r border-primary-border/10 dark:border-dark-primary-border/10 pl-4 pr-4 appearance-none bg-primary-light dark:bg-dark-background-main text-primary dark:text-dark-primary font-mono flex items-center justify-between text-sm ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -72,12 +72,12 @@ export function Dropdown({
           <span className="truncate">{selectedOption?.label || 'Select...'}</span>
         </div>
         {!hideChevron && (
-          <ChevronDown className={`w-4 h-4 text-[#FF373A] flex-none ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2} />
+          <ChevronDown className={`w-4 h-4 text-primary dark:text-dark-primary flex-none ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2} />
         )}
       </button>
 
       <div 
-        className={`fixed inset-0 bg-[#F4F2F8]/50 backdrop-blur-sm z-[9998] ${
+        className={`fixed inset-0 bg-primary-light/50 dark:bg-dark-background-main/70 backdrop-blur-sm z-[9998] ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         style={{
@@ -95,12 +95,12 @@ export function Dropdown({
           bottom: position === 'top' ? `${window.innerHeight - (buttonRect?.top || 0)}px` : 'auto'
         }}
       >
-        <div className="w-[calc(100vw-64px)] mx-auto bg-[#F4F2F8] border-[#FF373A]/20 border-t border-b border-r border-l">
+        <div className="w-[calc(100vw-64px)] mx-auto bg-primary-light dark:bg-dark-background-main border-primary-border/10 dark:border-dark-primary-border/10 border-t border-b border-r border-l">
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
               key={option.value}
-              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[#FF373A]/5 border-b border-[#FF373A]/20 last:border-b-0 ${
-                option.value === value ? 'bg-[#FF373A]/10' : ''
+              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-primary/5 dark:hover:bg-dark-primary/10 border-b border-primary-border/10 dark:border-dark-primary-border/10 last:border-b-0 ${
+                option.value === value ? 'bg-primary/10 dark:bg-dark-primary/10' : ''
               } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={() => {
                 if (!option.disabled) {
@@ -112,11 +112,11 @@ export function Dropdown({
               }}
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
-                {option.value === value && <Check className="w-4 h-4 text-[#FF373A] flex-none" strokeWidth={2} />}
+                {option.value === value && <Check className="w-4 h-4 text-primary dark:text-dark-primary flex-none" strokeWidth={2} />}
                 <div className="min-w-0">
-                  <div className="truncate">{option.label}</div>
+                  <div className="truncate text-primary dark:text-dark-primary">{option.label}</div>
                   {option.description && (
-                    <div className="text-sm text-[#FF373A]/70 truncate">{option.description}</div>
+                    <div className="text-sm text-primary/50 dark:text-dark-primary/70 truncate">{option.description}</div>
                   )}
                 </div>
               </div>

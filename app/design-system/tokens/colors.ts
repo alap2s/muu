@@ -1,11 +1,11 @@
 export const colors = {
-  main: '#FF373A',
+  main: '#E34114',
   text: '#1e1e1e',
-  border: 'rgba(255, 55, 58, 0.2)', // #FF373A at 20% opacity
+  border: 'rgba(227, 65, 20, 0.2)', // #E34114 at 20% opacity
   primary: {
-    main: '#FF373A',
-    light: 'rgba(255, 55, 58, 0.1)', // #FF373A at 10% opacity
-    dark: '#CC2C2E',
+    main: '#E34114',
+    light: 'rgba(227, 65, 20, 0.1)', // #E34114 at 10% opacity
+    dark: '#B32A0F',
   },
   secondary: {
     main: '#6237FF',
@@ -13,13 +13,38 @@ export const colors = {
     dark: '#4E2CCC',
   },
   background: {
-    main: '#FFFFFF',
-    light: '#F4F2F8',
-    dark: '#1E1E1E',
+    main: '#F8F6F4',
+    light: '#F8F6F4',
+    dark: '#181818',
   },
   status: {
-    error: '#FF3737',
+    error: '#E34114',
     success: '#37FF37',
     warning: '#FFA500',
+  },
+  dark: {
+    main: '#E34114',
+    text: '#F8F6F4',
+    border: 'rgba(227, 65, 20, 0.4)',
+    primary: {
+      main: '#E34114',
+      light: 'rgba(227, 65, 20, 0.2)',
+      dark: '#B32A0F',
+    },
+    secondary: {
+      main: '#6237FF',
+      light: 'rgba(98, 55, 255, 0.2)',
+      dark: '#4E2CCC',
+    },
+    background: {
+      main: '#181818',
+      light: '#232323',
+      dark: '#000000',
+    },
+    status: {
+      error: '#E34114',
+      success: '#37FF37',
+      warning: '#FFA500',
+    }
   }
 } 
