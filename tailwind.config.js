@@ -17,7 +17,7 @@ module.exports = {
         "dark-background-dark": "#000000",
         "dark-primary": "#E34114",
         "dark-primary-light": "#232323",
-        "dark-primary-border": "rgba(227, 65, 20, 0.4)",
+        "dark-primary-border": "rgba(227, 65, 20, 0.2)",
         "dark-text-primary": "#F8F6F4",
         "dark-text-secondary": "rgba(248, 246, 244, 0.7)",
         text: {
