@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Restaurant, MenuItem } from '../types'
+import { Restaurant, MenuItem as MenuItemType } from '../types'
 import { Filter, ChevronDown } from 'lucide-react'
 import {
   MenuItem,
@@ -89,7 +89,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
       acc[category].push(item)
     }
     return acc
-  }, {} as { [key: string]: MenuItem[] })
+  }, {} as { [key: string]: MenuItemType[] })
 
   const menuGroups = Object.entries(groupedMenu).map(([category, items]) => ({
     title: category,
