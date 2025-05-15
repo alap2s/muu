@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { Restaurant, MenuItem } from '../types'
 import { Filter, ChevronDown } from 'lucide-react'
 import {
-  MenuContainer,
+  MenuItem,
   MenuGroup,
+  MenuContainer,
   RestaurantHeader,
   WebsiteLink
-} from '../design-system/components/menu'
+} from '../../design-system/components/menu'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
