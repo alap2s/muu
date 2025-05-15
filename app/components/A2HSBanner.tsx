@@ -75,7 +75,7 @@ export function A2HSBanner() {
             <div className="w-8 flex-none border-r border-primary-border/40 dark:border-dark-primary-border/40 bg-primary-light dark:bg-dark-background-main" />
             <div className="flex-1 flex flex-col min-w-0 p-4 border-l border-r border-t border-b border-primary-border/40 dark:border-dark-primary-border/40">
               <div className="flex-1 min-w-0 mb-4">
-                <p className="text-sm text-primary dark:text-dark-text-primary">
+                <p className="text-sm text-black dark:text-dark-text-primary">
                   {isIos ? (
                     <>
                       To install this app on your iPhone:

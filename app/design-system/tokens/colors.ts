@@ -1,50 +1,42 @@
 export const colors = {
-  main: '#E34114',
-  text: '#1e1e1e',
-  border: 'rgba(227, 65, 20, 0.2)', // #E34114 at 20% opacity
-  primary: {
-    main: '#E34114',
-    light: 'rgba(227, 65, 20, 0.1)', // #E34114 at 10% opacity
-    dark: '#B32A0F',
-  },
-  secondary: {
-    main: '#6237FF',
-    light: 'rgba(98, 55, 255, 0.1)', // #6237FF at 10% opacity
-    dark: '#4E2CCC',
-  },
-  background: {
-    main: '#F8F6F4',
-    light: '#F8F6F4',
-    dark: '#181818',
-  },
-  status: {
-    error: '#E34114',
-    success: '#37FF37',
-    warning: '#FFA500',
-  },
-  dark: {
-    main: '#E34114',
-    text: '#F8F6F4',
-    border: 'rgba(227, 65, 20, 0.4)',
-    primary: {
-      main: '#E34114',
-      light: 'rgba(227, 65, 20, 0.2)',
-      dark: '#B32A0F',
-    },
-    secondary: {
-      main: '#6237FF',
-      light: 'rgba(98, 55, 255, 0.2)',
-      dark: '#4E2CCC',
-    },
+  // Brand colors
+  brand: '#6237FF',
+  brandLight: '#7B5AFF',
+  brandDark: '#4A1FFF',
+  
+  // Light mode colors
+  light: {
     background: {
-      main: '#181818',
-      light: '#232323',
-      dark: '#000000',
+      main: '#FEFBFF',
+      secondary: '#FEFBFF',
+      tertiary: '#F0EDEA'
     },
-    status: {
-      error: '#E34114',
-      success: '#37FF37',
-      warning: '#FFA500',
+    text: {
+      primary: '#1e1e1e',      // Dark gray for primary text
+      secondary: 'rgba(30, 30, 30, 0.5)',  // 50% opacity dark gray for secondary text
+      brand: '#6237FF'         // Brand purple for emphasis
+    },
+    border: {
+      main: 'rgba(30, 30, 30, 0.1)',
+      secondary: 'rgba(30, 30, 30, 0.05)'
+    }
+  },
+  
+  // Dark mode colors
+  dark: {
+    background: {
+      main: '#1A1A1A',
+      secondary: '#242424',
+      tertiary: '#2D2D2D'
+    },
+    text: {
+      primary: '#F8F6F4',      // Off-white for primary text
+      secondary: 'rgba(248, 246, 244, 0.7)',  // 70% opacity off-white for secondary text
+      brand: '#6237FF'         // Brand purple for emphasis
+    },
+    border: {
+      main: 'rgba(248, 246, 244, 0.12)',
+      secondary: 'rgba(248, 246, 244, 0.08)'
     }
   }
 } 

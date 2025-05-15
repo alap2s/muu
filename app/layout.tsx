@@ -31,14 +31,14 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#E34114" />
+        <meta name="theme-color" content="#6237FF" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Menoo" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body className={`${jetbrainsMono.className} bg-[#F8F6F4] dark:bg-[#181818] text-[#1e1e1e] dark:text-[#F8F6F4]`}>
+      <body suppressHydrationWarning className={`${jetbrainsMono.className} bg-background-secondary dark:bg-dark-background-main text-black dark:text-dark-text-primary`}>
         {children}
         <Toaster position="bottom-center" />
       </body>

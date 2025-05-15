@@ -166,7 +166,7 @@ export default function SubmitPage() {
       <div className="flex">
         <div className="w-8 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8]" />
         <div className="flex-1 h-12 border-r border-[#FF373A]/20 bg-[#F4F2F8] flex items-center justify-center">
-          <h1 className="text-[#FF373A] font-mono">Submit New Restaurant</h1>
+          <h1 className="text-primary font-mono">Submit New Restaurant</h1>
         </div>
         <div className="w-8 h-12 border-l border-[#FF373A]/20 bg-[#F4F2F8]" />
       </div>
@@ -191,7 +191,7 @@ export default function SubmitPage() {
             onChange={(e) => handleAddressChange(e.target.value)}
           />
           {coordinates && (
-            <p className="mt-2 text-sm text-[#FF373A]/70 font-mono">
+            <p className="mt-2 text-sm text-gray-600 font-mono">
               Coordinates: {coordinates.lat}, {coordinates.lng}
             </p>
           )}
@@ -213,7 +213,7 @@ export default function SubmitPage() {
               <div className="w-full border-t border-[#FF373A]/20" />
             </div>
             <div className="relative flex justify-center">
-              <span className="px-2 text-sm text-[#FF373A]/70 font-mono bg-white">OR</span>
+              <span className="px-2 text-sm text-gray-600 font-mono bg-white">OR</span>
             </div>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function SubmitPage() {
 
         <div className="col-span-12">
           <div className="bg-[#F4F2F8] p-4 rounded-lg">
-            <h2 className="text-[#FF373A] font-mono mb-4">Parsed Menu Items</h2>
+            <h2 className="text-primary font-mono mb-4">Parsed Menu Items</h2>
             <div className="space-y-4">
               {loading ? (
                 <div className="flex items-center justify-center py-8">
@@ -241,15 +241,15 @@ export default function SubmitPage() {
                   <div key={item.id} className="bg-white p-4 rounded-lg">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-mono text-[#FF373A]">{item.name}</h3>
+                        <h3 className="font-mono text-black">{item.name}</h3>
                         {item.description && (
                           <p className="text-sm text-gray-600 mt-1">{item.description}</p>
                         )}
-                        <p className="text-sm font-mono text-[#FF373A]/70 mt-1">
+                        <p className="text-sm font-mono text-gray-600 mt-1">
                           Category: {item.category}
                         </p>
                       </div>
-                      <p className="font-mono text-[#FF373A]">{item.price.toFixed(2)} €</p>
+                      <p className="font-mono text-black">{item.price.toFixed(2)} €</p>
                     </div>
                   </div>
                 ))

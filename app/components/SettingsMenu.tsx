@@ -34,7 +34,7 @@ export function SettingsMenu({
       rightContent: (
         <div className="flex gap-2">
           <button 
-            className={`px-2 py-1 ${language === 'EN' ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
+            className={`px-2 py-1 ${language === 'EN' ? 'bg-primary text-white' : 'text-black'}`}
             onClick={(e) => {
               e.stopPropagation()
               setLanguage('EN')
@@ -44,7 +44,7 @@ export function SettingsMenu({
             EN
           </button>
           <button 
-            className={`px-2 py-1 ${language === 'DE' ? 'bg-[#FF373A] text-white' : 'text-[#1e1e1e]'}`}
+            className={`px-2 py-1 ${language === 'DE' ? 'bg-primary text-white' : 'text-black'}`}
             onClick={(e) => {
               e.stopPropagation()
               setLanguage('DE')
@@ -66,7 +66,7 @@ export function SettingsMenu({
       value: 'share',
       label: 'Share with your friends',
       rightContent: (
-        <Share className="w-4 h-4 text-[#1e1e1e]" />
+        <Share className="w-4 h-4 text-black" />
       )
     },
     {
@@ -84,7 +84,7 @@ export function SettingsMenu({
       value: 'contact',
       label: 'Contact us',
       rightContent: (
-        <Mail className="w-4 h-4 text-[#1e1e1e]" />
+        <Mail className="w-4 h-4 text-black" />
       )
     }
   ]
@@ -98,7 +98,7 @@ export function SettingsMenu({
         }
       }}
       options={options}
-      leftIcon={<Menu className="w-4 h-4 text-[#FF373A]" strokeWidth={2} />}
+      leftIcon={<Menu className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
       position="bottom"
       align="right"
       hideChevron
