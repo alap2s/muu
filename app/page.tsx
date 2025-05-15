@@ -188,30 +188,29 @@ export default function Home() {
     const name = item.name.toLowerCase()
     const description = item.description?.toLowerCase() || ''
 
-    if (item.dietaryRestrictions.includes('vegetarian')) {
-      icons.push(<Milk key="milk" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
-    }
     if (item.dietaryRestrictions.includes('vegan')) {
-      icons.push(<Leaf key="leaf" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+      icons.push(<Leaf key="leaf" className="w-4 h-4 text-black" />)
+    } else if (item.dietaryRestrictions.includes('vegetarian')) {
+      icons.push(<Milk key="milk" className="w-4 h-4 text-black" />)
     }
     if (item.dietaryRestrictions.includes('nuts')) {
-      icons.push(<Nut key="nut" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+      icons.push(<Nut key="nut" className="w-4 h-4 text-black" />)
     }
     if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
       if (name.includes('chicken') || description.includes('chicken') || 
           name.includes('hähnchen') || description.includes('hähnchen')) {
-        icons.push(<Bird key="bird" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+        icons.push(<Bird key="bird" className="w-4 h-4 text-black" />)
       } else if (name.includes('egg') || description.includes('egg') ||
                  name.includes('ei') || description.includes('ei')) {
-        icons.push(<Egg key="egg" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+        icons.push(<Egg key="egg" className="w-4 h-4 text-black" />)
       } else if (name.includes('fish') || description.includes('fish') ||
                  name.includes('fisch') || description.includes('fisch')) {
-        icons.push(<Fish key="fish" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+        icons.push(<Fish key="fish" className="w-4 h-4 text-black" />)
       } else if (name.includes('ham') || description.includes('ham') ||
                  name.includes('schinken') || description.includes('schinken')) {
-        icons.push(<Beef key="ham" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+        icons.push(<Beef key="ham" className="w-4 h-4 text-black" />)
       } else {
-        icons.push(<Bird key="meat" className="w-4 h-4 text-primary dark:text-dark-text-primary" />)
+        icons.push(<Bird key="meat" className="w-4 h-4 text-black" />)
       }
     }
     return icons
@@ -250,7 +249,9 @@ export default function Home() {
         <div className="flex justify-center">
           <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
           <div className="flex-1 max-w-4xl flex items-center justify-between h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main pl-4 pr-0">
-            <span className="text-[18px] font-bold text-primary dark:text-dark-primary">Menoo</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[18px] font-bold text-primary dark:text-dark-primary">Menoo</span>
+            </div>
             <div className="w-12 h-12 flex items-center justify-center border-l border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main">
               <SettingsMenu
                 language={language}
@@ -275,7 +276,7 @@ export default function Home() {
                 }}
                 options={restaurants.map(restaurant => ({
                   value: restaurant.id,
-                  label: `${restaurant.name} (${restaurant.distance} km)`
+                  label: `${restaurant.name} (<${restaurant.distance} km)`
                 }))}
                 leftIcon={<Store className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
                 position="bottom"
@@ -306,9 +307,21 @@ export default function Home() {
                 value={filter}
                 onChange={setFilter}
                 options={[
-                  { value: 'all', label: 'All' },
-                  { value: 'vegetarian', label: 'Vegetarian' },
-                  { value: 'vegan', label: 'Vegan' }
+                  { 
+                    value: 'all', 
+                    label: 'All',
+                    leftContent: <Filter className="w-4 h-4" strokeWidth={2} />
+                  },
+                  { 
+                    value: 'vegetarian', 
+                    label: 'Vegetarian',
+                    leftContent: <Milk className="w-4 h-4" strokeWidth={2} />
+                  },
+                  { 
+                    value: 'vegan', 
+                    label: 'Vegan',
+                    leftContent: <Leaf className="w-4 h-4" strokeWidth={2} />
+                  }
                 ]}
                 leftIcon={
                   filter === 'all' ? <Filter className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
@@ -357,7 +370,7 @@ export default function Home() {
                     <div className="flex justify-center">
                       <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
                       <div className="flex-1 max-w-4xl">
-                        <h3 className="font-extrabold text-[10px] text-primary dark:text-dark-text-primary h-12 flex items-center px-4 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 uppercase">
+                        <h3 className="font-extrabold text-[10px] text-black h-12 flex items-center px-4 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 uppercase">
                           {category}
                         </h3>
                       </div>
@@ -376,7 +389,7 @@ export default function Home() {
                               <div className="flex justify-between items-start p-4 border-r border-primary-border/10 dark:border-dark-primary-border/20">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-2">
-                                    <h4 className="font-medium text-sm text-primary dark:text-dark-text-primary">
+                                    <h4 className="font-medium text-sm text-black dark:text-dark-text-primary">
                                       <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
                                         {item.name}
                                       </span>
@@ -386,12 +399,12 @@ export default function Home() {
                                     </div>
                                   </div>
                                   {item.description && (
-                                    <p className={`text-primary/50 dark:text-dark-text-primary/70 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
+                                    <p className={`text-gray-600 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
                                       {item.description}
                                     </p>
                                   )}
                                 </div>
-                                <span className="font-medium ml-4 text-primary dark:text-dark-text-primary">
+                                <span className="font-medium ml-4 text-black dark:text-dark-text-primary">
                                   €{item.price.toFixed(2)}
                                 </span>
                               </div>
@@ -446,7 +459,7 @@ export default function Home() {
                         }}
                         options={restaurants.map(restaurant => ({
                           value: restaurant.id,
-                          label: `${restaurant.name} (${restaurant.distance} km)`
+                          label: `${restaurant.name} (<${restaurant.distance} km)`
                         }))}
                         leftIcon={<Store className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
                         position="top"
@@ -477,9 +490,21 @@ export default function Home() {
                         value={filter}
                         onChange={setFilter}
                         options={[
-                          { value: 'all', label: 'All' },
-                          { value: 'vegetarian', label: 'Vegetarian' },
-                          { value: 'vegan', label: 'Vegan' }
+                          { 
+                            value: 'all', 
+                            label: 'All',
+                            leftContent: <Filter className="w-4 h-4" strokeWidth={2} />
+                          },
+                          { 
+                            value: 'vegetarian', 
+                            label: 'Vegetarian',
+                            leftContent: <Milk className="w-4 h-4" strokeWidth={2} />
+                          },
+                          { 
+                            value: 'vegan', 
+                            label: 'Vegan',
+                            leftContent: <Leaf className="w-4 h-4" strokeWidth={2} />
+                          }
                         ]}
                         leftIcon={
                           filter === 'all' ? <Filter className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
