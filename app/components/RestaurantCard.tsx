@@ -1,11 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Restaurant, MenuItem as MenuItemType } from '../types'
 import { Filter, ChevronDown } from 'lucide-react'
-import {
-  MenuItem,
-  MenuGroup,
-  MenuContainer
-} from '../../design-system/components/menu'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
