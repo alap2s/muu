@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu } from 'lucide-react'
 import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
 import { A2HSBanner } from './components/A2HSBanner'
 import Link from 'next/link'
 import { Button } from './design-system/components/Button'
 import { SettingsIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useIsMobile } from './hooks/useIsMobile'
 
 interface MenuItem {
   id: string
@@ -53,6 +55,8 @@ export default function Home() {
     }
     return false
   })
+  const router = useRouter()
+  const isMobile = useIsMobile()
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -192,28 +196,28 @@ export default function Home() {
     const description = item.description?.toLowerCase() || ''
 
     if (item.dietaryRestrictions.includes('vegan')) {
-      icons.push(<Leaf key="leaf" className="w-4 h-4 text-black" />)
+      icons.push(<Leaf key="leaf" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     } else if (item.dietaryRestrictions.includes('vegetarian')) {
-      icons.push(<Milk key="milk" className="w-4 h-4 text-black" />)
+      icons.push(<Milk key="milk" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
     if (item.dietaryRestrictions.includes('nuts')) {
-      icons.push(<Nut key="nut" className="w-4 h-4 text-black" />)
+      icons.push(<Nut key="nut" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
     if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
       if (name.includes('chicken') || description.includes('chicken') || 
           name.includes('hähnchen') || description.includes('hähnchen')) {
-        icons.push(<Bird key="bird" className="w-4 h-4 text-black" />)
+        icons.push(<Bird key="bird" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       } else if (name.includes('egg') || description.includes('egg') ||
                  name.includes('ei') || description.includes('ei')) {
-        icons.push(<Egg key="egg" className="w-4 h-4 text-black" />)
+        icons.push(<Egg key="egg" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       } else if (name.includes('fish') || description.includes('fish') ||
                  name.includes('fisch') || description.includes('fisch')) {
-        icons.push(<Fish key="fish" className="w-4 h-4 text-black" />)
+        icons.push(<Fish key="fish" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       } else if (name.includes('ham') || description.includes('ham') ||
                  name.includes('schinken') || description.includes('schinken')) {
-        icons.push(<Beef key="ham" className="w-4 h-4 text-black" />)
+        icons.push(<Beef key="ham" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       } else {
-        icons.push(<Bird key="meat" className="w-4 h-4 text-black" />)
+        icons.push(<Bird key="meat" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       }
     }
     return icons
@@ -234,39 +238,34 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-primary-light dark:bg-dark-background-main">
-      <A2HSBanner />
+    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }}>
+      {isMobile && <A2HSBanner />}
       {/* Notch spacer row for safe area */}
-      <div
-        className="flex justify-center"
-        style={{ height: 'env(safe-area-inset-top)' }}
-      >
-        <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/20 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-        <div className="flex-1 max-w-4xl bg-primary-light dark:bg-dark-background-main" />
-        <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
+      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }}>
+        <div style={{ width: 32, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)', height: '100%' }} />
+        <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }} />
+        <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
       <div
-        className="flex flex-col border-b border-primary-border/10 dark:border-dark-primary-border/20 sticky top-0 bg-primary-light dark:bg-dark-background-main z-50"
-        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+        className="flex flex-col sticky top-0 z-50"
+        style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="flex justify-center">
-          <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-          <div className="flex-1 max-w-4xl flex items-center justify-between h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main pl-4 pr-0">
+          <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+          <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
             <div className="flex items-center gap-2">
-              <span className="text-[18px] font-bold text-primary dark:text-dark-primary">Menoo</span>
+              <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Menoo</span>
             </div>
-            <div className="w-12 h-12 flex items-center justify-center border-l border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main">
-              <Link href="/settings">
-                <Button variant="secondary" className="ml-2">
-                  <SettingsIcon className="w-5 h-5" />
-                </Button>
-              </Link>
+            <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
+              <Button variant="secondary" onClick={() => router.push('/settings')}>
+                <Menu className="w-4 h-4" />
+              </Button>
             </div>
           </div>
-          <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 bg-primary-light dark:bg-dark-background-main" />
+          <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
         </div>
-        <div className="hidden md:flex border-t border-primary-border/10 dark:border-dark-primary-border/20 justify-center">
-          <div className="w-8 md:w-[calc((100vw-1024px)/2)] flex-none border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
+        <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
           <div className="flex-1 flex min-w-0 max-w-4xl">
             <div className="flex-1 min-w-0">
               <Dropdown
@@ -279,7 +278,7 @@ export default function Home() {
                   value: restaurant.id,
                   label: `${restaurant.name} (<${restaurant.distance} km)`
                 }))}
-                leftIcon={<Store className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+                leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
                 position="bottom"
               />
             </div>
@@ -297,7 +296,7 @@ export default function Home() {
                   value: category,
                   label: category
                 }))}
-                leftIcon={<Layers className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+                leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
                 position="bottom"
                 hideChevron={true}
                 className="justify-center"
@@ -325,9 +324,9 @@ export default function Home() {
                   }
                 ]}
                 leftIcon={
-                  filter === 'all' ? <Filter className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
-                  filter === 'vegetarian' ? <Milk className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
-                  <Leaf className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />
+                  filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
+                  filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
+                  <Leaf className="w-4 h-4" strokeWidth={2} />
                 }
                 position="bottom"
                 align="right"
@@ -336,7 +335,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div className="w-8 md:w-[calc((100vw-1024px)/2)] flex-none bg-primary-light dark:bg-dark-background-main" />
+          <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
         </div>
       </div>
       
@@ -369,48 +368,38 @@ export default function Home() {
                     }}
                   >
                     <div className="flex justify-center">
-                      <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                      <div className="flex-1 max-w-4xl">
-                        <h3 className="font-extrabold text-[10px] text-black h-12 flex items-center px-4 border-r border-primary-border/10 dark:border-dark-primary-border/20 border-b border-primary-border/10 dark:border-dark-primary-border/20 uppercase">
-                          {category}
-                        </h3>
+                      <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                      <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
+                        <h3 style={{ color: 'var(--text-primary)', borderRight: '1px solid var(--border-main)', borderBottom: '1px solid var(--border-main)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
                       </div>
-                      <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 border-b border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
+                      <div style={{ width: 32, height: 48, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
                     </div>
                     <div className="space-y-0">
                       {items.map((item) => (
                         <div 
                           key={item.id} 
-                          className="border-b border-primary-border/10 dark:border-dark-primary-border/20 cursor-pointer"
+                          style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer' }}
                           onClick={() => toggleItemExpansion(item.id)}
                         >
                           <div className="flex justify-center">
-                            <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                            <div className="flex-1 max-w-4xl">
-                              <div className="flex justify-between items-start p-4 border-r border-primary-border/10 dark:border-dark-primary-border/20">
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2">
-                                    <h4 className="font-medium text-sm text-black dark:text-dark-text-primary">
-                                      <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>
-                                        {item.name}
-                                      </span>
+                            <div style={{ width: 32, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                            <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', padding: 16, borderRight: '1px solid var(--border-main)' }}>
+                                <div style={{ flex: 1 }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <h4 style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14, margin: 0 }}>
+                                      <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>{item.name}</span>
                                     </h4>
-                                    <div className="flex gap-2 items-center">
-                                      {getDietaryIcons(item)}
-                                    </div>
+                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>{getDietaryIcons(item)}</div>
                                   </div>
                                   {item.description && (
-                                    <p className={`text-gray-600 text-sm mt-1 ${expandedItems.has(item.id) ? '' : 'line-clamp-2'}`}>
-                                      {item.description}
-                                    </p>
+                                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4, marginBottom: 0 }} className={expandedItems.has(item.id) ? '' : 'line-clamp-2'}>{item.description}</p>
                                   )}
                                 </div>
-                                <span className="font-medium ml-4 text-black dark:text-dark-text-primary">
-                                  €{item.price.toFixed(2)}
-                                </span>
+                                <span style={{ color: 'var(--text-primary)', fontWeight: 500, marginLeft: 16, fontSize: 14 }}>€{item.price.toFixed(2)}</span>
                               </div>
                             </div>
-                            <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
+                            <div style={{ width: 32, background: 'var(--background-main)' }} />
                           </div>
                         </div>
                       ))}
@@ -445,11 +434,11 @@ export default function Home() {
             </div>
           )}
 
-          <div className="fixed bottom-0 left-0 right-0 bg-primary-light dark:bg-dark-background-main z-50 md:hidden">
+          <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
             <div className="max-w-4xl mx-auto">
-              <div className="border-t border-primary-border/10 dark:border-dark-primary-border/20">
-                <div className="flex w-full border-b border-primary-border/10 dark:border-dark-primary-border/20">
-                  <div className="w-8 flex-none border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
+              <div style={{ borderTop: '1px solid var(--border-main)' }}>
+                <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                  <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
                   <div className="flex-1 flex min-w-0">
                     <div className="flex-1 min-w-0">
                       <Dropdown
@@ -462,7 +451,7 @@ export default function Home() {
                           value: restaurant.id,
                           label: `${restaurant.name} (<${restaurant.distance} km)`
                         }))}
-                        leftIcon={<Store className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+                        leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
                         position="top"
                       />
                     </div>
@@ -480,7 +469,7 @@ export default function Home() {
                           value: category,
                           label: category
                         }))}
-                        leftIcon={<Layers className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+                        leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
                         position="top"
                         hideChevron={true}
                         className="justify-center"
@@ -508,9 +497,9 @@ export default function Home() {
                           }
                         ]}
                         leftIcon={
-                          filter === 'all' ? <Filter className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
-                          filter === 'vegetarian' ? <Milk className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} /> :
-                          <Leaf className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />
+                          filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
+                          filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
+                          <Leaf className="w-4 h-4" strokeWidth={2} />
                         }
                         position="top"
                         align="right"
@@ -519,14 +508,14 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  <div className="w-8 flex-none bg-primary-light dark:bg-dark-background-main" />
+                  <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
                 </div>
               </div>
-              <div className="border-b border-primary-border/10 dark:border-dark-primary-border/20">
+              <div style={{ borderBottom: '1px solid var(--border-main)' }}>
                 <div className="flex h-8">
-                  <div className="w-8 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                  <div className="flex-1 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                  <div className="w-8 bg-primary-light dark:bg-dark-background-main" />
+                  <div className="w-8" style={{ borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                  <div className="flex-1" style={{ borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                  <div className="w-8" style={{ background: 'var(--background-main)' }} />
                 </div>
               </div>
             </div>

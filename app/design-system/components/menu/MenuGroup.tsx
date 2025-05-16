@@ -14,7 +14,7 @@ export const MenuGroup = React.forwardRef<HTMLDivElement, MenuGroupProps>(
     return (
       <div ref={ref} className={cn('mb-6', className)}>
         <h3 className={cn(
-          'text-xl font-semibold mb-3 bg-white py-2 text-black z-10',
+          'text-xl font-semibold mb-3 bg-white py-2 text-black',
           sticky && 'sticky top-0'
         )}>
           {title}

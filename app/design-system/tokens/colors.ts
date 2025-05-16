@@ -1,3 +1,7 @@
+// For reference only. All runtime accent color comes from CSS variable --accent.
+// Do not use brand, brandLight, or brandDark directly in components.
+// Use CSS var(--accent) for all accent/brand color at runtime.
+
 export const colors = {
   // Brand colors
   brand: '#6237FF',
@@ -17,8 +21,8 @@ export const colors = {
       brand: '#6237FF'         // Brand purple for emphasis
     },
     border: {
-      main: 'rgba(30, 30, 30, 0.1)',
-      secondary: 'rgba(30, 30, 30, 0.05)'
+      main: '#EEEAFF',
+      secondary: '#EEEAFF'
     }
   },
   
@@ -37,6 +41,23 @@ export const colors = {
     border: {
       main: 'rgba(248, 246, 244, 0.12)',
       secondary: 'rgba(248, 246, 244, 0.08)'
+    }
+  },
+  // Gray mode colors (black & grays only)
+  gray: {
+    background: {
+      main: '#181818',
+      secondary: '#232323',
+      tertiary: '#2C2C2C'
+    },
+    text: {
+      primary: '#F5F5F5',
+      secondary: 'rgba(245, 245, 245, 0.6)',
+      brand: '#F5F5F5' // No purple, just gray/white
+    },
+    border: {
+      main: '#232323',
+      secondary: '#2C2C2C'
     }
   }
 } 

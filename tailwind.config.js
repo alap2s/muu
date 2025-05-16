@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+// All accent/brand color usage should use var(--accent) at runtime. These tokens are for reference only.
 module.exports = {
-  darkMode: 'media',
+  darkMode: 'class',
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",

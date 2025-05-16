@@ -68,17 +68,17 @@ export function A2HSBanner() {
   if (!showBanner) return null
 
   return (
-    <div className="fixed bottom-[80px] left-0 right-0 bg-primary-light dark:bg-dark-background-main z-[100]">
+    <div className="fixed bottom-[80px] left-0 right-0 z-[100]" style={{ background: 'var(--background-main)' }}>
       <div className="max-w-4xl mx-auto">
-        <div className="border-t border-primary-border/10 dark:border-dark-primary-border/20">
-          <div className="flex w-full border-b border-primary-border/10 dark:border-dark-primary-border/20">
-            <div className="w-8 flex-none border-r border-primary-border/40 dark:border-dark-primary-border/40 bg-primary-light dark:bg-dark-background-main" />
-            <div className="flex-1 flex flex-col min-w-0 p-4 border-l border-r border-t border-b border-primary-border/40 dark:border-dark-primary-border/40">
+        <div style={{ borderTop: '1px solid var(--border-main)' }}>
+          <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
+            <div className="w-8 flex-none" style={{ borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+            <div className="flex-1 flex flex-col min-w-0 p-4" style={{ border: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
               <div className="flex-1 min-w-0 mb-4">
-                <p className="text-sm text-black dark:text-dark-text-primary">
+                <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
                   {isIos ? (
                     <>
-                      To install this app on your iPhone:
+                      Use like an app?
                       <br />
                       1. Tap the Share button
                       <br />
@@ -95,20 +95,20 @@ export function A2HSBanner() {
                 {isAndroid && (
                   <button
                     onClick={handleInstall}
-                    className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-md hover:bg-primary/90"
+                    style={{ background: 'var(--accent)', color: 'var(--background-main)', borderRadius: 8, fontWeight: 500, fontSize: 14, padding: '8px 16px' }}
                   >
                     Install
                   </button>
                 )}
                 <button
                   onClick={() => setShowBanner(false)}
-                  className="text-primary dark:text-dark-text-primary text-sm font-medium ml-4"
+                  style={{ color: 'var(--accent)', fontWeight: 500, fontSize: 14, marginLeft: 16 }}
                 >
                   Dismiss
                 </button>
               </div>
             </div>
-            <div className="w-8 flex-none bg-primary-light dark:bg-dark-background-main" />
+            <div className="w-8 flex-none" style={{ background: 'var(--background-main)' }} />
           </div>
         </div>
       </div>

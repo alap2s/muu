@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { ChevronDown, Check } from 'lucide-react'
 
 interface Option {
@@ -24,6 +24,7 @@ interface DropdownProps {
   align?: 'left' | 'right'
   hideChevron?: boolean
   preventCloseOnOptionClick?: boolean
+  disabled?: boolean
 }
 
 export function Dropdown({ 
@@ -35,7 +36,8 @@ export function Dropdown({
   position = 'bottom', 
   align = 'left',
   hideChevron = false,
-  preventCloseOnOptionClick = false
+  preventCloseOnOptionClick = false,
+  disabled = false
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -65,48 +67,94 @@ export function Dropdown({
 
   return (
     <div className="relative w-full md:max-w-4xl md:mx-auto" ref={dropdownRef}>
+      {/* Blur overlay, rendered first and behind the button and dropdown */}
+      {isOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'transparent',
+            opacity: 1,
+            pointerEvents: 'auto',
+            zIndex: 9997,
+            backdropFilter: 'blur(4px)',
+            transition: 'opacity 0.2s',
+          }}
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      {/* Dropdown trigger button */}
       <button
         type="button"
-        className={`w-full h-12 border-r border-border-main dark:border-dark-border-main pl-4 pr-4 appearance-none bg-background-secondary dark:bg-dark-background-secondary ${selectedOption ? 'text-primary dark:text-dark-text-primary' : 'text-black dark:text-dark-text-primary'} font-mono flex items-center justify-between text-sm ${isOpen ? 'border-t border-b border-l' : ''} ${className}`}
+        style={{
+          width: '100%',
+          height: 48,
+          borderRight: '1px solid var(--border-main)',
+          paddingLeft: 16,
+          paddingRight: 16,
+          background: 'var(--background-main)',
+          color: selectedOption ? 'var(--accent)' : 'var(--text-primary)',
+          fontFamily: 'var(--font-mono, monospace)',
+          fontSize: 14,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderTop: isOpen ? '1px solid var(--border-main)' : undefined,
+          borderBottom: isOpen ? '1px solid var(--border-main)' : undefined,
+          borderLeft: isOpen ? '1px solid var(--border-main)' : undefined,
+          zIndex: 9998,
+          position: 'relative',
+        }}
+        className={className}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex items-center gap-2 min-w-0 flex-1">
-          {leftIcon && <div className="flex-none">{leftIcon}</div>}
-          <span className="truncate">{selectedOption?.label || 'Select...'}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
+          {leftIcon && <div style={{ flex: 'none', color: disabled ? '#B9A5FF' : 'var(--accent)' }}>{leftIcon}</div>}
+          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: selectedOption ? 'var(--accent)' : 'var(--text-primary)' }}>{selectedOption?.label || 'Select...'}</span>
         </div>
         {!hideChevron && (
           <ChevronDown
             className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            style={{ color: 'var(--accent)' }}
           />
         )}
       </button>
 
       <div 
-        className={`fixed inset-0 bg-primary-light/50 dark:bg-dark-background-main/70 backdrop-blur-md z-[9998] transition-opacity duration-200 ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
         style={{
-          clipPath: isOpen && buttonRect ? `polygon(0% 0%, 100% 0%, 100% ${buttonRect.top}px, ${buttonRect.right}px ${buttonRect.top}px, ${buttonRect.left}px ${buttonRect.top}px, ${buttonRect.left}px ${buttonRect.bottom}px, ${buttonRect.right}px ${buttonRect.bottom}px, ${buttonRect.right}px ${buttonRect.top}px, 100% ${buttonRect.top}px, 100% 100%, 0% 100%)` : 'none'
-        }}
-        onClick={() => setIsOpen(false)}
-      />
-
-      <div 
-        className={`fixed left-0 w-screen z-[9999] transition-opacity duration-200 ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        style={{
+          position: 'fixed',
+          left: 0,
+          width: '100vw',
+          zIndex: 9999,
+          opacity: isOpen ? 1 : 0,
+          pointerEvents: isOpen ? 'auto' : 'none',
           top: position === 'bottom' ? `${buttonRect?.bottom}px` : 'auto',
-          bottom: position === 'top' ? `${window.innerHeight - (buttonRect?.top || 0)}px` : 'auto'
+          bottom: position === 'top' ? `${window.innerHeight - (buttonRect?.top || 0)}px` : 'auto',
+          transition: 'opacity 0.2s',
         }}
       >
-        <div className="w-[calc(100vw-64px)] md:max-w-4xl md:mx-auto md:w-full mx-auto bg-background-secondary dark:bg-dark-background-secondary border border-primary/20 dark:border-dark-border-main border-t border-b border-r border-l">
+        <div style={{ 
+          width: 'calc(100vw - 64px)', 
+          maxWidth: 1024, 
+          margin: '0 auto', 
+          background: 'var(--background-secondary)', 
+          border: '1px solid var(--border-main)'
+        }}>
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
               key={option.value}
-              className={`flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-background-tertiary dark:hover:bg-dark-background-tertiary border-b border-primary/20 dark:border-dark-border-main last:border-b-0 transition-colors ${
-                option.value === value ? 'bg-background-tertiary dark:bg-dark-background-tertiary' : ''
-              } ${option.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '12px 16px',
+                cursor: option.disabled ? 'not-allowed' : 'pointer',
+                background: option.value === value ? 'var(--background-tertiary)' : 'var(--background-secondary)',
+                borderBottom: index === filteredOptions.length - 1 ? 'none' : '1px solid var(--border-main)',
+                color: 'var(--text-primary)',
+                opacity: option.disabled ? 0.5 : 1,
+                transition: 'background 0.2s',
+              }}
               onClick={() => {
                 if (!option.disabled) {
                   onChange(option.value)
@@ -116,26 +164,51 @@ export function Dropdown({
                 }
               }}
             >
-              <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
                 {option.leftContent && (
-                  <div className={`flex-none ${option.value === value ? 'text-primary dark:text-dark-text-primary' : 'text-black dark:text-dark-text-primary'}`}>
+                  <div style={{ flex: 'none', color: option.disabled
+                    ? '#B9A5FF'
+                    : option.value === value
+                      ? 'var(--accent)'
+                      : 'var(--text-primary)'
+                  }}>
                     {option.leftContent}
                   </div>
                 )}
-                <div className="min-w-0">
-                  <div className={`truncate ${option.value === value ? 'text-primary dark:text-dark-text-primary' : 'text-black dark:text-dark-text-primary'}`}>{option.label}</div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ 
+                    whiteSpace: 'nowrap', 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis', 
+                    color: option.value === value ? 'var(--accent)' : 'var(--text-primary)'
+                  }}>
+                    {option.label}
+                  </div>
                   {option.description && (
-                    <div className="text-sm text-gray-600 dark:text-white/50 whitespace-normal">{option.description}</div>
+                    <div style={{ fontSize: 14, color: 'var(--text-secondary)', whiteSpace: 'normal' }}>
+                      {option.description}
+                    </div>
                   )}
                 </div>
               </div>
-              <div className="flex items-center gap-2 flex-none">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 'none' }}>
                 {option.rightContent && (
-                  <div className={`flex-none ${option.value === value ? 'text-primary dark:text-dark-text-primary' : 'text-black dark:text-dark-text-primary'}`}>
+                  <div style={{ flex: 'none', color: option.disabled
+                    ? '#B9A5FF'
+                    : option.value === value
+                      ? 'var(--accent)'
+                      : 'var(--text-primary)'
+                  }}>
                     {option.rightContent}
                   </div>
                 )}
-                {option.value === value && <Check className="w-4 h-4 text-primary dark:text-dark-text-primary" strokeWidth={2} />}
+                {option.value === value && (
+                  <Check 
+                    className="w-4 h-4" 
+                    style={{ color: option.disabled ? '#B9A5FF' : 'var(--accent)' }} 
+                    strokeWidth={2} 
+                  />
+                )}
               </div>
             </div>
           ))}

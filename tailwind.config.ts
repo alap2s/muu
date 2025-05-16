@@ -1,6 +1,8 @@
 import type { Config } from 'tailwindcss'
 import { colors } from './app/design-system/tokens/colors'
 
+// All accent/brand color usage should use var(--accent) at runtime. These tokens are for reference only.
+
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',

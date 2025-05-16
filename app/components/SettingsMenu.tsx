@@ -66,7 +66,7 @@ export function SettingsMenu({
       value: 'share',
       label: 'Share with your friends',
       rightContent: (
-        <Share className="w-4 h-4 text-black" />
+        <Share className="w-4 h-4" />
       )
     },
     {
@@ -84,7 +84,7 @@ export function SettingsMenu({
       value: 'contact',
       label: 'Contact us',
       rightContent: (
-        <Mail className="w-4 h-4 text-black" />
+        <Mail className="w-4 h-4" />
       )
     }
   ]
@@ -98,7 +98,7 @@ export function SettingsMenu({
         }
       }}
       options={options}
-      leftIcon={<Menu className="w-4 h-4 text-primary dark:text-dark-primary" strokeWidth={2} />}
+      leftIcon={<Menu className="w-4 h-4" strokeWidth={2} />}
       position="bottom"
       align="right"
       hideChevron
