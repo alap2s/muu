@@ -1,9 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,16 +41,15 @@ export async function POST(request: NextRequest) {
       },
     ]
 
-    // Call GPT Vision API
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo-vision-preview',
-      messages: messages as any,
-      max_tokens: 2048,
-      temperature: 0.2, // Lower temperature for more consistent output
-    })
-
-    // Parse the response and extract menu items
-    const menuItems = JSON.parse(response.choices[0].message.content || '[]')
+    // Placeholder response
+    const menuItems = [
+      {
+        name: 'Placeholder Item',
+        description: 'This is a placeholder item since OpenAI is not used.',
+        price: 0,
+        dietaryRestrictions: []
+      }
+    ]
 
     return NextResponse.json({ menuItems })
   } catch (error) {

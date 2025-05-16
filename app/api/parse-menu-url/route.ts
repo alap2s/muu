@@ -1,9 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import OpenAI from 'openai'
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-})
 
 // Simple rate limiting
 const REQUESTS_PER_MINUTE = 3
@@ -47,48 +42,17 @@ export async function POST(request: NextRequest) {
     }
     const html = await response.text()
 
-    // Prepare messages for GPT
-    const messages = [
+    // Placeholder response
+    const menuItems = [
       {
-        role: 'system',
-        content: 'You are a menu parsing assistant. Extract menu items from HTML content and return them in a structured format. Include item names, descriptions, prices, and dietary restrictions.',
-      },
-      {
-        role: 'user',
-        content: `Please analyze this menu webpage and extract all menu items. Return them in a JSON format with the following structure for each item: { name: string, description?: string, price: number, dietaryRestrictions?: string[] }. Group items by category. Here's the HTML content:\n\n${html}`,
-      },
+        name: 'Placeholder Item',
+        description: 'This is a placeholder item since OpenAI is not used.',
+        price: 0,
+        dietaryRestrictions: []
+      }
     ]
 
-    try {
-      // Call GPT API with retries
-      const completion = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: messages as any,
-        max_tokens: 2048,
-        temperature: 0.2,
-      })
-
-      // Validate the response format
-      const content = completion.choices[0].message.content
-      if (!content) {
-        throw new Error('Empty response from OpenAI')
-      }
-
-      const menuItems = JSON.parse(content)
-      if (!Array.isArray(menuItems) && typeof menuItems !== 'object') {
-        throw new Error('Invalid menu items format')
-      }
-
-      return NextResponse.json({ menuItems })
-    } catch (error: any) {
-      if (error?.status === 429) {
-        return NextResponse.json(
-          { error: 'OpenAI API rate limit exceeded. Please try again later.' },
-          { status: 429 }
-        )
-      }
-      throw error
-    }
+    return NextResponse.json({ menuItems })
   } catch (error: any) {
     console.error('Error parsing menu from URL:', error)
     return NextResponse.json(
