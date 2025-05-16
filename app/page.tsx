@@ -5,6 +5,9 @@ import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, La
 import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
 import { A2HSBanner } from './components/A2HSBanner'
+import Link from 'next/link'
+import { Button } from './design-system/components/Button'
+import { SettingsIcon } from 'lucide-react'
 
 interface MenuItem {
   id: string
@@ -253,13 +256,11 @@ export default function Home() {
               <span className="text-[18px] font-bold text-primary dark:text-dark-primary">Menoo</span>
             </div>
             <div className="w-12 h-12 flex items-center justify-center border-l border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main">
-              <SettingsMenu
-                language={language}
-                onLanguageChange={setLanguage}
-                notifications={notifications}
-                onNotificationsChange={setNotifications}
-                onShare={handleShare}
-              />
+              <Link href="/settings">
+                <Button variant="secondary" className="ml-2">
+                  <SettingsIcon className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
           </div>
           <div className="w-8 md:w-[calc((100vw-1024px)/2)] h-12 bg-primary-light dark:bg-dark-background-main" />
