@@ -4,9 +4,7 @@ import { Filter, ChevronDown } from 'lucide-react'
 import {
   MenuItem,
   MenuGroup,
-  MenuContainer,
-  RestaurantHeader,
-  WebsiteLink
+  MenuContainer
 } from '../../design-system/components/menu'
 
 interface RestaurantCardProps {
@@ -104,36 +102,24 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-hidden">
-        <RestaurantHeader
-          name={restaurant.name}
-          distance={restaurant.distance}
-          onClose={onClose}
-        />
-
-        {categories.length > 0 && (
-          <div className="mb-4">
-            <select
-              value={selectedGroup}
-              onChange={(e) => scrollToGroup(e.target.value)}
-              className="w-full p-2 border rounded-md"
-            >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className="mb-4">
+          <select
+            value={selectedGroup}
+            onChange={(e) => scrollToGroup(e.target.value)}
+            className="w-full p-2 border rounded-md"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <MenuContainer
           ref={menuRef}
           groups={menuGroups}
         />
-
-        {restaurant.website && (
-          <WebsiteLink url={restaurant.website} />
-        )}
       </div>
     </div>
   )
