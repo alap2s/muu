@@ -180,7 +180,8 @@ export function Dropdown({
                     whiteSpace: 'nowrap', 
                     overflow: 'hidden', 
                     textOverflow: 'ellipsis', 
-                    color: option.value === value ? 'var(--accent)' : 'var(--text-primary)'
+                    color: option.value === value ? 'var(--accent)' : 'var(--text-primary)',
+                    fontSize: 14
                   }}>
                     {option.label}
                   </div>
