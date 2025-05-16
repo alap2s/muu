@@ -110,11 +110,6 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
             ))}
           </select>
         </div>
-
-        <MenuContainer
-          ref={menuRef}
-          groups={menuGroups}
-        />
       </div>
     </div>
   )
