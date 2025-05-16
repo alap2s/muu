@@ -12,7 +12,7 @@ export const MenuContainer = React.forwardRef<HTMLDivElement, MenuContainerProps
       <div
         ref={ref}
         className={cn(
-          'max-w-2xl mx-auto px-4 py-6 bg-white rounded-lg shadow-sm',
+          'max-w-2xl mx-auto px-4 py-6 bg-white rounded-lg shadow-sm h-[calc(100vh-200px)] overflow-y-auto',
           className
         )}
       >
