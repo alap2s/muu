@@ -89,19 +89,17 @@ export function Dropdown({
         style={{
           width: '100%',
           height: 48,
+          borderLeft: '1px solid var(--border-main)',
           borderRight: '1px solid var(--border-main)',
           paddingLeft: 16,
           paddingRight: 16,
-          background: 'var(--background-main)',
-          color: selectedOption ? 'var(--accent)' : 'var(--text-primary)',
+          background: isOpen ? 'var(--accent)' : 'var(--background-main)',
+          color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') ,
           fontFamily: 'var(--font-mono, monospace)',
           fontSize: 14,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          borderTop: isOpen ? '1px solid var(--border-main)' : undefined,
-          borderBottom: isOpen ? '1px solid var(--border-main)' : undefined,
-          borderLeft: isOpen ? '1px solid var(--border-main)' : undefined,
           zIndex: 9998,
           position: 'relative',
         }}
@@ -109,13 +107,13 @@ export function Dropdown({
         onClick={() => setIsOpen(!isOpen)}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
-          {leftIcon && <div style={{ flex: 'none', color: disabled ? '#B9A5FF' : 'var(--accent)' }}>{leftIcon}</div>}
-          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: selectedOption ? 'var(--accent)' : 'var(--text-primary)' }}>{selectedOption?.label || 'Select...'}</span>
+          {leftIcon && <div style={{ flex: 'none', color: isOpen ? 'var(--background-main)' : (disabled ? '#B9A5FF' : 'var(--accent)') }}>{leftIcon}</div>}
+          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') }}>{selectedOption?.label || 'Select...'}</span>
         </div>
         {!hideChevron && (
           <ChevronDown
             className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-            style={{ color: 'var(--accent)' }}
+            style={{ color: isOpen ? 'var(--background-main)' : 'var(--accent)' }}
           />
         )}
       </button>
@@ -138,7 +136,7 @@ export function Dropdown({
           maxWidth: 1024, 
           margin: '0 auto', 
           background: 'var(--background-secondary)', 
-          border: '1px solid var(--border-main)'
+          border: isOpen ? '1px solid var(--accent)' : '1px solid var(--border-main)',
         }}>
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div

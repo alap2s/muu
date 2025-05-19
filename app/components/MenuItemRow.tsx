@@ -1,12 +1,13 @@
 import React from 'react';
 import { usePrice } from '../hooks/usePrice';
+import { Currency } from '../context/CurrencyContext';
 
 interface MenuItem {
   id: string;
-  price: number;
-  currency?: string;
   name: string;
   description?: string;
+  price: number;
+  currency?: Currency;
   dietary?: string[];
 }
 
@@ -14,7 +15,7 @@ interface MenuItemRowProps {
   item: MenuItem;
   expanded: boolean;
   onClick: (id: string) => void;
-  getDietaryIcons: (dietary: string[]) => React.ReactNode;
+  getDietaryIcons: (item: MenuItem) => React.ReactNode;
   viewMode: 'grid' | 'list';
 }
 
@@ -33,26 +34,22 @@ export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode
             background: 'var(--background-main)'
           }}
         />
-        <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: 48, position: 'relative' }}>
-          <div className="flex flex-col w-full px-3">
-            <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>{item.name}</span>
-            {item.description && (
-              <span style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4 }}>
-                {item.description}
-              </span>
-            )}
-            {item.dietary && item.dietary.length > 0 && (
-              <div className="flex gap-1 mt-2">
-                {getDietaryIcons(item.dietary)}
+        <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', padding: 16, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <h4 style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14, margin: 0 }}>
+                  <span className={expanded ? '' : 'line-clamp-1'}>{item.name}</span>
+                </h4>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>{getDietaryIcons(item)}</div>
               </div>
-            )}
-          </div>
-          <div className="flex items-center justify-end px-3">
-            {isLoading ? (
-              <span className="font-mono text-[14px]" style={{ color: 'var(--text-secondary)' }}>...</span>
-            ) : (
-              <span className="font-mono text-[14px]" style={{ color: 'var(--text-primary)' }}>{formattedPrice}</span>
-            )}
+              {item.description && (
+                <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4, marginBottom: 0 }} className={expanded ? '' : 'line-clamp-2'}>{item.description}</p>
+              )}
+            </div>
+            <span style={{ color: 'var(--text-primary)', fontWeight: 500, marginLeft: 16, fontSize: 14 }}>
+              {isLoading ? '...' : formattedPrice}
+            </span>
           </div>
         </div>
         <div
