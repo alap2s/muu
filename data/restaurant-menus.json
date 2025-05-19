@@ -3893,6 +3893,329 @@
         ]
       },
       "menuSource": "database"
+    },
+    {
+      "id": "liu-nudelhaus",
+      "name": "LIU Nudelhaus",
+      "address": "Kronenstraße 72, 10117 Berlin",
+      "coordinates": {
+        "lat": 52.51013,
+        "lng": 13.38644
+      },
+      "website": "https://chengduweidao.de/speisekarte/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Feuertopfsoßen",
+            "items": [
+              {
+                "id": "feuertopf-1",
+                "name": "Chiliöl 250ml K",
+                "description": "ChengduWeidao Chiliöl mit 1 Chili oder 3 Chili. Mit diesem Öl erhalten die meisten unserer Gerichte ihre Schärfe. Im Preis enthalten sind pro Glas 50 Cent Pfand. Wenn es leer ist befüllen wir es euch gerne wieder.",
+                "price": 7.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "feuertopf-2",
+                "name": "Rindöl Feuertopfsoße 500g F",
+                "description": "Traditionelle Feuertopfsoße mit 25 chinesischen Gewürzen. Basisöl: Rindertalg. Basisschärfe: 0,5 Chili (mini scharf).",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "feuertopf-3",
+                "name": "Vegetarische Feuertopfsoße (Rapsöl) 500g F",
+                "description": "Traditionelle Feuertopfsoße mit 25 chinesischen Gewürzen. Basisöl: Rapsöl. Basisschärfe: 0,5 Chili (mini scharf). 500g reichen für 5-7 Töpfe.",
+                "price": 15.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Chengdu Snacks",
+            "items": [
+              {
+                "id": "snack-1",
+                "name": "Tieban Tintenfisch 100g F,K",
+                "description": "Gegrillter Tintenfisch in scharfer Soße. Kaltgericht. Menge: 100g (Trockengewicht) Chili: 1",
+                "price": 8.30,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "snack-2",
+                "name": "Liangban Lotus 100g F,K",
+                "description": "Lotusscheiben in scharfer Soße gezogen. Kaltgericht. Menge: 130g (Trockengewicht) Chili: 2",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "snack-3",
+                "name": "Dörrfleisch 100g F,K",
+                "description": "Dörrfleisch (getrocketes Rindfleisch) in Malasoße (kriebelnd Sichuanpfeffer & scharfe Chilis). Kaltgericht. Menge: 100g (Trockengewicht) Chili: 3",
+                "price": 8.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "snack-4",
+                "name": "Ganban Rindfleisch 100g I",
+                "description": "Chengduer Rindfleischsalat. Rindfleisch ist getrockenet. Kaltgericht. Menge: 100g (Trockengewicht) Chili: 2",
+                "price": 9.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "snack-5",
+                "name": "Mala Hühnerfuss 3 Stück F",
+                "description": "Hühnerfüsser mit Malasoße (kriebelnd Sichuanpfeffer & scharfe Chilis) glasiert. Kaltgericht. Menge: 3 Stück Chili: 2",
+                "price": 4.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "snack-6",
+                "name": "Lazi Hühnchen (scharfes Hühnchen) 100g F",
+                "description": "Scharfes Hähnchen. Kleine Hähnchenstücken in scharfer Chili-Soße, Kaltgericht. Menge: 100g (Trockengewicht) Chili: 2",
+                "price": 5.90,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "snack-7",
+                "name": "Xiangla Rinderblättermagen 100g F,I",
+                "description": "Rinderblättermagen in leichtscharfen Xiangla-Soße. Kaltgericht. Menge: 100g (Trockengewicht) Chili: 0,5",
+                "price": 7.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "snack-8",
+                "name": "Liangban Tofuscheiben 100g F,I",
+                "description": "Tofuscheiben (Nudeln) in leicht scharfer Soße gezogen. Kaltgericht. Menge: 100g (Trockengewicht) Chili: 0,5",
+                "price": 6.30,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "snack-9",
+                "name": "La Lu frittieres Tofu 100g F",
+                "description": "Frittiertes Tofu in scharfer Lu-Soße gekocht. Kaltgericht. Menge: 100g (Trockengewicht) Chili: 2,5",
+                "price": 5.20,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Chengdu Nudeln",
+            "items": [
+              {
+                "id": "noodle-1",
+                "name": "Shiitake Hähnchen Nudeln A",
+                "description": "Shiitake Pilze mit Pak Choi und Hähnchenstückchen in Gemüsebrühe mit Weizennudeln. Chili: 0",
+                "price": 11.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "noodle-2",
+                "name": "Shiitake Tofu Nudeln A",
+                "description": "Shiitake Pilze mit Pak Choi und Tofustückchen in Gemüsebrühe mit Weizennudeln. Chili: 0",
+                "price": 11.20,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "noodle-3",
+                "name": "Tomaten & Ei Nudeln A,C",
+                "description": "Tomatensuppe mit Ei und Weizennudeln. Chili: 0",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "noodle-4",
+                "name": "Tomaten Tofu Nudeln A,F",
+                "description": "Tomatensuppe mit größeren Tofustückchen und Weizennudeln. Chili: 0",
+                "price": 11.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "noodle-5",
+                "name": "Shengjiao Rindfleischnudeln A,F,K",
+                "description": "Rinderhackfleisch im scharfen Chiliöl. Chili: 2, 3",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "noodle-6",
+                "name": "Sichuan Rindfleischnudeln A,F,I",
+                "description": "Sichuan Rindfleischnudeln mit großen saftigen Rindfleischstücken in hauseigener Feuertopfsoße. Chili: 0,5 , 1, 2",
+                "price": 14.30,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "noodle-7",
+                "name": "Sauerkraut Tofu Nudeln A,F",
+                "description": "Sauere Nudelsuppe mit Tofustückchen in Gemüsesuppe. Chili: 0, 0,5 , 1, 2",
+                "price": 12.20,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "noodle-8",
+                "name": "Sauerkraut Schweinefilet Nudeln A",
+                "description": "Sauere Nudelsuppe mit zarten Schweinefiletstückchen in Gemüsesuppe. Chili: 0, 0,5 , 1, 2",
+                "price": 12.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "noodle-9",
+                "name": "Sichuan Zajiang Nudeln A",
+                "description": "Schweine Hackfleisch in Sojasoße mit Weizennudeln (la mian). Chili 0, 0,5 , 1, 2",
+                "price": 13.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "noodle-10",
+                "name": "Veg. Sichuan Zajiang Nudeln A,F",
+                "description": "Tofu gehackt in Sojasoße mit Weizennudeln (la mian). Chili 0, 0,5 , 1, 2",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "noodle-11",
+                "name": "Suan La Süßkartoffelnudeln F,I,K",
+                "description": "Süßkartoffelnudeln in einer sauer scharfen Gemüsesuppe. Chili: 1, 2, 3",
+                "price": 13.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodle-12",
+                "name": "Kalte Nudeln mit Gurke F,K",
+                "description": "Chengdu´s Sommerspezial: kalte Nudeln(Liang Nudeln) in einer sauren Soße mit Gurke (Kaltgericht). Chili: 0, 1, 2",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodle-13",
+                "name": "Kalte Nudeln mit Sojasprossen F,K",
+                "description": "Chengdu´s Sommerspezial: kalte Nudeln(Liang Nudeln) in einer sauren Soße mit Sojasprossen (Kaltgericht). Chili: 0, 1, 2",
+                "price": 7.50,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodle-14",
+                "name": "Tianshui Nudeln A,F,K",
+                "description": "Hausgemachte dicken Nudeln mit Sesamsauce (Kaltgericht). Chili: 0, 1, 2",
+                "price": 9.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              },
+              {
+                "id": "noodle-15",
+                "name": "Extra Nudeln A",
+                "description": "Eine Portion extra Weizennudeln (Guamian). Chili: 0",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegetarian", "vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Dumplings/Teigtaschen",
+            "items": [
+              {
+                "id": "dumpling-1",
+                "name": "Chengdu Dumplings A",
+                "description": "Hausgemachte Teigtaschen gefüllt mit Schweinefleisch und Gemüse, serviert mit Chiliöl und Sojasoße. Chili: 1",
+                "price": 8.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "dumpling-2",
+                "name": "Vegane Dumplings A",
+                "description": "Hausgemachte Teigtaschen gefüllt mit Tofu und Gemüse, serviert mit Chiliöl und Sojasoße. Chili: 1",
+                "price": 8.20,
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "dumpling-3",
+                "name": "Sichuan Wontons A",
+                "description": "Hausgemachte Wontons gefüllt mit Schweinefleisch, serviert in Chiliöl-Sauce. Chili: 2",
+                "price": 8.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Vorspeisen",
+            "items": [
+              {
+                "id": "appetizer-1",
+                "name": "Sichuan Gurkensalat",
+                "description": "Frische Gurken mit Knoblauch und Chiliöl. Chili: 1",
+                "price": 5.50,
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "appetizer-2",
+                "name": "Edamame",
+                "description": "Gedämpfte Sojabohnen mit Meersalz",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "appetizer-3",
+                "name": "Sichuan Kimchi",
+                "description": "Hausgemachtes Kimchi nach Sichuan Art. Chili: 2",
+                "price": 4.50,
+                "dietaryRestrictions": ["vegan"]
+              }
+            ]
+          },
+          {
+            "name": "Hauptspeisen",
+            "items": [
+              {
+                "id": "main-1",
+                "name": "Mapo Tofu A",
+                "description": "Traditionelles Sichuan Gericht mit Tofu in würziger Sauce. Serviert mit Reis. Chili: 2",
+                "price": 12.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "main-2",
+                "name": "Kung Pao Chicken A",
+                "description": "Hähnchen mit Erdnüssen und Gemüse in Kung Pao Sauce. Serviert mit Reis. Chili: 2",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-3",
+                "name": "Twice Cooked Pork",
+                "description": "Zweimal gekochtes Schweinefleisch mit Gemüse in würziger Sauce. Serviert mit Reis. Chili: 2",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Getränke",
+            "items": [
+              {
+                "id": "drink-1",
+                "name": "Jasmin Tee",
+                "description": "Traditioneller chinesischer Jasmin Tee",
+                "price": 3.50,
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "drink-2",
+                "name": "Hausgemachter Eistee",
+                "description": "Erfrischender hausgemachter Eistee",
+                "price": 4.00,
+                "dietaryRestrictions": ["vegan"]
+              },
+              {
+                "id": "drink-3",
+                "name": "Tsingtao Bier",
+                "description": "Chinesisches Bier (0,33l)",
+                "price": 3.80,
+                "dietaryRestrictions": ["vegan"]
+              }
+            ]
+          }
+        ]
+      },
+      "menuSource": "database"
     }
   ]
 } 
