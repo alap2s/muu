@@ -15,6 +15,7 @@ import { useViewMode } from './contexts/ViewModeContext'
 import { ActionButton } from './components/ActionButton'
 import { usePrice } from './hooks/usePrice'
 import { MenuItemRow } from './components/MenuItemRow'
+import { Currency } from './context/CurrencyContext'
 
 interface MenuItem {
   id: string
@@ -23,7 +24,7 @@ interface MenuItem {
   price: number
   category: string
   dietaryRestrictions: string[]
-  currency?: string
+  currency?: Currency
 }
 
 interface Restaurant {

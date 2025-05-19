@@ -8,7 +8,8 @@ interface MenuItem {
   description?: string;
   price: number;
   currency?: Currency;
-  dietary?: string[];
+  category: string;
+  dietaryRestrictions: string[];
 }
 
 interface MenuItemRowProps {
