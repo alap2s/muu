@@ -118,7 +118,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
         </div>
         <div ref={menuRef} className="overflow-y-auto max-h-[calc(90vh-120px)]">
           {menuGroups.map(group => (
-            <div key={group.title} ref={el => (groupRefs.current[group.title] = el)}>
+            <div key={group.title} ref={el => { groupRefs.current[group.title] = el; }}>
               <div className="font-bold text-lg mb-2" style={{ borderBottom: '1px solid var(--border-main)' }}>{group.title}</div>
               {group.items.map((item, idx) => (
                 <div
