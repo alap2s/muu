@@ -3,10 +3,10 @@ import { usePrice } from '../hooks/usePrice';
 
 interface MenuItem {
   id: string;
-  name: string;
-  description?: string;
   price: number;
   currency?: string;
+  name: string;
+  description?: string;
   dietary?: string[];
 }
 
@@ -47,7 +47,7 @@ export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode
               </div>
             )}
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-end px-3">
             {isLoading ? (
               <span className="font-mono text-[14px]" style={{ color: 'var(--text-secondary)' }}>...</span>
             ) : (
