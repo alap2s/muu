@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Restaurant, MenuItem as MenuItemType } from '../types'
 import { Filter, ChevronDown } from 'lucide-react'
+import { useViewMode } from '../contexts/ViewModeContext'
 
 interface RestaurantCardProps {
   restaurant: Restaurant
@@ -12,6 +13,7 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   const [isScrolling, setIsScrolling] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const { viewMode } = useViewMode()
 
   // Get unique categories from menu items
   const categories = Array.from(new Set(restaurant.menu?.map(item => item.category).filter((category): category is string => category !== undefined) ?? []))
@@ -95,7 +97,11 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
   }))
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+      viewMode === 'grid' 
+        ? 'border border-border-main' 
+        : 'border-t border-b border-border-main'
+    }`}>
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-hidden">
         <div className="mb-4">
           <select
@@ -109,6 +115,34 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
               </option>
             ))}
           </select>
+        </div>
+        <div ref={menuRef} className="overflow-y-auto max-h-[calc(90vh-120px)]">
+          {menuGroups.map(group => (
+            <div key={group.title} ref={el => (groupRefs.current[group.title] = el)}>
+              <div className="font-bold text-lg mb-2" style={{ borderBottom: '1px solid var(--border-main)' }}>{group.title}</div>
+              {group.items.map((item, idx) => (
+                <div
+                  key={item.name}
+                  className="flex items-center"
+                  style={{
+                    borderBottom: '1px solid var(--border-main)',
+                  }}
+                >
+                  <div
+                    className={`flex-1 p-2 ${
+                      viewMode === 'grid'
+                        ? 'border-l border-r border-border-main'
+                        : ''
+                    }`}
+                  >
+                    <div className="font-medium">{item.name}</div>
+                    <div className="text-sm text-gray-500">{item.description}</div>
+                    <div className="text-sm font-medium">{item.price}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -10,6 +10,11 @@ import { Button } from './design-system/components/Button'
 import { SettingsIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useIsMobile } from './hooks/useIsMobile'
+import { ViewModeToggle } from './components/ViewModeToggle'
+import { useViewMode } from './contexts/ViewModeContext'
+import { ActionButton } from './components/ActionButton'
+import { usePrice } from './hooks/usePrice'
+import { MenuItemRow } from './components/MenuItemRow'
 
 interface MenuItem {
   id: string
@@ -18,6 +23,7 @@ interface MenuItem {
   price: number
   category: string
   dietaryRestrictions: string[]
+  currency?: string
 }
 
 interface Restaurant {
@@ -57,6 +63,7 @@ export default function Home() {
   })
   const router = useRouter()
   const isMobile = useIsMobile()
+  const { viewMode, setViewMode } = useViewMode()
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -237,12 +244,35 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('print') === '1') {
+        // Hide dropdowns and app name header before printing
+        const dropdowns = document.querySelectorAll('.dropdown, .dropdown-trigger, .dropdown-content')
+        dropdowns.forEach(el => (el as HTMLElement).style.display = 'none')
+        const appNameHeader = document.querySelector('.app-name-header')
+        if (appNameHeader) (appNameHeader as HTMLElement).style.display = 'none'
+        setTimeout(() => {
+          window.print()
+          setTimeout(() => {
+            dropdowns.forEach(el => (el as HTMLElement).style.display = '')
+            if (appNameHeader) (appNameHeader as HTMLElement).style.display = ''
+            params.delete('print')
+            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '')
+            window.history.replaceState({}, '', newUrl)
+          }, 500)
+        }, 300)
+      }
+    }
+  }, [])
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }}>
       {isMobile && <A2HSBanner />}
       {/* Notch spacer row for safe area */}
       <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }}>
-        <div style={{ width: 32, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)', height: '100%' }} />
+        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
         <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }} />
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
@@ -251,12 +281,12 @@ export default function Home() {
         style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="flex justify-center">
-          <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-          <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
+          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
             <div className="flex items-center gap-2">
               <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Menoo</span>
             </div>
-            <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
+            <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}>
               <Button variant="secondary" onClick={() => router.push('/settings')}>
                 <Menu className="w-4 h-4" />
               </Button>
@@ -265,7 +295,7 @@ export default function Home() {
           <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
         </div>
         <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
           <div className="flex-1 flex min-w-0 max-w-4xl">
             <div className="flex-1 min-w-0">
               <Dropdown
@@ -368,40 +398,37 @@ export default function Home() {
                     }}
                   >
                     <div className="flex justify-center">
-                      <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                      <div
+                        style={{
+                          width: 32,
+                          height: 48,
+                          borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+                          borderBottom: '1px solid var(--border-main)',
+                          background: 'var(--background-main)'
+                        }}
+                      />
                       <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
-                        <h3 style={{ color: 'var(--text-primary)', borderRight: '1px solid var(--border-main)', borderBottom: '1px solid var(--border-main)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
+                        <h3 style={{ color: 'var(--text-primary)', borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
                       </div>
-                      <div style={{ width: 32, height: 48, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                      <div
+                        style={{
+                          width: 32,
+                          height: 48,
+                          borderBottom: '1px solid var(--border-main)',
+                          background: 'var(--background-main)'
+                        }}
+                      />
                     </div>
                     <div className="space-y-0">
                       {items.map((item) => (
-                        <div 
-                          key={item.id} 
-                          style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer' }}
-                          onClick={() => toggleItemExpansion(item.id)}
-                        >
-                          <div className="flex justify-center">
-                            <div style={{ width: 32, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-                            <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', padding: 16, borderRight: '1px solid var(--border-main)' }}>
-                                <div style={{ flex: 1 }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                    <h4 style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14, margin: 0 }}>
-                                      <span className={expandedItems.has(item.id) ? '' : 'line-clamp-1'}>{item.name}</span>
-                                    </h4>
-                                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>{getDietaryIcons(item)}</div>
-                                  </div>
-                                  {item.description && (
-                                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4, marginBottom: 0 }} className={expandedItems.has(item.id) ? '' : 'line-clamp-2'}>{item.description}</p>
-                                  )}
-                                </div>
-                                <span style={{ color: 'var(--text-primary)', fontWeight: 500, marginLeft: 16, fontSize: 14 }}>€{item.price.toFixed(2)}</span>
-                              </div>
-                            </div>
-                            <div style={{ width: 32, background: 'var(--background-main)' }} />
-                          </div>
-                        </div>
+                        <MenuItemRow
+                          key={item.id}
+                          item={item}
+                          expanded={expandedItems.has(item.id)}
+                          onClick={toggleItemExpansion}
+                          getDietaryIcons={getDietaryIcons}
+                          viewMode={viewMode}
+                        />
                       ))}
                     </div>
                   </div>
@@ -438,7 +465,7 @@ export default function Home() {
             <div className="max-w-4xl mx-auto">
               <div style={{ borderTop: '1px solid var(--border-main)' }}>
                 <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div style={{ width: 32, height: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                  <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
                   <div className="flex-1 flex min-w-0">
                     <div className="flex-1 min-w-0">
                       <Dropdown
@@ -513,8 +540,8 @@ export default function Home() {
               </div>
               <div style={{ borderBottom: '1px solid var(--border-main)' }}>
                 <div className="flex h-8">
-                  <div className="w-8" style={{ borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-                  <div className="flex-1" style={{ borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+                  <div className="w-8" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                  <div className="flex-1" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
                   <div className="w-8" style={{ background: 'var(--background-main)' }} />
                 </div>
               </div>
@@ -523,17 +550,16 @@ export default function Home() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-48px)] space-y-4">
-          <p className="text-primary/50 dark:text-dark-text-primary/70">No restaurants found nearby</p>
-          <button
-            type="button"
-            className="h-12 px-4 appearance-none bg-primary-light dark:bg-dark-background-main text-primary dark:text-dark-primary font-mono flex items-center justify-center border border-primary-border/10 dark:border-dark-primary-border/20 hover:bg-primary/5 dark:hover:bg-dark-primary/10 transition-colors"
+          <p className="text-[16px] text-[var(--text-secondary)] font-medium">No restaurants found nearby</p>
+          <ActionButton
             onClick={() => {
               // TODO: Implement add restaurant functionality
               console.log('Add restaurant clicked')
             }}
+            iconLeft={null}
           >
             Add restaurant menu
-          </button>
+          </ActionButton>
         </div>
       )}
     </div>

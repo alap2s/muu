@@ -4,6 +4,7 @@
 
 :root {
   /* Light theme with brand colors */
+  --font-main: 'JetBrains Mono', monospace;
   --accent: #6237FF;
   --background-main: #FEFBFF;
   --background-secondary: #FEFBFF;
@@ -117,6 +118,7 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
+  font-family: var(--font-main);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -124,4 +126,8 @@ body {
     --foreground-rgb: 248, 246, 244;
     --background-rgb: 24, 24, 24;
   }
+}
+
+html.font-atkinson {
+  --font-main: 'Atkinson Hyperlegible', Arial, sans-serif;
 } 

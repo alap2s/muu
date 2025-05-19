@@ -21,17 +21,13 @@ export function Button({
   // Use CSS variables for color, background, and border
   let style: React.CSSProperties = {};
   if (variant === 'primary') {
-    style.background = selected ? 'var(--accent)' : 'var(--accent)';
+    style.background = 'var(--accent)';
     style.color = 'var(--text-primary)';
     if (disabled) style.color = '#B9A5FF';
   } else {
-    style.background = 'var(--background-main)';
-    style.color = 'var(--text-primary)';
+    style.background = selected ? 'var(--accent)' : 'var(--background-main)';
+    style.color = selected ? 'var(--background-main)' : 'var(--accent)';
     style.border = '1px solid var(--border-main)';
-    if (selected) {
-      style.background = 'var(--accent)';
-      style.color = 'var(--background-main)';
-    }
     if (disabled) style.color = '#B9A5FF';
   }
 
@@ -50,7 +46,7 @@ export function Button({
             if (typeof child === 'string' || typeof child === 'number') {
               return <span className="text-[14px] font-mono flex items-center justify-center w-full h-full">{child}</span>;
             }
-            // For icons or elements, force 16x16 and set color to brand
+            // For icons or elements, force 16x16 and set color to match button text
             return React.isValidElement(child)
               ? React.cloneElement(child as React.ReactElement, {
                   className: 'w-4 h-4',

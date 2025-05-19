@@ -4,6 +4,10 @@ import { JetBrains_Mono } from 'next/font/google'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import { ThemeProvider } from './context/ThemeContext'
+import { ViewModeProvider } from './contexts/ViewModeContext'
+import { CurrencyProvider } from './context/CurrencyContext'
+import { FontInitializer } from './components/FontInitializer'
+import { FontProvider } from './context/FontContext'
 
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ['latin'],
@@ -33,6 +37,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#6237FF" id="theme-color-meta" />
+        <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/atkinson-hyperlegible" />
         <script dangerouslySetInnerHTML={{
           __html: `
             function setThemeColor() {
@@ -53,11 +58,18 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Menoo" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body suppressHydrationWarning className={`${jetbrainsMono.className} bg-background-secondary dark:bg-dark-background-main text-black dark:text-dark-text-primary`}>
-        <ThemeProvider>
-          {children}
-          <Toaster position="bottom-center" />
-        </ThemeProvider>
+      <body suppressHydrationWarning className={`bg-background-secondary dark:bg-dark-background-main text-black dark:text-dark-text-primary`} style={{ fontFamily: 'var(--font-main)' }}>
+        <FontProvider>
+          <FontInitializer />
+          <CurrencyProvider>
+            <ThemeProvider>
+              <ViewModeProvider>
+                {children}
+              </ViewModeProvider>
+            </ThemeProvider>
+            <Toaster position="bottom-center" />
+          </CurrencyProvider>
+        </FontProvider>
       </body>
     </html>
   )
