@@ -440,21 +440,15 @@ export default function Home() {
                 <div>
                   <div className="flex justify-center">
                     <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                    <div className="flex-1 h-12 flex items-center justify-center border-r border-primary-border/10 dark:border-dark-primary-border/20 max-w-4xl">
-                      <a
-                        href={selectedRestaurant.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary dark:text-dark-text-primary hover:underline underline"
+                    <div className="flex-1 flex items-center justify-center border-r border-primary-border/10 dark:border-dark-primary-border/20 max-w-4xl">
+                      <Button
+                        variant="secondary"
+                        onClick={() => window.open(selectedRestaurant.website, '_blank', 'noopener,noreferrer')}
+                        className="w-full"
                       >
                         Visit Restaurant Website
-                      </a>
+                      </Button>
                     </div>
-                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
-                  </div>
-                  <div className="flex justify-center h-8">
-                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                    <div className="flex-1 border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main max-w-4xl" />
                     <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
                   </div>
                 </div>

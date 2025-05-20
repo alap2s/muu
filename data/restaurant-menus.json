@@ -4221,6 +4221,10 @@
       "id": "koempul-restaurant",
       "name": "KOEMPUL RESTAURANT",
       "address": "Lychener Str. 6, 10437 Berlin, Germany",
+      "coordinates": {
+        "lat": 52.5413634,
+        "lng": 13.4151335
+      },
       "menu": {
         "categories": [
           {

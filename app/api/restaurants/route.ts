@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import * as fs from 'fs/promises'
+import * as fs from 'fs'
 import * as path from 'path'
 
 interface MenuItem {
@@ -63,14 +63,40 @@ async function loadRestaurantData() {
   if (restaurantMenus) return restaurantMenus
   
   try {
-    const data = await fs.readFile(
-      path.join(process.cwd(), 'data', 'restaurant-menus.json'),
-      'utf-8'
-    )
-    restaurantMenus = JSON.parse(data)
-    return restaurantMenus
+    const filePath = path.join(process.cwd(), 'data', 'restaurant-menus.json')
+    console.log('Attempting to read restaurant data from:', filePath)
+    
+    // Check if file exists first
+    if (!fs.existsSync(filePath)) {
+      console.error('Restaurant data file not found:', filePath)
+      throw new Error('Restaurant data file not found')
+    }
+    
+    // Use synchronous read for initial load
+    const data = fs.readFileSync(filePath, 'utf-8')
+    console.log('Successfully read restaurant data file')
+    
+    try {
+      restaurantMenus = JSON.parse(data)
+      if (!restaurantMenus || !Array.isArray(restaurantMenus.restaurants)) {
+        console.error('Invalid restaurant data format:', restaurantMenus)
+        throw new Error('Invalid restaurant data format')
+      }
+      console.log('Successfully parsed restaurant data, found', restaurantMenus.restaurants.length, 'restaurants')
+      return restaurantMenus
+    } catch (parseError) {
+      console.error('Error parsing restaurant data:', parseError)
+      throw new Error('Failed to parse restaurant data')
+    }
   } catch (error) {
     console.error('Error loading restaurant data:', error)
+    if (error instanceof Error) {
+      console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      })
+    }
     throw new Error('Failed to load restaurant data')
   }
 }
@@ -120,30 +146,59 @@ export async function GET(request: Request) {
   try {
     const userLat = parseFloat(lat)
     const userLng = parseFloat(lng)
-    const searchRadius = 1
+    const searchRadius = parseFloat(radius)
 
-    console.log('Loading restaurant data...')
+    if (isNaN(userLat) || isNaN(userLng) || isNaN(searchRadius)) {
+      return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 })
+    }
+
     // Load restaurant data
     const restaurantData = await loadRestaurantData()
     if (!restaurantData) {
-      console.error('No restaurant data available')
       throw new Error('Restaurant data not available')
     }
 
-    console.log(`Found ${restaurantData.restaurants.length} total restaurants in database`)
+    // Log total restaurants loaded
+    console.log('Total restaurants loaded:', restaurantData.restaurants.length);
+    
+    // Log restaurants with missing coordinates
+    const invalidRestaurants = restaurantData.restaurants.filter((restaurant: Restaurant) => 
+      !restaurant.coordinates || 
+      typeof restaurant.coordinates.lat !== 'number' || 
+      typeof restaurant.coordinates.lng !== 'number'
+    );
+    
+    if (invalidRestaurants.length > 0) {
+      console.warn('Found restaurants with invalid coordinates:', 
+        invalidRestaurants.map(r => ({
+          name: r.name,
+          coordinates: r.coordinates
+        }))
+      );
+    }
+
+    // Filter out restaurants with missing/invalid coordinates
+    const validRestaurants = restaurantData.restaurants.filter((restaurant: Restaurant) => 
+      restaurant.coordinates && 
+      typeof restaurant.coordinates.lat === 'number' && 
+      typeof restaurant.coordinates.lng === 'number'
+    );
+    
+    const skipped = restaurantData.restaurants.length - validRestaurants.length;
+    if (skipped > 0) {
+      console.warn(`Skipped ${skipped} restaurants due to missing/invalid coordinates.`);
+    }
 
     // Calculate distance for each restaurant and filter by radius
-    const filteredRestaurants = restaurantData.restaurants
+    const filteredRestaurants = validRestaurants
       .map((restaurant: Restaurant) => ({
         ...restaurant,
         distance: calculateDistance(userLat, userLng, restaurant.coordinates.lat, restaurant.coordinates.lng)
       }))
       .filter((restaurant) => restaurant.distance <= searchRadius)
-      .sort((a, b) => a.distance - b.distance)
       .map(transformToFrontendFormat)
 
-    console.log(`Found ${filteredRestaurants.length} restaurants within ${searchRadius}km`)
-    console.log('Restaurants:', filteredRestaurants.map(r => ({
+    console.log('Found restaurants:', filteredRestaurants.map(r => ({
       name: r.name,
       distance: r.distance,
       menuItems: r.menu.length,

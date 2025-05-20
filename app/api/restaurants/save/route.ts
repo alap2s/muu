@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFile, readFile } from 'fs/promises';
+import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     // Generate a unique ID for the restaurant
     const id = uuidv4();
 
-    // Create the restaurant object with the correct menu structure
+    // Create the restaurant object
     const restaurant = {
       id,
       name,
@@ -22,29 +22,21 @@ export async function POST(request: Request) {
       },
       website: '',
       menu: {
-        categories: menu.categories.map((category: any) => ({
-          name: category.name,
-          items: category.items.map((item: any) => ({
-            id: item.id || uuidv4(),
-            name: item.name,
-            description: item.description || '',
-            price: item.price,
-            dietaryRestrictions: item.dietaryRestrictions || []
-          }))
-        }))
+        categories: menu.categories
       },
       lastUpdated: new Date().toISOString()
     };
 
     // Read the existing restaurants file
     const restaurantsPath = join(process.cwd(), 'data', 'restaurant-menus.json');
-    const restaurantsData = JSON.parse(await readFile(restaurantsPath, 'utf-8'));
+    const restaurantsData = await import('../../../data/restaurant-menus.json');
+    const restaurants = restaurantsData.default;
 
     // Add the new restaurant
-    restaurantsData.restaurants.push(restaurant);
+    restaurants.restaurants.push(restaurant);
 
     // Write the updated restaurants back to the file
-    await writeFile(restaurantsPath, JSON.stringify(restaurantsData, null, 2));
+    await writeFile(restaurantsPath, JSON.stringify(restaurants, null, 2));
 
     return NextResponse.json({ success: true, restaurant });
   } catch (error) {
