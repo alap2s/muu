@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
+import { writeFile, readFile } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,8 +29,8 @@ export async function POST(request: Request) {
 
     // Read the existing restaurants file
     const restaurantsPath = join(process.cwd(), 'data', 'restaurant-menus.json');
-    const restaurantsData = await import('../../../data/restaurant-menus.json');
-    const restaurants = restaurantsData.default;
+    const fileContent = await readFile(restaurantsPath, 'utf-8');
+    const restaurants = JSON.parse(fileContent);
 
     // Add the new restaurant
     restaurants.restaurants.push(restaurant);
