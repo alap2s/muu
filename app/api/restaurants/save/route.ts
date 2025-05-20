@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     // Generate a unique ID for the restaurant
     const id = uuidv4();
 
-    // Create the restaurant object
+    // Create the restaurant object with the correct menu structure
     const restaurant = {
       id,
       name,
@@ -22,7 +22,16 @@ export async function POST(request: Request) {
       },
       website: '',
       menu: {
-        categories: menu.categories
+        categories: menu.categories.map((category: any) => ({
+          name: category.name,
+          items: category.items.map((item: any) => ({
+            id: item.id || uuidv4(),
+            name: item.name,
+            description: item.description || '',
+            price: item.price,
+            dietaryRestrictions: item.dietaryRestrictions || []
+          }))
+        }))
       },
       lastUpdated: new Date().toISOString()
     };
