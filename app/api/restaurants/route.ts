@@ -122,13 +122,15 @@ export async function GET(request: Request) {
     const userLng = parseFloat(lng)
     const searchRadius = 1
 
+    console.log('Loading restaurant data...')
     // Load restaurant data
     const restaurantData = await loadRestaurantData()
     if (!restaurantData) {
+      console.error('No restaurant data available')
       throw new Error('Restaurant data not available')
     }
 
-    console.log('Total restaurants in database:', restaurantData.restaurants.length)
+    console.log(`Found ${restaurantData.restaurants.length} total restaurants in database`)
 
     // Calculate distance for each restaurant and filter by radius
     const filteredRestaurants = restaurantData.restaurants
@@ -137,15 +139,16 @@ export async function GET(request: Request) {
         distance: calculateDistance(userLat, userLng, restaurant.coordinates.lat, restaurant.coordinates.lng)
       }))
       .filter((restaurant) => restaurant.distance <= searchRadius)
+      .sort((a, b) => a.distance - b.distance)
       .map(transformToFrontendFormat)
 
-    console.log('Restaurants within radius:', filteredRestaurants.length)
-    console.log('First restaurant data:', filteredRestaurants[0] ? {
-      name: filteredRestaurants[0].name,
-      distance: filteredRestaurants[0].distance,
-      menuItems: filteredRestaurants[0].menu.length,
-      menuSource: filteredRestaurants[0].menuSource
-    } : 'No restaurants found')
+    console.log(`Found ${filteredRestaurants.length} restaurants within ${searchRadius}km`)
+    console.log('Restaurants:', filteredRestaurants.map(r => ({
+      name: r.name,
+      distance: r.distance,
+      menuItems: r.menu.length,
+      menuSource: r.menuSource
+    })))
 
     return NextResponse.json({ restaurants: filteredRestaurants })
   } catch (error) {
