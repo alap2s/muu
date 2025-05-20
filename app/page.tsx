@@ -167,12 +167,21 @@ export default function Home() {
       }
 
       const dbData = await dbResponse.json()
+      console.log('API Response:', dbData)
       
       // Only use restaurants from our database and limit to closest 10
       const allRestaurants = dbData.restaurants
         .filter((r: Restaurant) => r.menuSource === 'database')
         .sort((a: Restaurant, b: Restaurant) => a.distance - b.distance)
         .slice(0, 10)
+
+      console.log('Filtered restaurants:', allRestaurants.length)
+      console.log('First restaurant:', allRestaurants[0] ? {
+        name: allRestaurants[0].name,
+        distance: allRestaurants[0].distance,
+        menuItems: allRestaurants[0].menu.length,
+        menuSource: allRestaurants[0].menuSource
+      } : 'No restaurants found')
 
       setRestaurants(allRestaurants)
     } catch (err) {

@@ -120,14 +120,15 @@ export async function GET(request: Request) {
   try {
     const userLat = parseFloat(lat)
     const userLng = parseFloat(lng)
-    // Increase the search radius to 5km to show more restaurants
-    const searchRadius = 5
+    const searchRadius = 1
 
     // Load restaurant data
     const restaurantData = await loadRestaurantData()
     if (!restaurantData) {
       throw new Error('Restaurant data not available')
     }
+
+    console.log('Total restaurants in database:', restaurantData.restaurants.length)
 
     // Calculate distance for each restaurant and filter by radius
     const filteredRestaurants = restaurantData.restaurants
@@ -136,29 +137,15 @@ export async function GET(request: Request) {
         distance: calculateDistance(userLat, userLng, restaurant.coordinates.lat, restaurant.coordinates.lng)
       }))
       .filter((restaurant) => restaurant.distance <= searchRadius)
-      .sort((a, b) => a.distance - b.distance) // Sort by distance
       .map(transformToFrontendFormat)
 
-    // If no restaurants found within radius, return all restaurants sorted by distance
-    if (filteredRestaurants.length === 0) {
-      const allRestaurants = restaurantData.restaurants
-        .map((restaurant: Restaurant) => ({
-          ...restaurant,
-          distance: calculateDistance(userLat, userLng, restaurant.coordinates.lat, restaurant.coordinates.lng)
-        }))
-        .sort((a, b) => a.distance - b.distance)
-        .slice(0, 10) // Limit to 10 closest restaurants
-        .map(transformToFrontendFormat)
-
-      return NextResponse.json({ restaurants: allRestaurants })
-    }
-
-    console.log('Found restaurants:', filteredRestaurants.map(r => ({
-      name: r.name,
-      distance: r.distance,
-      menuItems: r.menu.length,
-      menuSource: r.menuSource
-    })))
+    console.log('Restaurants within radius:', filteredRestaurants.length)
+    console.log('First restaurant data:', filteredRestaurants[0] ? {
+      name: filteredRestaurants[0].name,
+      distance: filteredRestaurants[0].distance,
+      menuItems: filteredRestaurants[0].menu.length,
+      menuSource: filteredRestaurants[0].menuSource
+    } : 'No restaurants found')
 
     return NextResponse.json({ restaurants: filteredRestaurants })
   } catch (error) {
