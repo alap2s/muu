@@ -20,7 +20,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Menoo',
-  description: 'Find nearby restaurants and their menus',
+  description: 'Accessible and personalized menus',
   icons: {
     icon: '/favicon.svg',
   },
@@ -57,6 +57,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Menoo" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta property="og:title" content="Menoo" />
+        <meta property="og:description" content="Accessible and personalized menus" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/icon-512.png" />
+        <meta property="og:url" content="https://menoo.app" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Menoo" />
+        <meta name="twitter:description" content="Accessible and personalized menus" />
+        <meta name="twitter:image" content="/icon-512.png" />
       </head>
       <body suppressHydrationWarning className={`bg-background-secondary dark:bg-dark-background-main text-black dark:text-dark-text-primary`} style={{ fontFamily: 'var(--font-main)' }}>
         <FontProvider>

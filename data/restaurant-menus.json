@@ -4216,6 +4216,507 @@
         ]
       },
       "menuSource": "database"
+    },
+    {
+      "id": "koempul-restaurant",
+      "name": "KOEMPUL RESTAURANT",
+      "address": "Lychener Str. 6, 10437 Berlin, Germany",
+      "menu": {
+        "categories": [
+          {
+            "name": "Specials",
+            "items": [
+              {
+                "id": "specials-1",
+                "name": "Crispy Chicken Skin",
+                "description": "Lightly seasoned, crispy fried chicken skin (Limited)",
+                "price": 7.5,
+                "dietaryRestrictions": ["dairy-free", "milk"]
+              },
+              {
+                "id": "specials-2",
+                "name": "Oseng Kerang Cabe Ijo",
+                "description": "Mussels with green chili, curry kale, corn pancake & rice (Mild Spicy)",
+                "price": 17.5,
+                "dietaryRestrictions": ["dairy-free", "nuts"]
+              },
+              {
+                "id": "specials-3",
+                "name": "Lele Goreng Lengkuas",
+                "description": "Fried galanga catfish with rice, tofu, tempeh & sambal (2 pieces)",
+                "price": 14.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "egg-free", "egg"]
+              }
+            ]
+          },
+          {
+            "name": "Appetizers",
+            "items": [
+              {
+                "id": "appetizers-1",
+                "name": "Tempe Mendoan",
+                "description": "Lightly battered fried tempeh",
+                "price": 6.9,
+                "dietaryRestrictions": ["dairy-free", "milk", "egg-free", "nuts"]
+              },
+              {
+                "id": "appetizers-2",
+                "name": "Tahu Isi",
+                "description": "Fried tofu stuffed with vegetables and chicken (Mild Spicy)",
+                "price": 3.5,
+                "dietaryRestrictions": ["dairy-free", "egg-free"]
+              },
+              {
+                "id": "appetizers-3",
+                "name": "Risoles",
+                "description": "Potato, carrot, and minced chicken wrap",
+                "price": 3.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "egg-free", "nuts", "gluten-free"]
+              },
+              {
+                "id": "appetizers-4",
+                "name": "Crispy Jamur",
+                "description": "Fried Enoki mushrooms with sweet-sour & peanut sauce",
+                "price": 7.3,
+                "dietaryRestrictions": ["dairy-free", "nuts"]
+              }
+            ]
+          },
+          {
+            "name": "Vegetarian/Vegan",
+            "items": [
+              {
+                "id": "vegetarian-1",
+                "name": "Gado-Gado",
+                "description": "Vegetables, tofu, potatoes, tempeh, rice & peanut sauce",
+                "price": 12.5,
+                "dietaryRestrictions": ["vegetarian", "dairy-free", "milk"]
+              },
+              {
+                "id": "vegetarian-2",
+                "name": "Nasi Goreng Vegetarian",
+                "description": "Fried rice with tofu, eggs & vegetables",
+                "price": 13.5,
+                "dietaryRestrictions": ["vegetarian", "dairy-free", "nuts", "milk"]
+              },
+              {
+                "id": "vegetarian-3",
+                "name": "Bakmi Goreng Vegetarian",
+                "description": "Fried noodles with tofu, eggs & vegetables",
+                "price": 12.9,
+                "dietaryRestrictions": ["vegetarian", "dairy-free", "nuts", "milk"]
+              },
+              {
+                "id": "vegetarian-4",
+                "name": "Nasi Uduk Vegetarian",
+                "description": "Coconut rice with tempeh, tofu, spicy egg, and peanut sauce",
+                "price": 14.9,
+                "dietaryRestrictions": ["vegetarian", "dairy-free", "milk", "egg-free", "nuts"]
+              }
+            ]
+          },
+          {
+            "name": "Noodles & Rice",
+            "items": [
+              {
+                "id": "noodles-1",
+                "name": "Bakmi Goreng Sapi",
+                "description": "Fried noodles with beef, eggs & vegetables",
+                "price": 13.9,
+                "dietaryRestrictions": ["dairy-free", "milk", "nuts"]
+              },
+              {
+                "id": "noodles-2",
+                "name": "Nasi Goreng Sapi",
+                "description": "Fried rice with beef, eggs & vegetables",
+                "price": 13.9,
+                "dietaryRestrictions": ["dairy-free", "nuts", "milk"]
+              },
+              {
+                "id": "noodles-3",
+                "name": "Bakmi Goreng Ayam / Nasi Goreng Ayam",
+                "description": "Fried noodles or rice with chicken, eggs & vegetables",
+                "price": 13.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "nuts"]
+              },
+              {
+                "id": "noodles-4",
+                "name": "Nasi Goreng Geledek",
+                "description": "Spicy fried rice with beef, bakso, eggs & vegetables",
+                "price": 15.2,
+                "dietaryRestrictions": ["dairy-free", "nuts", "milk"]
+              }
+            ]
+          },
+          {
+            "name": "Indonesian Classics",
+            "items": [
+              {
+                "id": "classics-1",
+                "name": "Iga Bakar Penyet",
+                "description": "Grilled sweet-spicy beef ribs, veggie coconut urap & chili",
+                "price": 18.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "egg-free"]
+              },
+              {
+                "id": "classics-2",
+                "name": "Nasi Padang Rendang",
+                "description": "Braised beef rendang, kale, jackfruit, potato fritter, chili",
+                "price": 16.5,
+                "dietaryRestrictions": ["dairy-free", "milk"]
+              },
+              {
+                "id": "classics-3",
+                "name": "Ayam Kremes",
+                "description": "Fried crispy chicken with rice and sambal",
+                "price": 14.9,
+                "dietaryRestrictions": ["dairy-free", "milk"]
+              },
+              {
+                "id": "classics-4",
+                "name": "Sate Ayam",
+                "description": "Chicken skewers with rice, peanut sauce & pickles (5 pcs)",
+                "price": 16.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "nuts"]
+              },
+              {
+                "id": "classics-5",
+                "name": "Ayam Sambal Matah",
+                "description": "Fried chicken, corn pancake & Bali chili",
+                "price": 16.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "egg-free"]
+              },
+              {
+                "id": "classics-6",
+                "name": "Ayam Madura",
+                "description": "Black fried chicken, green chili & urap (Spicy)",
+                "price": 17.5,
+                "dietaryRestrictions": ["dairy-free", "milk"]
+              }
+            ]
+          },
+          {
+            "name": "Reistafel",
+            "items": [
+              {
+                "id": "reistafel-1",
+                "name": "Reistafel A",
+                "description": "Chicken satay, jackfruit curry, rendang, kale, tempeh, gado-gado, etc. (Min. 2 persons)",
+                "price": 32.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "nuts", "egg-free"]
+              },
+              {
+                "id": "reistafel-2",
+                "name": "Reistafel B",
+                "description": "White rice, bala-bala, chicken satay, rendang, veggie soup, etc. (Min. 2 persons)",
+                "price": 25.0,
+                "dietaryRestrictions": ["dairy-free", "milk", "nuts", "egg-free"]
+              },
+              {
+                "id": "reistafel-3",
+                "name": "Nasi Padang Rice Table",
+                "description": "Rendang, gulai, jackfruit curry, chicken, beef skin crackers, etc. (Min. 2 persons)",
+                "price": 30.0,
+                "dietaryRestrictions": ["dairy-free", "milk", "nuts", "egg-free"]
+              }
+            ]
+          },
+          {
+            "name": "Desserts",
+            "items": [
+              {
+                "id": "desserts-1",
+                "name": "Es Campur",
+                "description": "Palm sugar, black rice, coconut jelly, jackfruit",
+                "price": 7.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "desserts-2",
+                "name": "Bubur Ketan Hitam",
+                "description": "Black rice with coconut milk and vanilla",
+                "price": 7.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "desserts-3",
+                "name": "Bolu Ijo",
+                "description": "Green pandan coconut cake",
+                "price": 7.5,
+                "dietaryRestrictions": ["dairy-free", "milk", "gluten-free"]
+              },
+              {
+                "id": "desserts-4",
+                "name": "Lupis Original",
+                "description": "Glutinous rice, banana leaf, coconut & brown sugar sauce",
+                "price": 7.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Drinks",
+            "items": [
+              {
+                "id": "drinks-1",
+                "name": "Wedang Jahe",
+                "description": "Hot or cold palm sugar, lemongrass & ginger (Homemade)",
+                "price": 4.3,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-2",
+                "name": "Es Teh Manis / Tawar",
+                "description": "Sweetened / Unsweetened iced Indonesian tea",
+                "price": 3.3,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-3",
+                "name": "Teh Botol Sosro",
+                "description": "Indonesian bottled tea",
+                "price": 3.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-4",
+                "name": "Sodas",
+                "description": "Coca Cola, Sprite, etc.",
+                "price": 3.6,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "drinks-5",
+                "name": "Fruit Juices & Nectars",
+                "description": "Apple, Mango, Pineapple, etc.",
+                "price": 3.9,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Alcoholic Beverages",
+            "items": [
+              {
+                "id": "alcohol-1",
+                "name": "Beers",
+                "description": "Berliner Kindl, Erdinger, Tiger, etc.",
+                "price": 4.3,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "alcohol-2",
+                "name": "Cocktails / Longdrinks",
+                "description": "Gin Tonic, Jacky Cola, etc.",
+                "price": 6.9,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "alcohol-3",
+                "name": "Wines",
+                "description": "Merlot, Pinot Noir, Riesling, etc. (Glass)",
+                "price": 6.0,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "alcohol-4",
+                "name": "Wines",
+                "description": "Merlot, Pinot Noir, Riesling, etc. (Bottle)",
+                "price": 23.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "restaurant-hodori",
+      "name": "Restaurant HODORI",
+      "address": "Goebenstraße 16, 10783 Berlin",
+      "coordinates": {
+        "lat": 52.4925,
+        "lng": 13.3675
+      },
+      "website": "http://www.restaurant-hodori.de/",
+      "menu": {
+        "categories": [
+          {
+            "name": "Hauptgerichte",
+            "items": [
+              {
+                "id": "main-1",
+                "name": "Suppe mit Maultaschen",
+                "description": "Soup with Maultaschen",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-2",
+                "name": "Nudelsuppe mit Meeresfrüchten",
+                "description": "Noodle soup with seafood, spicy",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-3",
+                "name": "Nudeln mit speziale Bohnenpaste",
+                "description": "Noodles with special bean paste",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-4",
+                "name": "Bibimbop",
+                "description": "Rice with various herbs, vegetables, tofu or beef and fried egg",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-5",
+                "name": "Gebratene Tintenfisch",
+                "description": "Stir-fried squid with vegetables served with rice",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-6",
+                "name": "Marinierte Rindfleisch auf Reis",
+                "description": "Marinated beef on rice",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-7",
+                "name": "Buchweizennudelsuppe",
+                "description": "Buckwheat noodle soup with beef, served cold. Only available in summer",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-8",
+                "name": "Rindfleischsuppe mit Rettich und Glasnudeln",
+                "description": "Beef soup with radish and glass noodles",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-9",
+                "name": "Rindfleischsuppe mit Gemüse",
+                "description": "Beef soup with various vegetables, spicy",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "main-10",
+                "name": "Kimchisuppe",
+                "description": "Kimchi soup with pork and tofu, spicy",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Spezialitäten des Hauses",
+            "items": [
+              {
+                "id": "special-1",
+                "name": "Gebratene Maultaschen",
+                "description": "Stir-fried Maultaschen with various vegetable fillings (12 pieces)",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "special-2",
+                "name": "Blutwurstsuppe",
+                "description": "Blood sausage soup with Korean special filling",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "special-3",
+                "name": "Rinderrippchensuppe",
+                "description": "Beef rib soup with glass noodles",
+                "price": 11.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "special-4",
+                "name": "Frittiertes Schweinefleisch",
+                "description": "Fried pork with sweet and sour sauce",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "special-5",
+                "name": "Frittiertes Hühnerfleisch",
+                "description": "Fried chicken with ketchup",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Grill (für 2 Personen)",
+            "items": [
+              {
+                "id": "grill-1",
+                "name": "Schweinebauch",
+                "description": "Pork belly for 2 persons",
+                "price": 24.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "grill-2",
+                "name": "Marinierte Rindfleisch",
+                "description": "Marinated beef for 2 persons",
+                "price": 24.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "grill-3",
+                "name": "Marinierte Entenfleisch",
+                "description": "Marinated duck for 2 persons",
+                "price": 24.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "grill-4",
+                "name": "Marinierte Tintenfisch",
+                "description": "Marinated squid for 2 persons",
+                "price": 25.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Feuertopf für 2 Personen",
+            "items": [
+              {
+                "id": "hotpot-1",
+                "name": "Tofu und Gemüse",
+                "description": "Tofu and various vegetables hot pot for 2 persons",
+                "price": 19.50,
+                "dietaryRestrictions": ["vegetarian"]
+              },
+              {
+                "id": "hotpot-2",
+                "name": "Meeresfrüchte mit Gemüse",
+                "description": "Seafood with vegetables hot pot for 2 persons",
+                "price": 29.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "hotpot-3",
+                "name": "Kimchi, Tofu, Schweinefleisch und Nudeln",
+                "description": "Kimchi, tofu, pork and noodles hot pot for 2 persons",
+                "price": 22.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 } 

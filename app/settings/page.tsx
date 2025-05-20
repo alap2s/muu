@@ -26,7 +26,7 @@ export default function SettingsPage() {
       try {
         await navigator.share({
           title: 'Menoo',
-          text: 'Check out Menoo - A free app standardized restaurant menu app.',
+          text: 'Accessible and personalized menus – check out Menoo!',
           url: window.location.href,
         })
       } catch (error) {

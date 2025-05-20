@@ -17,9 +17,16 @@ export function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseStyles = "h-12 min-w-12 w-12 font-mono transition-colors flex items-center justify-center"
+  const baseStyles = "h-12 font-mono transition-colors flex items-center"
   // Use CSS variables for color, background, and border
-  let style: React.CSSProperties = {};
+  let style: React.CSSProperties = {
+    minWidth: 48,
+    height: 48,
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 16px',
+  };
+  
   if (variant === 'primary') {
     style.background = 'var(--accent)';
     style.color = 'var(--text-primary)';
@@ -41,20 +48,19 @@ export function Button({
       {loading ? (
         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
       ) : (
-        <span className="flex items-center justify-center w-full h-full text-[14px] font-mono">
+        <span className="flex items-center gap-2 w-full text-[14px] font-mono">
           {React.Children.map(children, child => {
             if (typeof child === 'string' || typeof child === 'number') {
-              return <span className="text-[14px] font-mono flex items-center justify-center w-full h-full">{child}</span>;
+              return <span className="text-[14px] font-mono text-left flex-1">{child}</span>;
             }
             // For icons or elements, force 16x16 and set color to match button text
             return React.isValidElement(child)
               ? React.cloneElement(child as React.ReactElement, {
-                  className: 'w-4 h-4',
+                  className: 'w-4 h-4 flex-none',
                   style: {
                     width: 16,
                     height: 16,
                     display: 'block',
-                    margin: 'auto',
                     color: disabled
                       ? '#B9A5FF'
                       : selected

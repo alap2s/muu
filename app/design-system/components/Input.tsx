@@ -1,11 +1,23 @@
 'use client'
 
+import React, { useState } from 'react'
+import { LucideIcon } from 'lucide-react'
+
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: string
+  icon?: LucideIcon
 }
 
-export function Input({ label, error, className = '', ...props }: InputProps) {
+export function Input({ 
+  label, 
+  error, 
+  icon: Icon,
+  className = '', 
+  ...props 
+}: InputProps) {
+  const [isFocused, setIsFocused] = useState(false)
+
   return (
     <div className="w-full">
       {label && (
@@ -13,26 +25,59 @@ export function Input({ label, error, className = '', ...props }: InputProps) {
           {label}
         </label>
       )}
-      <input
+      <div 
         style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
           width: '100%',
           height: 48,
-          paddingLeft: 16,
-          paddingRight: 16,
           background: 'var(--background-secondary)',
-          border: '1px solid var(--border-main)',
-          borderRadius: 8,
-          fontFamily: 'var(--font-mono, monospace)',
-          color: 'var(--text-primary)',
-          fontSize: 16,
-          outline: 'none',
+          border: `1px solid ${error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--border-main)'}`,
+          transition: 'border-color 0.2s',
         }}
-        className={className}
-        placeholder={props.placeholder}
-        {...props}
-      />
+      >
+        {Icon && (
+          <div 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              width: 48,
+              height: 48,
+              color: error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--text-secondary)',
+            }}
+          >
+            <Icon size={16} />
+          </div>
+        )}
+        <input
+          style={{
+            width: '100%',
+            height: '100%',
+            paddingLeft: Icon ? 0 : 16,
+            paddingRight: 16,
+            background: 'transparent',
+            border: 'none',
+            fontFamily: 'var(--font-mono, monospace)',
+            color: 'var(--text-primary)',
+            fontSize: 14,
+            outline: 'none',
+          }}
+          className={className}
+          onFocus={(e) => {
+            setIsFocused(true)
+            props.onFocus?.(e)
+          }}
+          onBlur={(e) => {
+            setIsFocused(false)
+            props.onBlur?.(e)
+          }}
+          {...props}
+        />
+      </div>
       {error && (
-        <p className="mt-1 text-sm" style={{ color: '#f87171' }}>{error}</p>
+        <p className="mt-2 text-sm" style={{ color: '#f87171' }}>{error}</p>
       )}
     </div>
   )
