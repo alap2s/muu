@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu, Building2, Globe, Map, Send } from 'lucide-react'
 import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
 import { A2HSBanner } from './components/A2HSBanner'
@@ -16,6 +16,7 @@ import { ActionButton } from './components/ActionButton'
 import { usePrice } from './hooks/usePrice'
 import { MenuItemRow } from './components/MenuItemRow'
 import { Currency } from './context/CurrencyContext'
+import { Input } from './design-system/components/Input'
 
 interface MenuItem {
   id: string
@@ -65,6 +66,9 @@ export default function Home() {
   const router = useRouter()
   const isMobile = useIsMobile()
   const { viewMode, setViewMode } = useViewMode()
+  const [restaurantName, setRestaurantName] = useState('')
+  const [restaurantAddress, setRestaurantAddress] = useState('')
+  const [restaurantWebsite, setRestaurantWebsite] = useState('')
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -545,17 +549,91 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-48px)] space-y-4">
-          <p className="text-[16px] text-[var(--text-secondary)] font-medium">No restaurants found nearby</p>
-          <ActionButton
-            onClick={() => {
-              // TODO: Implement add restaurant functionality
-              console.log('Add restaurant clicked')
-            }}
-            iconLeft={null}
-          >
-            Add restaurant menu
-          </ActionButton>
+        <div style={{ minHeight: '100vh', background: 'var(--background-main)' }}>
+          {/* Empty state rows */}
+          {[...Array(24)].map((_, i) => (
+            <div key={i} className="flex justify-center">
+              <div
+                style={{
+                  width: 32,
+                  height: i >= 1 && i <= 8 ? 'auto' : 48,
+                  borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+                  borderBottom: '1px solid var(--border-main)',
+                  background: 'var(--background-main)'
+                }}
+              />
+              <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: 48, position: 'relative' }}>
+                {i === 1 && (
+                  <div className="flex flex-col w-full px-3">
+                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, fontWeight: 500 }}>No restaurants found nearby</p>
+                  </div>
+                )}
+                {i === 4 && (
+                  <div className="flex flex-col w-full px-3">
+                    <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500 }}>Request to add a new restaurant</p>
+                  </div>
+                )}
+                {i === 5 && (
+                  <div className="flex flex-col w-full">
+                    <Input
+                      type="text"
+                      placeholder="Restaurant name"
+                      icon={Store}
+                      value={restaurantName}
+                      onChange={(e) => setRestaurantName(e.target.value)}
+                    />
+                  </div>
+                )}
+                {i === 6 && (
+                  <div className="flex flex-col w-full">
+                    <Input
+                      type="text"
+                      placeholder="Restaurant address"
+                      icon={MapPin}
+                      value={restaurantAddress}
+                      onChange={(e) => setRestaurantAddress(e.target.value)}
+                    />
+                  </div>
+                )}
+                {i === 7 && (
+                  <div className="flex flex-col w-full">
+                    <Input
+                      type="url"
+                      placeholder="Restaurant website (optional)"
+                      icon={Globe}
+                      value={restaurantWebsite}
+                      onChange={(e) => setRestaurantWebsite(e.target.value)}
+                    />
+                  </div>
+                )}
+                {i === 8 && (
+                  <div className="flex flex-col w-full">
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        const subject = `New Restaurant Request: ${restaurantName}`;
+                        const body = `Restaurant Name: ${restaurantName}\nRestaurant Address: ${restaurantAddress}\nRestaurant Website: ${restaurantWebsite}`;
+                        
+                        window.location.href = `mailto:alapshah.com@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                      }}
+                    >
+                      Send request
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  width: 32,
+                  height: i >= 1 && i <= 8 ? 'auto' : 48,
+                  borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+                  borderBottom: '1px solid var(--border-main)',
+                  background: 'var(--background-main)'
+                }}
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>

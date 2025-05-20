@@ -32,7 +32,7 @@ export function Input({
           alignItems: 'center',
           width: '100%',
           height: 48,
-          background: 'var(--background-secondary)',
+          background: 'var(--background-main)',
           border: `1px solid ${error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--border-main)'}`,
           transition: 'border-color 0.2s',
         }}
@@ -45,7 +45,7 @@ export function Input({
               justifyContent: 'center',
               width: 48,
               height: 48,
-              color: error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--text-secondary)',
+              color: error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--accent)',
             }}
           >
             <Icon size={16} />
