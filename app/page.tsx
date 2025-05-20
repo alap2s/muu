@@ -409,12 +409,13 @@ export default function Home() {
                         }}
                       />
                       <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
-                        <h3 style={{ color: 'var(--text-primary)', borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
+                        <h3 style={{ color: 'var(--text-primary)', borderBottom: '1px solid var(--border-main)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
                       </div>
                       <div
                         style={{
                           width: 32,
                           height: 48,
+                          borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
                           borderBottom: '1px solid var(--border-main)',
                           background: 'var(--background-main)'
                         }}
