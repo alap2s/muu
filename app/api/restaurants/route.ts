@@ -120,8 +120,8 @@ export async function GET(request: Request) {
   try {
     const userLat = parseFloat(lat)
     const userLng = parseFloat(lng)
-    // Always use 1km as the max radius
-    const searchRadius = 1
+    // Increase the search radius to 5km to show more restaurants
+    const searchRadius = 5
 
     // Load restaurant data
     const restaurantData = await loadRestaurantData()
@@ -129,14 +129,29 @@ export async function GET(request: Request) {
       throw new Error('Restaurant data not available')
     }
 
-    // Calculate distance for each restaurant and filter by 1km
+    // Calculate distance for each restaurant and filter by radius
     const filteredRestaurants = restaurantData.restaurants
       .map((restaurant: Restaurant) => ({
         ...restaurant,
         distance: calculateDistance(userLat, userLng, restaurant.coordinates.lat, restaurant.coordinates.lng)
       }))
       .filter((restaurant) => restaurant.distance <= searchRadius)
+      .sort((a, b) => a.distance - b.distance) // Sort by distance
       .map(transformToFrontendFormat)
+
+    // If no restaurants found within radius, return all restaurants sorted by distance
+    if (filteredRestaurants.length === 0) {
+      const allRestaurants = restaurantData.restaurants
+        .map((restaurant: Restaurant) => ({
+          ...restaurant,
+          distance: calculateDistance(userLat, userLng, restaurant.coordinates.lat, restaurant.coordinates.lng)
+        }))
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 10) // Limit to 10 closest restaurants
+        .map(transformToFrontendFormat)
+
+      return NextResponse.json({ restaurants: allRestaurants })
+    }
 
     console.log('Found restaurants:', filteredRestaurants.map(r => ({
       name: r.name,
