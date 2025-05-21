@@ -556,7 +556,7 @@ export default function Home() {
               <div
                 style={{
                   width: 32,
-                  height: i >= 1 && i <= 8 ? 'auto' : 48,
+                  height: i >= 1 && i <= 4 ? 'auto' : 48,
                   borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
                   borderBottom: '1px solid var(--border-main)',
                   background: 'var(--background-main)'
@@ -568,57 +568,14 @@ export default function Home() {
                     <p style={{ color: 'var(--text-secondary)', fontSize: 14, fontWeight: 500 }}>No restaurants found nearby</p>
                   </div>
                 )}
-                {i === 4 && (
-                  <div className="flex flex-col w-full px-3">
-                    <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500 }}>Request to add a new restaurant</p>
-                  </div>
-                )}
-                {i === 5 && (
-                  <div className="flex flex-col w-full">
-                    <Input
-                      type="text"
-                      placeholder="Restaurant name"
-                      icon={Store}
-                      value={restaurantName}
-                      onChange={(e) => setRestaurantName(e.target.value)}
-                    />
-                  </div>
-                )}
-                {i === 6 && (
-                  <div className="flex flex-col w-full">
-                    <Input
-                      type="text"
-                      placeholder="Restaurant address"
-                      icon={MapPin}
-                      value={restaurantAddress}
-                      onChange={(e) => setRestaurantAddress(e.target.value)}
-                    />
-                  </div>
-                )}
-                {i === 7 && (
-                  <div className="flex flex-col w-full">
-                    <Input
-                      type="url"
-                      placeholder="Restaurant website (optional)"
-                      icon={Globe}
-                      value={restaurantWebsite}
-                      onChange={(e) => setRestaurantWebsite(e.target.value)}
-                    />
-                  </div>
-                )}
-                {i === 8 && (
+                {i === 3 && (
                   <div className="flex flex-col w-full">
                     <Button
                       variant="secondary"
-                      onClick={() => {
-                        const subject = `New Restaurant Request: ${restaurantName}`;
-                        const body = `Restaurant Name: ${restaurantName}\nRestaurant Address: ${restaurantAddress}\nRestaurant Website: ${restaurantWebsite}`;
-                        
-                        window.location.href = `mailto:alapshah.com@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                      }}
+                      onClick={() => router.push('/menu-request')}
+                      className="w-full"
                     >
-                      Send request
-                      <Send className="w-4 h-4" />
+                      Request to add a restaurant
                     </Button>
                   </div>
                 )}
@@ -626,7 +583,7 @@ export default function Home() {
               <div
                 style={{
                   width: 32,
-                  height: i >= 1 && i <= 8 ? 'auto' : 48,
+                  height: i >= 1 && i <= 4 ? 'auto' : 48,
                   borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
                   borderBottom: '1px solid var(--border-main)',
                   background: 'var(--background-main)'

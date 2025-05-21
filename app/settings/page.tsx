@@ -2,12 +2,13 @@
 import { Button } from '../design-system/components/Button'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer } from 'lucide-react'
+import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../contexts/ViewModeContext'
 import { useCurrency } from '../context/CurrencyContext'
 import { useFont } from '../context/FontContext'
+import { useRouter } from 'next/navigation'
 
 // Define theme and color mode options
 const THEME_MODES = ['auto', 'light', 'dark'] as const;
@@ -20,6 +21,7 @@ export default function SettingsPage() {
   const { viewMode, setViewMode } = useViewMode()
   const { selectedCurrency, setSelectedCurrency } = useCurrency();
   const { font, setFont } = useFont();
+  const router = useRouter();
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -43,7 +45,10 @@ export default function SettingsPage() {
   }
 
   const handlePrint = () => {
-    window.location.href = '/?print=1'
+    // For iOS devices, we'll use a URL parameter approach
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('print', '1');
+    window.location.href = currentUrl.toString();
   }
 
   // Row 1: BellOff (selected), BellRing (disabled), [gap], SunMoon (auto), Sun (light), Moon (dark)
@@ -71,8 +76,8 @@ export default function SettingsPage() {
     ],
     // Row 4: Print, Email, Share
     [
+      { icon: <BookPlus />, selected: false, onClick: () => router.push('/menu-request'), label: 'Request Menu' },
       { icon: <Printer />, selected: false, onClick: handlePrint, label: 'Print' },
-      null,
       null,
       { icon: <Mail />, selected: false, onClick: handleEmail, label: 'Mail' },
       { icon: <Share />, selected: false, onClick: handleShare, label: 'Share' }
@@ -149,9 +154,22 @@ export default function SettingsPage() {
                 </span>
               </div>
             )}
-            {/* 4th row (index 3) intentionally left empty */}
+            {i === 1 && (
+              <div className="flex flex-col w-full px-3">
+                <div className="flex items-center justify-between">
+                  <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500 }}>Print menu</p>
+                  <div className="flex items-center gap-2">
+                    <Button variant="secondary" onClick={() => router.push('/menu-request')}>
+                      <BookPlus className="w-4 h-4" />
+                    </Button>
+                    <Button variant="secondary" onClick={() => window.print()}>
+                      <Printer className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
             {i >= 4 && i < 8 && renderButtonRow(buttonGrid[i-4])}
-            {/* 6th row (index 5): font toggle buttons directly after center content */}
             {i === 5 && (
               <>
                 <Button
