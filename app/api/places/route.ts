@@ -72,7 +72,7 @@ export async function GET(request: Request) {
       }).toString(),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'Menoo Restaurant Finder'
+        'User-Agent': 'MUU Restaurant Finder'
       }
     })
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu, Building2, Globe, Map, Send } from 'lucide-react'
+import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu, Building2, Globe, Map, Send, Plus, Settings } from 'lucide-react'
 import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
 import { A2HSBanner } from './components/A2HSBanner'
@@ -239,8 +239,8 @@ export default function Home() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Menoo',
-          text: 'Accessible and personalized menus – check out Menoo!',
+          title: 'MUU',
+          text: 'Accessible and personalized menus – check out MUU!',
           url: window.location.href,
         })
       } catch (error) {
@@ -273,15 +273,24 @@ export default function Home() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
       {isMobile && <A2HSBanner />}
       {/* Notch spacer row for safe area */}
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }}>
+      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
         <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
         <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }} />
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
-      <div
+
+      {/* Status announcements for screen readers */}
+      <div aria-live="polite" className="sr-only">
+        {loading ? 'Loading restaurants...' : 
+         error ? `Error: ${error}` :
+         restaurants.length > 0 ? `Found ${restaurants.length} restaurants nearby` :
+         'No restaurants found nearby'}
+      </div>
+
+      <header
         className="flex flex-col sticky top-0 z-50"
         style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingTop: 'env(safe-area-inset-top)' }}
       >
@@ -289,17 +298,21 @@ export default function Home() {
           <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
           <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
             <div className="flex items-center gap-2">
-              <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Menoo</span>
+              <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>MUU</span>
             </div>
             <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}>
-              <Button variant="secondary" onClick={() => router.push('/settings')}>
-                <Menu className="w-4 h-4" />
+              <Button 
+                variant="secondary" 
+                onClick={() => router.push('/settings')}
+                aria-label="Open settings menu"
+              >
+                <Menu className="w-4 h-4" aria-hidden="true" />
               </Button>
             </div>
           </div>
           <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
         </div>
-        <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }}>
+        <nav className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Restaurant navigation">
           <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
           <div className="flex-1 flex min-w-0 max-w-4xl">
             <div className="flex-1 min-w-0">
@@ -313,8 +326,9 @@ export default function Home() {
                   value: restaurant.id,
                   label: `${restaurant.name} (<${restaurant.distance} km)`
                 }))}
-                leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
+                leftIcon={<Store className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
                 position="bottom"
+                aria-label="Select restaurant"
               />
             </div>
             <div className="flex-none w-12">
@@ -331,10 +345,11 @@ export default function Home() {
                   value: category,
                   label: category
                 }))}
-                leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
+                leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
                 position="bottom"
                 hideChevron={true}
                 className="justify-center"
+                aria-label="Select menu category"
               />
             </div>
             <div className="flex-none w-12">
@@ -345,37 +360,38 @@ export default function Home() {
                   { 
                     value: 'all', 
                     label: 'All',
-                    leftContent: <Filter className="w-4 h-4" strokeWidth={2} />
+                    leftContent: <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
                   },
                   { 
                     value: 'vegetarian', 
                     label: 'Vegetarian',
-                    leftContent: <Milk className="w-4 h-4" strokeWidth={2} />
+                    leftContent: <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
                   },
                   { 
                     value: 'vegan', 
                     label: 'Vegan',
-                    leftContent: <Leaf className="w-4 h-4" strokeWidth={2} />
+                    leftContent: <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
                   }
                 ]}
                 leftIcon={
-                  filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
-                  filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
-                  <Leaf className="w-4 h-4" strokeWidth={2} />
+                  filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
+                  filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
+                  <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
                 }
                 position="bottom"
                 align="right"
                 hideChevron={true}
                 className="justify-center"
+                aria-label="Filter menu items"
               />
             </div>
           </div>
           <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-        </div>
-      </div>
+        </nav>
+      </header>
       
       {error && (
-        <div className="flex justify-center">
+        <div className="flex justify-center" role="alert">
           <div className="max-w-4xl w-full">
             <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 mb-4">
               {error}
@@ -385,13 +401,13 @@ export default function Home() {
       )}
 
       {loading ? (
-        <div className="flex justify-center">
+        <div className="flex justify-center" role="status" aria-live="polite">
           <div className="max-w-4xl w-full text-center py-8">Loading restaurants...</div>
         </div>
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
           {selectedRestaurant && (
-            <div className="bg-primary-light dark:bg-dark-background-main pb-20" ref={menuRef}>
+            <div className="bg-primary-light dark:bg-dark-background-main pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`}>
               <div className="space-y-0">
                 {Object.entries(groupedMenu).map(([category, items]) => (
                   <div 
@@ -425,7 +441,7 @@ export default function Home() {
                         }}
                       />
                     </div>
-                    <div className="space-y-0">
+                    <div className="space-y-0" role="list">
                       {items.map((item) => (
                         <MenuItemRow
                           key={item.id}
@@ -450,6 +466,7 @@ export default function Home() {
                         variant="secondary"
                         onClick={() => window.open(selectedRestaurant.website, '_blank', 'noopener,noreferrer')}
                         className="w-full"
+                        aria-label={`Visit ${selectedRestaurant.name}'s website`}
                       >
                         Visit Restaurant Website
                       </Button>
@@ -549,33 +566,35 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div style={{ minHeight: '100vh', background: 'var(--background-main)' }}>
-          {/* Empty state rows */}
+        <div className="space-y-0">
           {[...Array(24)].map((_, i) => (
             <div key={i} className="flex justify-center">
               <div
                 style={{
                   width: 32,
-                  height: i >= 1 && i <= 4 ? 'auto' : 48,
+                  height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
                   borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
                   borderBottom: '1px solid var(--border-main)',
                   background: 'var(--background-main)'
                 }}
+                role="presentation"
               />
-              <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: 48, position: 'relative' }}>
+              <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i >= 1 && i <= 8 ? 48 : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)', position: 'relative' }}>
                 {i === 1 && (
                   <div className="flex flex-col w-full px-3">
-                    <p style={{ color: 'var(--text-secondary)', fontSize: 14, fontWeight: 500 }}>No restaurants found nearby</p>
+                    <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500 }}>No restaurants found in your area.</p>
                   </div>
                 )}
-                {i === 3 && (
+                {i === 2 && (
                   <div className="flex flex-col w-full">
                     <Button
                       variant="secondary"
                       onClick={() => router.push('/menu-request')}
                       className="w-full"
+                      aria-label="Request a new restaurant menu"
                     >
-                      Request to add a restaurant
+                      Request a new restaurant menu
+                      <Plus className="w-4 h-4 ml-2" aria-hidden="true" />
                     </Button>
                   </div>
                 )}
@@ -583,11 +602,12 @@ export default function Home() {
               <div
                 style={{
                   width: 32,
-                  height: i >= 1 && i <= 4 ? 'auto' : 48,
+                  height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
                   borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
                   borderBottom: '1px solid var(--border-main)',
                   background: 'var(--background-main)'
                 }}
+                role="presentation"
               />
             </div>
           ))}

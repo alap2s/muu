@@ -71,7 +71,7 @@ export function SettingsMenu({
     },
     {
       value: 'app-info',
-      label: 'Menoo',
+      label: 'MUU',
       description: 'Standardized restaurant menus that adapt to your dietary preferences and language. No need to touch sticky menus anymore. Get notified when you sit down and settle.',
       hideInList: false
     },

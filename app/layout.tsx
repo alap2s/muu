@@ -19,10 +19,38 @@ const jetbrainsMono = JetBrains_Mono({
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Menoo',
-  description: 'Accessible and personalized menus',
+  title: 'MUU',
+  description: 'Find and explore restaurant menus nearby.',
+  manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'MUU',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover',
+  },
+  themeColor: '#ffffff',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://muu.app',
+    title: 'MUU',
+    description: 'Find and explore restaurant menus nearby.',
+    siteName: 'MUU',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'MUU',
+    description: 'Find and explore restaurant menus nearby.',
   },
 }
 

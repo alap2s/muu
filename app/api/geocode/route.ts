@@ -13,7 +13,8 @@ export async function GET(request: Request) {
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`,
       {
         headers: {
-          'User-Agent': 'Menoo Restaurant Finder (menoo@example.com)'  // Replace with your contact info
+          'Accept': 'application/json',
+          'User-Agent': 'MUU Restaurant Finder (muu@example.com)'  // Replace with your contact info
         }
       }
     )

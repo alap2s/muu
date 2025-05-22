@@ -89,7 +89,7 @@ export function A2HSBanner() {
           <div className="shadow-lg" style={{ border: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
             <div className="flex items-center justify-between" style={{ height: 48, borderBottom: '1px solid var(--border-main)' }}>
               <p className="text-sm px-4" style={{ color: 'var(--text-primary)' }}>
-                {isIos ? 'Use like an app' : isAndroid ? 'Install Menoo' : 'Add to Home Screen'}
+                {isIos ? 'Use like an app' : isAndroid ? 'Install MUU' : 'Add to Home Screen'}
               </p>
               <button
                 onClick={() => setShowBanner(false)}
@@ -110,7 +110,7 @@ export function A2HSBanner() {
                     2. Tap "Add to Home Screen"
                   </>
                 ) : isAndroid ? (
-                  'Install Menoo for better experience'
+                  'Install MUU for better experience'
                 ) : (
                   'Add this app to your home screen for the best experience'
                 )}
