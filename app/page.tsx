@@ -212,7 +212,7 @@ export default function Home() {
     } else if (item.dietaryRestrictions.includes('vegetarian')) {
       icons.push(<Milk key="milk" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
-    if (item.dietaryRestrictions.includes('nuts')) {
+    if (item.dietaryRestrictions.includes('nuts') || name.includes('nuts') || description.includes('nuts')) {
       icons.push(<Nut key="nut" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
     if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
@@ -223,7 +223,8 @@ export default function Home() {
                  name.includes('ei') || description.includes('ei')) {
         icons.push(<Egg key="egg" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       } else if (name.includes('fish') || description.includes('fish') ||
-                 name.includes('fisch') || description.includes('fisch')) {
+                 name.includes('fisch') || description.includes('fisch') ||
+                 name.includes('tuna') || description.includes('tuna')) {
         icons.push(<Fish key="fish" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       } else if (name.includes('ham') || description.includes('ham') ||
                  name.includes('schinken') || description.includes('schinken')) {
@@ -297,8 +298,12 @@ export default function Home() {
         <div className="flex justify-center">
           <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
           <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
-            <div className="flex items-center gap-2">
-              <span style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>MUU</span>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center">
+                <svg width="44" height="16" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+                  <path d="M28 26H24V4H16V26H12V4H4V26H0V0H28V26ZM38 22H46V0H50V26H34V0H38V22ZM60 0V22H68V0H72V26H56V0H60Z" fill="var(--accent)" />
+                </svg>
+              </div>
             </div>
             <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}>
               <Button 

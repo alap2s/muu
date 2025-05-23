@@ -126,6 +126,16 @@ export function A2HSBanner() {
                 </button>
               </div>
             )}
+            <div className="flex items-center justify-between">
+              <span>Install MUU on your home screen for quick access!</span>
+              <button
+                onClick={handleInstall}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                aria-label="Install MUU app"
+              >
+                Install App
+              </button>
+            </div>
           </div>
         </div>
       </div>

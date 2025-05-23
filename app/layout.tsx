@@ -64,22 +64,12 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#6237FF" id="theme-color-meta" />
-        <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/atkinson-hyperlegible" />
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            function setThemeColor() {
-              var accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-              var meta = document.getElementById('theme-color-meta');
-              if (meta && accent) meta.setAttribute('content', accent);
-            }
-            setThemeColor();
-            window.addEventListener('DOMContentLoaded', setThemeColor);
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setThemeColor);
-            var observer = new MutationObserver(setThemeColor);
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-          `
-        }} />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <meta name="theme-color" content="#6237FF" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="MUU" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
