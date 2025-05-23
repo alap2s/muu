@@ -39,7 +39,7 @@ export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', padding: '24px 16px' }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <h4 style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: 14, margin: 0 }}>
+                <h4 style={{ color: 'var(--text-primary)', fontWeight: 500, fontSize: 14, margin: 0 }}>
                   <span className={expanded ? '' : 'line-clamp-1'}>{item.name}</span>
                 </h4>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>{getDietaryIcons(item)}</div>
