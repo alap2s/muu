@@ -27,7 +27,6 @@ export function A2HSBanner() {
   const [showBanner, setShowBanner] = useState(false)
   const [isIos, setIsIos] = useState(false)
   const [isAndroid, setIsAndroid] = useState(false)
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
 
   useEffect(() => {
     const ios = isIosDevice()
@@ -40,18 +39,8 @@ export function A2HSBanner() {
       return
     }
 
-    // Handle Android installation prompt
-    const handleBeforeInstallPrompt = (e: any) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setShowBanner(true)
-      sessionStorage.setItem('a2hsBannerShown', '1')
-    }
-
     let timer: NodeJS.Timeout | null = null
-    if (android) {
-      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    } else if (ios) {
+    if (ios) {
       timer = setTimeout(() => {
         if (!isStandalone()) {
           setShowBanner(true)
@@ -61,23 +50,9 @@ export function A2HSBanner() {
     }
 
     return () => {
-      if (android) {
-        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-      }
       if (timer) clearTimeout(timer)
     }
   }, [])
-
-  const handleInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt()
-      const { outcome } = await deferredPrompt.userChoice
-      if (outcome === 'accepted') {
-        setShowBanner(false)
-      }
-      setDeferredPrompt(null)
-    }
-  }
 
   if (!showBanner) return null
 
@@ -89,7 +64,7 @@ export function A2HSBanner() {
           <div className="shadow-lg" style={{ border: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
             <div className="flex items-center justify-between" style={{ height: 48, borderBottom: '1px solid var(--border-main)' }}>
               <p className="text-sm px-4" style={{ color: 'var(--text-primary)' }}>
-                {isIos ? 'Use like an app' : isAndroid ? 'Install MUU' : 'Add to Home Screen'}
+                {isIos ? 'Use like an app' : 'Add to Home Screen'}
               </p>
               <button
                 onClick={() => setShowBanner(false)}
@@ -109,32 +84,10 @@ export function A2HSBanner() {
                     <br />
                     2. Tap "Add to Home Screen"
                   </>
-                ) : isAndroid ? (
-                  'Install MUU for better experience'
                 ) : (
                   'Add this app to your home screen for the best experience'
                 )}
               </p>
-            </div>
-            {isAndroid && (
-              <div className="flex items-center justify-end p-4 pt-3" style={{ borderTop: '1px solid var(--border-main)' }}>
-                <button
-                  onClick={handleInstall}
-                  style={{ background: 'var(--accent)', color: 'var(--background-main)', borderRadius: 8, fontWeight: 500, fontSize: 14, padding: '8px 16px' }}
-                >
-                  Install
-                </button>
-              </div>
-            )}
-            <div className="flex items-center justify-between">
-              <span>Install MUU on your home screen for quick access!</span>
-              <button
-                onClick={handleInstall}
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                aria-label="Install MUU app"
-              >
-                Install App
-              </button>
             </div>
           </div>
         </div>
