@@ -83,15 +83,15 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Menoo" />
+        <meta name="apple-mobile-web-app-title" content="MUU" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
-        <meta property="og:title" content="Menoo" />
+        <meta property="og:title" content="MUU" />
         <meta property="og:description" content="Accessible and personalized menus" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="/icon-512.png" />
-        <meta property="og:url" content="https://menoo.app" />
+        <meta property="og:url" content="https://muu.app" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Menoo" />
+        <meta name="twitter:title" content="MUU" />
         <meta name="twitter:description" content="Accessible and personalized menus" />
         <meta name="twitter:image" content="/icon-512.png" />
       </head>
