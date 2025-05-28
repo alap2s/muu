@@ -11,8 +11,8 @@ export const colors = {
   // Light mode colors
   light: {
     background: {
-      main: '#FEFBFF',
-      secondary: '#FEFBFF',
+      main: '#F8F6F4',
+      secondary: '#F8F6F4',
       tertiary: '#F0EDEA'
     },
     text: {
