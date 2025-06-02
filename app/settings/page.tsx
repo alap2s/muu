@@ -169,8 +169,8 @@ export default function SettingsPage() {
               {i === 1 && (
                 <div className="flex flex-col w-full px-3" style={{ paddingTop: 12, paddingBottom: 12 }}>
                   <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: 14, marginTop: 4 }}>
-                    Accessible and standardized restaurant menus that adapt to your dietary preferences and language. No need to touch sticky menus anymore. Get notified when you sit down and settle.
+                  <span style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
+                    A smart, accessible menu app that automatically shows you the restaurant's menu where you're seated. Designed with accessibility in mind, it offers easy-to-read fonts, dark and light modes, currency support, and simple layouts. Restaurants can print personalized, standardized menus, with support for multiple languages coming soon.
                   </span>
                 </div>
               )}
