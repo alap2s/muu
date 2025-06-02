@@ -69,6 +69,9 @@ export default function Home() {
   const [restaurantName, setRestaurantName] = useState('')
   const [restaurantAddress, setRestaurantAddress] = useState('')
   const [restaurantWebsite, setRestaurantWebsite] = useState('')
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [showDescription, setShowDescription] = useState(true)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -104,6 +107,32 @@ export default function Home() {
       fetchRestaurants()
     }
   }, [location])
+
+  useEffect(() => {
+    if (restaurants.length > 0 && !selectedRestaurant) {
+      setSelectedRestaurant(restaurants[0])
+    }
+  }, [restaurants])
+
+  useEffect(() => {
+    if (selectedRestaurant && Array.isArray(selectedRestaurant.menu) && selectedRestaurant.menu.length > 0) {
+      const categories = Array.from(new Set(selectedRestaurant.menu.map(item => item.category)))
+      if (categories.length > 0) {
+        setSelectedGroup(categories[0])
+      }
+    }
+  }, [selectedRestaurant])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY
+      const maxScroll = 100 // Adjust this value to control how quickly the transition happens
+      const progress = Math.min(scrollPosition / maxScroll, 1)
+      setScrollProgress(progress)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     if (restaurants.length > 0 && !selectedRestaurant) {
@@ -273,6 +302,12 @@ export default function Home() {
     }
   }, [])
 
+  // Calculate dimensions based on scroll progress
+  const logoHeight = 72 - (scrollProgress * 48) // 72px to 24px
+  const logoWidth = (logoHeight / 72) * 210 // Maintain aspect ratio
+  const verticalPadding = 80 - (scrollProgress * 68) // 80px to 12px
+  const descriptionHeight = scrollProgress === 0 ? 'auto' : `${Math.max(0, 40 - (scrollProgress * 40))}px`
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
       {isMobile && <A2HSBanner />}
@@ -293,19 +328,78 @@ export default function Home() {
 
       <header
         className="flex flex-col sticky top-0 z-50"
-        style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingTop: 'env(safe-area-inset-top)' }}
+        style={{ 
+          borderBottom: '1px solid var(--border-main)', 
+          background: 'var(--background-main)', 
+          paddingTop: 'env(safe-area-inset-top)'
+        }}
       >
         <div className="flex justify-center">
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center">
-                <svg width="44" height="16" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                  <path d="M28 26H24V4H16V26H12V4H4V26H0V0H28V26ZM38 22H46V0H50V26H34V0H38V22ZM60 0V22H68V0H72V26H56V0H60Z" fill="var(--accent)" />
-                </svg>
+          <div style={{ 
+            width: 32, 
+            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', 
+            background: 'var(--background-main)'
+          }} />
+          <div style={{ 
+            flex: 1, 
+            maxWidth: 1024, 
+            display: 'flex', 
+            alignItems: 'flex-start', 
+            justifyContent: 'space-between', 
+            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', 
+            background: 'var(--background-main)'
+          }}>
+            <div style={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'flex-start', 
+              paddingTop: verticalPadding,
+              paddingBottom: verticalPadding,
+              paddingLeft: 16,
+              paddingRight: 16,
+              transition: 'padding 0.3s ease-out'
+            }}>
+              <svg 
+                width={logoWidth}
+                height={logoHeight}
+                viewBox="0 0 210 73" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg" 
+                style={{ 
+                  display: 'block',
+                  transition: 'width 0.3s ease-out, height 0.3s ease-out'
+                }}
+              >
+                <path d="M89.25 0.5V72.5H65.2933V21.4229H57.9343V72.5H31.3157V21.4229H23.9567V72.5H0V0.5H89.25Z" fill="var(--accent)"/>
+                <path d="M150.15 72.5V0.5H126.03V51.5771H118.62V0.5H94.5V72.5H150.15Z" fill="var(--accent)"/>
+                <path d="M210 72.5V0.5H186.335V51.5771H179.065V0.5H155.4V72.5H210Z" fill="var(--accent)"/>
+              </svg>
+              <div style={{ 
+                height: descriptionHeight,
+                overflow: 'hidden',
+                transition: 'height 0.3s ease-out, opacity 0.3s ease-out',
+                opacity: 1 - (scrollProgress * 10)
+              }}>
+                <p style={{ 
+                  color: 'var(--text-secondary)', 
+                  fontSize: 12, 
+                  marginTop: 2, 
+                  marginBottom: 0,
+                  paddingTop: 8,
+                  paddingBottom: 8
+                }}>
+                  Standardized, accessible restaurant menus that remember your preferences.
+                </p>
               </div>
             </div>
-            <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}>
+            <div style={{ 
+              width: 48, 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', 
+              background: 'var(--background-main)'
+            }}>
               <Button 
                 variant="secondary" 
                 onClick={() => router.push('/settings')}
@@ -315,10 +409,13 @@ export default function Home() {
               </Button>
             </div>
           </div>
-          <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
+          <div style={{ 
+            width: 32, 
+            background: 'var(--background-main)'
+          }} />
         </div>
         <nav className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Restaurant navigation">
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          <div style={{ width: 32, height: logoHeight + (verticalPadding * 2), borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
           <div className="flex-1 flex min-w-0 max-w-4xl">
             <div className="flex-1 min-w-0">
               <Dropdown
@@ -391,7 +488,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
+          <div style={{ width: 32, height: logoHeight + (verticalPadding * 2), background: 'var(--background-main)' }} />
         </nav>
       </header>
       
@@ -463,20 +560,36 @@ export default function Home() {
               </div>
 
               {selectedRestaurant.website && (
-                <div>
+                <div
+                  style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer' }}
+                >
                   <div className="flex justify-center">
-                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] border-r border-primary-border/10 dark:border-dark-primary-border/20 bg-primary-light dark:bg-dark-background-main" />
-                    <div className="flex-1 flex items-center justify-center border-r border-primary-border/10 dark:border-dark-primary-border/20 max-w-4xl">
-                      <Button
-                        variant="secondary"
-                        onClick={() => window.open(selectedRestaurant.website, '_blank', 'noopener,noreferrer')}
-                        className="w-full"
-                        aria-label={`Visit ${selectedRestaurant.name}'s website`}
-                      >
-                        Visit Restaurant Website
-                      </Button>
+                    <div
+                      style={{
+                        width: 32,
+                        borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+                        background: 'var(--background-main)'
+                      }}
+                    />
+                    <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Button
+                          variant="secondary"
+                          onClick={() => window.open(selectedRestaurant.website, '_blank', 'noopener,noreferrer')}
+                          className="w-full"
+                          aria-label={`Visit ${selectedRestaurant.name}'s website`}
+                        >
+                          Visit Restaurant Website
+                        </Button>
+                      </div>
                     </div>
-                    <div className="w-8 md:w-[calc((100vw-1024px)/2)] bg-primary-light dark:bg-dark-background-main" />
+                    <div
+                      style={{
+                        width: 32,
+                        borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+                        background: 'var(--background-main)'
+                      }}
+                    />
                   </div>
                 </div>
               )}
