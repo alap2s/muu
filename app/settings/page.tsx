@@ -9,6 +9,7 @@ import { useViewMode } from '../contexts/ViewModeContext'
 import { useCurrency } from '../context/CurrencyContext'
 import { useFont } from '../context/FontContext'
 import { useRouter } from 'next/navigation'
+import { useLoading } from '../contexts/LoadingContext'
 
 // Define theme and color mode options
 const THEME_MODES = ['auto', 'light', 'dark'] as const;
@@ -22,6 +23,11 @@ export default function SettingsPage() {
   const { selectedCurrency, setSelectedCurrency } = useCurrency();
   const { font, setFont } = useFont();
   const router = useRouter();
+  const { setIsLoading } = useLoading()
+
+  useEffect(() => {
+    setIsLoading(false)
+  }, [setIsLoading])
 
   const handleShare = async () => {
     if (navigator.share) {

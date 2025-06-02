@@ -17,6 +17,7 @@ import { usePrice } from './hooks/usePrice'
 import { MenuItemRow } from './components/MenuItemRow'
 import { Currency } from './context/CurrencyContext'
 import { Input } from './design-system/components/Input'
+import { useLoading } from './contexts/LoadingContext'
 
 interface MenuItem {
   id: string
@@ -72,6 +73,9 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [showDescription, setShowDescription] = useState(true)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const descriptionRef = useRef<HTMLDivElement>(null)
+  const [initialDescriptionHeight, setInitialDescriptionHeight] = useState(0)
+  const { setIsLoading } = useLoading()
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -182,6 +186,12 @@ export default function Home() {
       return () => menuElement.removeEventListener('scroll', handleScroll)
     }
   }, [selectedGroup])
+
+  useEffect(() => {
+    if (descriptionRef.current) {
+      setInitialDescriptionHeight(descriptionRef.current.scrollHeight)
+    }
+  }, [])
 
   const fetchRestaurants = async () => {
     if (!location) return
@@ -305,8 +315,13 @@ export default function Home() {
   // Calculate dimensions based on scroll progress
   const logoHeight = 72 - (scrollProgress * 48) // 72px to 24px
   const logoWidth = (logoHeight / 72) * 210 // Maintain aspect ratio
-  const verticalPadding = 80 - (scrollProgress * 68) // 80px to 12px
-  const descriptionHeight = scrollProgress === 0 ? 'auto' : `${Math.max(0, 40 - (scrollProgress * 40))}px`
+  const verticalPadding = 48 - (scrollProgress * 36) // 48px to 12px
+  const descriptionHeight = `${initialDescriptionHeight - (scrollProgress * initialDescriptionHeight)}px`
+
+  const handleSettingsClick = () => {
+    setIsLoading(true)
+    router.replace('/settings')
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
@@ -357,7 +372,7 @@ export default function Home() {
               paddingBottom: verticalPadding,
               paddingLeft: 16,
               paddingRight: 16,
-              transition: 'padding 0.3s ease-out'
+              transition: 'padding 0.3s linear'
             }}>
               <svg 
                 width={logoWidth}
@@ -367,7 +382,7 @@ export default function Home() {
                 xmlns="http://www.w3.org/2000/svg" 
                 style={{ 
                   display: 'block',
-                  transition: 'width 0.3s ease-out, height 0.3s ease-out'
+                  transition: 'width 0.3s linear, height 0.3s linear'
                 }}
               >
                 <path d="M89.25 0.5V72.5H65.2933V21.4229H57.9343V72.5H31.3157V21.4229H23.9567V72.5H0V0.5H89.25Z" fill="var(--accent)"/>
@@ -377,9 +392,9 @@ export default function Home() {
               <div style={{ 
                 height: descriptionHeight,
                 overflow: 'hidden',
-                transition: 'height 0.3s ease-out, opacity 0.3s ease-out',
+                transition: 'height 0.3s linear, opacity 0.3s linear',
                 opacity: 1 - (scrollProgress * 10)
-              }}>
+              }} ref={descriptionRef}>
                 <p style={{ 
                   color: 'var(--text-secondary)', 
                   fontSize: 12, 
@@ -402,7 +417,7 @@ export default function Home() {
             }}>
               <Button 
                 variant="secondary" 
-                onClick={() => router.push('/settings')}
+                onClick={handleSettingsClick}
                 aria-label="Open settings menu"
               >
                 <Menu className="w-4 h-4" aria-hidden="true" />

@@ -8,6 +8,8 @@ import { ViewModeProvider } from './contexts/ViewModeContext'
 import { CurrencyProvider } from './context/CurrencyContext'
 import { FontInitializer } from './components/FontInitializer'
 import { FontProvider } from './context/FontContext'
+import { LoadingProvider } from './contexts/LoadingContext'
+import { ClientLayout } from './components/ClientLayout'
 
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ['latin'],
@@ -91,10 +93,14 @@ export default function RootLayout({
           <CurrencyProvider>
             <ThemeProvider>
               <ViewModeProvider>
-                {children}
+                <LoadingProvider>
+                  <ClientLayout>
+                    <Toaster position="bottom-center" />
+                    {children}
+                  </ClientLayout>
+                </LoadingProvider>
               </ViewModeProvider>
             </ThemeProvider>
-            <Toaster position="bottom-center" />
           </CurrencyProvider>
         </FontProvider>
       </body>

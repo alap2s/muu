@@ -130,4 +130,13 @@ body {
 
 html.font-atkinson {
   --font-main: 'Atkinson Hyperlegible', Arial, sans-serif;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 } 
