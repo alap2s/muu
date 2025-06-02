@@ -69,6 +69,10 @@ export default function Home() {
   const [restaurantName, setRestaurantName] = useState('')
   const [restaurantAddress, setRestaurantAddress] = useState('')
   const [restaurantWebsite, setRestaurantWebsite] = useState('')
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [showDescription, setShowDescription] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [ticking, setTicking] = useState(false);
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems)
@@ -122,37 +126,45 @@ export default function Home() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!menuRef.current) return
-
-      const menuTop = menuRef.current.getBoundingClientRect().top
-      const menuItems = Object.entries(categoryRefs.current)
-      
-      let closestCategory = ''
-      let smallestDistance = Infinity
-
-      for (const [category, element] of menuItems) {
-        if (!element) continue
-        
-        const itemTop = element.getBoundingClientRect().top
-        const distance = Math.abs(itemTop - menuTop - 100) // 100px offset from top
-        
-        if (distance < smallestDistance) {
-          smallestDistance = distance
-          closestCategory = category
-        }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPosition = window.scrollY;
+          const shouldBeScrolled = scrollPosition > 0;
+          
+          if (shouldBeScrolled !== isScrolled) {
+            setIsScrolled(shouldBeScrolled);
+            setShowDescription(!shouldBeScrolled);
+            
+            if (shouldBeScrolled) {
+              setIsTransitioning(true);
+              // Lock scroll position
+              const scrollY = window.scrollY;
+              document.body.style.position = 'fixed';
+              document.body.style.top = `-${scrollY}px`;
+              
+              // After transition completes
+              setTimeout(() => {
+                setIsTransitioning(false);
+                // Restore scroll position
+                document.body.style.position = '';
+                document.body.style.top = '';
+                window.scrollTo(0, scrollY);
+              }, 300); // Match this with the transition duration
+            }
+          }
+          
+          setTicking(false);
+        });
+        setTicking(true);
       }
+    };
 
-      if (closestCategory && closestCategory !== selectedGroup) {
-        setSelectedGroup(closestCategory)
-      }
-    }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isScrolled, ticking]);
 
-    const menuElement = menuRef.current
-    if (menuElement) {
-      menuElement.addEventListener('scroll', handleScroll)
-      return () => menuElement.removeEventListener('scroll', handleScroll)
-    }
-  }, [selectedGroup])
+  // Calculate header height based on scroll state
+  const headerHeight = isScrolled ? 48 : 160; // 48px when scrolled, 160px when not scrolled
 
   const fetchRestaurants = async () => {
     if (!location) return
@@ -291,108 +303,38 @@ export default function Home() {
          'No restaurants found nearby'}
       </div>
 
-      <header
-        className="flex flex-col sticky top-0 z-50"
-        style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingTop: 'env(safe-area-inset-top)' }}
+      <header 
+        className="flex justify-center" 
+        style={{ 
+          position: 'sticky', 
+          top: 0, 
+          zIndex: 10,
+          height: headerHeight,
+          transform: isTransitioning ? 'translateY(-100%)' : 'translateY(0)',
+          transition: 'height 0.3s ease-out, transform 0.3s ease-out'
+        }}
       >
-        <div className="flex justify-center">
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', paddingLeft: 16, paddingRight: 0 }}>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center">
-                <svg width="44" height="16" viewBox="0 0 72 26" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                  <path d="M28 26H24V4H16V26H12V4H4V26H0V0H28V26ZM38 22H46V0H50V26H34V0H38V22ZM60 0V22H68V0H72V26H56V0H60Z" fill="var(--accent)" />
-                </svg>
-              </div>
-            </div>
-            <div style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}>
-              <Button 
-                variant="secondary" 
-                onClick={() => router.push('/settings')}
-                aria-label="Open settings menu"
-              >
-                <Menu className="w-4 h-4" aria-hidden="true" />
-              </Button>
+        <div style={{ width: 32, height: '100%', borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+        <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingRight: 0 }}>
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" onClick={() => router.push('/settings')} aria-label="Open settings">
+              <Menu className="w-4 h-4" aria-hidden="true" />
+            </Button>
+            <div className="flex flex-col" style={{ height: '100%', paddingLeft: 16, paddingRight: 16, paddingTop: isScrolled ? 12 : 80, paddingBottom: isScrolled ? 12 : 80, transition: 'padding 0.3s ease-out' }}>
+              <svg width={isScrolled ? 70 : 210} height={isScrolled ? 24 : 72} viewBox="0 0 210 73" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transition: 'width 0.3s ease-out, height 0.3s ease-out' }}>
+                <path d="M0 0H210V73H0V0Z" fill="var(--accent)" />
+                <path d="M42 18H168V55H42V18Z" fill="var(--background-main)" />
+                <path d="M52 28H158V45H52V28Z" fill="var(--accent)" />
+              </svg>
+              {showDescription && (
+                <span style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0, opacity: 1, transition: 'opacity 0.3s ease-out' }}>
+                  Standardized, accessible restaurant menus that remember your preferences.
+                </span>
+              )}
             </div>
           </div>
-          <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
         </div>
-        <nav className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Restaurant navigation">
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div className="flex-1 flex min-w-0 max-w-4xl">
-            <div className="flex-1 min-w-0">
-              <Dropdown
-                value={selectedRestaurant?.id || ''}
-                onChange={(value) => {
-                  const restaurant = restaurants.find(r => r.id === value)
-                  if (restaurant) setSelectedRestaurant(restaurant)
-                }}
-                options={restaurants.map(restaurant => ({
-                  value: restaurant.id,
-                  label: `${restaurant.name} (<${restaurant.distance} km)`
-                }))}
-                leftIcon={<Store className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                position="bottom"
-                aria-label="Select restaurant"
-              />
-            </div>
-            <div className="flex-none w-12">
-              <Dropdown
-                value={selectedGroup}
-                onChange={(value) => {
-                  setSelectedGroup(value)
-                  const element = categoryRefs.current[value]
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }
-                }}
-                options={categories.map(category => ({
-                  value: category,
-                  label: category
-                }))}
-                leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                position="bottom"
-                hideChevron={true}
-                className="justify-center"
-                aria-label="Select menu category"
-              />
-            </div>
-            <div className="flex-none w-12">
-              <Dropdown
-                value={filter}
-                onChange={setFilter}
-                options={[
-                  { 
-                    value: 'all', 
-                    label: 'All',
-                    leftContent: <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                  },
-                  { 
-                    value: 'vegetarian', 
-                    label: 'Vegetarian',
-                    leftContent: <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                  },
-                  { 
-                    value: 'vegan', 
-                    label: 'Vegan',
-                    leftContent: <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                  }
-                ]}
-                leftIcon={
-                  filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
-                  filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
-                  <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                }
-                position="bottom"
-                align="right"
-                hideChevron={true}
-                className="justify-center"
-                aria-label="Filter menu items"
-              />
-            </div>
-          </div>
-          <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-        </nav>
+        <div style={{ width: 32, height: '100%', borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
       </header>
       
       {error && (
