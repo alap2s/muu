@@ -145,9 +145,9 @@ export default function SettingsPage() {
       </div>
 
       {/* Header */}
-      <header className="flex justify-center" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingRight: 0 }}>
+      <header className="flex justify-center" style={{ position: 'sticky', top: 0, zIndex: 10, borderBottom: '1px solid var(--border-main)' }}>
+        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, background: 'var(--background-main)', paddingRight: 0 }}>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -155,23 +155,22 @@ export default function SettingsPage() {
             <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Settings</h1>
           </div>
         </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
       </header>
 
       {/* Content */}
       <div className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Settings options">
         {[...Array(rowCount)].map((_, i) => (
-          <div key={i} className="flex justify-center">
+          <div key={i} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
             <div
               style={{
                 width: 32,
                 height: i === 1 ? 'auto' : 48,
                 borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                borderBottom: '1px solid var(--border-main)',
                 background: 'var(--background-main)'
               }}
             />
-            <div style={{ flex: 1, maxWidth: 800, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i === 1 ? 'auto' : 48, position: 'relative' }}>
+            <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i === 1 ? 'auto' : 48, position: 'relative' }}>
               {i === 1 && (
                 <div className="flex flex-col w-full px-3" style={{ paddingTop: 12, paddingBottom: 12 }}>
                   <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
@@ -213,7 +212,6 @@ export default function SettingsPage() {
                 width: 32,
                 height: i === 1 ? 'auto' : 48,
                 borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                borderBottom: '1px solid var(--border-main)',
                 background: 'var(--background-main)'
               }}
             />
