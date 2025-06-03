@@ -140,14 +140,14 @@ export default function SettingsPage() {
       {/* Notch spacer row for safe area */}
       <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
         <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
-        <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }} />
+        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }} />
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
 
       {/* Header */}
       <header className="flex justify-center" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
         <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-        <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingRight: 0 }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingRight: 0 }}>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -171,7 +171,7 @@ export default function SettingsPage() {
                 background: 'var(--background-main)'
               }}
             />
-            <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i === 1 ? 'auto' : 48, position: 'relative' }}>
+            <div style={{ flex: 1, maxWidth: 800, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i === 1 ? 'auto' : 48, position: 'relative' }}>
               {i === 1 && (
                 <div className="flex flex-col w-full px-3" style={{ paddingTop: 12, paddingBottom: 12 }}>
                   <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
