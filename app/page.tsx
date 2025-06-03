@@ -357,7 +357,7 @@ export default function Home() {
           }} />
           <div style={{ 
             flex: 1, 
-            maxWidth: 1024, 
+            maxWidth: 800, 
             display: 'flex', 
             alignItems: 'flex-start', 
             justifyContent: 'space-between', 
@@ -430,8 +430,8 @@ export default function Home() {
           }} />
         </div>
         <nav className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Restaurant navigation">
-          <div style={{ width: 32, height: logoHeight + (verticalPadding * 2), borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div className="flex-1 flex min-w-0 max-w-4xl">
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          <div className="flex-1 flex min-w-0 max-w-[800px]">
             <div className="flex-1 min-w-0">
               <Dropdown
                 value={selectedRestaurant?.id || ''}
@@ -503,7 +503,7 @@ export default function Home() {
               />
             </div>
           </div>
-          <div style={{ width: 32, height: logoHeight + (verticalPadding * 2), background: 'var(--background-main)' }} />
+          <div style={{ width: 32, background: 'var(--background-main)' }} />
         </nav>
       </header>
       
@@ -535,25 +535,23 @@ export default function Home() {
                       }
                     }}
                   >
-                    <div className="flex justify-center">
+                    <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
                       <div
                         style={{
                           width: 32,
                           height: 48,
                           borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                          borderBottom: '1px solid var(--border-main)',
                           background: 'var(--background-main)'
                         }}
                       />
-                      <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
-                        <h3 style={{ color: 'var(--text-primary)', borderBottom: '1px solid var(--border-main)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
+                      <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
+                        <h3 style={{ color: 'var(--text-primary)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
                       </div>
                       <div
                         style={{
                           width: 32,
                           height: 48,
                           borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                          borderBottom: '1px solid var(--border-main)',
                           background: 'var(--background-main)'
                         }}
                       />
@@ -586,7 +584,7 @@ export default function Home() {
                         background: 'var(--background-main)'
                       }}
                     />
-                    <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
+                    <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Button
                           variant="secondary"

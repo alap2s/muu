@@ -35,7 +35,7 @@ export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode
             background: 'var(--background-main)'
           }}
         />
-        <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }}>
+        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', padding: '24px 16px' }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
