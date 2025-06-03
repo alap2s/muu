@@ -393,7 +393,7 @@ export default function Home() {
                 height: descriptionHeight,
                 overflow: 'hidden',
                 transition: 'height 0.3s linear, opacity 0.3s linear',
-                opacity: 1 - (scrollProgress * 10)
+                opacity: 1 - scrollProgress
               }} ref={descriptionRef}>
                 <p style={{ 
                   color: 'var(--text-secondary)', 
