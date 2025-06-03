@@ -4721,6 +4721,127 @@
           }
         ]
       }
+    },
+    {
+      "id": "zur-letzten-instanz-3b1f",
+      "name": "Zur letzten Instanz",
+      "address": "Waisenstraße 14-16, 10179 Berlin",
+      "coordinates": {
+        "lat": 52.51741774388,
+        "lng": 13.413144549769
+      },
+      "website": "https://zurletzteninstanz.com/",
+      "menuSource": "database",
+      "menu": {
+        "categories": [
+          {
+            "name": "Main Selection",
+            "items": [
+              {
+                "id": "e0b9b8f0-7c8e-4f8a-b1f0-9d8f7c7e6d5c",
+                "name": "Pickled vegetables",
+                "price": 6,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "a1c2d3e4-f5g6-7h8i-9j0k-l1m2n3o4p5q6",
+                "name": "Chicken liver paté",
+                "price": 9,
+                "description": "pickled gherkin",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "b2c3d4e5-f6g7-8h9i-0j1k-l2m3n4o5p6q7",
+                "name": "Onion tarte tatin",
+                "price": 15,
+                "description": "Blomeyers cheese",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "c3d4e5f6-g7h8-9i0j-1k2l-m3n4o5p6q7r8",
+                "name": "Mountain cheese dumplings",
+                "price": 15,
+                "description": "velouté | crumbs",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "d4e5f6g7-h8i9-0j1k-2l3m-n4o5p6q7r8s9",
+                "name": "Ceviche from char and pike perch",
+                "price": 21,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "e5f6g7h8-i9j0-1k2l-3m4n-o5p6q7r8s9t0",
+                "name": "Veal escalope",
+                "price": 36,
+                "description": "quail egg | green beans | sardine brioche",
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Our classics",
+            "items": [
+              {
+                "id": "f6g7h8i9-j0k1-2l3m-4n5o-p6q7r8s9t0u1",
+                "name": "Meatballs in savoury sauce",
+                "price": 24,
+                "description": "capers | potato- parsley mash",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "g7h8i9j0-k1l2-3m4n-5o6p-q7r8s9t0u1v2",
+                "name": "Stuffed cabbage roll",
+                "price": 25,
+                "description": "crispy pork belly | white salsify",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "h8i9j0k1-l2m3-4n5o-6p7q-r8s9t0u1v2w3",
+                "name": "Eggs in mustard sauce",
+                "price": 12,
+                "description": "mashed potato",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "i9j0k1l2-m3n4-5o6p-7q8r-s9t0u1v2w3x4",
+                "name": "Grilled knuckle of pork",
+                "price": 29,
+                "description": "malt syrup | red cabbage",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "j0k1l2m3-n4o5-6p7q-8r9s-t0u1v2w3x4y5",
+                "name": "Veal liver",
+                "price": 31,
+                "description": "apple | spring leek",
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dessert",
+            "items": [
+              {
+                "id": "k1l2m3n4-o5p6-7q8r-9s0t-u1v2w3x4y5z6",
+                "name": "Warm apple pie, vanilla ice cream",
+                "price": 12,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "l2m3n4o5-p6q7-8r9s-0t1u-v2w3x4y5z6a7",
+                "name": "Raspberry sorbet with raspberry spirit",
+                "price": 9,
+                "description": "",
+                "dietaryRestrictions": []
+              }
+            ]
+          }
+        ]
+      }
     }
   ]
 } 
