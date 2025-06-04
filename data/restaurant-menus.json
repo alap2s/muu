@@ -4842,6 +4842,1556 @@
           }
         ]
       }
+    },
+    {
+      "id": "sticks-n-sushi-kantstrasse-berlin-c4a7",
+      "name": "Sticks'n'Sushi",
+      "address": "Kantstraße 152, 10623 Berlin",
+      "coordinates": {
+        "lat": 52.5077,
+        "lng": 13.3001
+      },
+      "website": "https://www.sticksnsushi.com/de/en/",
+      "menuSource": "database",
+      "menu": {
+        "categories": [
+          {
+            "name": "Menus",
+            "items": [
+              {
+                "id": "menu-item-salmon-friends-0d1e",
+                "name": "Salmon & Friends",
+                "description": "Rice Paper Shake with soy-cured salmon, pickled red onion, avocado, cucumber & coriander served with goma. Nigiri with salmon. Ebi Panko with tempura shrimp & spicy sauce, topped with avocado. Spicy Tuna with tuna, cucumber, spicy sauce, masago, kataifi & cress. Pink Alaska with salmon, avocado, cream cheese & lumpfish roe.",
+                "price": 27.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-maki-maki-a3b2",
+                "name": "Maki Maki",
+                "description": "Shake Aïoli maki with snow peas, avocado, miso aïoli & cucumber, topped with seared salmon & trout roe. Ebi Panko maki with tempura shrimp & spicy sauce, topped with avocado. Hell's Kitchen maki with tempura shrimp, avocado & spicy sauce, topped with tuna & barbecue. Ceviche maki with pickled red onion, avocado & cucumber, topped with scallops, lime & coriander. 8 pcs of each roll.",
+                "price": 64.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-full-house-b8c1",
+                "name": "Full House",
+                "description": "All 6 House Rolls. Wagyu maki with wagyu tartare, kizami wasabi & crispy kataifi. Aka Ebi maki with argentinian red shrimp, spicy gochujang, avocado, snow peas, miso aioli & trout roe. Black Cod maki with miso-marinated black cod, artichoke chips & pickled red onion. Red'N'Green maki with roasted pepper, avocado, cucumber, yuzu-kosho, shiso & tsume. Soft Shell maki with softshell crab, masago & spicy sauce. Lobster Abokado lobster & yuzu, avocado, cucumber, soya sesame, chives & coriander. 4 of each roll.",
+                "price": 85.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kyoto-non-stop-f2d9",
+                "name": "Kyoto Non-Stop",
+                "description": "Nigiri with Tofu and ginger, Grilled red pepper, Seared aubergine, Avocado and Portobello mushroom.",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-four-meal-drive-e7a4",
+                "name": "Four Meal Drive",
+                "description": "Nanban maki with chicken, avocado, kataifi, coriander, soya sesame & spicy yuzu-kosho. Pink Alaska maki with salmon, avocado, cream cheese & lumpfish roe. Spicy Tuna maki with tuna, cucumber, spicy sauce, masago, kataifi & cress. Ebi Panko maki with tempura shrimp & spicy sauce, topped with avocado. Hell's Kitchen maki with tempura shrimp, avocado & spicy sauce, topped with tuna & barbecue. Shake Aïoli maki with snow peas, avocado, miso aïoli & cucumber, topped with seared salmon & trout roe. Chirashi maki with seared fish, spicy sauce, snow peas, ginger, chilli & pickled red onion. Nigiri with salmon, yellowfin tuna, seared salmon and shrimp.",
+                "price": 135.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-robust-c9b3",
+                "name": "Robust",
+                "description": "Beef Tataki with beef fillet with miso aïoli, spring onion, artichoke chips, shiitake & truffle ponzu. Bimi Tempura with tempura tenderstem broccoli, daikon oroshi in shiitake-tentsuyu sauce. Okazu with Kappa Chilli, Poteto Sarada & Kimchi. Aigamo Tsukune stick with grilled duck meatball with egg yolk in supreme soy. Shōyu Tebasaki stick with chicken wings marinated in garlic, ginger & tamari with soya sesame. Tsukune Chilli stick with chicken meatballs, chilli dip, teriyaki & spring onions. Gyu Habu stick with beef filet with miso herb butter.",
+                "price": 36.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-perfect-day-d6e5",
+                "name": "Perfect Day",
+                "description": "Edamame beans with sea salt & lemon. Tuna Tartare Bites with tuna, avocado, sesame, miso, yuzu and spring onion on crispy flat bread. Kinoko Korokke Mushroom croquette, Danish Rød Krystal cheese, miso aïoli & truffle dust. Rice Paper Shake with soy-cured salmon, pickled red onion, avocado, cucumber & coriander served with goma. Nigiri with seared salmon. Nigiri with avocado, yuzu-kosho & soya sesame. Crispy Ebi maki with tempura shrimp, avocado, spicy sauce & tsume soya. Spicy Tuna maki with tuna, cucumber, spicy sauce, masago, kataifi & cress. Tsukune sticks with chicken meatballs & teriyaki. Buta Yaki sticks with free-range pork with yuzu-miso. Shake Teriyaki sticks with salmon, teriyaki & spring onion.",
+                "price": 96.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-as-good-as-it-gets-a1f7",
+                "name": "As Good As It Gets",
+                "description": "Edamame. Soya beans, grilled with supreme soy & sesame. Hotate Kataifi. Scallops, miso aïoli, trout roe, kataifi & shiso cress. Kani Korokke. Crab croquettes with wasabi Caesar. Ebi Bites. Tempura shrimp, miso aïoli, chilli, lime & coriander. Tuna Tartare. Tuna, avocado, sesame, miso, yuzu and spring onion on crispy flat bread. Shake Tataki. Salmon, sake-tamari marinated trout roe, daikon, miso, ponzu & daikon cress. Hiramasa Kataifi. Hiramasa, kataifi, chives, shiso, truffle oil & ponzu. Temaki Setto. Wagyu tartare, lobster & yuzu, kataifi, cress, soya sesame, avocado and sake-tamari marinated trout roe with sushi rice and crispy nori. Ebi Panko. Tempura shrimp & spicy sauce, topped with avocado. New York Subway. Tempura shrimp, avocado & spicy sauce, topped with salmon & garlic. Gindara No Miso. Black cod & miso. Hotate Bacon. Scallops & bacon with miso herb butter.",
+                "price": 140.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-tokyo-non-stop-b2c8",
+                "name": "Tokyo Non-Stop",
+                "description": "NIGIRI. Seared salmon, avocado, tuna and seared yellowtail kingfish, topped with Exmoor Caviar – Royal Beluski [10 gr].",
+                "price": 35.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-mini-maki-maki-e4d1",
+                "name": "Mini Maki Maki",
+                "description": "Ceviche maki with pickled red onion, avocado & cucumber, topped with scallops, lime & coriander. Hell's Kitchen maki with tempura shrimp, avocado & spicy sauce, topped with tuna & barbecue. Ebi Panko maki with tempura shrimp & spicy sauce, topped with avocado. Shake Aïoli maki with snow peas, avocado, miso aïoli & cucumber, topped with seared salmon & trout roe. 4 pcs of each roll.",
+                "price": 32.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-set-for-success-f9a3",
+                "name": "Set For Success",
+                "description": "Broccoli. Grilled in supreme soy, served with spicy goma. Ebi Bites. Tempura shrimp, miso aïoli, chilli, lime & coriander. Shake Tataki. Salmon, sake-tamari marinated trout roe, daikon, miso, ponzu & daikon cress. Beef Tataki. Beef fillet with miso aïoli, spring onion, artichoke chips, shiitake & truffle ponzu. Ebi Panko. Tempura shrimp & spicy sauce, topped with avocado. Hell's Kitchen. Tempura shrimp, avocado & spicy sauce, topped with tuna & barbecue. Pink Alaska. Salmon, avocado, cream cheese & lumpfish roe. Nanban. Chicken, avocado, kataifi, coriander & spicy yuzu-kosho. Aka Ebi. Argentinian red shrimp, spicy gochujang & garlic butter. Tsukune Chilli. Chicken meatballs, chilli dip, teriyaki & spring onions. Gyu Katzu. Fried beef fillet, okonomiyaki sauce, Japanese mayonnaise, daikon cress.",
+                "price": 106.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-mixed-emotions-c7b6",
+                "name": "Mixed Emotions",
+                "description": "Edamame beans with sea salt & lemon. Kani Korokke croquettes with crab and wasabi Caesar. Shake Tataki with salmon, sake-tamari marinated trout roe, daikon, miso, ponzu & daikon cress. Nigiri with salmon. Nigiri with yellowfin tuna. Spicy Tuna maki with tuna, cucumber, spicy sauce, masago, kataifi & cress. Pink Alaska maki with salmon, avocado, cream cheese & lumpfish roe. Chirashi maki with seared fish, spicy sauce, snow peas, ginger, chilli & pickled red onion. Tsukune stick with chicken meatballs & teriyaki. Shake Teriyaki stick with salmon, teriyaki & spring onion.",
+                "price": 36.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-green-keeper-d1e9",
+                "name": "Green Keeper",
+                "description": "Edamame beans with spicy miso & sesame. Seaweed Salad with daikon, snow peas, cucumber & sesame dressing. Fried cauliflower served with black truffle goma. Kinoko nigiri with portobello mushroom & lime salt. Abokado nigiri with avocado, yuzu-kosho & soya sesame. Nasu Aburi nigiri with seared aubergine, miso & kizami wasabi. Red'N'Green maki with roasted pepper, avocado, cucumber, yuzu-kosho, shiso & tsume soy. Eringi stick with king oyster mushroom & miso herb sauce. Imo Yaki stick with sweet potato, coriander cress & teriyaki.",
+                "price": 29.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Side Orders",
+            "items": [
+              {
+                "id": "menu-item-hotate-ceviche-b5c8",
+                "name": "Hotate Ceviche",
+                "description": "Scallops, lime & coriander dressing, yuzu miso, red onion, green chili, kataifi & coriander.",
+                "price": 13.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-edamame-beans-a2f1",
+                "name": "Edamame Beans",
+                "description": "Edamame beans with sea salt and lemon.",
+                "price": 6.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-grilled-edamame-beans-e9d4",
+                "name": "Grilled Edamame Beans",
+                "description": "Grilled edamame with supreme soy & soya sesame.",
+                "price": 6.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-spicy-edamame-beans-c3b7",
+                "name": "Spicy Edamame Beans",
+                "description": "Edamame with spicy miso & sesame.",
+                "price": 6.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-ebi-bites-f8a0",
+                "name": "Ebi Bites",
+                "description": "Tempura shrimp, chili, coriander, miso aioli & fresh lime.",
+                "price": 10.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kani-korokke-d5e3",
+                "name": "Kani Korokke",
+                "description": "Crab croquettes with wasabi Caesar.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-beef-tataki-a1f6",
+                "name": "Beef Tataki",
+                "description": "Beef fillet with miso aïoli, spring onion, artichoke chips, shiitake & truffle ponzu.",
+                "price": 15.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-karaage-b2c9",
+                "name": "Karaage",
+                "description": "Chicken with pickled red onion & wasabi Caesar.",
+                "price": 11.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-gyoza-e4d0",
+                "name": "Gyoza",
+                "description": "Chicken gyoza topped with okonomiyaki sauce, Japanese mayonnaise, chives & bonito.",
+                "price": 13.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hotate-kataifi-f9a2",
+                "name": "Hotate Kataifi",
+                "description": "Scallops, miso aïoli, trout roe, kataifi & shiso cress.",
+                "price": 14.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hiramasa-kataifi-c7b5",
+                "name": "Hiramasa Kataifi",
+                "description": "Hiramasa, kataifi, chives, shiso, truffle oil & ponzu.",
+                "price": 16.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-rice-paper-shake-d1e8",
+                "name": "Rice Paper Shake",
+                "description": "Soy-cured salmon, pickled red onion, avocado, cucumber & coriander served with goma.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-tataki-b5c7",
+                "name": "Shake Tataki",
+                "description": "Salmon, sake-tamari marinated trout roe, daikon, miso, ponzu & daikon cress.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kinoko-korokke-a2f0",
+                "name": "Kinoko Korokke",
+                "description": "Mushroom croquette, Danish Rød Krystal cheese, miso aïoli & truffle dust.",
+                "price": 9.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-wagyu-bites-e9d3",
+                "name": "Wagyu Bites",
+                "description": "Wagyu tartare with shiso, spring onion and kizami wasabi on toasted bread.",
+                "price": 22.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hiramasa-kama-c3b6",
+                "name": "Hiramasa Kama",
+                "description": "Hiramasa collar with sea salt & lemon, served with miso soup & rice [Limited availability].",
+                "price": 27.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-cauliflower-f8a9",
+                "name": "Cauliflower",
+                "description": "Fried and served with black truffle goma.",
+                "price": 7.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-broccoli-d5e2",
+                "name": "Broccoli",
+                "description": "Grilled in supreme soy, served with spicy goma.",
+                "price": 7.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-lobster-ikura-temaki-a1f5",
+                "name": "Lobster & Ikura Temaki",
+                "description": "Lobster, yuzu mayonnaise & sake-tamari marinated trout roe with sushi rice on crispy nori.",
+                "price": 12.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-bimi-tempura-b2c8",
+                "name": "Bimi Tempura",
+                "description": "Tempura tenderstem broccoli with daikon oroshi in shiitake-tentsuyu sauce.",
+                "price": 9.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-come-for-a-swim-e4d0",
+                "name": "Come For A Swim",
+                "description": "Hotate Kataifi. Scallops, miso aïoli, trout roe, kataifi & shiso cress. Kani Korokke. Crab croquettes with wasabi Caesar. Ebi Bites. Tempura shrimp, miso aïoli, chilli, lime & coriander. Hiramasa Kataifi. Hiramasa, kataifi, chives, shiso, truffle oil & ponzu. Shake Tataki. Salmon, sake-tamari marinated trout roe, daikon, miso, ponzu & daikon cress. Tuna Tartare. Tuna, avocado, sesame, miso, yuzu and spring onion with crispy flat bread.",
+                "price": 50.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-tuna-tartare-bites-f9a2",
+                "name": "Tuna Tartare Bites",
+                "description": "Tuna, avocado, sesame, miso, yuzu and spring onion on crispy flat bread.",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-temaki-setto-c7b5",
+                "name": "Temaki Setto",
+                "description": "Wagyu tartare, lobster & yuzu, kataifi, cress, soya sesame, avocado and sake-tamari marinated trout roe with sushi rice and crispy nori. Temaki means handroll. Create your own small bites.",
+                "price": 45.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-okazu-d1e8",
+                "name": "Okazu",
+                "description": "Kimchi. Fermented cabbage with chilli. Poteto Sarada. Japanese potato salad with cucumber, red onion, carrot, cress & crispy potato. Kappa Chilli. Cucumber topped with almonds, chilli, onion & roasted sesame oil.",
+                "price": 7.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-seaweed-salad-b5c7",
+                "name": "Seaweed Salad",
+                "description": "Seaweed, daikon, snow peas, cucumber & sesame dressing.",
+                "price": 7.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-miso-soup-a2f0",
+                "name": "Miso Soup",
+                "description": "Miso with tofu, spring onion & wakame.",
+                "price": 3.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-japanese-rice-e9d3",
+                "name": "Japanese Rice",
+                "description": "A bowl of Japanese rice.",
+                "price": 3.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-rice-with-sauce-c3b6",
+                "name": "Rice with sauce",
+                "description": "With crunchy chilli & almonds, teriyaki or chilli dip.",
+                "price": 4.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-rossini-black-label-caviar-10g-f8a9",
+                "name": "Rossini Black Label Caviar 10g",
+                "description": "Rossini Black Label [10 gr].",
+                "price": 27.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Sashimi",
+            "items": [
+              {
+                "id": "menu-item-sashimi-deluxe-d5e2",
+                "name": "Sashimi Deluxe",
+                "description": "Salmon, yellowfin tuna, yellowtail kingfish, lobster daikon roll, hiramasa ceviche and tamago ikura.",
+                "price": 43.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-sashimi-a1f5",
+                "name": "Shake Sashimi",
+                "description": "Salmon.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-maguro-sashimi-b2c8",
+                "name": "Maguro Sashimi",
+                "description": "Yellowfin tuna.",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hiramasa-sashimi-e4d0",
+                "name": "Hiramasa Sashimi",
+                "description": "Yellowtail kingfish.",
+                "price": 16.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Nigiri",
+            "items": [
+              {
+                "id": "menu-item-maguro-f9a2",
+                "name": "Maguro",
+                "description": "Nigiri with yellowfin tuna.",
+                "price": 8.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-ebi-c7b5",
+                "name": "Ebi",
+                "description": "Nigiri with shrimp.",
+                "price": 7.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-abokado-d1e8",
+                "name": "Abokado",
+                "description": "Nigiri with avocado, yuzu-kosho & sesame.",
+                "price": 5.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-b5c7",
+                "name": "Shake",
+                "description": "Nigiri with salmon.",
+                "price": 6.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-yaki-a2f0",
+                "name": "Shake Yaki",
+                "description": "Nigiri with seared salmon, sansho pepper & tsume soy.",
+                "price": 6.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-ny-e9d3",
+                "name": "Shake NY",
+                "description": "Nigiri with salmon & garlic.",
+                "price": 6.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-tamago-c3b6",
+                "name": "Tamago",
+                "description": "Nigiri with Japanese omelet.",
+                "price": 5.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hiramasa-f8a9",
+                "name": "Hiramasa",
+                "description": "Nigiri with yellowtail kingfish.",
+                "price": 8.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hiramasa-yaki-d5e2",
+                "name": "Hiramasa Yaki",
+                "description": "Nigiri with seared yellowtail kingfish.",
+                "price": 8.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hotate-yaki-a1f5",
+                "name": "Hotate Yaki",
+                "description": "Nigiri with seared scallop, masago, spring onion & tsume soy.",
+                "price": 9.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-inari-b2c8",
+                "name": "Inari",
+                "description": "Tofu with ginger, shiitake mushroom, cress and sesame.",
+                "price": 5.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-inari-ikura-e4d0",
+                "name": "Inari Ikura",
+                "description": "Tofu with ginger, trout roe, shiitake mushroom, cress & sesame.",
+                "price": 7.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-aka-piman-f9a2",
+                "name": "Aka Piman",
+                "description": "Nigiri with grilled Romano pepper & yuzu-kosho.",
+                "price": 5.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-nasu-aburi-c7b5",
+                "name": "Nasu Aburi",
+                "description": "Nigiri with seared aubergine, miso & kizami wasabi.",
+                "price": 5.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kinoko-d1e8",
+                "name": "Kinoko",
+                "description": "Nigiri with portobello and lime salt.",
+                "price": 5.40,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "House Rolls",
+            "items": [
+              {
+                "id": "menu-item-lobster-abokado-b5c7",
+                "name": "Lobster Abokado",
+                "description": "Lobster & yuzu, avocado, cucumber, soya sesame, chives & coriander.",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-aka-ebi-a2f0",
+                "name": "Aka Ebi",
+                "description": "Argentinian red shrimp, spicy gochujang, avocado, snow peas, miso aioli & trout roe.",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-black-cod-e9d3",
+                "name": "Black Cod",
+                "description": "Miso-marinated black cod with artichoke chips & pickled red onion.",
+                "price": 17.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-wagyu-c3b6",
+                "name": "Wagyu",
+                "description": "Wagyu tartare with kizami wasabi & crispy kataifi.",
+                "price": 18.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-soft-shell-f8a9",
+                "name": "Soft Shell",
+                "description": "Softshell crab with masago & spicy sauce.",
+                "price": 15.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-redngreen-d5e2",
+                "name": "Red'N'Green",
+                "description": "Roasted pepper, avocado, cucumber, yuzu-kosho, shiso & tsume.",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Kaburimaki",
+            "items": [
+              {
+                "id": "menu-item-ebi-panko-a1f5",
+                "name": "Ebi Panko",
+                "description": "Tempura shrimp & spicy sauce, topped with avocado.",
+                "price": 17.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hells-kitchen-b2c8",
+                "name": "Hell's Kitchen",
+                "description": "Tempura shrimp, avocado & spicy sauce, topped with tuna & barbecue.",
+                "price": 18.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-aïoli-e4d0",
+                "name": "Shake Aïoli",
+                "description": "Snow peas, avocado, miso aïoli & cucumber, topped with seared salmon & trout roe.",
+                "price": 17.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-new-york-subway-f9a2",
+                "name": "New York Subway",
+                "description": "Tempura shrimp, avocado & spicy sauce, topped with salmon & garlic.",
+                "price": 17.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-ceviche-c7b5",
+                "name": "Ceviche",
+                "description": "Pickled red onion, avocado & cucumber, topped with scallops & coriander.",
+                "price": 17.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-chirashi-d1e8",
+                "name": "Chirashi",
+                "description": "Seared fish, spicy sauce, snow peas, ginger, chilli & pickled red onion.",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Uramaki",
+            "items": [
+              {
+                "id": "menu-item-crispy-ebi-b5c7",
+                "name": "Crispy Ebi",
+                "description": "Tempura shrimp, avocado, spicy sauce & sesame.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-california-a2f0",
+                "name": "California",
+                "description": "Shrimp, avocado, cucumber, masago, sesame & miso aïoli.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-nanban-e9d3",
+                "name": "Nanban",
+                "description": "Chicken, avocado, kataifi, coriander, soya sesame & yuzu-kosho.",
+                "price": 13.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-pink-alaska-c3b6",
+                "name": "Pink Alaska",
+                "description": "Salmon, avocado, cream cheese & lumpfish roe.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-spicy-tuna-f8a9",
+                "name": "Spicy Tuna",
+                "description": "Tuna, cucumber, spicy sauce, masago, kataifi & cress.",
+                "price": 12.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-mamma-mia-d5e2",
+                "name": "Mamma Mia",
+                "description": "Avocado, cucumber, soya sesame & chives.",
+                "price": 10.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Sticks",
+            "items": [
+              {
+                "id": "menu-item-gyu-katzu-a1f5",
+                "name": "Gyu Katzu",
+                "description": "Beef fillet, panko, okonomiyaki sauce, Japanese mayonnaise, daikon cress.",
+                "price": 18.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-ramu-niku-b2c8",
+                "name": "Ramu Niku",
+                "description": "Lamb, spring onion, yakiniku sauce, garlic butter & soy sesame.",
+                "price": 10.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-momo-nanban-e4d0",
+                "name": "Momo Nanban",
+                "description": "Fried chicken thigh, sweet and sour dashi marinade, Japanese mayonnaise, onion & daikon cress.",
+                "price": 9.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-saba-yaki-f9a2",
+                "name": "Saba Yaki",
+                "description": "Sake marinated mackerel with spring onion and shiso ginger sauce.",
+                "price": 8.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shoyu-tebasaki-c7b5",
+                "name": "Shoyu Tebasaki",
+                "description": "Chicken wings marinated in garlic, ginger, soy & mirin, with soya sesame.",
+                "price": 8.80,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-tebasaki-d1e8",
+                "name": "Tebasaki",
+                "description": "Chicken wings with sea salt.",
+                "price": 8.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-aka-ebi-stick-b5c7",
+                "name": "Aka Ebi",
+                "description": "Argentinian red shrimp, spicy gochujang & garlic butter.",
+                "price": 14.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-gyu-habu-a2f0",
+                "name": "Gyu Habu",
+                "description": "Beef filet with miso herb butter.",
+                "price": 18.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-tsukune-e9d3",
+                "name": "Tsukune",
+                "description": "Chicken meatballs & teriyaki.",
+                "price": 7.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-tsukune-chili-c3b6",
+                "name": "Tsukune Chili",
+                "description": "Chicken meatballs, chili dip, teriyaki & spring onions.",
+                "price": 8.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-gindara-no-miso-f8a9",
+                "name": "Gindara No Miso",
+                "description": "Miso marinated black cod.",
+                "price": 21.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shake-teriyaki-d5e2",
+                "name": "Shake Teriyaki",
+                "description": "Salmon with teriyaki sauce & spring onion.",
+                "price": 7.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-hotate-bacon-a1f5",
+                "name": "Hotate Bacon",
+                "description": "Scallops & bacon with miso herb butter.",
+                "price": 12.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-buta-yaki-b2c8",
+                "name": "Buta Yaki",
+                "description": "Free-range pork with yuzu-miso & sesame.",
+                "price": 8.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-aigamo-tsukune-e4d0",
+                "name": "Aigamo Tsukune",
+                "description": "Grilled duck meatball with egg york in surpreme soy.",
+                "price": 13.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-yaki-yagi-f9a2",
+                "name": "Yaki Yagi",
+                "description": "Goat's cheese with dried ham.",
+                "price": 9.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-iberico-secreto-c7b5",
+                "name": "Iberico Secreto",
+                "description": "Miso cured black Iberian pig.",
+                "price": 17.20,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-eringi-yaki-d1e8",
+                "name": "Eringi Yaki",
+                "description": "King oyster mushroom & miso herb sauce.",
+                "price": 6.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-imo-yaki-b5c7",
+                "name": "Imo Yaki",
+                "description": "Sweet potato, coriander cress & teriyaki.",
+                "price": 6.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shishito-yaki-a2f0",
+                "name": "Shishito Yaki",
+                "description": "Padron peppers, spicy gochujang, tsume & lime sauce.",
+                "price": 7.60,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-chiizu-maki-e9d3",
+                "name": "Chiizu Maki",
+                "description": "Emmental cheese wrapped in bacon.",
+                "price": 8.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Salads",
+            "items": [
+              {
+                "id": "menu-item-jungle-fish-c3b6",
+                "name": "Jungle Fish",
+                "description": "Grilled salmon, shrimp and seared tuna on a salad of green leaves, red cabbage, quinoa, tomatoes, edamame, avocado, radish, broccoli & sesame – topped with lotus chips & miso-mustard dressing.",
+                "price": 21.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-green-bird-f8a9",
+                "name": "Green Bird",
+                "description": "Marinated chicken and soy egg on a salad of green leaves, red cabbage, quinoa, tomatoes, edamame, avocado, radish, broccoli & sesame.",
+                "price": 19.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-green-gate-d5e2",
+                "name": "Green Gate",
+                "description": "Grilled sweet potato, avocado, cauliflower and portobello mushroom on a salad of green leaves, red cabbage, quinoa, tomatoes, edamame, radish, broccoli and sesame – topped with goma and jerusalem artichoke chips.",
+                "price": 17.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-beautiful-mess-a1f5",
+                "name": "Beautiful Mess",
+                "description": "Salmon, avocado, snow peas, edamame, pickled red onion, sushi rice & poké sauce.",
+                "price": 14.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-chirashi-deluxe-b2c8",
+                "name": "Chirashi Deluxe",
+                "description": "Grilled miso marinated black cod, tempura shrimp, yellowfin tuna, seared salmon and lobster with sushi rice, avocado, tamago, shiitake, snow peas, sake-tamari marinated trout roe, shiso, soya sesame & tsume soy.",
+                "price": 27.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Kids",
+            "items": [
+              {
+                "id": "menu-item-kids-sticksnsushi-shake-e4d0",
+                "name": "Kids Sticks'n'Sushi Shake",
+                "description": "2 nigiri with salmon. 2 sticks with chicken meatballs & teriyaki. 8 pieces of hosomaki with cucumber, avocado or salmon. Rice, edamame beans and yasai sticks with miso dip. Chocolate fish.",
+                "price": 12.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-sticks-menu-f9a2",
+                "name": "Sticks Menu",
+                "description": "2 sticks with salmon & teriyaki or 2 sticks with chicken meatballs & teriyaki. Rice, edamame beans and yasai sticks with miso dip. Chocolate fish.",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kids-sushi-menu-ebi-c7b5",
+                "name": "Kids Sushi Menu Ebi",
+                "description": "2 nigiri with shrimp. 8 pieces of hosomaki with cucumber, avocado or salmon. Edamame beans and yasai sticks with miso dip. Chocolate fish.",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kids-sushi-menu-shake-d1e8",
+                "name": "Kids Sushi Menu Shake",
+                "description": "2 nigiri with salmon. 8 pieces of hosomaki with cucumber, avocado or salmon. Edamame beans and yasai sticks with miso dip. Chocolate fish.",
+                "price": 10.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kids-sticksnsushi-ebi-b5c7",
+                "name": "Kids Sticks'n'Sushi Ebi",
+                "description": "2 nigiri with shrimp. 2 sticks with chicken meatballs & teriyaki. 8 pieces of hosomaki with cucumber, avocado or salmon. Rice, edamame beans and yasai sticks with miso dip. Chocolate fish.",
+                "price": 12.40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-kids-dessert-a2f0",
+                "name": "Kids Dessert",
+                "description": "Vanilla ice cream with caramelised white chocolate sauce, white chocolate cookie crumble and a chocolate fish.",
+                "price": 6.00,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dessert",
+            "items": [
+              {
+                "id": "menu-item-matcha-fondant-e9d3",
+                "name": "Matcha Fondant",
+                "description": "Dark chocolate fondant with matcha core, vanilla ice cream & matcha cookie crumble.",
+                "price": 11.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-yuzu-c3b6",
+                "name": "Yuzu",
+                "description": "Shortcrust pastry with yuzu curd & yuzu meringue.",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-shabetto-f8a9",
+                "name": "Shabetto",
+                "description": "Sorbet Trio. Mango with sun ripened Alphonso mangoes. Blackcurrant with Danish berries from Thy. Chocolate sorbet made with Avola almonds.",
+                "price": 7.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-karameru-d5e2",
+                "name": "Karameru",
+                "description": "Chocolate ice cream stick with miso caramel, hazelnut nougatine & dark chocolate. Vanilla ice cream stick with miso caramel & white chocolate cookie crumble.",
+                "price": 10.00,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "menu-item-goma-a1f5",
+                "name": "Goma",
+                "description": "Vanilla crème brûlée with black sesame crumble.",
+                "price": 9.50,
+                "dietaryRestrictions": []
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "library-bar-limassol-cyprus-a1b2",
+      "name": "Library Bar",
+      "address": "Themidos 1, Limassol 3036, Cyprus",
+      "coordinates": {
+        "lat": 34.7071,
+        "lng": 33.0226
+      },
+      "website": "https://www.librarybarcy.com/",
+      "menuSource": "database",
+      "menu": {
+        "categories": [
+          {
+            "name": "Dips - served with crudités, flatbread and crackers",
+            "items": [
+              {
+                "id": "lb-dip-1",
+                "name": "Mixed olives & bread",
+                "price": 4.5,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-dip-2",
+                "name": "Guacamole",
+                "price": 8,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-dip-3",
+                "name": "Hummus with pickled carrots",
+                "price": 8,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-dip-4",
+                "name": "Cream Cheese with herbs",
+                "price": 8,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-dip-5",
+                "name": "A combination of the three dips",
+                "price": 12,
+                "description": "",
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Bruschetta",
+            "items": [
+              {
+                "id": "lb-bru-1",
+                "name": "Tomato Bruschetta",
+                "description": "EVOO, garlic & basil",
+                "price": 6,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-bru-2",
+                "name": "Burrata Bruschetta",
+                "description": "EVOO & sea salt",
+                "price": 7.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Salads",
+            "items": [
+              {
+                "id": "lb-sal-1",
+                "name": "Caprese Salad",
+                "description": "burrata, cherry tomatoes, basil vinaigrette",
+                "price": 10.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-sal-2",
+                "name": "Caesar Salad",
+                "description": "baby gem, pecorino, croutons. ADD Chicken 5.5 OR Prawns 8",
+                "price": 9,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-sal-3",
+                "name": "Superfood Salad",
+                "description": "greens, quinoa, sweet potatoes, broccoli, avocado, almonds. ADD Chicken 5.5 OR Prawns 8",
+                "price": 9,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Small Plates",
+            "items": [
+              {
+                "id": "lb-sp-1",
+                "name": "Falafel Bites",
+                "description": "with hummus & house pickles",
+                "price": 8.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-sp-2",
+                "name": "Crispy Chicken Bites",
+                "description": "with sweet chili mayo & coriander",
+                "price": 10,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-sp-3",
+                "name": "Grilled Chicken Skewers",
+                "description": "with herbed yogurt & cucumber salad",
+                "price": 10,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Burgers & Sliders",
+            "items": [
+              {
+                "id": "lb-burg-1",
+                "name": "Library Burger (beef)",
+                "description": "cheddar, pickles, mayonnaise",
+                "price": 15.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-burg-2",
+                "name": "Truffle Burger (beef)",
+                "description": "mushrooms, pecorino, rocket, truffle mayonnaise",
+                "price": 16.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-slid-1",
+                "name": "Sliders (3 pcs) Beef",
+                "description": "cheddar, pickles, mayonnaise",
+                "price": 10.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-slid-2",
+                "name": "Sliders (3 pcs) Crispy Chicken",
+                "description": "cheddar, pickles, mayonnaise",
+                "price": 10.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Sides",
+            "items": [
+              {
+                "id": "lb-side-1",
+                "name": "Thick Cut Fries",
+                "description": "truffle mayonnaise",
+                "price": 5.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-side-2",
+                "name": "Roasted almonds",
+                "price": 3.5,
+                "description": "",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-side-3",
+                "name": "House-made chips",
+                "price": 3.5,
+                "description": "",
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Mini Open Tortillas (3 pcs)",
+            "items": [
+              {
+                "id": "lb-tor-1",
+                "name": "Grilled chicken Tortillas",
+                "description": "herbed yogurt, pickled cabbage, cucumber",
+                "price": 10.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-tor-2",
+                "name": "Prawns Tortillas",
+                "description": "guacamole, tomatoes, sweet chili mayonnaise",
+                "price": 11.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-tor-3",
+                "name": "Grilled mushrooms Tortillas",
+                "description": "hummus, pickles, coriander",
+                "price": 10.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Cheese and Charcuterie (per 50gr)",
+            "items": [
+              {
+                "id": "lb-cc-1",
+                "name": "Goat cheese",
+                "price": 5,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-cc-2",
+                "name": "Graviera",
+                "price": 5,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-cc-3",
+                "name": "Pecorino",
+                "price": 6,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-cc-4",
+                "name": "Brie",
+                "price": 5,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-cc-5",
+                "name": "Prosciutto",
+                "price": 5,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-cc-6",
+                "name": "Salami",
+                "price": 5,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-cc-7",
+                "name": "Chorizo",
+                "price": 5,
+                "description": "per 50gr",
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Pizza and Pizzetta (House-made pizza-dough)",
+            "items": [
+              {
+                "id": "lb-piz-1a",
+                "name": "Margherita (Pizzetta)",
+                "description": "tomato, mozzarella & basil, EVOO",
+                "price": 7,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-1b",
+                "name": "Margherita (Pizza)",
+                "description": "tomato, mozzarella & basil, EVOO",
+                "price": 13,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-2a",
+                "name": "Goat Cheese (Pizzetta)",
+                "description": "tomato, mozzarella, cherry tomatoes, goat cheese & pine nuts, EVOO",
+                "price": 8,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-2b",
+                "name": "Goat Cheese (Pizza)",
+                "description": "tomato, mozzarella, cherry tomatoes, goat cheese & pine nuts, EVOO",
+                "price": 16,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-3a",
+                "name": "Burrata (Pizzetta)",
+                "description": "tomato, mozzarella, olives, burrata & fresh rocket, EVOO",
+                "price": 8,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-3b",
+                "name": "Burrata (Pizza)",
+                "description": "tomato, mozzarella, olives, burrata & fresh rocket, EVOO",
+                "price": 16,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-4a",
+                "name": "Pepperoni (Pizzetta)",
+                "description": "tomato, mozzarella, pepperoni & bell pepper, EVOO",
+                "price": 8,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-4b",
+                "name": "Pepperoni (Pizza)",
+                "description": "tomato, mozzarella, pepperoni & bell pepper, EVOO",
+                "price": 16,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-5a",
+                "name": "Truffle (Pizzetta)",
+                "description": "mozzarella, truffle, portobello mushroom & fresh rocket",
+                "price": 8,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-piz-5b",
+                "name": "Truffle (Pizza)",
+                "description": "mozzarella, truffle, portobello mushroom & fresh rocket",
+                "price": 16,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Dessert (Food Menu)",
+            "items": [
+              {
+                "id": "lb-des-1",
+                "name": "Chocolate fudge cake",
+                "description": "with strawberries & chocolate sauce",
+                "price": 8,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Wine - Sparkling",
+            "items": [
+              {
+                "id": "lb-wine-sp-1",
+                "name": "La Giostra Moscato d'Asti '24 (Gianni Doglia)",
+                "description": "Moscato Bianco, 5%, Piedmont, Italy. Bottle: 40",
+                "price": 9,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-sp-2",
+                "name": "Prosecco (Spagnol)",
+                "description": "Glera '23, 11%, Veneto, Italy. Bottle: 38",
+                "price": 8,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-sp-3",
+                "name": "Microcosmos Pet-Nat White (Aphrodite Constanti)",
+                "description": "Xynisteri '24, 12.5%, Paphos, Cyprus",
+                "price": 39,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-sp-4",
+                "name": "Cuvée Spéciale (Karanika)",
+                "description": "Xinomavro/Assyrtiko '22, 11.5%, Amyndeon, Greece",
+                "price": 41,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-sp-5",
+                "name": "Champagne Brut (Leclerc Briant)",
+                "description": "Pinot Noir/Meunier/Chardonnay, 12%, Epernay, France",
+                "price": 99,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-sp-6",
+                "name": "Champagne Brut Rosé (Deutz)",
+                "description": "Pinot Noir/Chardonnay, 12%, Aÿ-Champagne, France",
+                "price": 106,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Wine - White",
+            "items": [
+              {
+                "id": "lb-wine-wh-1",
+                "name": "Alina Unfiltered (Vouni Panayia)",
+                "description": "Xynisteri '22, 12.5%, Paphos, Cyprus. Bottle: 32",
+                "price": 7,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-2",
+                "name": "Meri (Argiolas)",
+                "description": "Vermentino '23, 13.5%, Sardinia, Italy. Bottle: 36",
+                "price": 8,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-3",
+                "name": "Rioja Crianza (Gómez Cruzado)",
+                "description": "Viura/Tempranillo/Garnacha '21, 13%, Haro, Spain",
+                "price": 35,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-4",
+                "name": "Cuvée Vouno (Mylonas)",
+                "description": "Savatiano '20, 12.5%, Attiki, Greece",
+                "price": 37,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-5",
+                "name": "Assyrtiko (Anatolikos)",
+                "description": "Assyrtiko '22, 14%, Xanthi, Greece",
+                "price": 38.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-6",
+                "name": "Vino di Sasso (Sclavos)",
+                "description": "Robola '22, 13%, Cephalonia, Greece",
+                "price": 38.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-7",
+                "name": "Promara (Vouni Panayia)",
+                "description": "Promara '20, 13.5%, Paphos, Cyprus",
+                "price": 39,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-8",
+                "name": "Kammern Grüner Veltliner (Hirsch)",
+                "description": "Grüner Veltliner '23, 12%, Kamptal, Austria",
+                "price": 46,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-wh-9",
+                "name": "Pouilly Fumé (Pasca Jolivet)",
+                "description": "Sauvignon Blanc '23, 12.5%, Loire Valley, France",
+                "price": 56,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Wine - Orange/Skin Contact",
+            "items": [
+              {
+                "id": "lb-wine-or-1",
+                "name": "Microcosmos Orange (Aphrodite Constanti)",
+                "description": "Xynisteri '17, 12.5%, Paphos, Cyprus",
+                "price": 39,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-or-2",
+                "name": "Liquid Sunshine (Kristinus)",
+                "description": "Chardonnay - Pinot Gris '22, 14%, Balaton, Hungary",
+                "price": 40,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-or-3",
+                "name": "Orange Puglia (Valentina Passalacqua)",
+                "description": "Falanghina '22, 11%, Puglia, Italy (1L Bottle)",
+                "price": 53,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Wine - Rosé",
+            "items": [
+              {
+                "id": "lb-wine-ro-1",
+                "name": "A la Mer Rosé (Xavier)",
+                "description": "Cinsault/Syrah/Mourvèdre '23, 13%, Rhône Valley, France. Bottle: 33",
+                "price": 7.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-ro-2",
+                "name": "Pampela (Vouni Panayia)",
+                "description": "Mavro/Xynisteri '21, 12%, Paphos, Cyprus",
+                "price": 32,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Wine - Red",
+            "items": [
+              {
+                "id": "lb-wine-re-1",
+                "name": "Plakota (Vouni Panayia)",
+                "description": "Mavro/Maratheftiko '21, 13%, Paphos, Cyprus. Bottle: 32",
+                "price": 7,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-2",
+                "name": "Xinomavro (Karanika)",
+                "description": "Xinomavro '19, 13.5%, Amyndeon, Greece. Bottle: 43",
+                "price": 9,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-3",
+                "name": "Zweigelt (Anton Bauer)",
+                "description": "Zweigelt '20, 14%, Feuersbrunn, Austria",
+                "price": 34,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-4",
+                "name": "Primitivo (San Gregorio)",
+                "description": "Primitivo '21, 14.5%, Manduris, Italy",
+                "price": 37,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-5",
+                "name": "Yiannoudi (Makarounas)",
+                "description": "Yiannoudi '21, 13%, Paphos, Cyprus",
+                "price": 38,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-6",
+                "name": "Mavroudi/Merlot/Cabernet Sauvignon (Anatolikos)",
+                "description": "13.5%, Xanthi, Greece",
+                "price": 42.5,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-7",
+                "name": "Explore Malbec (Krontiras)",
+                "description": "Malbec '19, 13.8%, Mendoza, Argentina",
+                "price": 44,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-8",
+                "name": "Attitude Pinot Noir (Pasca Jolivet)",
+                "description": "Pinot Noir '23, 12.5%, Loire Valley, France",
+                "price": 52,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-9",
+                "name": "Viña Bosconia Rioja Reserva (R. López de Heredia)",
+                "description": "Tempranillo/Others '10, 13.5%, Haro, Spain",
+                "price": 68,
+                "dietaryRestrictions": []
+              },
+              {
+                "id": "lb-wine-re-10",
+                "name": "Barbera d'Alba (Vietti)",
+                "description": "Barbera d'Alba '18, 14%, Piedmont, Italy",
+                "price": 77.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+          {
+            "name": "Wine - Dessert",
+            "items": [
+              {
+                "id": "lb-wine-ds-1",
+                "name": "Commandaria (Tsiakkas)",
+                "description": "Xynisteri '20, 14.5%, Limassol, Cyprus (75ml glass)",
+                "price": 8.5,
+                "dietaryRestrictions": []
+              }
+            ]
+          },
+                    {
+            "name": "CIRCLE",
+            "items": [
+              {"id": "lb-ci-mg-379", "name": "Mandarin Gimlet", "price": 10.0, "description": "Gin, Mandarin, Vermouth Bianco,\\nCitrus\\ntimeless influence", "dietaryRestrictions": []},
+              {"id": "lb-ci-pm-1105", "name": "Passion Fruit Martini", "price": 10.0, "description": "Vodka, Passion Fruit, Vanilla, Lime,\\nProsecco Splash\\njuicy, fragrant", "dietaryRestrictions": []},
+              {"id": "lb-ci-sh-6528", "name": "Strawberry Highball", "price": 10.0, "description": "Gin, Strawberry, Lemon,\\nPomegranate\\nlively & fruity", "dietaryRestrictions": []},
+              {"id": "lb-ci-bs-6763", "name": "Bergamot Sour", "price": 9.0, "description": "Rum, Bergamot, Chamomile, Plum\\nBitters, Lime\\nround, citrussy", "dietaryRestrictions": []},
+              {"id": "lb-ci-sr-7397", "name": "Spicy Rita", "price": 11.0, "description": "Tequila, Coriander, Tomato,\\nJalapenos, Lime\\nfresh, spicy", "dietaryRestrictions": []},
+              {"id": "lb-ci-sf-5229", "name": "Smith Fashioned", "price": 11.0, "description": "Calvados, Green Apple, Cinnamon,\\nBitters\\nboozy, rich, crisp", "dietaryRestrictions": []}
+            ]
+          },
+          {
+            "name": "INFINITY",
+            "items": [
+              {"id": "lb-in-tp-120", "name": "The Player", "price": 9.0, "description": "Gin, Lemongrass, Chili, Lemon,\\nPlum Bitters, Black Pepper\\nit’s the player. ", "dietaryRestrictions": []},
+              {"id": "lb-in-he-3979", "name": "Heatwave", "price": 10.0, "description": "Tequila, Mezcal, Agave, Bergamot,\\nLime\\nsour, sweet, smoky", "dietaryRestrictions": []},
+              {"id": "lb-in-nm-2237", "name": "New Moon", "price": 10.0, "description": "Rum, Amaretto, Pineapple, Lime\\nrich, tropical", "dietaryRestrictions": []},
+              {"id": "lb-in-sg-9440", "name": "Stay Gold", "price": 11.0, "description": "Whiskey, Apricot Liqueur, Honey,\\nLemon\\nelegant & smoky", "dietaryRestrictions": []},
+              {"id": "lb-in-lo-5001", "name": "Life On Mars", "price": 11.0, "description": "Mezcal, Sweet Vermouth, Creme de\\nCacao, Amaro\\nbitter, sweet, aromatic", "dietaryRestrictions": []},
+              {"id": "lb-in-cc-9946", "name": "Charlie Chaplin", "price": 11.0, "description": "Sloe Gin, Apricot Liqueur, Lime\\nfruity, sour, sweet", "dietaryRestrictions": []}
+            ]
+          },
+          {
+            "name": "VERTICAL",
+            "items": [
+              {"id": "lb-ve-lg-4514", "name": "Library G+T", "price": 9.0, "description": "Gin, Mastiha Bitters, Med Tonic,\\nOlives, Lemon Aromas\\nfizzy, herbaceous", "dietaryRestrictions": []},
+              {"id": "lb-ve-cs-4056", "name": "Cosmic Spritz", "price": 10.0, "description": "Elderflower Liqueur, Pink Grapefruit,\\nSparkling Wine\\nfloral, fresh", "dietaryRestrictions": []},
+              {"id": "lb-ve-fa-6097", "name": "Fifth Avenue", "price": 10.0, "description": "Bourbon, Apricot, Lemon, Ginger\\nBeer\\nfruity, fizzy", "dietaryRestrictions": []},
+              {"id": "lb-ve-sf-8837", "name": "Step Forward", "price": 10.0, "description": "Tequila, Coconut, Agave, Lime,\\nPineapple Soda\\ntropical, sweet", "dietaryRestrictions": []},
+              {"id": "lb-ve-fa-1932", "name": "Fig Americano", "price": 10.0, "description": "Campari, Sweet Vermouth,\\nFig Soda\\nlively & bittersweet", "dietaryRestrictions": []},
+              {"id": "lb-ve-pt-7184", "name": "Pretty Thing", "price": 10.0, "description": "Mastiha & Berries Liqueur, Gin, Pink\\nGrapefruit, Tonic, Cucumber and\\nBasil Aromas\\nfresh & smooth", "dietaryRestrictions": []}
+            ]
+          },
+          {
+            "name": "NON ALCOHOLICS",
+            "items": [
+              {"id": "lb-no-mo-7439", "name": "Mojito*", "price": 8.0, "description": "0% Spirit, Lime, Mint", "dietaryRestrictions": []},
+              {"id": "lb-no-pa-2105", "name": "Paloma*", "price": 8.0, "description": "Pink Grapefruit, Agave, Lime, Salt", "dietaryRestrictions": []},
+              {"id": "lb-no-ac-780", "name": "A Cordial Affair", "price": 8.0, "description": "Lemon Cordial, Pomegranate Juice, Mint", "dietaryRestrictions": []}
+            ]
+          },
+          {
+            "name": "Beers",
+            "items": [
+              {"id": "lb-be-sm-3018", "name": "San Miguel Especial 5,4%", "price": 5.0, "description": "33cl bottle, pale lager", "dietaryRestrictions": []},
+              {"id": "lb-be-ma-5781", "name": "Mamos 5%", "price": 7.0, "description": "50cl bottle, pilsener", "dietaryRestrictions": []},
+              {"id": "lb-be-gu-9295", "name": "Guinness 4,2%", "price": 7.5, "description": "50cl draught, stout", "dietaryRestrictions": []},
+              {"id": "lb-be-nb-9036", "name": "Neφeli by Pivo 4,9%", "price": 9.5, "description": "44cl can, unfiltered IPA", "dietaryRestrictions": []}
+            ]
+          },
+          {
+            "name": "GIN & TONIC",
+            "items": [
+              {"id": "lb-gi-be-3108", "name": "Beefeater 40%", "price": 8.0, "description": "Pink Grapefruit & Orange Wedge", "dietaryRestrictions": []},
+              {"id": "lb-gi-op-423", "name": "Opihr 42,5%", "price": 9.0, "description": "Chili & Ginger", "dietaryRestrictions": []},
+              {"id": "lb-gi-bo-8473", "name": "Bombay 40%", "price": 8.0, "description": "Lime Wedge", "dietaryRestrictions": []},
+              {"id": "lb-gi-ta-2099", "name": "Tanqueray 43,7%", "price": 9.0, "description": "Pink Grapefruit Wedge & Ginger", "dietaryRestrictions": []},
+              {"id": "lb-gi-be-4773", "name": "Beefeater 24 45%", "price": 10.0, "description": "Pink Grapefruit Wedge", "dietaryRestrictions": []},
+              {"id": "lb-gi-dg-4442", "name": "Drumshanbo Gunpowder 43%", "price": 10.0, "description": "Pink Grapefruit Wedge, Chilli", "dietaryRestrictions": []},
+              {"id": "lb-gi-he-601", "name": "Hendricks 41,4%", "price": 10.0, "description": "Cucumber", "dietaryRestrictions": []},
+              {"id": "lb-gi-no-2688", "name": "No. 3 46%", "price": 11.0, "description": "Pink Grapefruit Wedge & Rosemary", "dietaryRestrictions": []},
+              {"id": "lb-gi-tb-345", "name": "The Botanist 46%", "price": 11.0, "description": "Orange Wedge & Basil Leaf", "dietaryRestrictions": []},
+              {"id": "lb-gi-gm-1642", "name": "Gin Mare 42,7%", "price": 11.0, "description": "Orange & Rosemary", "dietaryRestrictions": []},
+              {"id": "lb-gi-el-2524", "name": "Elephant 45%", "price": 11.5, "description": "Green Apple", "dietaryRestrictions": []},
+              {"id": "lb-gi-es-5801", "name": "Elephant Strength 57%", "price": 12.5, "description": "Green Apple", "dietaryRestrictions": []},
+              {"id": "lb-gi-ep-1174", "name": "Etsu Pacific Ocean Water 45%", "price": 12.5, "description": "Black Pepper", "dietaryRestrictions": []},
+              {"id": "lb-gi-mo-3487", "name": "Monkey 47 47%", "price": 14.0, "description": "Pink Grapefruit Peel", "dietaryRestrictions": []}
+            ]
+          }
+        ]
+      }
     }
   ]
 } 
