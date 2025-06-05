@@ -19,6 +19,10 @@ import { Currency } from './context/CurrencyContext'
 import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
 
+import { db } from '../lib/firebase';
+import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
+
+
 interface MenuItem {
   id: string
   name: string
@@ -29,16 +33,49 @@ interface MenuItem {
   currency?: Currency
 }
 
+// This interface represents the structure of menu items as stored within menuCategories in Firestore
+interface MenuItemFirestore {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  // category field is on the parent MenuCategoryFirestore
+  dietaryRestrictions: string[];
+}
+
+interface MenuCategoryFirestore {
+  name: string;
+  items: MenuItemFirestore[];
+}
+
 interface Restaurant {
-  id: string
-  name: string
-  address: string
-  distance: number
-  website: string
-  menu: MenuItem[]
-  menuSource?: 'database' | 'sample'
-  rating?: number
-  totalRatings?: number
+  id: string; // Firestore document ID
+  name: string;
+  address: string;
+  distance: number; // Calculated client-side
+  website?: string;
+  menu: MenuItem[]; // Reconstructed flat array for UI compatibility
+  menuSource?: 'database' | 'sample';
+  rating?: number;
+  totalRatings?: number;
+  notes?: string;
+  originalJsonId: string; // ID from the original JSON file
+  gps?: { latitude: number; longitude: number }; // For client-side use
+  // menuCategories will be processed into the flat menu above
+}
+
+// Helper function to calculate distance using Haversine formula
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = (lat2 - lat1) * Math.PI / 180; // Convert degrees to radians
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in km
+  return parseFloat(distance.toFixed(1)); // Return distance rounded to 1 decimal place
 }
 
 export default function Home() {
@@ -139,21 +176,6 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    if (restaurants.length > 0 && !selectedRestaurant) {
-      setSelectedRestaurant(restaurants[0])
-    }
-  }, [restaurants])
-
-  useEffect(() => {
-    if (selectedRestaurant && Array.isArray(selectedRestaurant.menu) && selectedRestaurant.menu.length > 0) {
-      const categories = Array.from(new Set(selectedRestaurant.menu.map(item => item.category)))
-      if (categories.length > 0) {
-        setSelectedGroup(categories[0])
-      }
-    }
-  }, [selectedRestaurant])
-
-  useEffect(() => {
     const handleScroll = () => {
       if (!menuRef.current) return
 
@@ -185,7 +207,7 @@ export default function Home() {
       menuElement.addEventListener('scroll', handleScroll)
       return () => menuElement.removeEventListener('scroll', handleScroll)
     }
-  }, [selectedGroup])
+  }, [selectedGroup, menuRef, categoryRefs])
 
   useEffect(() => {
     if (descriptionRef.current) {
@@ -200,26 +222,100 @@ export default function Home() {
     setError(null)
 
     try {
-      // Fetch restaurants from our database
-      const dbResponse = await fetch(
-        `/api/restaurants?lat=${location.lat}&lng=${location.lng}&radius=1`
-      )
+      const restaurantsQuery = query(collection(db, 'restaurants'));
+      const querySnapshot = await getDocs(restaurantsQuery);
+      
+      const fetchedRestaurants: Restaurant[] = [];
+      console.log('Firestore querySnapshot size:', querySnapshot.size);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as {
+          name: string;
+          address: string;
+          website?: string;
+          gps?: FirebaseGeoPoint; 
+          menuCategories: MenuCategoryFirestore[];
+          originalJsonId: string;
+          menuSource?: 'database' | 'sample';
+          rating?: number;
+          totalRatings?: number;
+          notes?: string;
+        };
+        // console.log(`Processing Firestore doc ID: ${doc.id}, Name: ${data.name}`);
+        // console.log('Raw menuCategories from Firestore:', data.menuCategories);
 
-      if (!dbResponse.ok) {
-        throw new Error('Failed to fetch restaurants from database')
+        let dist = Infinity;
+        let gpsCoords: { latitude: number; longitude: number } | undefined = undefined;
+        if (data.gps && location) { // Ensure location is available for distance calculation
+          gpsCoords = { latitude: data.gps.latitude, longitude: data.gps.longitude };
+          dist = calculateDistance(location.lat, location.lng, data.gps.latitude, data.gps.longitude);
+        }
+
+        const flatMenu: MenuItem[] = [];
+        if (data.menuCategories && Array.isArray(data.menuCategories)) {
+          data.menuCategories.forEach(category => {
+            if (category.items && Array.isArray(category.items)) {
+              category.items.forEach(item => {
+                flatMenu.push({
+                  id: item.id,
+                  name: item.name,
+                  description: item.description,
+                  price: item.price,
+                  category: category.name, 
+                  dietaryRestrictions: item.dietaryRestrictions || [],
+                });
+              });
+            }
+          });
+        } else {
+          // console.log(`No menuCategories found or not an array for ${data.name}`);
+        }
+        // console.log(`Constructed flatMenu for ${data.name}:`, flatMenu); 
+        
+        fetchedRestaurants.push({
+          id: doc.id, 
+          name: data.name,
+          address: data.address,
+          distance: dist,
+          website: data.website,
+          menu: flatMenu,
+          menuSource: data.menuSource,
+          rating: data.rating,
+          totalRatings: data.totalRatings,
+          notes: data.notes,
+          originalJsonId: data.originalJsonId,
+          gps: gpsCoords,
+        });
+      });
+
+      // Filter restaurants within 1km radius
+      const nearbyRestaurants = fetchedRestaurants.filter(r => r.distance <= 1);
+      console.log(`Found ${fetchedRestaurants.length} total restaurants, ${nearbyRestaurants.length} within 1km.`);
+
+      // Sort by distance and limit to closest 10 (or fewer if less than 10 available within 1km)
+      const sortedRestaurants = nearbyRestaurants
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 10);
+      console.log('Final sorted and sliced restaurants:', sortedRestaurants.map(r => ({name: r.name, distance: r.distance})));
+
+      setRestaurants(sortedRestaurants);
+      if (sortedRestaurants.length > 0) {
+        if (!selectedRestaurant || !sortedRestaurants.find(r => r.id === selectedRestaurant.id)) {
+            setSelectedRestaurant(sortedRestaurants[0]);
+            // Set initial category for the newly selected restaurant
+            if (Array.isArray(sortedRestaurants[0].menu) && sortedRestaurants[0].menu.length > 0) {
+                const categories = Array.from(new Set(sortedRestaurants[0].menu.map(item => item.category)))
+                if (categories.length > 0) {
+                setSelectedGroup(categories[0])
+                }
+            }
+        }
+      } else {
+        setSelectedRestaurant(null);
+        setRestaurants([]); // Clear restaurants if none are nearby
       }
 
-      const dbData = await dbResponse.json()
-      
-      // Only use restaurants from our database and limit to closest 10
-      const allRestaurants = dbData.restaurants
-        .filter((r: Restaurant) => r.menuSource === 'database')
-        .sort((a: Restaurant, b: Restaurant) => a.distance - b.distance)
-        .slice(0, 10)
-
-      setRestaurants(allRestaurants)
     } catch (err) {
-      console.error('Error fetching restaurants:', err)
+      console.error('Error fetching restaurants from Firestore:', err)
       setError('Failed to load restaurants. Please try again later.')
     } finally {
       setLoading(false)
@@ -372,7 +468,8 @@ export default function Home() {
               paddingBottom: verticalPadding,
               paddingLeft: 16,
               paddingRight: 16,
-              transition: 'padding 0.3s linear'
+              transition: 'padding 0.3s linear',
+              borderRight: '1px solid var(--border-main)'
             }}>
               <svg 
                 width={logoWidth}
