@@ -19,7 +19,7 @@ import { Currency } from './context/CurrencyContext'
 import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
 
-import { db } from '../lib/firebase';
+import { db } from '@/lib/firebase';
 import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
 
 
