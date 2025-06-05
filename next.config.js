@@ -1,10 +1,10 @@
-const withPWA = require('next-pwa')({
+/* const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: false,
   buildExcludes: [/app-build-manifest.json$/],
-})
+}) */
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -22,4 +22,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withPWA(nextConfig) 
+module.exports = nextConfig // Directly export nextConfig, bypassing withPWA for now 
