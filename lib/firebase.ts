@@ -1,7 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, getAuth } from "firebase"; // Try top-level import for getFirestore and getAuth
-// import { getFirestore } from "firebase/firestore";
-// import { getAuth } from "firebase/auth"; // If you plan to use Authentication
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth"; // If you plan to use Authentication
 // import { getStorage } from "firebase/storage"; // If you plan to use Storage
 import { getAnalytics, isSupported } from "firebase/analytics";
 
