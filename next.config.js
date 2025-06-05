@@ -13,13 +13,13 @@ const nextConfig = {
   images: {
     domains: [],
   },
-  experimental: {
-    turbo: {
-      rules: {
-        // Configure Turbopack rules here if needed
-      },
-    },
-  },
+  // experimental: {
+  //   turbo: {
+  //     rules: {
+  //       // Configure Turbopack rules here if needed
+  //     },
+  //   },
+  // },
 }
 
 module.exports = nextConfig // Directly export nextConfig, bypassing withPWA for now 
