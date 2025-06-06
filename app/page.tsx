@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation'
 import { useIsMobile } from './hooks/useIsMobile'
 import { ViewModeToggle } from './components/ViewModeToggle'
 import { useViewMode } from './contexts/ViewModeContext'
-import { ActionButton } from './components/ActionButton'
 import { usePrice } from './hooks/usePrice'
 import { MenuItemRow } from './components/MenuItemRow'
 import { Currency } from './context/CurrencyContext'
@@ -171,7 +170,7 @@ export default function Home() {
       const progress = Math.min(scrollPosition / maxScroll, 1)
       setScrollProgress(progress)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -468,8 +467,9 @@ export default function Home() {
               paddingBottom: verticalPadding,
               paddingLeft: 16,
               paddingRight: 16,
-              transition: 'padding 0.3s linear',
-              borderRight: '1px solid var(--border-main)'
+              transition: 'padding 0.3s ease-out',
+              borderRight: '1px solid var(--border-main)',
+              willChange: 'padding-top, padding-bottom'
             }}>
               <svg 
                 width={logoWidth}
@@ -479,7 +479,8 @@ export default function Home() {
                 xmlns="http://www.w3.org/2000/svg" 
                 style={{ 
                   display: 'block',
-                  transition: 'width 0.3s linear, height 0.3s linear'
+                  transition: 'width 0.3s ease-out, height 0.3s ease-out',
+                  willChange: 'width, height'
                 }}
               >
                 <path d="M89.25 0.5V72.5H65.2933V21.4229H57.9343V72.5H31.3157V21.4229H23.9567V72.5H0V0.5H89.25Z" fill="var(--accent)"/>
@@ -489,8 +490,9 @@ export default function Home() {
               <div style={{ 
                 height: descriptionHeight,
                 overflow: 'hidden',
-                transition: 'height 0.3s linear, opacity 0.3s linear',
-                opacity: 1 - scrollProgress
+                transition: 'height 0.3s ease-out, opacity 0.3s ease-out',
+                opacity: 1 - scrollProgress,
+                willChange: 'height, opacity'
               }} ref={descriptionRef}>
                 <p style={{ 
                   color: 'var(--text-secondary)', 

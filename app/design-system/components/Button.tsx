@@ -18,7 +18,6 @@ export function Button({
   ...props 
 }: ButtonProps) {
   const baseStyles = "h-12 font-mono transition-colors flex items-center"
-  // Use CSS variables for color, background, and border
   let style: React.CSSProperties = {
     minWidth: 48,
     height: 48,
@@ -27,15 +26,29 @@ export function Button({
     padding: '0 16px',
   };
   
+  let iconColor = 'inherit'; // Default icon color
+
   if (variant === 'primary') {
     style.background = 'var(--accent)';
-    style.color = 'var(--text-primary)';
-    if (disabled) style.color = '#B9A5FF';
-  } else {
+    style.color = '#FFFFFF'; // Always white text for primary buttons
+    iconColor = '#FFFFFF';
+    if (disabled) {
+      style.color = 'rgba(255, 255, 255, 0.65)'; // Dimmer white for disabled primary text
+      iconColor = 'rgba(255, 255, 255, 0.65)';
+    }
+  } else { // secondary
     style.background = selected ? 'var(--accent)' : 'var(--background-main)';
     style.color = selected ? 'var(--background-main)' : 'var(--accent)';
+    iconColor = selected ? 'var(--background-main)' : 'var(--accent)';
     style.border = '1px solid var(--border-main)';
-    if (disabled) style.color = '#B9A5FF';
+    if (disabled) {
+      // For secondary disabled, use text-secondary or a specific muted color that works on both accent and background-main
+      // Current globals.css has --text-secondary which is semi-transparent, might be fine with opacity-50 too.
+      // Using text-secondary for consistency with how other disabled states might be handled.
+      style.color = 'var(--text-secondary)'; 
+      iconColor = 'var(--text-secondary)';
+      // Note: The previous #B9A5FF might have been too specific or clashy depending on theme.
+    }
   }
 
   return (
@@ -53,7 +66,6 @@ export function Button({
             if (typeof child === 'string' || typeof child === 'number') {
               return <span className="text-[14px] font-mono text-left flex-1">{child}</span>;
             }
-            // For icons or elements, force 16x16 and set color to match button text
             return React.isValidElement(child)
               ? React.cloneElement(child as React.ReactElement, {
                   className: 'w-4 h-4 flex-none',
@@ -61,11 +73,7 @@ export function Button({
                     width: 16,
                     height: 16,
                     display: 'block',
-                    color: disabled
-                      ? '#B9A5FF'
-                      : selected
-                        ? 'var(--background-main)'
-                        : 'var(--accent)',
+                    color: iconColor, // Use the determined iconColor
                     ...((child as any).props?.style || {})
                   },
                   ...((child as any).props || {})

@@ -1,5 +1,5 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
@@ -21,39 +21,54 @@ const jetbrainsMono = JetBrains_Mono({
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  applicationName: 'MUU',
   title: 'MUU',
-  description: 'Find and explore restaurant menus nearby.',
+  description: 'Standardized, accessible restaurant menus that remember your preferences.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/icon.png',
-    apple: '/apple-icon.png',
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon-192.png',
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'MUU',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover',
-  },
-  themeColor: '#ffffff',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://muu.app',
     title: 'MUU',
-    description: 'Find and explore restaurant menus nearby.',
+    description: 'Standardized, accessible restaurant menus that remember your preferences.',
     siteName: 'MUU',
+    images: [
+      {
+        url: '/icon-512.png',
+        width: 512,
+        height: 512,
+        alt: 'MUU Logo',
+      },
+    ],
   },
   twitter: {
     card: 'summary',
     title: 'MUU',
-    description: 'Find and explore restaurant menus nearby.',
+    description: 'Standardized, accessible restaurant menus that remember your preferences.',
+    images: ['/icon-512.png'],
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#111111' },
+  ],
 }
 
 export default function RootLayout({
@@ -63,30 +78,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-        <meta name="theme-color" content="#6237FF" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="MUU" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="MUU" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-        <meta property="og:title" content="MUU" />
-        <meta property="og:description" content="Accessible and personalized menus" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="/icon-512.png" />
-        <meta property="og:url" content="https://muu.app" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="MUU" />
-        <meta name="twitter:description" content="Accessible and personalized menus" />
-        <meta name="twitter:image" content="/icon-512.png" />
-      </head>
+      <head />
       <body suppressHydrationWarning className={`bg-background-secondary dark:bg-dark-background-main text-black dark:text-dark-text-primary`} style={{ fontFamily: 'var(--font-main)' }}>
         <FontProvider>
           <FontInitializer />

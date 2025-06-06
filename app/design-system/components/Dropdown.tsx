@@ -25,6 +25,7 @@ interface DropdownProps {
   hideChevron?: boolean
   preventCloseOnOptionClick?: boolean
   disabled?: boolean
+  isIconOnly?: boolean
 }
 
 export function Dropdown({ 
@@ -37,7 +38,8 @@ export function Dropdown({
   align = 'left',
   hideChevron = false,
   preventCloseOnOptionClick = false,
-  disabled = false
+  disabled = false,
+  isIconOnly = false
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -84,39 +86,61 @@ export function Dropdown({
         />
       )}
       {/* Dropdown trigger button */}
-      <button
-        type="button"
-        style={{
-          width: '100%',
-          height: 48,
-          borderLeft: '1px solid var(--border-main)',
-          borderRight: '1px solid var(--border-main)',
-          paddingLeft: 16,
-          paddingRight: 16,
-          background: isOpen ? 'var(--accent)' : 'var(--background-main)',
-          color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') ,
-          fontFamily: 'var(--font-mono, monospace)',
-          fontSize: 14,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          zIndex: 9998,
-          position: 'relative',
-        }}
-        className={className}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
-          {leftIcon && <div style={{ flex: 'none', color: isOpen ? 'var(--background-main)' : (disabled ? '#B9A5FF' : 'var(--accent)') }}>{leftIcon}</div>}
-          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') }}>{selectedOption?.label || 'Select...'}</span>
-        </div>
-        {!hideChevron && (
-          <ChevronDown
-            className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-            style={{ color: isOpen ? 'var(--background-main)' : 'var(--accent)' }}
-          />
-        )}
-      </button>
+      {isIconOnly ? (
+        <button
+          type="button"
+          style={{
+            width: 48,
+            height: 48,
+            border: '1px solid var(--border-main)',
+            background: isOpen ? 'var(--accent)' : 'var(--background-main)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9998,
+            position: 'relative',
+          }}
+          className={className}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={selectedOption?.label || 'Open menu'}
+        >
+          {leftIcon && <div style={{ color: isOpen ? 'var(--background-main)' : (disabled ? '#B9A5FF' : 'var(--accent)') }}>{leftIcon}</div>}
+        </button>
+      ) : (
+        <button
+          type="button"
+          style={{
+            width: '100%',
+            height: 48,
+            borderLeft: '1px solid var(--border-main)',
+            borderRight: '1px solid var(--border-main)',
+            paddingLeft: 16,
+            paddingRight: 16,
+            background: isOpen ? 'var(--accent)' : 'var(--background-main)',
+            color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') ,
+            fontFamily: 'var(--font-mono, monospace)',
+            fontSize: 14,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            zIndex: 9998,
+            position: 'relative',
+          }}
+          className={className}
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
+            {leftIcon && <div style={{ flex: 'none', color: isOpen ? 'var(--background-main)' : (disabled ? '#B9A5FF' : 'var(--accent)') }}>{leftIcon}</div>}
+            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') }}>{selectedOption?.label || 'Select...'}</span>
+          </div>
+          {!hideChevron && (
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+              style={{ color: isOpen ? 'var(--background-main)' : 'var(--accent)' }}
+            />
+          )}
+        </button>
+      )}
 
       <div 
         style={{

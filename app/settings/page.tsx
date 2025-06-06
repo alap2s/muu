@@ -2,7 +2,7 @@
 import { Button } from '../design-system/components/Button'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus } from 'lucide-react'
+import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../contexts/ViewModeContext'
@@ -84,6 +84,15 @@ export default function SettingsPage() {
       null,
       { icon: <Mail />, selected: false, onClick: handleEmail, label: 'Mail' },
       { icon: <Share />, selected: false, onClick: handleShare, label: 'Share' }
+    ],
+    // New Row for Components link
+    [
+      { icon: <Puzzle className="w-5 h-5" />, selected: false, onClick: () => router.push('/components'), label: 'Components' },
+      null, // Spacer
+      null, // Spacer
+      null, // Spacer
+      null, // Spacer
+      null  // Spacer
     ]
   ];
 
@@ -180,7 +189,7 @@ export default function SettingsPage() {
                 </div>
               )}
               {/* 3rd row (index 2) intentionally left empty */}
-              {i >= 3 && i < 7 && renderButtonRow(buttonGrid[i-3])}
+              {i >= 3 && i < 8 && renderButtonRow(buttonGrid[i-3])}
               {/* 5th row (index 4): font toggle buttons directly after center content */}
               {i === 4 && (
                 <>

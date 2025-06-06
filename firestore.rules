@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read and write to the 'restaurants' collection for now
+    // THIS IS INSECURE FOR PRODUCTION - SECURE IT LATER!
+    match /restaurants/{restaurantId} {
+      allow read, write: if true;
+    }
+    // Allow read/write access to all other collections for now
+    // THIS IS INSECURE - refine this based on your actual collections
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
