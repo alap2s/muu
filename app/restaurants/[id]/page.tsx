@@ -6,9 +6,10 @@ import { db } from '../../../lib/firebase'
 import { doc, getDoc, GeoPoint, updateDoc } from 'firebase/firestore'
 import { useViewMode } from '../../contexts/ViewModeContext'
 import { Button } from '../../design-system/components/Button'
-import { ArrowLeft, Edit, Loader2, Check, X } from 'lucide-react'
+import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2 } from 'lucide-react'
 import { ListItem } from '../../design-system/components/ListItem'
 import { Input } from '../../design-system/components/Input'
+import { v4 as uuidv4 } from 'uuid';
 
 // Interfaces matching the Firestore structure
 interface MenuItemFirestore {
@@ -40,11 +41,12 @@ interface RestaurantFormData {
     address: string;
     website: string;
     notes: string;
+    menuCategories: MenuCategoryFirestore[];
 }
 
 export default function RestaurantDetailPage({ params }: { params: { id: string } }) {
   const [restaurant, setRestaurant] = useState<RestaurantDetails | null>(null)
-  const [formData, setFormData] = useState<RestaurantFormData>({ name: '', address: '', website: '', notes: '' });
+  const [formData, setFormData] = useState<RestaurantFormData>({ name: '', address: '', website: '', notes: '', menuCategories: [] });
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -76,6 +78,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
               address: restaurantData.address || '',
               website: restaurantData.website || '',
               notes: restaurantData.notes || '',
+              menuCategories: restaurantData.menuCategories || [],
           });
         } else {
           setError('Restaurant not found.')
@@ -91,9 +94,54 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     fetchRestaurantDetails()
   }, [restaurantId])
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
       setFormData(prev => ({ ...prev, [name]: value }));
+  }
+
+  const handleMenuChange = (categoryIndex: number, itemIndex: number, field: keyof MenuItemFirestore, value: string | number) => {
+      const newMenuCategories = [...formData.menuCategories];
+      (newMenuCategories[categoryIndex].items[itemIndex] as any)[field] = value;
+      setFormData(prev => ({ ...prev, menuCategories: newMenuCategories }));
+  }
+
+  const handleCategoryNameChange = (categoryIndex: number, value: string) => {
+    const newMenuCategories = [...formData.menuCategories];
+    newMenuCategories[categoryIndex].name = value;
+    setFormData(prev => ({ ...prev, menuCategories: newMenuCategories }));
+  }
+
+  const addCategory = () => {
+    const newCategory: MenuCategoryFirestore = {
+      name: 'New Category',
+      items: []
+    };
+    setFormData(prev => ({ ...prev, menuCategories: [...prev.menuCategories, newCategory] }));
+  }
+
+  const addItemToCategory = (categoryIndex: number) => {
+    const newItem: MenuItemFirestore = {
+      id: uuidv4(),
+      name: 'New Item',
+      description: '',
+      price: 0,
+      dietaryRestrictions: []
+    };
+    const newMenuCategories = [...formData.menuCategories];
+    newMenuCategories[categoryIndex].items.push(newItem);
+    setFormData(prev => ({ ...prev, menuCategories: newMenuCategories }));
+  }
+
+  const deleteCategory = (categoryIndex: number) => {
+    const newMenuCategories = [...formData.menuCategories];
+    newMenuCategories.splice(categoryIndex, 1);
+    setFormData(prev => ({ ...prev, menuCategories: newMenuCategories }));
+  }
+
+  const deleteItem = (categoryIndex: number, itemIndex: number) => {
+    const newMenuCategories = [...formData.menuCategories];
+    newMenuCategories[categoryIndex].items.splice(itemIndex, 1);
+    setFormData(prev => ({ ...prev, menuCategories: newMenuCategories }));
   }
 
   const handleSave = async () => {
@@ -110,9 +158,17 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
             address: formData.address,
             website: formData.website,
             notes: formData.notes,
+            menuCategories: formData.menuCategories,
         });
         // Refresh local state after saving
-        setRestaurant(prev => prev ? { ...prev, ...formData } : null);
+        setRestaurant(prev => prev ? { 
+            ...prev,
+            name: formData.name,
+            address: formData.address,
+            website: formData.website,
+            notes: formData.notes,
+            menuCategories: formData.menuCategories,
+        } : null);
         setIsEditing(false);
     } catch (err) {
         console.error("Error updating document: ", err);
@@ -130,6 +186,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
               address: restaurant.address || '',
               website: restaurant.website || '',
               notes: restaurant.notes || '',
+              menuCategories: restaurant.menuCategories || [],
           });
       }
       setIsEditing(false);
@@ -170,21 +227,46 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     renderDetailRow('Website', restaurant.website, 'website'),
     renderDetailRow('Notes', restaurant.notes, 'notes'),
     ...(isEditing ? [] : [renderDetailRow('GPS', restaurant.gps ? `${restaurant.gps.latitude}, ${restaurant.gps.longitude}`: undefined)]),
-    ...(restaurant.menuCategories || []).flatMap(category => [
+    ...(isEditing ? formData.menuCategories : restaurant.menuCategories || []).flatMap((category, categoryIndex) => [
       // Category Header
-      <div key={`cat-header-${category.name}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-alt)' }}>
+      <div key={`cat-header-${category.name}-${categoryIndex}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-alt)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 16px' }}>
-            <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>{category.name}</h3>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 16px', justifyContent: 'space-between' }}>
+            {isEditing ? (
+              <div className="flex-1 flex items-center gap-2">
+                <Input value={category.name} onChange={(e) => handleCategoryNameChange(categoryIndex, e.target.value)} className="font-semibold text-base flex-1" />
+                <Button variant="secondary" onClick={() => addItemToCategory(categoryIndex)} aria-label="Add item to category">
+                  <Plus className="w-4 h-4" />
+                </Button>
+                <Button variant="secondary" onClick={() => deleteCategory(categoryIndex)} aria-label="Delete category">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
+            ) : (
+              <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>{category.name}</h3>
+            )}
         </div>
         <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
       </div>,
       // Menu Items
-      ...category.items.map(item => (
-        <div key={item.id} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+      ...category.items.map((item, itemIndex) => (
+        <div key={item.id || `item-${categoryIndex}-${itemIndex}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
             <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
             <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }}>
-              <ListItem title={item.name} subtitle={item.description} endContent={<span className="text-sm font-mono" style={{ color: 'var(--text-primary)' }}>{item.price}</span>} />
+              {isEditing ? (
+                <div className="flex-1 flex items-center gap-2 p-4">
+                  <div className="flex-1 flex flex-col gap-2">
+                    <Input placeholder="Item Name" value={item.name} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'name', e.target.value)} />
+                    <Input placeholder="Description" value={item.description || ''} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'description', e.target.value)} />
+                    <Input type="number" placeholder="Price" value={item.price} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'price', parseFloat(e.target.value) || 0)} />
+                  </div>
+                  <Button variant="secondary" onClick={() => deleteItem(categoryIndex, itemIndex)} aria-label="Delete item">
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ) : (
+                <ListItem title={item.name} subtitle={item.description} endContent={<span className="text-sm font-mono" style={{ color: 'var(--text-primary)' }}>{item.price}</span>} />
+              )}
             </div>
             <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         </div>
@@ -235,13 +317,22 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
             <p className="text-red-500">{error}</p>
           </div>
         ) : (
-          [...Array(rowCount)].map((_, i) => allContent[i] || (
-            <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
-          ))
+          <>
+            {[...Array(rowCount)].map((_, i) => allContent[i] || (
+              <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                  <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+                  <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
+                  <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              </div>
+            ))}
+            {isEditing && (
+                <div className="fixed bottom-0 right-0 p-4 z-50">
+                    <Button variant="primary" onClick={addCategory} className="rounded-full h-14 w-14 shadow-lg flex items-center justify-center" aria-label="Add new category">
+                        <Plus className="w-6 h-6" />
+                    </Button>
+                </div>
+            )}
+          </>
         )}
       </main>
     </div>
