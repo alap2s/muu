@@ -198,9 +198,9 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     return (
       <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '8px 16px' }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '8px 0' }}>
           {isEditing && fieldName ? (
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 px-3">
               <label className="text-xs font-mono" style={{ color: 'var(--text-secondary)'}}>{label}</label>
               <Input
                 name={fieldName}
@@ -231,7 +231,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
       // Category Header
       <div key={`cat-header-${category.name}-${categoryIndex}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-alt)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 16px', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 8px', justifyContent: 'space-between' }}>
             {isEditing ? (
               <div className="flex-1 flex items-center gap-2">
                 <Input value={category.name} onChange={(e) => handleCategoryNameChange(categoryIndex, e.target.value)} className="font-semibold text-base flex-1" />
@@ -252,10 +252,10 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
       ...category.items.map((item, itemIndex) => (
         <div key={item.id || `item-${categoryIndex}-${itemIndex}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
             <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }}>
+            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 8px' }}>
               {isEditing ? (
-                <div className="flex-1 flex items-center gap-2 p-4">
-                  <div className="flex-1 flex flex-col gap-2">
+                <div className="flex-1 flex items-center gap-2">
+                  <div className="flex-1 flex flex-col gap-2 py-2">
                     <Input placeholder="Item Name" value={item.name} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'name', e.target.value)} />
                     <Input placeholder="Description" value={item.description || ''} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'description', e.target.value)} />
                     <Input type="number" placeholder="Price" value={item.price} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'price', parseFloat(e.target.value) || 0)} />
