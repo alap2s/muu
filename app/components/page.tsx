@@ -6,6 +6,7 @@ import { ViewModeToggle } from '../components/ViewModeToggle'
 import { A2HSBanner } from '../components/A2HSBanner'
 import { MenuItemRow } from '../components/MenuItemRow'
 import { MenuCategoryRow } from '../components/MenuCategoryRow'
+import { ListItem } from '../design-system/components/ListItem'
 import type { MenuItem } from '../page'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -125,6 +126,30 @@ export default function ComponentsPage() {
         <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} icon={Search} aria-label="Search input with value" className="w-full" key="input-value" />,
         <Input value="Cannot edit this" disabled icon={Info} aria-label="Disabled input example" className="w-full" key="input-disabled" />,
         <Input placeholder="Password..." type="password" aria-label="Password input field" className="w-full" key="input-password"/>,
+      ]
+    },
+    {
+      id: 'list-item',
+      title: 'List Item',
+      description: 'A reusable list item component, suitable for settings, navigation, or data display. Can be clickable or static.',
+      renderExamples: () => [
+        <ListItem 
+          title="Clickable Item" 
+          subtitle="With a subtitle" 
+          onClick={() => alert('Clicked!')}
+          key="li-clickable"
+        />,
+        <ListItem 
+          title="Static Item" 
+          subtitle="Not clickable" 
+          key="li-static"
+        />,
+        <ListItem
+          title="Custom End Content"
+          subtitle="e.g., a toggle"
+          endContent={<ViewModeToggle />}
+          key="li-custom-end"
+        />,
       ]
     },
     {
