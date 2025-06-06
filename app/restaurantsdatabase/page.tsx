@@ -118,7 +118,7 @@ export default function RestaurantsDatabasePage() {
                   <ListItem
                     title={filteredRestaurants[i].name}
                     subtitle={filteredRestaurants[i].id}
-                    onClick={() => {/* Handle click in the future */}}
+                    onClick={() => router.push(`/restaurants/${filteredRestaurants[i].id}`)}
                   />
                 )}
               </div>
