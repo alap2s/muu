@@ -11,7 +11,6 @@ import React, { useState } from 'react'
 import { ArrowLeft, Sun, Moon, Grid2x2, Rows3, Plus, Minus, Search, AlertCircle, CheckCircle, XCircle, Info, Settings, Edit2, Trash2, Copy, ExternalLink, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ListFilter, SortAsc, SortDesc, Star, Heart, MapPin, User, ShoppingCart, LogOut, Eye, EyeOff, Layers, Store, UploadCloud, DownloadCloud, DollarSign, Euro, MessageSquare, Phone, Calendar, Clock, Home, FileText, Folder, Wifi, WifiOff, Zap, ZapOff, Volume2, VolumeX, Maximize, Minimize, Play, Pause, SkipBack, SkipForward, RotateCcw, RotateCw, RefreshCw, SearchSlash, List, Mail as MailIcon, Send, Leaf, Milk, Fish, Bird, Egg, Beef, Nut, SunMoon, Circle, CircleOff } from 'lucide-react'
 import { useViewMode } from '../contexts/ViewModeContext'
 import { useRouter } from 'next/navigation'
-import { usePrice } from '../hooks/usePrice'
 import { Currency, useCurrency } from '../context/CurrencyContext'
 import { useTheme } from '../context/ThemeContext'
 import { useFont } from '../context/FontContext'
@@ -29,7 +28,6 @@ export default function ComponentsPage() {
   const [selectedDropdownValue, setSelectedDropdownValue] = useState('option1')
   const [inputValue, setInputValue] = useState('Pre-filled value')
   const [expandedMenuItems, setExpandedMenuItems] = useState<Set<string>>(new Set())
-  const { formatPrice } = usePrice();
   const { themeMode, colorMode, setThemeMode, setColorMode } = useTheme()
   const { selectedCurrency, setSelectedCurrency } = useCurrency()
   const { font, setFont } = useFont();
