@@ -22,7 +22,7 @@ import { db } from '../lib/firebase';
 import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
 
 
-interface MenuItem {
+export interface MenuItem {
   id: string
   name: string
   description?: string
