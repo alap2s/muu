@@ -5,6 +5,7 @@ import { Input } from '../design-system/components/Input'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { A2HSBanner } from '../components/A2HSBanner'
 import { MenuItemRow } from '../components/MenuItemRow'
+import { MenuCategoryRow } from '../components/MenuCategoryRow'
 import type { MenuItem } from '../page'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -14,6 +15,7 @@ import { useRouter } from 'next/navigation'
 import { Currency, useCurrency } from '../context/CurrencyContext'
 import { useTheme } from '../context/ThemeContext'
 import { useFont } from '../context/FontContext'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 interface ComponentShowcaseItem {
   id: string;
@@ -71,6 +73,24 @@ export default function ComponentsPage() {
     }
     setExpandedMenuItems(newExpandedItems);
   };
+
+  const ShowcaseMenuCategoryRow = () => {
+    const isMobile = useIsMobile()
+    return (
+      <div style={{ position: 'relative', width: '100%' }}>
+        <MenuCategoryRow
+          key="mc-showcase"
+          category="Showcase Category"
+          items={mockMenuItems}
+          expandedItems={expandedMenuItems}
+          toggleItemExpansion={toggleMenuItemExpansion}
+          getDietaryIcons={mockGetDietaryIcons}
+          viewMode={viewMode}
+          categoryRef={() => {}}
+        />
+      </div>
+    )
+  }
 
   const componentShowcases: ComponentShowcaseItem[] = [
     {
@@ -157,13 +177,12 @@ export default function ComponentsPage() {
       ]
     },
     {
-      id: 'menuitemrow',
-      title: 'MenuItemRow',
-      description: 'Displays a menu item with details, price, dietary icons, and expandable description.',
-      renderExamples: () => 
-        mockMenuItems.map(item => (
-           <MenuItemRow key={`mir-${item.id}`} item={item} expanded={expandedMenuItems.has(item.id)} onClick={() => toggleMenuItemExpansion(item.id)} getDietaryIcons={mockGetDietaryIcons} viewMode={viewMode} />
-        ))
+      id: 'menu_components',
+      title: 'Menu Components',
+      description: 'Components for displaying menu categories and individual menu items.',
+      renderExamples: () => [
+        <ShowcaseMenuCategoryRow key="showcase-menu-wrapper" />
+      ]
     }
   ];
 

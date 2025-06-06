@@ -14,6 +14,7 @@ import { ViewModeToggle } from './components/ViewModeToggle'
 import { useViewMode } from './contexts/ViewModeContext'
 import { usePrice } from './hooks/usePrice'
 import { MenuItemRow } from './components/MenuItemRow'
+import { MenuCategoryRow } from './components/MenuCategoryRow'
 import { Currency } from './context/CurrencyContext'
 import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
@@ -469,7 +470,8 @@ export default function Home() {
               paddingRight: 16,
               transition: 'padding 0.3s ease-out',
               borderRight: '1px solid var(--border-main)',
-              willChange: 'padding-top, padding-bottom'
+              willChange: 'padding-top, padding-bottom',
+              flex: 1
             }}>
               <svg 
                 width={logoWidth}
@@ -626,48 +628,20 @@ export default function Home() {
             <div className="bg-primary-light dark:bg-dark-background-main pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`}>
               <div className="space-y-0">
                 {Object.entries(groupedMenu).map(([category, items]) => (
-                  <div 
-                    key={category} 
-                    ref={(el) => {
+                  <MenuCategoryRow
+                    key={category}
+                    category={category}
+                    items={items}
+                    expandedItems={expandedItems}
+                    toggleItemExpansion={toggleItemExpansion}
+                    getDietaryIcons={getDietaryIcons}
+                    viewMode={viewMode}
+                    categoryRef={(el) => {
                       if (categoryRefs.current) {
                         categoryRefs.current[category] = el
                       }
                     }}
-                  >
-                    <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                      <div
-                        style={{
-                          width: 32,
-                          height: 48,
-                          borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                          background: 'var(--background-main)'
-                        }}
-                      />
-                      <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
-                        <h3 style={{ color: 'var(--text-primary)', height: 48, display: 'flex', alignItems: 'center', paddingLeft: 16, textTransform: 'uppercase', fontWeight: 800, fontSize: 10 }}>{category}</h3>
-                      </div>
-                      <div
-                        style={{
-                          width: 32,
-                          height: 48,
-                          borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                          background: 'var(--background-main)'
-                        }}
-                      />
-                    </div>
-                    <div className="space-y-0" role="list">
-                      {items.map((item) => (
-                        <MenuItemRow
-                          key={item.id}
-                          item={item}
-                          expanded={expandedItems.has(item.id)}
-                          onClick={toggleItemExpansion}
-                          getDietaryIcons={getDietaryIcons}
-                          viewMode={viewMode}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  />
                 ))}
               </div>
 
