@@ -6,7 +6,7 @@ import { db } from '../../../../lib/firebase'
 import { doc, getDoc, GeoPoint, updateDoc, deleteDoc } from 'firebase/firestore'
 import { useViewMode } from '../../../contexts/ViewModeContext'
 import { Button } from '../../../design-system/components/Button'
-import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2 } from 'lucide-react'
+import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideProps } from 'lucide-react'
 import { ListItem } from '../../../design-system/components/ListItem'
 import { Input } from '../../../design-system/components/Input'
 import { v4 as uuidv4 } from 'uuid';
@@ -436,7 +436,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     label: string, 
     value: string, 
     fieldName: keyof Omit<RestaurantFormData, 'menuCategories'>,
-    IconComponent: React.ElementType,
+    IconComponent: React.ForwardRefExoticComponent<LucideProps>,
     required?: boolean
   ) => {
     return (
