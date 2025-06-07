@@ -142,10 +142,10 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800 }} />
-        <div style={{ width: 32 }} />
+      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }}>
+        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
+        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }} />
+        <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
 
       <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
@@ -159,19 +159,14 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
         <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
       </header>
 
-      <main className="space-y-0" style={{ height: `calc(100vh - 48px - env(safe-area-inset-top))`, overflowY: 'auto' }} role="region" aria-label="Restaurant details">
-        {loading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
-              <Loader2 className="w-5 h-5 animate-spin" />
-              <span className="text-sm">Loading Restaurant Details...</span>
-            </div>
+      <main>
+        {loading && (
+          <div className="flex justify-center items-center" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))' }}>
+            <Loader2 className="w-8 h-8 animate-spin" />
           </div>
-        ) : error ? (
-          <div className="flex justify-center items-center h-full">
-            <p className="text-red-500">{error}</p>
-          </div>
-        ) : (
+        )}
+        {error && <p className="text-red-500 p-4">{error}</p>}
+        {restaurant && (
           <>
             {detailItems.map(item => item.value ? <DetailRow key={item.label} label={item.label} value={item.value} viewMode={viewMode} /> : null)}
             {restaurant.menuCategories && restaurant.menuCategories.map(category => (
