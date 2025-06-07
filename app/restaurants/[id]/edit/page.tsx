@@ -324,7 +324,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
     if (Object.keys(errors).length > 0) {
         // If there are top-level errors or nested errors, prevent saving.
-        if (Object.values(errors).some(val => val === true || (typeof val === 'object' && Object.keys(val).length > 0))) {
+        if (Object.values(errors).some(val => val === true || (typeof val === 'object' && val !== null && Object.keys(val).length > 0))) {
             setError("Please fill in all required fields marked with *");
             return;
         }
