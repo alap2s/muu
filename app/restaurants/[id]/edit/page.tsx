@@ -437,9 +437,15 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   }
 
   const isSaveDisabled = 
+    !formData ||
     isSaving || 
     addressError !== null || 
-    (formData && (!formData.name.trim() || !formData.address.trim() || formData.menuCategories.length === 0 || !formData.menuCategories[0].name.trim() || formData.menuCategories[0].items.length === 0 || !formData.menuCategories[0].items[0].name.trim()));
+    !formData.name.trim() || 
+    !formData.address.trim() || 
+    formData.menuCategories.length === 0 || 
+    !formData.menuCategories[0].name.trim() || 
+    formData.menuCategories[0].items.length === 0 || 
+    !formData.menuCategories[0].items[0].name.trim();
 
   if (loading) {
     return (
