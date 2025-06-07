@@ -578,7 +578,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
            </Button>
            <h1 className="text-base font-semibold truncate" style={{ color: 'var(--text-primary)' }}>Edit Details</h1>
            <div className="flex items-center">
-             <Button variant="secondary" onClick={handleDelete} disabled={isDeleting} aria-label="Delete restaurant">
+             <Button variant="secondary" onClick={() => handleDelete()} disabled={isDeleting} aria-label="Delete restaurant">
                {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
              </Button>
              <Button 
