@@ -14,6 +14,7 @@ interface MenuCategoryRowProps {
   getDietaryIcons: (item: MenuItem) => React.ReactNode[]
   viewMode: ViewMode
   categoryRef: (el: HTMLDivElement | null) => void
+  headerHeight?: number
 }
 
 export const MenuCategoryRow: React.FC<MenuCategoryRowProps> = ({
@@ -24,11 +25,13 @@ export const MenuCategoryRow: React.FC<MenuCategoryRowProps> = ({
   getDietaryIcons,
   viewMode,
   categoryRef,
+  headerHeight,
 }) => {
   const isMobile = useIsMobile()
   // Desktop header is 48px (logo area) + 48px (nav) + 1px border = 97px
   // Mobile header is just the logo area (48px)
-  const stickyTopOffset = isMobile ? '48px' : '97px'
+  const stickyTopOffsetValue = headerHeight !== undefined ? headerHeight : isMobile ? 48 : 97
+  const stickyTopOffset = `${stickyTopOffsetValue}px`
 
   return (
     <div ref={categoryRef}>

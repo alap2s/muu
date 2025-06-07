@@ -5,14 +5,18 @@ import { LucideIcon } from 'lucide-react'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
-  error?: string
+  error?: boolean
+  warning?: boolean
   icon?: LucideIcon
+  iconClassName?: string
 }
 
 export function Input({ 
   label, 
   error, 
+  warning,
   icon: Icon,
+  iconClassName,
   className = '', 
   ...props 
 }: InputProps) {
@@ -33,29 +37,25 @@ export function Input({
           width: '100%',
           height: 48,
           background: 'var(--background-main)',
-          border: `1px solid ${error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--border-main)'}`,
+          border: `1px solid ${error ? 'hsl(var(--destructive))' : warning ? 'hsl(var(--warning))' : isFocused ? 'var(--accent)' : 'var(--border-main)'}`,
           transition: 'border-color 0.2s',
         }}
       >
         {Icon && (
           <div 
+            className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
             style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              width: 48,
-              height: 48,
-              color: error ? '#f87171' : isFocused ? 'var(--accent)' : 'var(--accent)',
+              color: error ? 'hsl(var(--destructive))' : warning ? 'hsl(var(--warning))' : 'var(--accent)'
             }}
           >
-            <Icon size={16} />
+            <Icon className={`w-4 h-4 ${iconClassName || ''}`} />
           </div>
         )}
         <input
           style={{
             width: '100%',
             height: '100%',
-            paddingLeft: Icon ? 0 : 16,
+            paddingLeft: Icon ? 40 : 16,
             paddingRight: 16,
             background: 'transparent',
             border: 'none',
@@ -65,6 +65,7 @@ export function Input({
             outline: 'none',
           }}
           className={className}
+          {...props}
           onFocus={(e) => {
             setIsFocused(true)
             props.onFocus?.(e)
@@ -73,12 +74,8 @@ export function Input({
             setIsFocused(false)
             props.onBlur?.(e)
           }}
-          {...props}
         />
       </div>
-      {error && (
-        <p className="mt-2 text-sm" style={{ color: '#f87171' }}>{error}</p>
-      )}
     </div>
   )
 } 

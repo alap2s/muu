@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { db } from '../../lib/firebase'
-import { collection, getDocs, query, orderBy } from 'firebase/firestore'
+import { collection, getDocs, query, orderBy, addDoc, GeoPoint } from 'firebase/firestore'
 import { useViewMode } from '../contexts/ViewModeContext'
 import { Button } from '../design-system/components/Button'
-import { ArrowLeft, Loader2, ChevronRight, Search } from 'lucide-react'
+import { ArrowLeft, Loader2, Plus, Search } from 'lucide-react'
 import { Input } from '../design-system/components/Input'
 import { ListItem } from '../design-system/components/ListItem'
+import { v4 as uuidv4 } from 'uuid';
 
 interface RestaurantInfo {
   id: string
@@ -19,6 +20,7 @@ export default function RestaurantsDatabasePage() {
   const [restaurants, setRestaurants] = useState<RestaurantInfo[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [loading, setLoading] = useState(true)
+  const [adding, setAdding] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const { viewMode } = useViewMode()
@@ -56,6 +58,46 @@ export default function RestaurantsDatabasePage() {
     restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const handleAddRestaurant = async () => {
+    setAdding(true)
+    setError(null)
+    try {
+      const newRestaurantRef = await addDoc(collection(db, 'restaurants'), {
+        name: '',
+        address: '',
+        website: '',
+        notes: '',
+        menuCategories: [
+          {
+            id: uuidv4(),
+            name: '',
+            items: [
+              {
+                id: uuidv4(),
+                name: '',
+                description: '',
+                price: 0,
+                dietaryRestrictions: []
+              }
+            ]
+          }
+        ],
+        gps: new GeoPoint(0, 0),
+        menuSource: 'database',
+        rating: 0,
+        totalRatings: 0,
+        originalJsonId: '',
+        createdAt: new Date(), // Optional: for sorting by creation time
+      });
+      console.log('New restaurant created with ID:', newRestaurantRef.id)
+      router.push(`/restaurants/${newRestaurantRef.id}/edit`)
+    } catch (err) {
+      console.error('Error creating new restaurant:', err)
+      setError('Failed to create a new restaurant. Please try again.')
+      setAdding(false)
+    }
+  }
+
   const rowCount = Math.max(24, filteredRestaurants.length + 2) // Ensure at least 24 rows
 
   return (
@@ -77,6 +119,9 @@ export default function RestaurantsDatabasePage() {
             </Button>
             <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Restaurant Database</h1>
           </div>
+          <Button variant="secondary" onClick={handleAddRestaurant} disabled={adding} aria-label="Add new restaurant">
+            {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+          </Button>
         </div>
         <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
       </header>
@@ -113,7 +158,7 @@ export default function RestaurantsDatabasePage() {
           [...Array(rowCount)].map((_, i) => (
             <div key={i} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
               <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }}>
+              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
                 {i < filteredRestaurants.length && (
                   <ListItem
                     title={filteredRestaurants[i].name}

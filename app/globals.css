@@ -17,6 +17,12 @@
   --brand: #6237FF;
   --brand-light: #7B5AFF;
   --brand-dark: #4A1FFF;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --warning: 38 92% 50%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
 }
 
 :root.dark {
@@ -33,6 +39,12 @@
   --brand: #9B7AFF;
   --brand-light: #B39AFF;
   --brand-dark: #7B5AFF;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --warning: 48 96% 52%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
 }
 
 /* Gray mode overrides - these only affect content colors, not backgrounds */
@@ -73,6 +85,12 @@
     --brand: #9B7AFF;
     --brand-light: #B39AFF;
     --brand-dark: #7B5AFF;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --warning: 48 96% 52%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
   }
 
   /* Override for gray mode in system dark mode */
@@ -101,6 +119,12 @@
     --brand: #6237FF;
     --brand-light: #7B5AFF;
     --brand-dark: #4A1FFF;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
   }
 
   /* Override for gray mode in system light mode */

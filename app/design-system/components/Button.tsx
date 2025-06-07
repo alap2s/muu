@@ -51,6 +51,17 @@ export function Button({
     }
   }
 
+  const childArray = React.Children.toArray(children);
+  const isIconOnly = variant === 'secondary' && childArray.length === 1 && React.isValidElement(childArray[0]);
+
+  // If there is only one child and it's an icon, assume it's an icon-only button
+  if (isIconOnly) {
+    style.width = 48;
+    style.height = 48;
+    style.padding = '0';
+    style.justifyContent = 'center';
+  }
+
   return (
     <button
       className={`${baseStyles} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
@@ -61,7 +72,7 @@ export function Button({
       {loading ? (
         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
       ) : (
-        <span className="flex items-center gap-2 w-full text-[14px] font-mono">
+        <span className={`flex items-center gap-2 ${isIconOnly ? '' : 'w-full'} text-[14px] font-mono`}>
           {React.Children.map(children, child => {
             if (typeof child === 'string' || typeof child === 'number') {
               return <span className="text-[14px] font-mono text-left flex-1">{child}</span>;

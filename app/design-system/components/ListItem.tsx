@@ -29,8 +29,8 @@ export const ListItem: React.FC<ListItemProps> = ({
         minHeight: '48px',
       }}
     >
-      <div className="flex flex-col">
-        <span className="text-sm" style={{ color: 'var(--text-primary)' }}>
+      <div className="flex flex-col flex-1 min-w-0 mr-4">
+        <span className="text-sm truncate" style={{ color: 'var(--text-primary)' }}>
           {title}
         </span>
         {subtitle && (

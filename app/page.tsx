@@ -89,6 +89,8 @@ export default function Home() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   const menuRef = useRef<HTMLDivElement>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+  const headerRef = useRef<HTMLElement>(null)
+  const [headerHeight, setHeaderHeight] = useState(0)
   const [language, setLanguage] = useState<'EN' | 'DE'>(() => {
     if (typeof window !== 'undefined') {
       return (localStorage.getItem('language') as 'EN' | 'DE') || 'EN'
@@ -214,6 +216,26 @@ export default function Home() {
       setInitialDescriptionHeight(descriptionRef.current.scrollHeight)
     }
   }, [])
+
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight)
+      }
+    }
+
+    updateHeaderHeight()
+    const resizeObserver = new ResizeObserver(updateHeaderHeight)
+    if (headerRef.current) {
+      resizeObserver.observe(headerRef.current)
+    }
+
+    return () => {
+      if (headerRef.current) {
+        resizeObserver.unobserve(headerRef.current)
+      }
+    }
+  }, [scrollProgress])
 
   const fetchRestaurants = async () => {
     if (!location) return
@@ -438,6 +460,7 @@ export default function Home() {
       </div>
 
       <header
+        ref={headerRef}
         className="flex flex-col sticky top-0 z-50"
         style={{ 
           borderBottom: '1px solid var(--border-main)', 
@@ -641,6 +664,7 @@ export default function Home() {
                         categoryRefs.current[category] = el
                       }
                     }}
+                    headerHeight={headerHeight}
                   />
                 ))}
               </div>
