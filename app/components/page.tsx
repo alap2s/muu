@@ -147,7 +147,7 @@ export default function ComponentsPage() {
         <ListItem
           title="Custom End Content"
           subtitle="e.g., a toggle"
-          endContent={<ViewModeToggle />}
+          endContent={<ViewModeToggle viewMode={viewMode} onViewModeChange={setViewMode} />}
           key="li-custom-end"
         />,
       ]
