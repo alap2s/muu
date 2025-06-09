@@ -169,62 +169,61 @@ export default function SettingsPage() {
 
       {/* Content */}
       <div className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Settings options">
-        {[...Array(rowCount)].map((_, i) => (
-          <div key={i} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div
-              style={{
-                width: 32,
-                height: i === 1 ? 'auto' : 48,
-                borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                background: 'var(--background-main)'
-              }}
-            />
-            <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i === 1 ? 'auto' : 48, position: 'relative' }}>
-              {i === 1 && (
-                <div className="flex flex-col w-full px-3" style={{ paddingTop: 12, paddingBottom: 12 }}>
-                  <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
-                  <span style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
-                    A smart, accessible menu app that automatically shows you the restaurant's menu where you're seated. Designed with accessibility in mind, it offers easy-to-read fonts, dark and light modes, currency support, and simple layouts. Restaurants can print personalized, standardized menus, with support for multiple languages coming soon.
-                  </span>
-                </div>
-              )}
-              {/* 3rd row (index 2) intentionally left empty */}
-              {i >= 3 && i < 8 && renderButtonRow(buttonGrid[i-3])}
-              {/* 5th row (index 4): font toggle buttons directly after center content */}
-              {i === 4 && (
-                <>
-                  <Button
-                    variant="secondary"
-                    selected={font === 'jetbrains'}
-                    onClick={() => setFont('jetbrains')}
-                    className="w-12 h-12 p-0 flex items-center justify-center rounded-none border-r-0"
-                    aria-label="Use JetBrains Mono font"
-                    aria-pressed={font === 'jetbrains'}
-                  >
-                    <span className="font-mono text-[14px]" aria-hidden="true">JT</span>
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    selected={font === 'atkinson'}
-                    onClick={() => setFont('atkinson')}
-                    className="w-12 h-12 p-0 flex items-center justify-center rounded-none"
-                    aria-label="Use Atkinson Hyperlegible font"
-                    aria-pressed={font === 'atkinson'}
-                  >
-                    <span className="font-mono text-[14px]" aria-hidden="true">AT</span>
-                  </Button>
-                </>
-              )}
+        {/* Empty Row */}
+        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
+          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        </div>
+
+        {/* Settings Rows */}
+        {buttonGrid.map((row, i) => (
+          <div key={`settings-row-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+            <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48, position: 'relative' }}>
+              {renderButtonRow(row)}
             </div>
-            <div
-              style={{
-                width: 32,
-                height: i === 1 ? 'auto' : 48,
-                borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                background: 'var(--background-main)'
-              }}
-            />
+            <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
           </div>
+        ))}
+        
+        {/* Empty Row */}
+        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
+          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        </div>
+
+        {/* MUU Info Row */}
+        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          <div style={{ flex: 1, maxWidth: 800, padding: '12px 16px' }}>
+            <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
+              A menu experiment (mostly for Berlin friends) — that shows you a standardized, accessible menu automatically when you sit down.
+            </p>
+          </div>
+          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        </div>
+
+        {/* Credit Row */}
+        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          <div style={{ flex: 1, maxWidth: 800, padding: '12px 16px' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 12 }}>
+              Designed and vibe coded by <a href="https://www.linkedin.com/in/shahalap/" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>@alap</a> in Berlin, Europe.
+            </p>
+          </div>
+          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        </div>
+
+        {/* Filler rows to push content up */}
+        {[...Array(10)].map((_, i) => (
+            <div key={`filler-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+              <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
+              <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+            </div>
         ))}
       </div>
     </div>

@@ -27,7 +27,7 @@
 
 :root.dark {
   /* Dark theme with brand colors */
-  --accent: #7B5AFF;
+  --accent: #C6BBEF;
   --background-main: #1A1A1A;
   --background-secondary: #242424;
   --background-tertiary: #2A2A2A;
@@ -73,7 +73,7 @@
 /* Auto theme mode - uses system preferences */
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --accent: #7B5AFF;
+    --accent: #C6BBEF;
     --background-main: #1A1A1A;
     --background-secondary: #242424;
     --background-tertiary: #2A2A2A;
