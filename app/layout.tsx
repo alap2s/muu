@@ -78,7 +78,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
+      <head>
+        <meta name="mobile-web-app-capable" content="yes" />
+      </head>
       <body suppressHydrationWarning className={`bg-background-secondary dark:bg-dark-background-main text-black dark:text-dark-text-primary`} style={{ fontFamily: 'var(--font-main)' }}>
         <FontProvider>
           <FontInitializer />
