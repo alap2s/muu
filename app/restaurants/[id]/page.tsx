@@ -150,7 +150,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
 
       <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
         <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, padding: '0 16px' }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, paddingLeft: '16px' }}>
           <h1 className="text-base font-semibold" style={{ color: 'var(--accent)' }}>Details</h1>
           <Button variant="secondary" onClick={handleEditClick} aria-label="Edit restaurant details">
             <Edit className="w-4 h-4" aria-hidden="true" />
