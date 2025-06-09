@@ -442,7 +442,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     return (
       <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
             <div className="flex flex-col w-full">
               <Input
                 name={fieldName}
@@ -498,7 +498,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     renderDetailRow('Name', formData.name, 'name', Store, true),
     <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
             <div className="flex flex-col w-full">
               <Input
                 name="address"
@@ -545,7 +545,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-alt)' }}
       >
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, justifyContent: 'space-between' }}>
             <div className="flex-1 flex items-center">
                 <Input 
                   placeholder={categoryIndex === 0 ? "Category Name *" : "Category Name"}
@@ -575,8 +575,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
           style={{ borderBottom: '1px solid var(--border-main)' }}
         >
             <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }}>
-                <div className="flex-1 flex items-start p-0">
+            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+                <div className="flex-1 flex items-start">
                   <div className="flex-1 flex flex-col">
                     <Input 
                         placeholder={categoryIndex === 0 && itemIndex === 0 ? "Item Name *" : "Item Name"}

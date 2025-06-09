@@ -6,7 +6,7 @@ import { db } from '../../../lib/firebase'
 import { doc, getDoc, GeoPoint } from 'firebase/firestore'
 import { useViewMode } from '../../contexts/ViewModeContext'
 import { Button } from '../../design-system/components/Button'
-import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef } from 'lucide-react'
+import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef, WheatOff, Flame } from 'lucide-react'
 import { MenuCategoryRow } from '../../components/MenuCategoryRow'
 import { DetailRow } from '../../components/DetailRow'
 
@@ -67,31 +67,39 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     const icons = []
     const name = item.name.toLowerCase()
     const description = item.description?.toLowerCase() || ''
+    const combinedText = `${name} ${description}`;
 
+    // --- Explicit Restrictions ---
+    // These are based on data saved in the database and are the most reliable.
     if (item.dietaryRestrictions.includes('vegan')) {
-      icons.push(<Leaf key="leaf" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
+      icons.push(<Leaf key="vegan" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     } else if (item.dietaryRestrictions.includes('vegetarian')) {
-      icons.push(<Milk key="milk" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
+      icons.push(<Milk key="vegetarian" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
-    if (item.dietaryRestrictions.includes('nuts') || name.includes('nuts') || description.includes('nuts')) {
-      icons.push(<Nut key="nut" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
+    
+    // --- Inferred & Explicit Restrictions ---
+    // These can be explicitly set or inferred from keywords.
+    if (item.dietaryRestrictions.includes('gluten-free') || /\b(gluten-free|glutenfrei)\b/.test(combinedText)) {
+        icons.push(<WheatOff key="gluten-free" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />);
     }
+    if (item.dietaryRestrictions.includes('spicy') || /\b(spicy|scharf|hot|chili)\b/.test(combinedText)) {
+        icons.push(<Flame key="spicy" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />);
+    }
+    if (item.dietaryRestrictions.includes('nuts') || /\b(nuts?|almond|cashew|walnut|peanut|nuss|mandel|erdnuss)\b/.test(combinedText)) {
+      icons.push(<Nut key="nuts" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
+    }
+
+    // --- Purely Inferred Restrictions ---
+    // This block only runs if the item is not explicitly vegan or vegetarian.
     if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
-      if (name.includes('chicken') || description.includes('chicken') || 
-          name.includes('hähnchen') || description.includes('hähnchen')) {
-        icons.push(<Bird key="bird" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
-      } else if (name.includes('egg') || description.includes('egg') ||
-                 name.includes('ei') || description.includes('ei')) {
+      if (/\b(chicken|turkey|duck|hähnchen|geflügel|pute|ente)\b/.test(combinedText)) {
+        icons.push(<Bird key="poultry" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
+      } else if (/\b(egg|ei)\b/.test(combinedText)) {
         icons.push(<Egg key="egg" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
-      } else if (name.includes('fish') || description.includes('fish') ||
-                 name.includes('fisch') || description.includes('fisch') ||
-                 name.includes('tuna') || description.includes('tuna')) {
+      } else if (/\b(fish|tuna|salmon|lachs|fisch|thunfisch|shrimp|prawn|crab|lobster|seafood|meeresfrüchte|garnele|krabbe)\b/.test(combinedText)) {
         icons.push(<Fish key="fish" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
-      } else if (name.includes('ham') || description.includes('ham') ||
-                 name.includes('schinken') || description.includes('schinken')) {
-        icons.push(<Beef key="ham" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
-      } else {
-        icons.push(<Bird key="meat" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
+      } else if (/\b(beef|steak|rind|ham|schinken|pork|bacon|schwein|speck|kalb)\b/.test(combinedText)) {
+        icons.push(<Beef key="meat" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
       }
     }
     return icons
@@ -148,10 +156,10 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
 
-      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
+      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 20, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
         <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, paddingLeft: '16px' }}>
-          <h1 className="text-base font-semibold" style={{ color: 'var(--accent)' }}>Details</h1>
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
+          <h1 className="text-base font-semibold pl-4" style={{ color: 'var(--accent)' }}>Details</h1>
           <Button variant="secondary" onClick={handleEditClick} aria-label="Edit restaurant details">
             <Edit className="w-4 h-4" aria-hidden="true" />
           </Button>
@@ -179,7 +187,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
                 getDietaryIcons={getDietaryIcons}
                 viewMode={viewMode}
                 categoryRef={() => {}} // Not needed for scrolling here
-                headerHeight={0}
+                headerHeight={48}
               />
             ))}
           </>
