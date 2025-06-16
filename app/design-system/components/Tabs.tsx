@@ -7,49 +7,36 @@ interface Tab {
   label: string
 }
 
-interface TabsProps {
+interface TabsProps<T extends string> {
   tabs: Tab[]
-  activeTab: string
-  onTabChange: (tabId: string) => void
+  activeTab: T
+  onTabChange: (tabId: T) => void
   className?: string
 }
 
-export function Tabs({ tabs, activeTab, onTabChange, className = '' }: TabsProps) {
-  const baseStyles = "h-12 font-mono transition-colors flex items-center"
-  
+export function Tabs<T extends string>({ tabs, activeTab, onTabChange, className = '' }: TabsProps<T>) {
   return (
     <div className={`flex ${className}`}>
-      {tabs.map((tab) => {
-        const isActive = tab.id === activeTab
-        const style: React.CSSProperties = {
-          height: 48,
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 16px',
-          background: isActive ? 'var(--accent)' : 'var(--background-main)',
-          color: isActive ? 'var(--background-main)' : 'var(--accent)',
-          border: '1px solid var(--border-main)',
-          borderRight: 'none'
-        }
-
-        // Add right border to last tab
-        if (tab.id === tabs[tabs.length - 1].id) {
-          style.borderRight = '1px solid var(--border-main)'
-        }
-
-        return (
-          <button
-            key={tab.id}
-            className={`${baseStyles} ${className}`}
-            style={style}
-            onClick={() => onTabChange(tab.id)}
-          >
-            <span className="flex items-center text-[14px] font-mono whitespace-nowrap">
-              {tab.label}
-            </span>
-          </button>
-        )
-      })}
+      {tabs.map((tab, index) => (
+        <button
+          key={tab.id}
+          onClick={() => onTabChange(tab.id as T)}
+          className={`h-12 font-mono transition-colors flex items-center ${
+            activeTab === tab.id
+              ? 'bg-accent text-background-main'
+              : 'bg-background-main text-accent'
+          }`}
+          style={{
+            minWidth: 48,
+            height: 48,
+            padding: '0 16px',
+            border: '1px solid var(--border-main)',
+            borderRight: index === tabs.length - 1 ? '1px solid var(--border-main)' : 'none'
+          }}
+        >
+          <span className="text-[14px] font-mono">{tab.label}</span>
+        </button>
+      ))}
     </div>
   )
 } 

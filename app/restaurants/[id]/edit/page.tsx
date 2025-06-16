@@ -44,6 +44,8 @@ interface MenuJson {
   menuCategories: MenuCategoryFirestore[];
 }
 
+type TabType = 'manual' | 'json';
+
 export default function RestaurantEditPage({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState<RestaurantFormData | null>(null);
   const [originalAddress, setOriginalAddress] = useState<string>('');
@@ -58,7 +60,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const [formErrors, setFormErrors] = useState<any>({});
   const [isNewRestaurant, setIsNewRestaurant] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
-  const [activeTab, setActiveTab] = useState<'manual' | 'json'>('manual')
+  const [activeTab, setActiveTab] = useState<TabType>('manual')
   const [jsonInput, setJsonInput] = useState('')
   const [jsonError, setJsonError] = useState<string | null>(null)
 
@@ -156,7 +158,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   }, [activeTab, formData]);
 
   // Update the tab change handler
-  const handleTabChange = (tab: 'manual' | 'json') => {
+  const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
     if (tab === 'json' && formData) {
       const menuJson: MenuJson = {
@@ -613,7 +615,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     <div key="tabs-row" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
-            <Tabs
+            <Tabs<TabType>
               tabs={[
                 { id: 'manual', label: 'Manual' },
                 { id: 'json', label: 'JSON' }
