@@ -14,6 +14,7 @@ import { useRef } from 'react';
 import { Tabs } from '../../../design-system/components/Tabs'
 import { TextArea } from '../../../design-system/components/TextArea'
 import React from 'react';
+import { Restaurant } from '@/types/restaurant';
 
 // Interfaces matching the Firestore structure
 interface MenuItemFirestore {
@@ -45,6 +46,27 @@ interface MenuJson {
 }
 
 type TabType = 'manual' | 'json';
+
+interface RestaurantFirestore {
+  name: string;
+  address: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  menu: {
+    categories: Array<{
+      name: string;
+      items: Array<{
+        name: string;
+        description: string;
+        price: number;
+      }>;
+    }>;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export default function RestaurantEditPage({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState<RestaurantFormData | null>(null);
