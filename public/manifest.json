@@ -1,0 +1,29 @@
+{
+  "name": "MUU",
+  "short_name": "MUU",
+  "description": "Accessible and personalized menus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6237FF",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "260x260",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+} 

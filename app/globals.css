@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light theme with brand colors */
+  --font-main: 'JetBrains Mono', monospace;
+  --accent: #6237FF;
+  --background-main: #FEFBFF;
+  --background-secondary: #FEFBFF;
+  --background-tertiary: #F0EDEA;
+  --text-primary: #1e1e1e;
+  --text-secondary: rgba(30, 30, 30, 0.5);
+  --text-brand: #6237FF;
+  --border-main: #EEEAFF;
+  --border-secondary: #EEEAFF;
+  --brand: #6237FF;
+  --brand-light: #7B5AFF;
+  --brand-dark: #4A1FFF;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --warning: 38 92% 50%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+}
+
+:root.dark {
+  /* Dark theme with brand colors */
+  --accent: #C6BBEF;
+  --background-main: #1A1A1A;
+  --background-secondary: #242424;
+  --background-tertiary: #2A2A2A;
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.5);
+  --text-brand: #9B7AFF;
+  --border-main: #2A2A2A;
+  --border-secondary: #2A2A2A;
+  --brand: #9B7AFF;
+  --brand-light: #B39AFF;
+  --brand-dark: #7B5AFF;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --warning: 48 96% 52%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+}
+
+/* Gray mode overrides - these only affect content colors, not backgrounds */
+:root.gray {
+  /* Light theme with gray content */
+  --accent: #6B7280;
+  --text-brand: #1e1e1e;
+  --border-main: #E5E5E5;
+  --border-secondary: #E5E5E5;
+  --brand: #1e1e1e;
+  --brand-light: #4A4A4A;
+  --brand-dark: #000000;
+}
+
+:root.dark.gray {
+  /* Dark theme with gray content */
+  --accent: #CCCCCC;
+  --text-brand: #FFFFFF;
+  --border-main: #2A2A2A;
+  --border-secondary: #2A2A2A;
+  --brand: #FFFFFF;
+  --brand-light: #CCCCCC;
+  --brand-dark: #999999;
+}
+
+/* Auto theme mode - uses system preferences */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --accent: #C6BBEF;
+    --background-main: #1A1A1A;
+    --background-secondary: #242424;
+    --background-tertiary: #2A2A2A;
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.5);
+    --text-brand: #9B7AFF;
+    --border-main: #2A2A2A;
+    --border-secondary: #2A2A2A;
+    --brand: #9B7AFF;
+    --brand-light: #B39AFF;
+    --brand-dark: #7B5AFF;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --warning: 48 96% 52%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+  }
+
+  /* Override for gray mode in system dark mode */
+  :root:not(.light).gray {
+    --accent: #CCCCCC;
+    --text-brand: #FFFFFF;
+    --border-main: #2A2A2A;
+    --border-secondary: #2A2A2A;
+    --brand: #FFFFFF;
+    --brand-light: #CCCCCC;
+    --brand-dark: #999999;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not(.dark) {
+    --accent: #6237FF;
+    --background-main: #FEFBFF;
+    --background-secondary: #FEFBFF;
+    --background-tertiary: #F0EDEA;
+    --text-primary: #1e1e1e;
+    --text-secondary: rgba(30, 30, 30, 0.5);
+    --text-brand: #6237FF;
+    --border-main: #EEEAFF;
+    --border-secondary: #EEEAFF;
+    --brand: #6237FF;
+    --brand-light: #7B5AFF;
+    --brand-dark: #4A1FFF;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+  }
+
+  /* Override for gray mode in system light mode */
+  :root:not(.dark).gray {
+    --accent: #6B7280;
+    --text-brand: #1e1e1e;
+    --border-main: #E5E5E5;
+    --border-secondary: #E5E5E5;
+    --brand: #1e1e1e;
+    --brand-light: #4A4A4A;
+    --brand-dark: #000000;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: var(--font-main);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 248, 246, 244;
+    --background-rgb: 24, 24, 24;
+  }
+}
+
+html.font-atkinson {
+  --font-main: 'Atkinson Hyperlegible', Arial, sans-serif;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+} 
