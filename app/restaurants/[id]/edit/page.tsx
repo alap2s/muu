@@ -63,6 +63,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const [activeTab, setActiveTab] = useState<TabType>('manual')
   const [jsonInput, setJsonInput] = useState('')
   const [jsonError, setJsonError] = useState<string | null>(null)
+  const [jsonSuccess, setJsonSuccess] = useState<string | null>(null)
 
   // Refs and state for scrolling to new elements
   const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -469,15 +470,17 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const handleJsonBlur = () => {
     if (!jsonInput.trim()) {
       setJsonError(null)
+      setJsonSuccess(null)
       return
     }
 
     try {
       const parsedJson = JSON.parse(jsonInput) as MenuJson
       
-      // Validate structure
+      // Validate the structure
       if (!parsedJson.menuCategories || !Array.isArray(parsedJson.menuCategories)) {
         setJsonError('Invalid JSON structure: menuCategories must be an array')
+        setJsonSuccess(null)
         return
       }
 
@@ -485,6 +488,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       for (const category of parsedJson.menuCategories) {
         if (!category.id || !category.name || !Array.isArray(category.items)) {
           setJsonError('Invalid category structure: each category must have id, name, and items array')
+          setJsonSuccess(null)
           return
         }
 
@@ -492,19 +496,30 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         for (const item of category.items) {
           if (!item.id || !item.name || typeof item.price !== 'number' || !Array.isArray(item.dietaryRestrictions)) {
             setJsonError('Invalid item structure: each item must have id, name, price, and dietaryRestrictions array')
+            setJsonSuccess(null)
             return
           }
         }
       }
 
-      // If validation passes, update form data
-      setFormData(prev => prev ? {
-        ...prev,
-        menuCategories: parsedJson.menuCategories
-      } : null)
+      // Count total items
+      const totalItems = parsedJson.menuCategories.reduce((sum, category) => 
+        sum + (category.items?.length || 0), 0
+      )
+
+      // Create success message
+      const successMessage = `Found ${parsedJson.menuCategories.length} categories with ${totalItems} items`
+      setJsonSuccess(successMessage)
       setJsonError(null)
-    } catch (e) {
+
+      // Update form data
+      setFormData(prev => ({
+        ...prev!,
+        menuCategories: parsedJson.menuCategories
+      }))
+    } catch (error) {
       setJsonError('Invalid JSON format')
+      setJsonSuccess(null)
     }
   }
 
@@ -640,7 +655,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               value={jsonInput}
               onChange={(e) => setJsonInput(e.target.value)}
               onBlur={handleJsonBlur}
-              error={jsonError || undefined}
+              error={jsonError}
+              warning={jsonSuccess}
               placeholder="Paste your menu JSON here..."
               rows={20}
               className="w-full"
