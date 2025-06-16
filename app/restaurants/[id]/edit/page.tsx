@@ -367,7 +367,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
     try {
         setError(null);
-        const restaurantData: RestaurantFirestore = {
+        const restaurantData = {
             name: formData.name,
             address: formData.address,
             coordinates: formData.coordinates,
@@ -380,7 +380,16 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         if (restaurantId === 'new') {
             await addDoc(collection(db, 'restaurants'), restaurantData);
         } else {
-            await updateDoc(doc(db, 'restaurants', restaurantId), restaurantData);
+            // Convert the data to the format Firestore expects for updates
+            const updateData = {
+                name: restaurantData.name,
+                address: restaurantData.address,
+                coordinates: restaurantData.coordinates,
+                menuCategories: restaurantData.menuCategories,
+                notes: restaurantData.notes,
+                updatedAt: restaurantData.updatedAt
+            };
+            await updateDoc(doc(db, 'restaurants', restaurantId), updateData);
         }
         router.push('/restaurantsdatabase');
     } catch (err) {
