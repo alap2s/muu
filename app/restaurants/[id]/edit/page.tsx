@@ -37,6 +37,12 @@ interface RestaurantFormData {
     website: string;
     notes: string;
     menuCategories: MenuCategoryFirestore[];
+    coordinates?: {
+        lat: number;
+        lng: number;
+    };
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 // Add new interface for JSON validation
@@ -122,6 +128,9 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               website: restaurantData.website || '',
               notes: restaurantData.notes || '',
               menuCategories: restaurantData.menuCategories || [],
+              coordinates: restaurantData.coordinates,
+              createdAt: restaurantData.createdAt,
+              updatedAt: restaurantData.updatedAt,
           });
           setOriginalAddress(restaurantData.address || '');
         } else {
