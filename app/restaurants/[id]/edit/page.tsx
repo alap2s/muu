@@ -14,7 +14,6 @@ import { useRef } from 'react';
 import { Tabs } from '../../../design-system/components/Tabs'
 import { TextArea } from '../../../design-system/components/TextArea'
 import React from 'react';
-import { Restaurant } from '@/types/restaurant';
 
 // Interfaces matching the Firestore structure
 interface MenuItemFirestore {
