@@ -6,11 +6,14 @@ import { db } from '../../../../lib/firebase'
 import { doc, getDoc, GeoPoint, updateDoc, deleteDoc } from 'firebase/firestore'
 import { useViewMode } from '../../../contexts/ViewModeContext'
 import { Button } from '../../../design-system/components/Button'
-import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon } from 'lucide-react'
+import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy } from 'lucide-react'
 import { ListItem } from '../../../design-system/components/ListItem'
 import { Input } from '../../../design-system/components/Input'
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
+import { Tabs } from '../../../design-system/components/Tabs'
+import { TextArea } from '../../../design-system/components/TextArea'
+import React from 'react';
 
 // Interfaces matching the Firestore structure
 interface MenuItemFirestore {
@@ -36,6 +39,11 @@ interface RestaurantFormData {
     menuCategories: MenuCategoryFirestore[];
 }
 
+// Add new interface for JSON validation
+interface MenuJson {
+  menuCategories: MenuCategoryFirestore[];
+}
+
 export default function RestaurantEditPage({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState<RestaurantFormData | null>(null);
   const [originalAddress, setOriginalAddress] = useState<string>('');
@@ -50,6 +58,9 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const [formErrors, setFormErrors] = useState<any>({});
   const [isNewRestaurant, setIsNewRestaurant] = useState(false);
   const [isCancelling, setIsCancelling] = useState(false);
+  const [activeTab, setActiveTab] = useState<'manual' | 'json'>('manual')
+  const [jsonInput, setJsonInput] = useState('')
+  const [jsonError, setJsonError] = useState<string | null>(null)
 
   // Refs and state for scrolling to new elements
   const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -133,6 +144,27 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       }
     }
   }, [newlyAddedItem]);
+
+  // Add effect to update JSON input when form data changes or tab changes
+  useEffect(() => {
+    if (activeTab === 'json' && formData) {
+      const menuJson: MenuJson = {
+        menuCategories: formData.menuCategories
+      };
+      setJsonInput(JSON.stringify(menuJson, null, 2));
+    }
+  }, [activeTab, formData]);
+
+  // Update the tab change handler
+  const handleTabChange = (tab: 'manual' | 'json') => {
+    setActiveTab(tab);
+    if (tab === 'json' && formData) {
+      const menuJson: MenuJson = {
+        menuCategories: formData.menuCategories
+      };
+      setJsonInput(JSON.stringify(menuJson, null, 2));
+    }
+  };
 
   const validateField = (name: string, value: any) => {
     if (typeof value === 'string' && !value.trim()) {
@@ -432,6 +464,48 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     }
   };
 
+  const handleJsonBlur = () => {
+    if (!jsonInput.trim()) {
+      setJsonError(null)
+      return
+    }
+
+    try {
+      const parsedJson = JSON.parse(jsonInput) as MenuJson
+      
+      // Validate structure
+      if (!parsedJson.menuCategories || !Array.isArray(parsedJson.menuCategories)) {
+        setJsonError('Invalid JSON structure: menuCategories must be an array')
+        return
+      }
+
+      // Validate each category
+      for (const category of parsedJson.menuCategories) {
+        if (!category.id || !category.name || !Array.isArray(category.items)) {
+          setJsonError('Invalid category structure: each category must have id, name, and items array')
+          return
+        }
+
+        // Validate each item
+        for (const item of category.items) {
+          if (!item.id || !item.name || typeof item.price !== 'number' || !Array.isArray(item.dietaryRestrictions)) {
+            setJsonError('Invalid item structure: each item must have id, name, price, and dietaryRestrictions array')
+            return
+          }
+        }
+      }
+
+      // If validation passes, update form data
+      setFormData(prev => prev ? {
+        ...prev,
+        menuCategories: parsedJson.menuCategories
+      } : null)
+      setJsonError(null)
+    } catch (e) {
+      setJsonError('Invalid JSON format')
+    }
+  }
+
   const renderDetailRow = (
     label: string, 
     value: string, 
@@ -531,12 +605,49 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       </div>,
     renderDetailRow('Website', formData.website, 'website', Globe),
     renderDetailRow('Notes', formData.notes, 'notes', NotepadText),
-    <div key="spacer-row" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+    <div key="spacer-above-tabs" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
         <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
     </div>,
-    ...(formData.menuCategories || []).flatMap((category, categoryIndex) => [
+    <div key="tabs-row" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+            <Tabs
+              tabs={[
+                { id: 'manual', label: 'Manual' },
+                { id: 'json', label: 'JSON' }
+              ]}
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              className="w-full"
+            />
+        </div>
+        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+    </div>,
+    <div key="spacer-below-tabs" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
+        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+    </div>,
+    activeTab === 'json' ? (
+      <div key="json-input-row" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+            <TextArea
+              value={jsonInput}
+              onChange={(e) => setJsonInput(e.target.value)}
+              onBlur={handleJsonBlur}
+              error={jsonError || undefined}
+              placeholder="Paste your menu JSON here..."
+              rows={20}
+              className="w-full"
+            />
+        </div>
+        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+      </div>
+    ) : null,
+    ...(activeTab === 'manual' ? (formData.menuCategories || []).flatMap((category, categoryIndex) => [
       // Category Header
       <div 
         key={category.id}
@@ -612,7 +723,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
         <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
       </div>
-    ])
+    ]) : [])
   ].filter(Boolean);
 
   const rowCount = Math.max(24, allContent.length);
@@ -651,13 +762,19 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
       <main className="space-y-0" style={{ height: `calc(100vh - 48px - env(safe-area-inset-top))`, overflowY: 'auto', paddingBottom: 'calc(48px + env(safe-area-inset-bottom))' }} role="region" aria-label="Restaurant editor">
           <>
-            {[...Array(rowCount)].map((_, i) => allContent[i] || (
-              <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+            {[...Array(rowCount)].map((_, i) => {
+              const content = allContent[i];
+              if (content) {
+                return React.cloneElement(content, { key: `content-${i}` });
+              }
+              return (
+                <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
                   <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
                   <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
                   <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </>
       </main>
 
@@ -666,18 +783,53 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
           <div className="flex justify-center">
               <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
               <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48 }}>
-                <div className="flex-1">
-                  <Button variant="secondary" onClick={addCategory} className="w-full" aria-label="Add a new category to the menu">
-                    <FolderPlus className="w-4 h-4 mr-2" />
-                    Add Category
-                  </Button>
-                </div>
-                <div style={{ borderLeft: '1px solid var(--border-main)'}}>
-                  <Button variant="secondary" onClick={() => { if (activeCategoryIndex !== null) addItemToCategory(activeCategoryIndex)}} disabled={activeCategoryIndex === null} aria-label="Add a new item to the active category">
-                    <ListPlus className="w-4 h-4 mr-2" />
-                    Add Item
-                  </Button>
-                </div>
+                {activeTab === 'manual' ? (
+                  <>
+                    <div className="flex-1">
+                      <Button variant="secondary" onClick={addCategory} className="w-full" aria-label="Add a new category to the menu">
+                        <FolderPlus className="w-4 h-4 mr-2" />
+                        Add Category
+                      </Button>
+                    </div>
+                    <div style={{ borderLeft: '1px solid var(--border-main)'}}>
+                      <Button variant="secondary" onClick={() => { if (activeCategoryIndex !== null) addItemToCategory(activeCategoryIndex)}} disabled={activeCategoryIndex === null} aria-label="Add a new item to the active category">
+                        <ListPlus className="w-4 h-4 mr-2" />
+                        Add Item
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex-1">
+                    <Button 
+                      variant="secondary" 
+                      onClick={() => {
+                        const jsonFormat = {
+                          menuCategories: [
+                            {
+                              id: "category-id",
+                              name: "Category Name",
+                              items: [
+                                {
+                                  id: "item-id",
+                                  name: "Item Name",
+                                  description: "Item Description",
+                                  price: 0,
+                                  dietaryRestrictions: []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                        navigator.clipboard.writeText(JSON.stringify(jsonFormat, null, 2))
+                      }} 
+                      className="w-full" 
+                      aria-label="Copy JSON format"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copy JSON Format
+                    </Button>
+                  </div>
+                )}
               </div>
               <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
           </div>
