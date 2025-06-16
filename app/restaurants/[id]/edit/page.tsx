@@ -37,7 +37,7 @@ interface RestaurantFormData {
     website: string;
     notes: string;
     menuCategories: MenuCategoryFirestore[];
-    coordinates?: {
+    coordinates: {
         lat: number;
         lng: number;
     };
@@ -59,16 +59,8 @@ interface RestaurantFirestore {
     lat: number;
     lng: number;
   };
-  menu: {
-    categories: Array<{
-      name: string;
-      items: Array<{
-        name: string;
-        description: string;
-        price: number;
-      }>;
-    }>;
-  };
+  menuCategories: MenuCategoryFirestore[];
+  notes: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -361,63 +353,44 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const handleSave = async () => {
     if (!formData) return;
 
-    // If we're in JSON mode and there's an error, prevent saving
-    if (activeTab === 'json' && jsonError) {
-      return;
-    }
-
     // Validate required fields
     if (!formData.name || !formData.address) {
-      setError('Name and address are required');
-      return;
+        setError('Name and address are required');
+        return;
+    }
+
+    // Ensure coordinates are present
+    if (!formData.coordinates) {
+        setError('Coordinates are required');
+        return;
     }
 
     try {
-      setIsSaving(true);
-      setError(null);
+        setError(null);
+        const restaurantData: RestaurantFirestore = {
+            name: formData.name,
+            address: formData.address,
+            coordinates: formData.coordinates,
+            menuCategories: formData.menuCategories,
+            notes: formData.notes || '',
+            createdAt: formData.createdAt || new Date(),
+            updatedAt: new Date()
+        };
 
-      // If we're in JSON mode, validate the JSON one more time before saving
-      if (activeTab === 'json') {
-        try {
-          const parsedJson = JSON.parse(jsonInput) as MenuJson;
-          if (!parsedJson.menuCategories || !Array.isArray(parsedJson.menuCategories)) {
-            setError('Invalid menu JSON structure');
-            return;
-          }
-        } catch (error) {
-          setError('Invalid menu JSON format');
-          return;
+        if (restaurantId === 'new') {
+            await addDoc(collection(db, 'restaurants'), restaurantData);
+        } else {
+            await updateDoc(doc(db, 'restaurants', restaurantId), restaurantData);
         }
-      }
-
-      // Rest of the save logic...
-      const restaurantData: RestaurantFirestore = {
-        name: formData.name,
-        address: formData.address,
-        coordinates: formData.coordinates,
-        menuCategories: formData.menuCategories,
-        notes: formData.notes || '',
-        createdAt: formData.createdAt,
-        updatedAt: new Date()
-      };
-
-      if (isNewRestaurant) {
-        const docRef = await addDoc(collection(db, 'restaurants'), restaurantData);
-        router.push(`/restaurants/${docRef.id}`);
-      } else {
-        await updateDoc(doc(db, 'restaurants', params.id), restaurantData);
-        router.push(`/restaurants/${params.id}`);
-      }
-    } catch (error) {
-      console.error('Error saving restaurant:', error);
-      setError('Failed to save restaurant. Please try again.');
-    } finally {
-      setIsSaving(false);
+        router.push('/restaurantsdatabase');
+    } catch (err) {
+        console.error('Error saving restaurant:', err);
+        setError('Failed to save restaurant');
     }
   };
 
   const handleCancel = async () => {
-    if (isNewRestaurant) {
+    if (restaurantId === 'new') {
       // For a new, unsaved restaurant, confirm before deleting the draft
       if (window.confirm('This will discard the new restaurant. Are you sure?')) {
         setIsCancelling(true);
