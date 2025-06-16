@@ -3,7 +3,7 @@
 import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { db } from '../../../../lib/firebase'
-import { doc, getDoc, GeoPoint, updateDoc, deleteDoc } from 'firebase/firestore'
+import { doc, getDoc, GeoPoint, updateDoc, deleteDoc, addDoc, collection } from 'firebase/firestore'
 import { useViewMode } from '../../../contexts/ViewModeContext'
 import { Button } from '../../../design-system/components/Button'
 import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy } from 'lucide-react'
@@ -329,98 +329,57 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   };
 
   const handleSave = async () => {
-    if (!restaurantId || !formData) {
-      setError('No data to save.');
+    if (!formData) return;
+
+    // If we're in JSON mode and there's an error, prevent saving
+    if (activeTab === 'json' && jsonError) {
       return;
     }
 
-    // Run final validation before saving
-    const finalErrors: any = {};
-    let isFormValid = true;
-
-    if (!formData.name) {
-      finalErrors.name = true;
-      isFormValid = false;
-    }
-    if (!formData.address) {
-      finalErrors.address = true;
-      isFormValid = false;
-    }
-    if (formData.menuCategories.length === 0) {
-      // This case should be handled by disabling save, but as a safeguard:
-      setError("Please add at least one category and one item.");
-      isFormValid = false;
-    }
-
-    formData.menuCategories.forEach(cat => {
-      if (!cat.name) {
-        if (!finalErrors[cat.id]) finalErrors[cat.id] = {};
-        finalErrors[cat.id].name = true;
-        isFormValid = false;
-      }
-      if (cat.items.length === 0) {
-        setError("Please add at least one item to each category.");
-        isFormValid = false;
-      }
-      cat.items.forEach(item => {
-        if (!item.name) {
-          if (!finalErrors[cat.id]) finalErrors[cat.id] = {};
-          if (!finalErrors[cat.id].items) finalErrors[cat.id].items = {};
-          if (!finalErrors[cat.id].items[item.id]) finalErrors[cat.id].items[item.id] = {};
-          finalErrors[cat.id].items[item.id].name = true;
-          isFormValid = false;
-        }
-      });
-    });
-
-    setFormErrors(finalErrors);
-
-    if (!isFormValid) {
-      setError("Please fill out all required fields marked with *");
+    // Validate required fields
+    if (!formData.name || !formData.address) {
+      setError('Name and address are required');
       return;
     }
-
-    // Deep copy and sanitize data before saving
-    const sanitizedData = JSON.parse(JSON.stringify(formData));
-    sanitizedData.menuCategories.forEach((category: MenuCategoryFirestore) => {
-      category.items.forEach((item: MenuItemFirestore) => {
-        item.price = parseFloat(item.price as any) || 0;
-      });
-    });
-
-    // Address validation check before saving
-    if (formData.address !== originalAddress && formData.address) {
-      try {
-        const response = await fetch(`/api/geocode?address=${encodeURIComponent(formData.address)}`);
-        const data = await response.json();
-
-        if (!response.ok || data.quality === 'approximate') {
-            setAddressError(data.error || 'Address could not be verified or is approximate. Please correct it before saving.');
-            return; // Prevent saving
-        }
-        
-        // If validation is successful, update the GPS coordinates
-        if (data.latitude && data.longitude) {
-            sanitizedData.gps = new GeoPoint(data.latitude, data.longitude);
-        }
-
-      } catch (err) {
-        setAddressError('Could not verify address. Please check your network connection.');
-        return; // Prevent saving
-      }
-    }
-
-    setIsSaving(true);
-    setError(null);
-    setAddressError(null);
-    setAddressWarning(null);
 
     try {
-      const restaurantRef = doc(db, 'restaurants', restaurantId);
-      await updateDoc(restaurantRef, sanitizedData);
-      router.push(`/restaurants/${restaurantId}`);
-    } catch (err) {
-      console.error('Error saving restaurant:', err);
+      setIsSaving(true);
+      setError(null);
+
+      // If we're in JSON mode, validate the JSON one more time before saving
+      if (activeTab === 'json') {
+        try {
+          const parsedJson = JSON.parse(jsonInput) as MenuJson;
+          if (!parsedJson.menuCategories || !Array.isArray(parsedJson.menuCategories)) {
+            setError('Invalid menu JSON structure');
+            return;
+          }
+        } catch (error) {
+          setError('Invalid menu JSON format');
+          return;
+        }
+      }
+
+      // Rest of the save logic...
+      const restaurantData: RestaurantFirestore = {
+        name: formData.name,
+        address: formData.address,
+        coordinates: formData.coordinates,
+        menuCategories: formData.menuCategories,
+        notes: formData.notes || '',
+        createdAt: formData.createdAt,
+        updatedAt: new Date()
+      };
+
+      if (isNewRestaurant) {
+        const docRef = await addDoc(collection(db, 'restaurants'), restaurantData);
+        router.push(`/restaurants/${docRef.id}`);
+      } else {
+        await updateDoc(doc(db, 'restaurants', params.id), restaurantData);
+        router.push(`/restaurants/${params.id}`);
+      }
+    } catch (error) {
+      console.error('Error saving restaurant:', error);
       setError('Failed to save restaurant. Please try again.');
     } finally {
       setIsSaving(false);
@@ -655,11 +614,11 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               value={jsonInput}
               onChange={(e) => setJsonInput(e.target.value)}
               onBlur={handleJsonBlur}
-              error={jsonError}
+              error={!!jsonError}
+              errorMessage={jsonError || undefined}
               warning={jsonSuccess}
               placeholder="Paste your menu JSON here..."
               rows={20}
-              className="w-full"
             />
         </div>
         <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
