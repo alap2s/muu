@@ -6,6 +6,8 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   label?: string
   error?: boolean
   warning?: boolean
+  errorMessage?: string
+  warningMessage?: string
   rows?: number
 }
 
@@ -13,6 +15,8 @@ export function TextArea({
   label,
   error = false,
   warning = false,
+  errorMessage,
+  warningMessage,
   rows = 20,
   className = '',
   ...props 
@@ -66,14 +70,14 @@ export function TextArea({
           onBlur={handleBlur}
         />
       </div>
-      {error && (
+      {error && errorMessage && (
         <p className="mt-2 text-sm font-mono" style={{ color: 'hsl(var(--destructive))' }}>
-          {error}
+          {errorMessage}
         </p>
       )}
-      {warning && !error && (
+      {warning && warningMessage && !error && (
         <p className="mt-2 text-sm font-mono" style={{ color: 'hsl(var(--warning))' }}>
-          {warning}
+          {warningMessage}
         </p>
       )}
     </div>
