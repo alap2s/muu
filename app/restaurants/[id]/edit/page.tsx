@@ -628,7 +628,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               onBlur={handleJsonBlur}
               error={!!jsonError}
               errorMessage={jsonError || undefined}
-              warning={jsonSuccess}
+              warning={!!jsonSuccess}
+              warningMessage={jsonSuccess || undefined}
               placeholder="Paste your menu JSON here..."
               rows={20}
             />
