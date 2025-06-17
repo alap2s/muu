@@ -338,6 +338,15 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         if (!response.ok) {
           setAddressError(data.error || 'Could not verify address.');
         } else {
+          // Set the coordinates in formData
+          setFormData(prev => ({
+            ...prev!,
+            coordinates: {
+              lat: data.latitude,
+              lng: data.longitude
+            }
+          }));
+
           if (data.quality === 'approximate') {
             setAddressWarning('Address is an approximate match. Please review or provide more detail.');
           } else {
