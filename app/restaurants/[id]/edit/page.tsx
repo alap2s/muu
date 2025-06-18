@@ -536,8 +536,16 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     const newMenuCategories = [...formData.menuCategories];
     const item = newMenuCategories[categoryIndex].items[itemIndex];
     
-    // Update the field
-    item[field] = value;
+    // Update the field with proper type handling
+    if (field === 'name' || field === 'description') {
+      item[field] = value as string;
+    } else if (field === 'price') {
+      item[field] = value as number;
+    } else if (field === 'dietaryRestrictions') {
+      item[field] = value as string[];
+    } else if (field === 'id') {
+      item[field] = value as string;
+    }
     
     // Auto-detect dietary restrictions when name or description changes
     if (field === 'name' || field === 'description') {
