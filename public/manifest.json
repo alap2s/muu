@@ -25,5 +25,7 @@
       "type": "image/png",
       "purpose": "any"
     }
-  ]
+  ],
+  "apple-touch-icon": "/icon-192.png",
+  "mask-icon": "/icon.svg"
 } 
