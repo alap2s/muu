@@ -530,7 +530,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       }
   }
 
-  const handleMenuChange = (categoryIndex: number, itemIndex: number, field: keyof MenuItemFirestore, value: string | number) => {
+  const handleMenuChange = (categoryIndex: number, itemIndex: number, field: keyof MenuItemFirestore, value: string | number | string[]) => {
     if (!formData) return;
     
     const newMenuCategories = [...formData.menuCategories];
