@@ -8,9 +8,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Address parameter is required' }, { status: 400 })
   }
 
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY
   if (!apiKey) {
-    console.error('CRITICAL: Google Maps API key is not configured on the server.')
+    console.error('CRITICAL: Google Places API key is not configured on the server.')
     return NextResponse.json({ error: 'Server configuration error. Cannot validate address.' }, { status: 500 })
   }
 

@@ -6,14 +6,277 @@ import { db } from '../../../../lib/firebase'
 import { doc, getDoc, GeoPoint, updateDoc, deleteDoc, addDoc, collection } from 'firebase/firestore'
 import { useViewMode } from '../../../contexts/ViewModeContext'
 import { Button } from '../../../design-system/components/Button'
-import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy } from 'lucide-react'
+import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy, Filter, CookingPot, Milk, Leaf, Nut, Wheat, WheatOff, Flame, Droplet, Egg, Fish, Shell, Ban, Wine, Candy, Drumstick, Salad } from 'lucide-react'
 import { ListItem } from '../../../design-system/components/ListItem'
 import { Input } from '../../../design-system/components/Input'
 import { v4 as uuidv4 } from 'uuid';
 import { useRef } from 'react';
 import { Tabs } from '../../../design-system/components/Tabs'
 import { TextArea } from '../../../design-system/components/TextArea'
+import { MultiSelectDropdown } from '../../../design-system/components/MultiSelectDropdown'
 import React from 'react';
+import ReactDOM from 'react-dom';
+
+const DIETARY_OPTIONS = [
+  // Lifestyles
+  { value: 'vegetarian', label: 'Vegetarian', icon: Leaf },
+  { value: 'vegan', label: 'Vegan', icon: Leaf },
+  { value: 'pescatarian', label: 'Pescatarian', icon: Fish },
+
+  // Meat Types (all use Drumstick icon)
+  { value: 'pork', label: 'Pork', icon: Drumstick },
+  { value: 'beef', label: 'Beef', icon: Drumstick },
+  { value: 'lamb', label: 'Lamb', icon: Drumstick },
+  { value: 'chicken', label: 'Chicken', icon: Drumstick },
+  { value: 'duck', label: 'Duck', icon: Drumstick },
+  { value: 'turkey', label: 'Turkey', icon: Drumstick },
+  { value: 'fish', label: 'Fish', icon: Fish },
+  { value: 'shellfish', label: 'Shellfish', icon: Shell },
+  { value: 'crustacean', label: 'Crustacean', icon: Shell },
+  { value: 'mollusc', label: 'Mollusc', icon: Shell },
+  { value: 'game', label: 'Game', icon: Drumstick },
+
+  // EU 14 Allergens
+  { value: 'gluten', label: 'Gluten (Wheat, Rye, Barley, Oats, Spelt)', icon: Wheat },
+  { value: 'crustaceans', label: 'Crustaceans', icon: Shell },
+  { value: 'eggs', label: 'Eggs', icon: Egg },
+  { value: 'fish-allergen', label: 'Fish (Allergen)', icon: Fish },
+  { value: 'peanuts', label: 'Peanuts', icon: Nut },
+  { value: 'soybeans', label: 'Soybeans', icon: Droplet },
+  { value: 'milk', label: 'Milk', icon: Milk },
+  { value: 'nuts', label: 'Nuts', icon: Nut },
+  { value: 'celery', label: 'Celery', icon: CookingPot },
+  { value: 'mustard', label: 'Mustard', icon: CookingPot },
+  { value: 'sesame', label: 'Sesame', icon: CookingPot },
+  { value: 'sulphites', label: 'Sulphur Dioxide/Sulphites', icon: Droplet },
+  { value: 'lupin', label: 'Lupin', icon: CookingPot },
+  { value: 'molluscs', label: 'Molluscs', icon: Shell },
+
+  // Other
+  { value: 'lactose-free', label: 'Lactose Free', icon: Ban },
+  { value: 'dairy-free', label: 'Dairy Free', icon: Ban },
+  { value: 'nut-free', label: 'Nut Free', icon: Ban },
+  { value: 'egg-free', label: 'Egg Free', icon: Ban },
+  { value: 'soy-free', label: 'Soy Free', icon: Ban },
+  { value: 'sesame-free', label: 'Sesame Free', icon: Ban },
+  { value: 'peanut-free', label: 'Peanut Free', icon: Ban },
+  { value: 'gluten-free', label: 'Gluten Free', icon: WheatOff },
+  { value: 'spicy', label: 'Spicy', icon: Flame },
+  { value: 'contains-alcohol', label: 'Alcohol', icon: Wine },
+  { value: 'contains-sugar', label: 'Sugar', icon: Candy },
+  { value: 'low-carb', label: 'Low Carb', icon: Ban },
+  { value: 'low-fat', label: 'Low Fat', icon: Ban },
+  { value: 'high-protein', label: 'High Protein', icon: Ban },
+  // Religious/Cultural
+  { value: 'halal', label: 'Halal', icon: Ban },
+  { value: 'kosher', label: 'Kosher', icon: Ban },
+];
+
+const DIETARY_KEYWORDS: { [key: string]: string[] } = {
+  // Lifestyles
+  'vegetarian': ['vegetarian', 'veg', 'no meat', 'meatless', 'plant-based', 'plant based'],
+  'vegan': ['vegan', 'plant-based', 'plant based', 'no animal products'],
+  'pescatarian': ['pescatarian', 'pesco-vegetarian', 'fish only'],
+
+  // Meat Types (keys match DIETARY_OPTIONS)
+  'pork': ['pork', 'bacon', 'ham', 'sausage', 'prosciutto', 'pancetta', 'lardon', 'chorizo', 'salami', 'pepperoni'],
+  'beef': ['beef', 'steak', 'burger', 'hamburger', 'meatball', 'mince', 'ground beef', 'roast beef'],
+  'lamb': ['lamb', 'mutton', 'lamb chop', 'lamb shank'],
+  'chicken': ['chicken', 'poultry', 'chicken breast', 'chicken thigh', 'chicken wing'],
+  'duck': ['duck', 'duck breast', 'duck leg', 'poultry'],
+  'turkey': ['turkey', 'turkey breast', 'turkey leg'],
+  'fish': ['fish', 'seafood', 'salmon', 'tuna', 'cod', 'haddock', 'trout', 'mackerel', 'sardine', 'anchovy'],
+  'shellfish': ['shellfish', 'shrimp', 'prawn', 'crab', 'lobster', 'mussel', 'clam', 'oyster', 'scallop'],
+  'crustacean': ['crustacean', 'crab', 'lobster', 'shrimp', 'prawn'],
+  'mollusc': ['mollusc', 'mussel', 'clam', 'oyster', 'scallop', 'octopus', 'squid'],
+  'game': ['game', 'venison', 'rabbit', 'boar', 'pheasant', 'quail'],
+
+  // EU 14 Allergens
+  'gluten': ['gluten', 'wheat', 'rye', 'barley', 'oats', 'spelt', 'flour', 'bread', 'pasta'],
+  'crustaceans': ['crustacean', 'crab', 'lobster', 'shrimp', 'prawn'],
+  'eggs': ['egg', 'eggs'],
+  'fish-allergen': ['fish', 'seafood', 'salmon', 'tuna', 'cod', 'haddock', 'trout', 'mackerel', 'sardine', 'anchovy'],
+  'peanuts': ['peanut', 'peanuts'],
+  'soybeans': ['soy', 'soybean', 'tofu', 'edamame'],
+  'milk': ['milk', 'cheese', 'cream', 'butter', 'yogurt'],
+  'nuts': ['nut', 'nuts', 'almond', 'hazelnut', 'walnut', 'cashew', 'pecan', 'brazil nut', 'pistachio', 'macadamia'],
+  'celery': ['celery'],
+  'mustard': ['mustard'],
+  'sesame': ['sesame'],
+  'sulphites': ['sulphite', 'sulphur dioxide', 'preservative e220', 'preservative e221', 'preservative e222', 'preservative e223', 'preservative e224', 'preservative e226', 'preservative e227', 'preservative e228'],
+  'lupin': ['lupin'],
+  'molluscs': ['mollusc', 'mussel', 'clam', 'oyster', 'scallop', 'octopus', 'squid'],
+
+  // Other
+  'lactose-free': ['lactose-free', 'lactose free', 'no lactose'],
+  'dairy-free': ['dairy-free', 'dairy free', 'no dairy'],
+  'nut-free': ['nut-free', 'nut free', 'no nuts'],
+  'egg-free': ['egg-free', 'egg free', 'no eggs'],
+  'soy-free': ['soy-free', 'soy free', 'no soy'],
+  'sesame-free': ['sesame-free', 'sesame free', 'no sesame'],
+  'peanut-free': ['peanut-free', 'peanut free', 'no peanuts'],
+  'gluten-free': ['gluten-free', 'gluten free', 'no gluten', 'gf', 'celiac'],
+  'spicy': ['spicy', 'hot', 'chili', 'chilli', 'pepper', 'spice', 'spiced'],
+  'contains-alcohol': ['alcohol', 'wine', 'beer', 'cocktail', 'spirit', 'liquor', 'booze'],
+  'contains-sugar': ['sugar', 'sweet', 'honey', 'syrup', 'sweetened'],
+  'low-carb': ['low-carb', 'low carb', 'keto', 'ketogenic'],
+  'low-fat': ['low-fat', 'low fat', 'lean'],
+  'high-protein': ['high-protein', 'high protein', 'protein-rich'],
+  // Religious/Cultural
+  'halal': ['halal', 'islamic', 'muslim'],
+  'kosher': ['kosher', 'jewish', 'hechsher']
+};
+
+const detectDietaryRestrictions = (text: string): string[] => {
+  if (!text) return [];
+  const lowerText = text.toLowerCase();
+  const detectedRestrictions = new Set<string>();
+
+  // Helper function to check if a keyword is present without negation
+  const hasKeywordWithoutNegation = (keyword: string, negations: string[] = []): boolean => {
+    // Check if the keyword exists
+    if (!lowerText.includes(keyword)) return false;
+    
+    // Check for negations around the keyword
+    for (const negation of negations) {
+      // Look for negation patterns like "no gluten", "gluten free", "without gluten", etc.
+      const negationPatterns = [
+        new RegExp(`\\b${negation}\\s+${keyword}\\b`, 'i'),
+        new RegExp(`\\b${keyword}\\s+${negation}\\b`, 'i'),
+        new RegExp(`\\b${negation}-${keyword}\\b`, 'i'),
+        new RegExp(`\\b${keyword}-${negation}\\b`, 'i'),
+        new RegExp(`\\b${negation}${keyword}\\b`, 'i'),
+        new RegExp(`\\b${keyword}${negation}\\b`, 'i')
+      ];
+      
+      if (negationPatterns.some(pattern => pattern.test(lowerText))) {
+        return false; // Negation found, don't flag this
+      }
+    }
+    
+    return true; // Keyword found without negation
+  };
+
+  // Define negation words for different dietary restrictions
+  const negations = ['no', 'free', 'without', 'excludes', 'excluded', 'not', 'none', 'zero', 'lacks', 'missing'];
+  
+  // Check each dietary restriction with context awareness
+  Object.entries(DIETARY_KEYWORDS).forEach(([restriction, keywords]) => {
+    // Skip "free" restrictions as they're handled separately
+    if (restriction.endsWith('-free')) return;
+    
+    // Check if any keyword is present without negation
+    if (keywords.some(keyword => hasKeywordWithoutNegation(keyword, negations))) {
+      detectedRestrictions.add(restriction);
+    }
+  });
+
+  // Handle "free" restrictions separately (they should be detected when explicitly mentioned)
+  const freeRestrictions = {
+    'lactose-free': ['lactose-free', 'lactose free', 'no lactose'],
+    'dairy-free': ['dairy-free', 'dairy free', 'no dairy'],
+    'nut-free': ['nut-free', 'nut free', 'no nuts'],
+    'egg-free': ['egg-free', 'egg free', 'no eggs'],
+    'soy-free': ['soy-free', 'soy free', 'no soy'],
+    'sesame-free': ['sesame-free', 'sesame free', 'no sesame'],
+    'peanut-free': ['peanut-free', 'peanut free', 'no peanuts'],
+    'gluten-free': ['gluten-free', 'gluten free', 'no gluten', 'gf', 'celiac']
+  };
+
+  Object.entries(freeRestrictions).forEach(([restriction, keywords]) => {
+    if (keywords.some(keyword => lowerText.includes(keyword))) {
+      detectedRestrictions.add(restriction);
+    }
+  });
+
+  // Remove vegetarian/vegan if any meat type is detected
+  const meatTypes = [
+    'pork', 'beef', 'lamb', 'chicken', 'duck', 'turkey', 'fish', 'shellfish', 'crustacean', 'mollusc', 'game'
+  ];
+  if (meatTypes.some(type => detectedRestrictions.has(type))) {
+    detectedRestrictions.delete('vegetarian');
+    detectedRestrictions.delete('vegan');
+    detectedRestrictions.delete('pescatarian');
+  }
+  
+  // Remove vegan if any animal product is detected
+  const animalProducts = [
+    'eggs', 'milk', 'fish-allergen', 'crustaceans', 'molluscs'
+  ];
+  if (animalProducts.some(type => detectedRestrictions.has(type))) {
+    detectedRestrictions.delete('vegan');
+  }
+
+  // Auto-detect vegetarian and vegan based on ingredients
+  const hasMeat = meatTypes.some(type => detectedRestrictions.has(type));
+  const hasAnimalProducts = animalProducts.some(type => detectedRestrictions.has(type));
+  
+  // If no meat is detected, it could be vegetarian
+  if (!hasMeat) {
+    // If no animal products at all, it's vegan
+    if (!hasAnimalProducts) {
+      detectedRestrictions.add('vegan');
+    } else {
+      // If has animal products (milk, eggs) but no meat, it's vegetarian
+      detectedRestrictions.add('vegetarian');
+    }
+  }
+
+  // Remove conflicting restrictions
+  // If gluten-free is detected, remove gluten
+  if (detectedRestrictions.has('gluten-free')) {
+    detectedRestrictions.delete('gluten');
+  }
+  
+  // If lactose-free is detected, remove milk
+  if (detectedRestrictions.has('lactose-free')) {
+    detectedRestrictions.delete('milk');
+  }
+  
+  // If dairy-free is detected, remove milk
+  if (detectedRestrictions.has('dairy-free')) {
+    detectedRestrictions.delete('milk');
+  }
+
+  return Array.from(detectedRestrictions);
+};
+
+function DietaryDropdown({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const formattedOptions = DIETARY_OPTIONS.map(option => ({
+    value: option.value,
+    label: option.label,
+    leftContent: <option.icon className="w-4 h-4" />
+  }));
+
+  return (
+    <div ref={dropdownRef} className="relative">
+      <MultiSelectDropdown
+        value={value}
+        onChange={onChange}
+        options={formattedOptions}
+        placeholder="Select dietary restrictions"
+        leftIcon={<CookingPot className="w-4 h-4" />}
+        className="w-12"
+      />
+    </div>
+  );
+}
 
 // Interfaces matching the Firestore structure
 interface MenuItemFirestore {
@@ -105,28 +368,67 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       setLoading(true)
       setError(null)
       try {
-        const restaurantRef = doc(db, 'restaurants', restaurantId)
-        const docSnap = await getDoc(restaurantRef)
-
-        if (docSnap.exists()) {
-          const restaurantData = docSnap.data();
-          if (!restaurantData.name) {
-            setIsNewRestaurant(true);
-          }
-          // Initialize form data
+        if (restaurantId === 'new') {
+          // Initialize form data for new restaurant
           setFormData({
-              name: restaurantData.name || '',
-              address: restaurantData.address || '',
-              website: restaurantData.website || '',
-              notes: restaurantData.notes || '',
-              menuCategories: restaurantData.menuCategories || [],
-              coordinates: restaurantData.coordinates,
-              createdAt: restaurantData.createdAt,
-              updatedAt: restaurantData.updatedAt,
+              name: '',
+              address: '',
+              website: '',
+              notes: '',
+              menuCategories: [{
+                id: uuidv4(),
+                name: '',
+                items: [{
+                  id: uuidv4(),
+                  name: '',
+                  description: '',
+                  price: 0,
+                  dietaryRestrictions: []
+                }]
+              }],
+              coordinates: { lat: 0, lng: 0 },
+              createdAt: new Date(),
+              updatedAt: new Date(),
           });
-          setOriginalAddress(restaurantData.address || '');
+          setOriginalAddress('');
+          setIsNewRestaurant(true);
         } else {
-          setError('Restaurant not found.')
+          const restaurantRef = doc(db, 'restaurants', restaurantId)
+          const docSnap = await getDoc(restaurantRef)
+
+          if (docSnap.exists()) {
+            const restaurantData = docSnap.data();
+            console.log('Loaded restaurant data from database:', restaurantData);
+            console.log('Coordinates from database:', restaurantData.coordinates);
+            
+            // Check if coordinates are valid (not 0,0)
+            const hasValidCoordinates = restaurantData.coordinates && 
+              restaurantData.coordinates.lat !== 0 && 
+              restaurantData.coordinates.lng !== 0;
+            
+            if (!restaurantData.name) {
+              setIsNewRestaurant(true);
+            }
+            // Initialize form data
+            setFormData({
+                name: restaurantData.name || '',
+                address: restaurantData.address || '',
+                website: restaurantData.website || '',
+                notes: restaurantData.notes || '',
+                menuCategories: restaurantData.menuCategories || [],
+                coordinates: hasValidCoordinates ? restaurantData.coordinates : { lat: 0, lng: 0 },
+                createdAt: restaurantData.createdAt,
+                updatedAt: restaurantData.updatedAt,
+            });
+            setOriginalAddress(restaurantData.address || '');
+            
+            // If coordinates are invalid and there's an address, trigger geocoding
+            if (!hasValidCoordinates && restaurantData.address) {
+              console.log('Invalid coordinates detected, will geocode address on next blur');
+            }
+          } else {
+            setError('Restaurant not found.')
+          }
         }
       } catch (err) {
         console.error('Error fetching restaurant details:', err)
@@ -229,34 +531,42 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   }
 
   const handleMenuChange = (categoryIndex: number, itemIndex: number, field: keyof MenuItemFirestore, value: string | number) => {
-      if (!formData) return;
-
-      const newMenuCategories = [...formData.menuCategories];
-
-      if (field === 'price') {
-        const sanitizedValue = value.toString().replace(',', '.');
-        const validPriceRegex = /^\d*(\.\d{0,2})?$/;
-        if (sanitizedValue === '' || validPriceRegex.test(sanitizedValue)) {
-          (newMenuCategories[categoryIndex].items[itemIndex] as any)[field] = sanitizedValue;
-        }
-      } else {
-        (newMenuCategories[categoryIndex].items[itemIndex] as any)[field] = value;
-      }
-      
-      setFormData(prev => ({ ...prev!, menuCategories: newMenuCategories }));
-
-      const categoryId = newMenuCategories[categoryIndex].id;
-      const itemId = newMenuCategories[categoryIndex].items[itemIndex].id;
-      if (formErrors[categoryId]?.items?.[itemId]?.[field] && categoryIndex === 0 && itemIndex === 0) {
-        handleBlur(field, value, categoryId, itemId);
-      }
-  }
+    if (!formData) return;
+    
+    const newMenuCategories = [...formData.menuCategories];
+    const item = newMenuCategories[categoryIndex].items[itemIndex];
+    
+    // Update the field
+    item[field] = value;
+    
+    // Auto-detect dietary restrictions when name or description changes
+    if (field === 'name' || field === 'description') {
+      const nameText = field === 'name' ? value as string : item.name;
+      const descText = field === 'description' ? value as string : item.description;
+      const combinedText = `${nameText} ${descText}`;
+      item.dietaryRestrictions = detectDietaryRestrictions(combinedText);
+    }
+    
+    // Create a new form data object that preserves all existing fields, including coordinates
+    setFormData(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        menuCategories: newMenuCategories,
+        coordinates: prev.coordinates // Explicitly preserve coordinates
+      };
+    });
+  };
 
   const handleCategoryNameChange = (categoryIndex: number, value: string) => {
     if (!formData) return;
     const newMenuCategories = [...formData.menuCategories];
     newMenuCategories[categoryIndex].name = value;
-    setFormData(prev => ({ ...prev!, menuCategories: newMenuCategories }));
+    setFormData(prev => ({ 
+      ...prev!, 
+      menuCategories: newMenuCategories,
+      coordinates: prev!.coordinates // Explicitly preserve coordinates
+    }));
     if (formErrors[newMenuCategories[categoryIndex].id]?.name && categoryIndex === 0) {
       handleBlur('name', value, newMenuCategories[categoryIndex].id);
     }
@@ -282,7 +592,11 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     const insertIndex = activeCategoryIndex === null ? newMenuCategories.length : activeCategoryIndex + 1;
     newMenuCategories.splice(insertIndex, 0, newCategory);
 
-    setFormData(prev => ({ ...prev!, menuCategories: newMenuCategories }));
+    setFormData(prev => ({ 
+      ...prev!, 
+      menuCategories: newMenuCategories,
+      coordinates: prev!.coordinates // Explicitly preserve coordinates
+    }));
     setActiveCategoryIndex(insertIndex);
     setNewlyAddedCategoryIndex(insertIndex);
   }
@@ -299,7 +613,11 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     const newMenuCategories = [...formData.menuCategories];
     newMenuCategories[categoryIndex].items.push(newItem);
     const newItemIndex = newMenuCategories[categoryIndex].items.length - 1;
-    setFormData(prev => ({ ...prev!, menuCategories: newMenuCategories }));
+    setFormData(prev => ({ 
+      ...prev!, 
+      menuCategories: newMenuCategories,
+      coordinates: prev!.coordinates // Explicitly preserve coordinates
+    }));
     setNewlyAddedItem({ catIndex: categoryIndex, itemIndex: newItemIndex });
   }
 
@@ -307,60 +625,87 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     if (!formData) return;
     const newMenuCategories = [...formData.menuCategories];
     newMenuCategories.splice(categoryIndex, 1);
-    setFormData(prev => ({ ...prev!, menuCategories: newMenuCategories }));
+    setFormData(prev => ({ 
+      ...prev!, 
+      menuCategories: newMenuCategories,
+      coordinates: prev!.coordinates // Explicitly preserve coordinates
+    }));
   }
 
   const deleteItem = (categoryIndex: number, itemIndex: number) => {
     if (!formData) return;
     const newMenuCategories = [...formData.menuCategories];
     newMenuCategories[categoryIndex].items.splice(itemIndex, 1);
-    setFormData(prev => ({ ...prev!, menuCategories: newMenuCategories }));
+    setFormData(prev => ({ 
+      ...prev!, 
+      menuCategories: newMenuCategories,
+      coordinates: prev!.coordinates // Explicitly preserve coordinates
+    }));
   }
 
   const handleAddressBlur = () => {
-    // If the address is unchanged or empty, just clear any old errors and do nothing else.
-    // This prevents the transition from running unnecessarily.
-    if (!formData || formData.address === originalAddress || !formData.address) {
+    // If there's no address, just clear any old errors and do nothing else.
+    if (!formData || !formData.address.trim()) {
       setAddressError(null);
       setAddressWarning(null);
       return;
     }
 
-    // Only start a transition if the address has actually changed.
-    startTransition(async () => {
-      setAddressError(null);
-      setAddressWarning(null);
+    // Check if coordinates are invalid (0,0) or if address has changed
+    const hasValidCoordinates = formData.coordinates && 
+      formData.coordinates.lat !== 0 && 
+      formData.coordinates.lng !== 0;
+    
+    const addressChanged = formData.address !== originalAddress;
+    
+    // Always geocode if coordinates are invalid or address has changed
+    if (!hasValidCoordinates || addressChanged) {
+      startTransition(async () => {
+        setAddressError(null);
+        setAddressWarning(null);
 
-      try {
-        const response = await fetch(`/api/geocode?address=${encodeURIComponent(formData.address)}`);
-        const data = await response.json();
+        try {
+          console.log('Geocoding address:', formData.address);
+          console.log('Reason: coordinates invalid =', !hasValidCoordinates, 'address changed =', addressChanged);
+          const response = await fetch(`/api/geocode?address=${encodeURIComponent(formData.address)}`);
+          const data = await response.json();
 
-        if (!response.ok) {
-          setAddressError(data.error || 'Could not verify address.');
-        } else {
-          // Set the coordinates in formData
-          setFormData(prev => ({
-            ...prev!,
-            coordinates: {
-              lat: data.latitude,
-              lng: data.longitude
-            }
-          }));
+          console.log('Geocoding response:', data);
 
-          if (data.quality === 'approximate') {
-            setAddressWarning('Address is an approximate match. Please review or provide more detail.');
+          if (!response.ok) {
+            setAddressError(data.error || 'Could not verify address.');
           } else {
-            setAddressWarning(null);
+            // Set the coordinates in formData
+            setFormData(prev => ({
+              ...prev!,
+              coordinates: {
+                lat: data.latitude,
+                lng: data.longitude
+              }
+            }));
+
+            console.log('Updated coordinates:', { lat: data.latitude, lng: data.longitude });
+
+            if (data.quality === 'approximate') {
+              setAddressWarning('Address is an approximate match. Please review or provide more detail.');
+            } else {
+              setAddressWarning(null);
+            }
           }
+        } catch (err) {
+          console.error('Geocoding error:', err);
+          setAddressError('Could not verify address. Please check your network connection.');
         }
-      } catch (err) {
-        setAddressError('Could not verify address. Please check your network connection.');
-      }
-    });
+      });
+    } else {
+      console.log('Skipping geocoding - coordinates are valid and address unchanged');
+    }
   };
 
   const handleSave = async () => {
     if (!formData) return;
+
+    console.log('Saving restaurant with coordinates:', formData.coordinates);
 
     // Validate required fields
     if (!formData.name || !formData.address) {
@@ -371,6 +716,13 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     // Ensure coordinates are present
     if (!formData.coordinates) {
         setError('Coordinates are required');
+        return;
+    }
+
+    // Check if coordinates are valid (not 0,0)
+    if (formData.coordinates.lat === 0 && formData.coordinates.lng === 0) {
+        console.warn('Coordinates are 0,0 - this might indicate a geocoding issue');
+        setError('Please enter a valid address and wait for coordinates to be generated before saving.');
         return;
     }
 
@@ -386,6 +738,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
             updatedAt: new Date()
         };
 
+        console.log('Restaurant data to save:', restaurantData);
+
         if (restaurantId === 'new') {
             await addDoc(collection(db, 'restaurants'), restaurantData);
         } else {
@@ -398,6 +752,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 notes: restaurantData.notes,
                 updatedAt: restaurantData.updatedAt
             };
+            console.log('Update data:', updateData);
             await updateDoc(doc(db, 'restaurants', restaurantId), updateData);
         }
         router.push('/restaurantsdatabase');
@@ -409,18 +764,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
   const handleCancel = async () => {
     if (restaurantId === 'new') {
-      // For a new, unsaved restaurant, confirm before deleting the draft
-      if (window.confirm('This will discard the new restaurant. Are you sure?')) {
-        setIsCancelling(true);
-        try {
-          await deleteDoc(doc(db, 'restaurants', restaurantId));
-          router.push('/restaurantsdatabase');
-        } catch (err) {
-          console.error('Error discarding new restaurant:', err);
-          setError('Failed to discard the new restaurant.');
-          setIsCancelling(false);
-        }
-      }
+      // For a new, unsaved restaurant, just go back without trying to delete
+      router.push('/restaurantsdatabase');
     } else {
       // For an existing restaurant, just go back
       router.push('/restaurantsdatabase');
@@ -430,6 +775,11 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const handleDelete = async () => {
     if (!restaurantId) {
       setError('Cannot delete, no restaurant ID found.');
+      return;
+    }
+
+    if (restaurantId === 'new') {
+      setError('Cannot delete a new restaurant that has not been saved yet.');
       return;
     }
 
@@ -448,60 +798,50 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   };
 
   const handleJsonBlur = () => {
-    if (!jsonInput.trim()) {
-      setJsonError(null)
-      setJsonSuccess(null)
-      return
-    }
-
     try {
-      const parsedJson = JSON.parse(jsonInput) as MenuJson
+      const parsedJson = JSON.parse(jsonInput);
       
       // Validate the structure
       if (!parsedJson.menuCategories || !Array.isArray(parsedJson.menuCategories)) {
-        setJsonError('Invalid JSON structure: menuCategories must be an array')
-        setJsonSuccess(null)
-        return
+        setJsonError('Invalid JSON structure. Must contain a menuCategories array.');
+        return;
       }
 
       // Validate each category
       for (const category of parsedJson.menuCategories) {
-        if (!category.id || !category.name || !Array.isArray(category.items)) {
-          setJsonError('Invalid category structure: each category must have id, name, and items array')
-          setJsonSuccess(null)
-          return
+        if (!category.name || !Array.isArray(category.items)) {
+          setJsonError('Each category must have a name and an items array.');
+          return;
         }
 
         // Validate each item
         for (const item of category.items) {
-          if (!item.id || !item.name || typeof item.price !== 'number' || !Array.isArray(item.dietaryRestrictions)) {
-            setJsonError('Invalid item structure: each item must have id, name, price, and dietaryRestrictions array')
-            setJsonSuccess(null)
-            return
+          if (!item.name || typeof item.price !== 'number') {
+            setJsonError('Each item must have a name and a numeric price.');
+            return;
+          }
+          // Ensure dietaryRestrictions is an array
+          if (!item.dietaryRestrictions) {
+            item.dietaryRestrictions = [];
+          } else if (!Array.isArray(item.dietaryRestrictions)) {
+            setJsonError('dietaryRestrictions must be an array.');
+            return;
           }
         }
       }
 
-      // Count total items
-      const totalItems = parsedJson.menuCategories.reduce((sum, category) => 
-        sum + (category.items?.length || 0), 0
-      )
-
-      // Create success message
-      const successMessage = `Found ${parsedJson.menuCategories.length} categories with ${totalItems} items`
-      setJsonSuccess(successMessage)
-      setJsonError(null)
-
-      // Update form data
+      // Update form data with the parsed JSON
       setFormData(prev => ({
         ...prev!,
         menuCategories: parsedJson.menuCategories
-      }))
+      }));
+      setJsonError(null);
+      setJsonSuccess('Menu updated successfully!');
     } catch (error) {
-      setJsonError('Invalid JSON format')
-      setJsonSuccess(null)
+      setJsonError('Invalid JSON format.');
+      setJsonSuccess(null);
     }
-  }
+  };
 
   const renderDetailRow = (
     label: string, 
@@ -697,7 +1037,19 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                         error={categoryIndex === 0 && itemIndex === 0 && formErrors[category.id]?.items?.[item.id]?.name}
                         className="w-full text-sm" 
                     />
-                    <Input placeholder="Description" value={item.description || ''} onFocus={() => setActiveCategoryIndex(categoryIndex)} onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'description', e.target.value)} className="w-full text-sm" />
+                    <div className="flex-1 flex items-center">
+                      <Input 
+                        placeholder="Description" 
+                        value={item.description || ''} 
+                        onFocus={() => setActiveCategoryIndex(categoryIndex)} 
+                        onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'description', e.target.value)} 
+                        className="w-full text-sm" 
+                      />
+                      <DietaryDropdown
+                        value={item.dietaryRestrictions || []}
+                        onChange={(value) => handleMenuChange(categoryIndex, itemIndex, 'dietaryRestrictions', value)}
+                      />
+                    </div>
                     <Input 
                       type="text" 
                       inputMode="decimal"
@@ -778,7 +1130,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       </main>
 
       {/* Bottom Bar */}
-      <footer className="fixed bottom-0 left-0 right-0 z-10" style={{ borderTop: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
+      <footer className="fixed bottom-0 left-0 right-0" style={{ zIndex: 11000, borderTop: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
           <div className="flex justify-center">
               <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
               <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48 }}>

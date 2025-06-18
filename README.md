@@ -35,7 +35,7 @@ A lightweight web application that shows you menus of nearby restaurants based o
    Get your API keys:
    - Google Places API key from [Google Cloud Console](https://console.cloud.google.com/)
    - Firebase configuration from [Firebase Console](https://console.firebase.google.com/)
-   
+
 4. Run the development server:
    ```bash
    npm run dev

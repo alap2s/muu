@@ -166,16 +166,17 @@ export default function Home() {
     }
   }, [selectedRestaurant])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      const maxScroll = 100 // Adjust this value to control how quickly the transition happens
-      const progress = Math.min(scrollPosition / maxScroll, 1)
-      setScrollProgress(progress)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  // ANIMATION BACKUP - Commented out for performance
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollPosition = window.scrollY
+  //     const maxScroll = 100 // Adjust this value to control how quickly the transition happens
+  //     const progress = Math.min(scrollPosition / maxScroll, 1)
+  //     setScrollProgress(progress)
+  //   }
+  //   window.addEventListener('scroll', handleScroll, { passive: true })
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -211,12 +212,14 @@ export default function Home() {
     }
   }, [selectedGroup, menuRef, categoryRefs])
 
-  useEffect(() => {
-    if (descriptionRef.current) {
-      setInitialDescriptionHeight(descriptionRef.current.scrollHeight)
-    }
-  }, [])
+  // ANIMATION BACKUP - Commented out for performance
+  // useEffect(() => {
+  //   if (descriptionRef.current) {
+  //     setInitialDescriptionHeight(descriptionRef.current.scrollHeight)
+  //   }
+  // }, [])
 
+  // Simple header height calculation for sticky positioning (no animation)
   useEffect(() => {
     const updateHeaderHeight = () => {
       if (headerRef.current) {
@@ -235,7 +238,19 @@ export default function Home() {
         resizeObserver.unobserve(headerRef.current)
       }
     }
-  }, [scrollProgress])
+  }, []) // No dependencies - only runs once and on resize
+
+  // FIXED VALUES - Collapsed state only (no animation)
+  const logoHeight = 24 // Fixed collapsed height
+  const logoWidth = 70 // Fixed collapsed width (maintains aspect ratio)
+  const verticalPadding = 12 // Fixed collapsed padding
+  const descriptionHeight = '0px' // Hidden description in collapsed state
+
+  // ANIMATION BACKUP - Original dynamic calculations commented out
+  // const logoHeight = 72 - (scrollProgress * 48) // 72px to 24px
+  // const logoWidth = (logoHeight / 72) * 210 // Maintain aspect ratio
+  // const verticalPadding = 48 - (scrollProgress * 36) // 48px to 12px
+  // const descriptionHeight = `${initialDescriptionHeight - (scrollProgress * initialDescriptionHeight)}px`
 
   const fetchRestaurants = async () => {
     if (!location) return
@@ -430,12 +445,6 @@ export default function Home() {
     }
   }, [])
 
-  // Calculate dimensions based on scroll progress
-  const logoHeight = 72 - (scrollProgress * 48) // 72px to 24px
-  const logoWidth = (logoHeight / 72) * 210 // Maintain aspect ratio
-  const verticalPadding = 48 - (scrollProgress * 36) // 48px to 12px
-  const descriptionHeight = `${initialDescriptionHeight - (scrollProgress * initialDescriptionHeight)}px`
-
   const handleSettingsClick = () => {
     setIsLoading(true)
     router.replace('/settings')
@@ -491,9 +500,7 @@ export default function Home() {
               paddingBottom: verticalPadding,
               paddingLeft: 16,
               paddingRight: 16,
-              transition: 'padding 0.3s ease-out',
               borderRight: '1px solid var(--border-main)',
-              willChange: 'padding-top, padding-bottom',
               flex: 1
             }}>
               <svg 
@@ -503,9 +510,7 @@ export default function Home() {
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg" 
                 style={{ 
-                  display: 'block',
-                  transition: 'width 0.3s ease-out, height 0.3s ease-out',
-                  willChange: 'width, height'
+                  display: 'block'
                 }}
               >
                 <path d="M89.25 0.5V72.5H65.2933V21.4229H57.9343V72.5H31.3157V21.4229H23.9567V72.5H0V0.5H89.25Z" fill="var(--accent)"/>
@@ -514,10 +519,7 @@ export default function Home() {
               </svg>
               <div style={{ 
                 height: descriptionHeight,
-                overflow: 'hidden',
-                transition: 'height 0.3s ease-out, opacity 0.3s ease-out',
-                opacity: 1 - scrollProgress,
-                willChange: 'height, opacity'
+                overflow: 'hidden'
               }} ref={descriptionRef}>
                 <p style={{ 
                   color: 'var(--text-secondary)', 
@@ -648,7 +650,7 @@ export default function Home() {
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
           {selectedRestaurant && (
-            <div className="bg-primary-light dark:bg-dark-background-main pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`}>
+            <div className="pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`} style={{ background: 'var(--background-main)' }}>
               <div className="space-y-0">
                 {Object.entries(groupedMenu).map(([category, items]) => (
                   <MenuCategoryRow
@@ -671,9 +673,9 @@ export default function Home() {
 
               {selectedRestaurant.website && (
                 <div
-                  style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer' }}
+                  style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer', background: 'var(--background-main)' }}
                 >
-                  <div className="flex justify-center">
+                  <div className="flex justify-center" style={{ background: 'var(--background-main)' }}>
                     <div
                       style={{
                         width: 32,
@@ -682,7 +684,7 @@ export default function Home() {
                       }}
                     />
                     <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background-main)' }}>
                         <Button
                           variant="secondary"
                           onClick={() => window.open(selectedRestaurant.website, '_blank', 'noopener,noreferrer')}
@@ -703,6 +705,12 @@ export default function Home() {
                   </div>
                 </div>
               )}
+              {/* Empty row below website link row for visual separation */}
+              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
+                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                <div style={{ flex: 1, maxWidth: 800, height: 48, background: 'var(--background-main)' }} />
+                <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+              </div>
             </div>
           )}
 

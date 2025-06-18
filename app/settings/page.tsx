@@ -64,10 +64,14 @@ export default function SettingsPage() {
       { icon: <Sun />, selected: themeMode === 'light', onClick: () => setThemeMode('light'), label: 'Light Theme' },
       { icon: <Moon />, selected: themeMode === 'dark', onClick: () => setThemeMode('dark'), label: 'Dark Theme' },
     ],
-    // Row 2: Layout, View
+    // Row 2: Layout, View, and Font controls
     [
       { icon: <Grid2x2 />, selected: viewMode === 'grid', onClick: () => setViewMode('grid'), label: 'Grid View' },
-      { icon: <Rows3 />, selected: viewMode === 'list', onClick: () => setViewMode('list'), label: 'List View' }
+      { icon: <Rows3 />, selected: viewMode === 'list', onClick: () => setViewMode('list'), label: 'List View' },
+      null,
+      null,
+      { icon: <span className="font-mono">JT</span>, selected: font === 'jetbrains', onClick: () => setFont('jetbrains'), label: 'JetBrains Font' },
+      { icon: <span className="font-mono">AT</span>, selected: font === 'atkinson', onClick: () => setFont('atkinson'), label: 'Atkinson Font' }
     ],
     // Row 3: Language and Currency
     [
@@ -200,7 +204,7 @@ export default function SettingsPage() {
           <div style={{ flex: 1, maxWidth: 800, padding: '12px 16px' }}>
             <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
             <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
-              A menu experiment (mostly for Berlin friends) — that shows you a standardized, accessible menu automatically when you sit down.
+              A menu experiment (mostly for Berlin friends) — that shows you a standardized, accessible menu automatically when you sit down. This app provides dietary and allergen information for guidance only. For severe allergies or dietary needs, always check directly with the restaurant staff before ordering.
             </p>
           </div>
           <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />

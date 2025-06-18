@@ -40,7 +40,10 @@ interface RestaurantDetails {
   address: string;
   website?: string;
   notes?: string;
-  gps?: GeoPoint;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
   menuCategories: MenuCategoryFirestore[];
 }
 
@@ -145,7 +148,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     { label: 'Address', value: restaurant.address },
     { label: 'Website', value: restaurant.website },
     { label: 'Notes', value: restaurant.notes },
-    { label: 'GPS', value: restaurant.gps ? `${restaurant.gps.latitude.toFixed(5)}, ${restaurant.gps.longitude.toFixed(5)}` : undefined },
+    { label: 'GPS', value: restaurant.coordinates ? `${restaurant.coordinates.lat.toFixed(5)}, ${restaurant.coordinates.lng.toFixed(5)}` : undefined },
   ] : []
 
   return (
