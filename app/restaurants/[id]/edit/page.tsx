@@ -542,7 +542,9 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     } else if (field === 'price') {
       item[field] = value as number;
     } else if (field === 'dietaryRestrictions') {
-      item[field] = value as string[];
+      if (Array.isArray(value)) {
+        item[field] = value;
+      }
     } else if (field === 'id') {
       item[field] = value as string;
     }
