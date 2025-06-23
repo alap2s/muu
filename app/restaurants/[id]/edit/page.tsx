@@ -415,9 +415,9 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 address: restaurantData.address || '',
                 website: restaurantData.website || '',
                 notes: restaurantData.notes || '',
-                menuCategories: (restaurantData.menuCategories || []).map(category => ({
+                menuCategories: (restaurantData.menuCategories || []).map((category: any) => ({
                   ...category,
-                  items: category.items.map(item => ({
+                  items: category.items.map((item: any) => ({
                     ...item,
                     dietaryRestrictionsExplicitlySet: item.dietaryRestrictionsExplicitlySet || false
                   }))
@@ -848,7 +848,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
           // Validate dietary restriction values
           const invalidRestrictions = item.dietaryRestrictions.filter(
-            restriction => !validRestrictions.includes(restriction)
+            (restriction: string) => !validRestrictions.includes(restriction)
           );
           if (invalidRestrictions.length > 0) {
             setJsonError(`Invalid dietary restrictions: ${invalidRestrictions.join(', ')}. Please use valid values from the guide.`);
