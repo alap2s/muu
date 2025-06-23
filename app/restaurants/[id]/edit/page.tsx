@@ -285,6 +285,7 @@ interface MenuItemFirestore {
   description?: string;
   price: number;
   dietaryRestrictions: string[];
+  dietaryRestrictionsExplicitlySet?: boolean;
 }
 
 interface MenuCategoryFirestore {
@@ -383,7 +384,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                   name: '',
                   description: '',
                   price: 0,
-                  dietaryRestrictions: []
+                  dietaryRestrictions: [],
+                  dietaryRestrictionsExplicitlySet: false
                 }]
               }],
               coordinates: { lat: 0, lng: 0 },
@@ -413,7 +415,13 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 address: restaurantData.address || '',
                 website: restaurantData.website || '',
                 notes: restaurantData.notes || '',
-                menuCategories: restaurantData.menuCategories || [],
+                menuCategories: (restaurantData.menuCategories || []).map(category => ({
+                  ...category,
+                  items: category.items.map(item => ({
+                    ...item,
+                    dietaryRestrictionsExplicitlySet: item.dietaryRestrictionsExplicitlySet || false
+                  }))
+                })),
                 coordinates: hasValidCoordinates ? restaurantData.coordinates : { lat: 0, lng: 0 },
                 createdAt: restaurantData.createdAt,
                 updatedAt: restaurantData.updatedAt,
@@ -542,13 +550,15 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     } else if (field === 'dietaryRestrictions') {
       if (Array.isArray(value)) {
         item[field] = value;
+        // Mark that dietary restrictions were explicitly set
+        item.dietaryRestrictionsExplicitlySet = true;
       }
     } else if (field === 'id') {
       item[field] = value as string;
     }
     
-    // Auto-detect dietary restrictions when name or description changes
-    if (field === 'name' || field === 'description') {
+    // Auto-detect dietary restrictions when name or description changes, but only if not explicitly set
+    if ((field === 'name' || field === 'description') && !item.dietaryRestrictionsExplicitlySet) {
       const nameText = field === 'name' ? value as string : item.name;
       const descText = field === 'description' ? value as string : item.description;
       const combinedText = `${nameText} ${descText}`;
@@ -591,7 +601,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
           name: '',
           description: '',
           price: 0,
-          dietaryRestrictions: []
+          dietaryRestrictions: [],
+          dietaryRestrictionsExplicitlySet: false
         }
       ]
     };
@@ -616,7 +627,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       name: '',
       description: '',
       price: 0,
-      dietaryRestrictions: []
+      dietaryRestrictions: [],
+      dietaryRestrictionsExplicitlySet: false
     };
     const newMenuCategories = [...formData.menuCategories];
     newMenuCategories[categoryIndex].items.push(newItem);
@@ -802,6 +814,17 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         return;
       }
 
+      // Define valid dietary restrictions
+      const validRestrictions = [
+        'vegetarian', 'vegan', 'pescatarian', 'gluten', 'crustaceans', 
+        'eggs', 'fish-allergen', 'peanuts', 'soybeans', 'milk', 'nuts',
+        'celery', 'mustard', 'sesame', 'sulphites', 'lupin', 'molluscs',
+        'lactose-free', 'dairy-free', 'nut-free', 'egg-free', 'soy-free',
+        'sesame-free', 'peanut-free', 'gluten-free', 'spicy', 
+        'contains-alcohol', 'contains-sugar', 'low-carb', 'low-fat',
+        'high-protein', 'halal', 'kosher'
+      ];
+
       // Validate each category
       for (const category of parsedJson.menuCategories) {
         if (!category.name || !Array.isArray(category.items)) {
@@ -821,6 +844,20 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
           } else if (!Array.isArray(item.dietaryRestrictions)) {
             setJsonError('dietaryRestrictions must be an array.');
             return;
+          }
+
+          // Validate dietary restriction values
+          const invalidRestrictions = item.dietaryRestrictions.filter(
+            restriction => !validRestrictions.includes(restriction)
+          );
+          if (invalidRestrictions.length > 0) {
+            setJsonError(`Invalid dietary restrictions: ${invalidRestrictions.join(', ')}. Please use valid values from the guide.`);
+            return;
+          }
+
+          // Mark dietary restrictions as explicitly set if they were provided in JSON
+          if (item.dietaryRestrictions.length > 0) {
+            item.dietaryRestrictionsExplicitlySet = true;
           }
         }
       }
@@ -974,7 +1011,37 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               errorMessage={jsonError || undefined}
               warning={!!jsonSuccess}
               warningMessage={jsonSuccess || undefined}
-              placeholder="Paste your menu JSON here..."
+              placeholder={`{
+  "menuCategories": [
+    {
+      "name": "Appetizers",
+      "items": [
+        {
+          "id": "unique-id-1",
+          "name": "Fries, Classic or seasoned with chaat masala",
+          "description": "Crispy fries with optional chaat masala seasoning",
+          "price": 8.50,
+          "dietaryRestrictions": ["vegan", "gluten-free"]
+        }
+      ]
+    }
+  ]
+}
+
+// DIETARY RESTRICTIONS GUIDE:
+// Use these exact values in dietaryRestrictions array:
+// 
+// LIFESTYLES: "vegetarian", "vegan", "pescatarian"
+// 
+// ALLERGENS: "gluten", "crustaceans", "eggs", "fish-allergen", 
+//            "peanuts", "soybeans", "milk", "nuts", "celery", 
+//            "mustard", "sesame", "sulphites", "lupin", "molluscs"
+// 
+// FREE FROM: "lactose-free", "dairy-free", "nut-free", "egg-free",
+//            "soy-free", "sesame-free", "peanut-free", "gluten-free"
+// 
+// OTHER: "spicy", "contains-alcohol", "contains-sugar", "low-carb",
+//        "low-fat", "high-protein", "halal", "kosher"`}
               rows={20}
             />
         </div>
@@ -1153,20 +1220,36 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                           menuCategories: [
                             {
                               id: "category-id",
-                              name: "Category Name",
+                              name: "Appetizers",
                               items: [
                                 {
                                   id: "item-id",
-                                  name: "Item Name",
-                                  description: "Item Description",
-                                  price: 0,
-                                  dietaryRestrictions: []
+                                  name: "Fries, Classic or seasoned with chaat masala",
+                                  description: "Crispy fries with optional chaat masala seasoning",
+                                  price: 8.50,
+                                  dietaryRestrictions: ["vegan", "gluten-free"]
                                 }
                               ]
                             }
                           ]
                         }
-                        navigator.clipboard.writeText(JSON.stringify(jsonFormat, null, 2))
+                        const jsonString = JSON.stringify(jsonFormat, null, 2) + `
+
+// DIETARY RESTRICTIONS GUIDE:
+// Use these exact values in dietaryRestrictions array:
+// 
+// LIFESTYLES: "vegetarian", "vegan", "pescatarian"
+// 
+// ALLERGENS: "gluten", "crustaceans", "eggs", "fish-allergen", 
+//            "peanuts", "soybeans", "milk", "nuts", "celery", 
+//            "mustard", "sesame", "sulphites", "lupin", "molluscs"
+// 
+// FREE FROM: "lactose-free", "dairy-free", "nut-free", "egg-free",
+//            "soy-free", "sesame-free", "peanut-free", "gluten-free"
+// 
+// OTHER: "spicy", "contains-alcohol", "contains-sugar", "low-carb",
+//        "low-fat", "high-protein", "halal", "kosher"`;
+                        navigator.clipboard.writeText(jsonString)
                       }} 
                       className="w-full" 
                       aria-label="Copy JSON format"
