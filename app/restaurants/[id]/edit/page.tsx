@@ -398,8 +398,6 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
           if (docSnap.exists()) {
             const restaurantData = docSnap.data();
-            console.log('Loaded restaurant data from database:', restaurantData);
-            console.log('Coordinates from database:', restaurantData.coordinates);
             
             // Check if coordinates are valid (not 0,0)
             const hasValidCoordinates = restaurantData.coordinates && 
@@ -675,12 +673,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         setAddressWarning(null);
 
         try {
-          console.log('Geocoding address:', formData.address);
-          console.log('Reason: coordinates invalid =', !hasValidCoordinates, 'address changed =', addressChanged);
           const response = await fetch(`/api/geocode?address=${encodeURIComponent(formData.address)}`);
           const data = await response.json();
-
-          console.log('Geocoding response:', data);
 
           if (!response.ok) {
             setAddressError(data.error || 'Could not verify address.');
@@ -694,8 +688,6 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               }
             }));
 
-            console.log('Updated coordinates:', { lat: data.latitude, lng: data.longitude });
-
             if (data.quality === 'approximate') {
               setAddressWarning('Address is an approximate match. Please review or provide more detail.');
             } else {
@@ -707,15 +699,11 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
           setAddressError('Could not verify address. Please check your network connection.');
         }
       });
-    } else {
-      console.log('Skipping geocoding - coordinates are valid and address unchanged');
     }
   };
 
   const handleSave = async () => {
     if (!formData) return;
-
-    console.log('Saving restaurant with coordinates:', formData.coordinates);
 
     // Validate required fields
     if (!formData.name || !formData.address) {
@@ -748,8 +736,6 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
             updatedAt: new Date()
         };
 
-        console.log('Restaurant data to save:', restaurantData);
-
         if (restaurantId === 'new') {
             await addDoc(collection(db, 'restaurants'), restaurantData);
         } else {
@@ -762,7 +748,6 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 notes: restaurantData.notes,
                 updatedAt: restaurantData.updatedAt
             };
-            console.log('Update data:', updateData);
             await updateDoc(doc(db, 'restaurants', restaurantId), updateData);
         }
         router.push('/restaurantsdatabase');

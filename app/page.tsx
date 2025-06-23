@@ -130,10 +130,12 @@ export default function Home() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLocation({
+          const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          })
+          };
+          console.log('Your current location:', userLocation);
+          setLocation(userLocation);
         },
         (error) => {
           console.error('Error getting location:', error)
@@ -263,13 +265,14 @@ export default function Home() {
       const querySnapshot = await getDocs(restaurantsQuery);
       
       const fetchedRestaurants: Restaurant[] = [];
-      console.log('Firestore querySnapshot size:', querySnapshot.size);
+      console.log('Loading restaurants from database...');
       querySnapshot.forEach((doc) => {
         const data = doc.data() as {
           name: string;
           address: string;
           website?: string;
           gps?: FirebaseGeoPoint; 
+          coordinates?: { lat: number; lng: number };
           menuCategories: MenuCategoryFirestore[];
           originalJsonId: string;
           menuSource?: 'database' | 'sample';
@@ -277,12 +280,16 @@ export default function Home() {
           totalRatings?: number;
           notes?: string;
         };
-        // console.log(`Processing Firestore doc ID: ${doc.id}, Name: ${data.name}`);
-        // console.log('Raw menuCategories from Firestore:', data.menuCategories);
 
         let dist = Infinity;
         let gpsCoords: { latitude: number; longitude: number } | undefined = undefined;
-        if (data.gps && location) { // Ensure location is available for distance calculation
+        
+        // Check for both 'coordinates' (plain object) and 'gps' (FirebaseGeoPoint) fields
+        // Prioritize coordinates since that's what the edit page saves
+        if (data.coordinates && location) {
+          gpsCoords = { latitude: data.coordinates.lat, longitude: data.coordinates.lng };
+          dist = calculateDistance(location.lat, location.lng, data.coordinates.lat, data.coordinates.lng);
+        } else if (data.gps && location) {
           gpsCoords = { latitude: data.gps.latitude, longitude: data.gps.longitude };
           dist = calculateDistance(location.lat, location.lng, data.gps.latitude, data.gps.longitude);
         }
@@ -303,10 +310,7 @@ export default function Home() {
               });
             }
           });
-        } else {
-          // console.log(`No menuCategories found or not an array for ${data.name}`);
         }
-        // console.log(`Constructed flatMenu for ${data.name}:`, flatMenu); 
         
         fetchedRestaurants.push({
           id: doc.id, 
@@ -326,13 +330,18 @@ export default function Home() {
 
       // Filter restaurants within 1km radius
       const nearbyRestaurants = fetchedRestaurants.filter(r => r.distance <= 1);
-      console.log(`Found ${fetchedRestaurants.length} total restaurants, ${nearbyRestaurants.length} within 1km.`);
+      console.log(`Found ${fetchedRestaurants.length} total restaurants, ${nearbyRestaurants.length} within 1km radius`);
 
       // Sort by distance and limit to closest 10 (or fewer if less than 10 available within 1km)
       const sortedRestaurants = nearbyRestaurants
         .sort((a, b) => a.distance - b.distance)
         .slice(0, 10);
-      console.log('Final sorted and sliced restaurants:', sortedRestaurants.map(r => ({name: r.name, distance: r.distance})));
+      
+      if (sortedRestaurants.length > 0) {
+        console.log(`Showing ${sortedRestaurants.length} nearby restaurants`);
+      } else {
+        console.log('No restaurants found within 1km radius');
+      }
 
       setRestaurants(sortedRestaurants);
       if (sortedRestaurants.length > 0) {
