@@ -15,6 +15,7 @@ import { useViewMode } from './contexts/ViewModeContext'
 import { usePrice } from './hooks/usePrice'
 import { MenuItemRow } from './components/MenuItemRow'
 import { MenuCategoryRow } from './components/MenuCategoryRow'
+import { NoteRow } from './components/NoteRow'
 import { Currency } from './context/CurrencyContext'
 import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
@@ -87,6 +88,7 @@ export default function Home() {
   const [filter, setFilter] = useState<string>('all')
   const [selectedGroup, setSelectedGroup] = useState<string>('')
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set())
   const menuRef = useRef<HTMLDivElement>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
   const headerRef = useRef<HTMLElement>(null)
@@ -124,6 +126,16 @@ export default function Home() {
       newExpandedItems.add(itemId)
     }
     setExpandedItems(newExpandedItems)
+  }
+
+  const toggleNoteExpansion = (noteId: string) => {
+    const newExpandedNotes = new Set(expandedNotes)
+    if (expandedNotes.has(noteId)) {
+      newExpandedNotes.delete(noteId)
+    } else {
+      newExpandedNotes.add(noteId)
+    }
+    setExpandedNotes(newExpandedNotes)
   }
 
   useEffect(() => {
@@ -661,6 +673,17 @@ export default function Home() {
           {selectedRestaurant && (
             <div className="pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`} style={{ background: 'var(--background-main)' }}>
               <div className="space-y-0">
+                {/* Display notes if they exist */}
+                {selectedRestaurant.notes && (
+                  <NoteRow
+                    id="restaurant-notes"
+                    content={selectedRestaurant.notes}
+                    expanded={expandedNotes.has('restaurant-notes')}
+                    onClick={toggleNoteExpansion}
+                    viewMode={viewMode}
+                  />
+                )}
+                
                 {Object.entries(groupedMenu).map(([category, items]) => (
                   <MenuCategoryRow
                     key={category}

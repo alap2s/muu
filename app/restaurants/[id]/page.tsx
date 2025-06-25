@@ -9,6 +9,7 @@ import { Button } from '../../design-system/components/Button'
 import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef, WheatOff, Flame } from 'lucide-react'
 import { MenuCategoryRow } from '../../components/MenuCategoryRow'
 import { DetailRow } from '../../components/DetailRow'
+import { NoteRow } from '../../components/NoteRow'
 
 // This is the shape of the data that getDietaryIcons expects
 interface MenuItem {
@@ -52,6 +53,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set())
   const router = useRouter()
   const { viewMode } = useViewMode()
   const { id: restaurantId } = params
@@ -64,6 +66,16 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
       newExpandedItems.add(itemId);
     }
     setExpandedItems(newExpandedItems);
+  };
+
+  const toggleNoteExpansion = (noteId: string) => {
+    const newExpandedNotes = new Set(expandedNotes);
+    if (newExpandedNotes.has(noteId)) {
+      newExpandedNotes.delete(noteId);
+    } else {
+      newExpandedNotes.add(noteId);
+    }
+    setExpandedNotes(newExpandedNotes);
   };
 
   const getDietaryIcons = (item: MenuItem) => {
@@ -147,7 +159,6 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     { label: 'Name', value: restaurant.name },
     { label: 'Address', value: restaurant.address },
     { label: 'Website', value: restaurant.website },
-    { label: 'Notes', value: restaurant.notes },
     { label: 'GPS', value: restaurant.coordinates ? `${restaurant.coordinates.lat.toFixed(5)}, ${restaurant.coordinates.lng.toFixed(5)}` : undefined },
   ] : []
 
@@ -180,6 +191,15 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
         {restaurant && (
           <>
             {detailItems.map(item => item.value ? <DetailRow key={item.label} label={item.label} value={item.value} viewMode={viewMode} /> : null)}
+            {restaurant.notes && (
+              <NoteRow
+                id="restaurant-notes"
+                content={restaurant.notes}
+                expanded={expandedNotes.has("restaurant-notes")}
+                onClick={toggleNoteExpansion}
+                viewMode={viewMode}
+              />
+            )}
             {restaurant.menuCategories && restaurant.menuCategories.map(category => (
               <MenuCategoryRow
                 key={category.name}

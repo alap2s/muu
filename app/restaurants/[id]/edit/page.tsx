@@ -395,26 +395,26 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
           setOriginalAddress('');
           setIsNewRestaurant(true);
         } else {
-          const restaurantRef = doc(db, 'restaurants', restaurantId)
-          const docSnap = await getDoc(restaurantRef)
+        const restaurantRef = doc(db, 'restaurants', restaurantId)
+        const docSnap = await getDoc(restaurantRef)
 
-          if (docSnap.exists()) {
-            const restaurantData = docSnap.data();
+        if (docSnap.exists()) {
+          const restaurantData = docSnap.data();
             
             // Check if coordinates are valid (not 0,0)
             const hasValidCoordinates = restaurantData.coordinates && 
               restaurantData.coordinates.lat !== 0 && 
               restaurantData.coordinates.lng !== 0;
             
-            if (!restaurantData.name) {
-              setIsNewRestaurant(true);
-            }
-            // Initialize form data
-            setFormData({
-                name: restaurantData.name || '',
-                address: restaurantData.address || '',
-                website: restaurantData.website || '',
-                notes: restaurantData.notes || '',
+          if (!restaurantData.name) {
+            setIsNewRestaurant(true);
+          }
+          // Initialize form data
+          setFormData({
+              name: restaurantData.name || '',
+              address: restaurantData.address || '',
+              website: restaurantData.website || '',
+              notes: restaurantData.notes || '',
                 menuCategories: (restaurantData.menuCategories || []).map((category: any) => ({
                   ...category,
                   items: category.items.map((item: any) => ({
@@ -425,15 +425,15 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 coordinates: hasValidCoordinates ? restaurantData.coordinates : { lat: 0, lng: 0 },
                 createdAt: restaurantData.createdAt,
                 updatedAt: restaurantData.updatedAt,
-            });
-            setOriginalAddress(restaurantData.address || '');
+          });
+          setOriginalAddress(restaurantData.address || '');
             
             // If coordinates are invalid and there's an address, trigger geocoding
             if (!hasValidCoordinates && restaurantData.address) {
               console.log('Invalid coordinates detected, will geocode address on next blur');
             }
-          } else {
-            setError('Restaurant not found.')
+        } else {
+          setError('Restaurant not found.')
           }
         }
       } catch (err) {
@@ -537,9 +537,9 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   }
 
   const handleMenuChange = (categoryIndex: number, itemIndex: number, field: keyof MenuItemFirestore, value: string | number | string[]) => {
-    if (!formData) return;
-    
-    const newMenuCategories = [...formData.menuCategories];
+      if (!formData) return;
+
+      const newMenuCategories = [...formData.menuCategories];
     const item = newMenuCategories[categoryIndex].items[itemIndex];
     
     // Update the field with proper type handling
@@ -555,7 +555,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       }
     } else if (field === 'id') {
       item[field] = value as string;
-    }
+        }
     
     // Auto-detect dietary restrictions when name or description changes, but only if not explicitly set
     if ((field === 'name' || field === 'description') && !item.dietaryRestrictionsExplicitlySet) {
@@ -680,17 +680,17 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     
     // Always geocode if coordinates are invalid or address has changed
     if (!hasValidCoordinates || addressChanged) {
-      startTransition(async () => {
-        setAddressError(null);
-        setAddressWarning(null);
+    startTransition(async () => {
+      setAddressError(null);
+      setAddressWarning(null);
 
-        try {
-          const response = await fetch(`/api/geocode?address=${encodeURIComponent(formData.address)}`);
-          const data = await response.json();
+      try {
+        const response = await fetch(`/api/geocode?address=${encodeURIComponent(formData.address)}`);
+        const data = await response.json();
 
-          if (!response.ok) {
-            setAddressError(data.error || 'Could not verify address.');
-          } else {
+        if (!response.ok) {
+          setAddressError(data.error || 'Could not verify address.');
+        } else {
             // Set the coordinates in formData
             setFormData(prev => ({
               ...prev!,
@@ -700,17 +700,17 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               }
             }));
 
-            if (data.quality === 'approximate') {
-              setAddressWarning('Address is an approximate match. Please review or provide more detail.');
-            } else {
-              setAddressWarning(null);
-            }
+          if (data.quality === 'approximate') {
+            setAddressWarning('Address is an approximate match. Please review or provide more detail.');
+          } else {
+            setAddressWarning(null);
           }
-        } catch (err) {
-          console.error('Geocoding error:', err);
-          setAddressError('Could not verify address. Please check your network connection.');
         }
-      });
+      } catch (err) {
+          console.error('Geocoding error:', err);
+        setAddressError('Could not verify address. Please check your network connection.');
+      }
+    });
     }
   };
 
@@ -720,7 +720,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     // Validate required fields
     if (!formData.name || !formData.address) {
         setError('Name and address are required');
-        return;
+      return;
     }
 
     // Ensure coordinates are present
@@ -733,7 +733,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     if (formData.coordinates.lat === 0 && formData.coordinates.lng === 0) {
         console.warn('Coordinates are 0,0 - this might indicate a geocoding issue');
         setError('Please enter a valid address and wait for coordinates to be generated before saving.');
-        return;
+      return;
     }
 
     try {
@@ -764,7 +764,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         }
         router.push('/restaurantsdatabase');
     } catch (err) {
-        console.error('Error saving restaurant:', err);
+      console.error('Error saving restaurant:', err);
         setError('Failed to save restaurant');
     }
   };
@@ -772,7 +772,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const handleCancel = async () => {
     if (restaurantId === 'new') {
       // For a new, unsaved restaurant, just go back without trying to delete
-      router.push('/restaurantsdatabase');
+          router.push('/restaurantsdatabase');
     } else {
       // For an existing restaurant, just go back
       router.push('/restaurantsdatabase');
@@ -1181,11 +1181,11 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 return React.cloneElement(content, { key: `content-${i}` });
               }
               return (
-                <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+              <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
                   <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
                   <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
                   <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                </div>
+              </div>
               );
             })}
           </>
@@ -1198,18 +1198,18 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48 }}>
                 {activeTab === 'manual' ? (
                   <>
-                    <div className="flex-1">
-                      <Button variant="secondary" onClick={addCategory} className="w-full" aria-label="Add a new category to the menu">
-                        <FolderPlus className="w-4 h-4 mr-2" />
-                        Add Category
-                      </Button>
-                    </div>
-                    <div style={{ borderLeft: '1px solid var(--border-main)'}}>
-                      <Button variant="secondary" onClick={() => { if (activeCategoryIndex !== null) addItemToCategory(activeCategoryIndex)}} disabled={activeCategoryIndex === null} aria-label="Add a new item to the active category">
-                        <ListPlus className="w-4 h-4 mr-2" />
-                        Add Item
-                      </Button>
-                    </div>
+                <div className="flex-1">
+                  <Button variant="secondary" onClick={addCategory} className="w-full" aria-label="Add a new category to the menu">
+                    <FolderPlus className="w-4 h-4 mr-2" />
+                    Add Category
+                  </Button>
+                </div>
+                <div style={{ borderLeft: '1px solid var(--border-main)'}}>
+                  <Button variant="secondary" onClick={() => { if (activeCategoryIndex !== null) addItemToCategory(activeCategoryIndex)}} disabled={activeCategoryIndex === null} aria-label="Add a new item to the active category">
+                    <ListPlus className="w-4 h-4 mr-2" />
+                    Add Item
+                  </Button>
+                </div>
                   </>
                 ) : (
                   <div className="flex-1">
