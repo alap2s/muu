@@ -299,9 +299,9 @@ export default function Home() {
 
         const flatMenu: MenuItem[] = [];
         if (data.menuCategories && Array.isArray(data.menuCategories)) {
-          data.menuCategories.forEach(category => {
+          data.menuCategories.forEach((category: MenuCategoryFirestore) => {
             if (category.items && Array.isArray(category.items)) {
-              category.items.forEach(item => {
+              category.items.forEach((item: MenuItemFirestore) => {
                 flatMenu.push({
                   id: item.id,
                   name: item.name,

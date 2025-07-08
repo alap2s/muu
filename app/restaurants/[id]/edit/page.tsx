@@ -16,7 +16,6 @@ import { TextArea } from '../../../design-system/components/TextArea'
 import { MultiSelectDropdown } from '../../../design-system/components/MultiSelectDropdown'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Switch } from '../../../design-system/components/Switch'
 
 const DIETARY_OPTIONS = [
   // Lifestyles
@@ -320,6 +319,7 @@ type TabType = 'manual' | 'json';
 interface RestaurantFirestore {
   name: string;
   address: string;
+  website?: string;
   coordinates: {
     lat: number;
     lng: number;
@@ -719,6 +719,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   };
 
   const handleSave = async () => {
+    if (!formData) return;
     // Validate required fields
     if (!formData.name.trim()) {
       alert('Restaurant name cannot be empty.');
