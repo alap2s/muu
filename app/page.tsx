@@ -21,7 +21,7 @@ import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
 
 import { db } from '../lib/firebase';
-import { collection, getDocs, query, where, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
+import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
 
 
 export interface MenuItem {
@@ -172,7 +172,8 @@ export default function Home() {
   }, [restaurants])
 
   useEffect(() => {
-    if (selectedRestaurant && Array.isArray(selectedRestaurant.menu) && selectedRestaurant.menu.length > 0) {
+    if (selectedRestaurant && Array.isArray(selectedRestaurant.menu) && selectedRestaurant.menu.length > 0) 
+{
       const categories = Array.from(new Set(selectedRestaurant.menu.map(item => item.category)))
       if (categories.length > 0) {
         setSelectedGroup(categories[0])
@@ -271,37 +272,46 @@ export default function Home() {
 
     setLoading(true)
     setError(null)
-    setIsLoading(true)
 
     try {
-      // Create a query against the collection.
-      const restaurantsRef = collection(db, 'restaurants');
-      const q = query(restaurantsRef, where("isHidden", "in", [false, null]));
-
-      const querySnapshot = await getDocs(q);
+      const restaurantsQuery = query(collection(db, 'restaurants'));
+      const querySnapshot = await getDocs(restaurantsQuery);
       
-      const fetchedRestaurants: Restaurant[] = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        // Fallback for coordinates if they are missing or invalid
-        let hasValidCoordinates = false;
-        let distance = Infinity;
-        let gpsCoords: { latitude: number; longitude: number } | undefined = undefined;
+      const fetchedRestaurants: Restaurant[] = [];
+      console.log('Loading restaurants from database...');
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as {
+          name: string;
+          address: string;
+          website?: string;
+          gps?: FirebaseGeoPoint; 
+          coordinates?: { lat: number; lng: number };
+          menuCategories: MenuCategoryFirestore[];
+          originalJsonId: string;
+          menuSource?: 'database' | 'sample';
+          rating?: number;
+          totalRatings?: number;
+          notes?: string;
+        };
 
+        let dist = Infinity;
+        let gpsCoords: { latitude: number; longitude: number } | undefined = undefined;
+        
+        // Check for both 'coordinates' (plain object) and 'gps' (FirebaseGeoPoint) fields
+        // Prioritize coordinates since that's what the edit page saves
         if (data.coordinates && location) {
           gpsCoords = { latitude: data.coordinates.lat, longitude: data.coordinates.lng };
-          distance = calculateDistance(location.lat, location.lng, data.coordinates.lat, data.coordinates.lng);
-          hasValidCoordinates = true;
+          dist = calculateDistance(location.lat, location.lng, data.coordinates.lat, data.coordinates.lng);
         } else if (data.gps && location) {
           gpsCoords = { latitude: data.gps.latitude, longitude: data.gps.longitude };
-          distance = calculateDistance(location.lat, location.lng, data.gps.latitude, data.gps.longitude);
-          hasValidCoordinates = true;
+          dist = calculateDistance(location.lat, location.lng, data.gps.latitude, data.gps.longitude);
         }
 
         const flatMenu: MenuItem[] = [];
         if (data.menuCategories && Array.isArray(data.menuCategories)) {
-          data.menuCategories.forEach((category: MenuCategoryFirestore) => {
+          data.menuCategories.forEach(category => {
             if (category.items && Array.isArray(category.items)) {
-              category.items.forEach((item: MenuItemFirestore) => {
+              category.items.forEach(item => {
                 flatMenu.push({
                   id: item.id,
                   name: item.name,
@@ -315,20 +325,29 @@ export default function Home() {
           });
         }
         
-        return {
-          id: doc.id,
+        fetchedRestaurants.push({
+          id: doc.id, 
           name: data.name,
           address: data.address,
+          distance: dist,
           website: data.website,
-          notes: data.notes,
-          distance,
           menu: flatMenu,
-          gps: hasValidCoordinates ? { latitude: data.coordinates.lat, longitude: data.coordinates.lng } : undefined,
-        } as Restaurant;
+          menuSource: data.menuSource,
+          rating: data.rating,
+          totalRatings: data.totalRatings,
+          notes: data.notes,
+          originalJsonId: data.originalJsonId,
+          gps: gpsCoords,
+        });
       });
 
-      // Sort restaurants by distance
-      const sortedRestaurants = fetchedRestaurants
+      // Filter restaurants within 1km radius
+      const nearbyRestaurants = fetchedRestaurants.filter(r => r.distance <= 1);
+      console.log(`Found ${fetchedRestaurants.length} total restaurants, ${nearbyRestaurants.length} within 
+1km radius`);
+
+      // Sort by distance and limit to closest 10 (or fewer if less than 10 available within 1km)
+      const sortedRestaurants = nearbyRestaurants
         .sort((a, b) => a.distance - b.distance)
         .slice(0, 10);
       
@@ -388,7 +407,8 @@ export default function Home() {
     } else if (item.dietaryRestrictions.includes('vegetarian')) {
       icons.push(<Milk key="milk" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
-    if (item.dietaryRestrictions.includes('nuts') || name.includes('nuts') || description.includes('nuts')) {
+    if (item.dietaryRestrictions.includes('nuts') || name.includes('nuts') || description.includes('nuts')) 
+{
       icons.push(<Nut key="nut" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
     }
     if (!item.dietaryRestrictions.includes('vegetarian') && !item.dietaryRestrictions.includes('vegan')) {
