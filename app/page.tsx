@@ -21,7 +21,7 @@ import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
 
 import { db } from '../lib/firebase';
-import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
+import { collection, getDocs, query, where, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
 
 
 export interface MenuItem {
@@ -271,39 +271,30 @@ export default function Home() {
 
     setLoading(true)
     setError(null)
+    setIsLoading(true)
 
     try {
-      const restaurantsQuery = query(collection(db, 'restaurants'));
-      const querySnapshot = await getDocs(restaurantsQuery);
-      
-      const fetchedRestaurants: Restaurant[] = [];
-      console.log('Loading restaurants from database...');
-      querySnapshot.forEach((doc) => {
-        const data = doc.data() as {
-          name: string;
-          address: string;
-          website?: string;
-          gps?: FirebaseGeoPoint; 
-          coordinates?: { lat: number; lng: number };
-          menuCategories: MenuCategoryFirestore[];
-          originalJsonId: string;
-          menuSource?: 'database' | 'sample';
-          rating?: number;
-          totalRatings?: number;
-          notes?: string;
-        };
+      // Create a query against the collection.
+      const restaurantsRef = collection(db, 'restaurants');
+      const q = query(restaurantsRef, where("isHidden", "!=", true));
 
-        let dist = Infinity;
+      const querySnapshot = await getDocs(q);
+      
+      const fetchedRestaurants: Restaurant[] = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        // Fallback for coordinates if they are missing or invalid
+        let hasValidCoordinates = false;
+        let distance = Infinity;
         let gpsCoords: { latitude: number; longitude: number } | undefined = undefined;
-        
-        // Check for both 'coordinates' (plain object) and 'gps' (FirebaseGeoPoint) fields
-        // Prioritize coordinates since that's what the edit page saves
+
         if (data.coordinates && location) {
           gpsCoords = { latitude: data.coordinates.lat, longitude: data.coordinates.lng };
-          dist = calculateDistance(location.lat, location.lng, data.coordinates.lat, data.coordinates.lng);
+          distance = calculateDistance(location.lat, location.lng, data.coordinates.lat, data.coordinates.lng);
+          hasValidCoordinates = true;
         } else if (data.gps && location) {
           gpsCoords = { latitude: data.gps.latitude, longitude: data.gps.longitude };
-          dist = calculateDistance(location.lat, location.lng, data.gps.latitude, data.gps.longitude);
+          distance = calculateDistance(location.lat, location.lng, data.gps.latitude, data.gps.longitude);
+          hasValidCoordinates = true;
         }
 
         const flatMenu: MenuItem[] = [];
@@ -324,28 +315,20 @@ export default function Home() {
           });
         }
         
-        fetchedRestaurants.push({
-          id: doc.id, 
+        return {
+          id: doc.id,
           name: data.name,
           address: data.address,
-          distance: dist,
           website: data.website,
-          menu: flatMenu,
-          menuSource: data.menuSource,
-          rating: data.rating,
-          totalRatings: data.totalRatings,
           notes: data.notes,
-          originalJsonId: data.originalJsonId,
-          gps: gpsCoords,
-        });
+          distance,
+          menu: flatMenu,
+          gps: hasValidCoordinates ? { latitude: data.coordinates.lat, longitude: data.coordinates.lng } : undefined,
+        } as Restaurant;
       });
 
-      // Filter restaurants within 1km radius
-      const nearbyRestaurants = fetchedRestaurants.filter(r => r.distance <= 1);
-      console.log(`Found ${fetchedRestaurants.length} total restaurants, ${nearbyRestaurants.length} within 1km radius`);
-
-      // Sort by distance and limit to closest 10 (or fewer if less than 10 available within 1km)
-      const sortedRestaurants = nearbyRestaurants
+      // Sort restaurants by distance
+      const sortedRestaurants = fetchedRestaurants
         .sort((a, b) => a.distance - b.distance)
         .slice(0, 10);
       

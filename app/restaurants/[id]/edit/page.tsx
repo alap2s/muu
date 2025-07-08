@@ -6,7 +6,7 @@ import { db } from '../../../../lib/firebase'
 import { doc, getDoc, GeoPoint, updateDoc, deleteDoc, addDoc, collection } from 'firebase/firestore'
 import { useViewMode } from '../../../contexts/ViewModeContext'
 import { Button } from '../../../design-system/components/Button'
-import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy, Filter, CookingPot, Milk, Leaf, Nut, Wheat, WheatOff, Flame, Droplet, Egg, Fish, Shell, Ban, Wine, Candy, Drumstick, Salad } from 'lucide-react'
+import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy, Filter, CookingPot, Milk, Leaf, Nut, Wheat, WheatOff, Flame, Droplet, Egg, Fish, Shell, Ban, Wine, Candy, Drumstick, Salad, Eye, EyeOff } from 'lucide-react'
 import { ListItem } from '../../../design-system/components/ListItem'
 import { Input } from '../../../design-system/components/Input'
 import { v4 as uuidv4 } from 'uuid';
@@ -16,6 +16,7 @@ import { TextArea } from '../../../design-system/components/TextArea'
 import { MultiSelectDropdown } from '../../../design-system/components/MultiSelectDropdown'
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Switch } from '../../../design-system/components/Switch'
 
 const DIETARY_OPTIONS = [
   // Lifestyles
@@ -327,6 +328,7 @@ interface RestaurantFirestore {
   notes: string;
   createdAt: Date;
   updatedAt: Date;
+  isHidden?: boolean;
 }
 
 export default function RestaurantEditPage({ params }: { params: { id: string } }) {
@@ -347,6 +349,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const [jsonInput, setJsonInput] = useState('')
   const [jsonError, setJsonError] = useState<string | null>(null)
   const [jsonSuccess, setJsonSuccess] = useState<string | null>(null)
+  const [isHidden, setIsHidden] = useState(false);
 
   // Refs and state for scrolling to new elements
   const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -399,7 +402,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         const docSnap = await getDoc(restaurantRef)
 
         if (docSnap.exists()) {
-          const restaurantData = docSnap.data();
+          const restaurantData = docSnap.data() as RestaurantFirestore;
             
             // Check if coordinates are valid (not 0,0)
             const hasValidCoordinates = restaurantData.coordinates && 
@@ -427,6 +430,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 updatedAt: restaurantData.updatedAt,
           });
           setOriginalAddress(restaurantData.address || '');
+          setIsHidden(restaurantData.isHidden || false);
             
             // If coordinates are invalid and there's an address, trigger geocoding
             if (!hasValidCoordinates && restaurantData.address) {
@@ -715,13 +719,14 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   };
 
   const handleSave = async () => {
-    if (!formData) return;
-
     // Validate required fields
-    if (!formData.name || !formData.address) {
-        setError('Name and address are required');
+    if (!formData.name.trim()) {
+      alert('Restaurant name cannot be empty.');
       return;
     }
+
+    setIsSaving(true);
+    let finalMenuCategories = formData.menuCategories;
 
     // Ensure coordinates are present
     if (!formData.coordinates) {
@@ -745,7 +750,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
             menuCategories: formData.menuCategories,
             notes: formData.notes || '',
             createdAt: formData.createdAt || new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+            isHidden: isHidden,
         };
 
         if (restaurantId === 'new') {
@@ -758,7 +764,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 coordinates: restaurantData.coordinates,
                 menuCategories: restaurantData.menuCategories,
                 notes: restaurantData.notes,
-                updatedAt: restaurantData.updatedAt
+                updatedAt: restaurantData.updatedAt,
+                isHidden: restaurantData.isHidden,
             };
             await updateDoc(doc(db, 'restaurants', restaurantId), updateData);
         }
@@ -766,6 +773,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     } catch (err) {
       console.error('Error saving restaurant:', err);
         setError('Failed to save restaurant');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -974,6 +983,34 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       </div>,
     renderDetailRow('Website', formData.website, 'website', Globe),
     renderDetailRow('Notes', formData.notes, 'notes', NotepadText),
+    <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, justifyContent: 'space-between', paddingLeft: 12 }}>
+          <div className="flex items-center gap-2">
+            {isHidden ? <EyeOff className="w-4 h-4 text-gray-500" /> : <Eye className="w-4 h-4" style={{ color: 'var(--accent)'}} />}
+            <span className="text-sm font-mono" style={{ color: 'var(--text-primary)'}}>Restaurant Visibility</span>
+          </div>
+          <div className="flex items-center">
+            <Button
+              variant={!isHidden ? 'primary' : 'secondary'}
+              onClick={() => setIsHidden(false)}
+              aria-pressed={!isHidden}
+              className="rounded-r-none"
+            >
+              Show
+            </Button>
+            <Button
+              variant={isHidden ? 'primary' : 'secondary'}
+              onClick={() => setIsHidden(true)}
+              aria-pressed={isHidden}
+              className="rounded-l-none"
+            >
+              Hide
+            </Button>
+          </div>
+        </div>
+        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+    </div>,
     <div key="spacer-above-tabs" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />

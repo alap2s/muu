@@ -23,4 +23,5 @@ export interface Restaurant {
   }
   menuSource?: 'database' | 'sample'
   lastUpdated?: string
+  isHidden?: boolean
 } 
