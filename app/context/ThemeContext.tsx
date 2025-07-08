@@ -40,6 +40,27 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('themeMode', themeMode)
   }, [themeMode])
 
+  // Apply theme-color meta tag for PWA notch area
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    
+    let color = '#F8F6F4'; // Default to light mode color
+    if (themeMode === 'dark') {
+      color = '#1A1A1A';
+    } else if (themeMode === 'auto') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      color = prefersDark ? '#1A1A1A' : '#F8F6F4';
+    }
+
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.setAttribute('name', 'theme-color');
+      document.getElementsByTagName('head')[0].appendChild(metaThemeColor);
+    }
+    metaThemeColor.setAttribute('content', color);
+  }, [themeMode]);
+
   // Apply color mode
   useEffect(() => {
     if (typeof window === 'undefined') return
