@@ -62,6 +62,7 @@ interface Restaurant {
   notes?: string;
   originalJsonId: string; // ID from the original JSON file
   gps?: { latitude: number; longitude: number }; // For client-side use
+  isHidden?: boolean;
   // menuCategories will be processed into the flat menu above
 }
 
@@ -292,6 +293,7 @@ export default function Home() {
           rating?: number;
           totalRatings?: number;
           notes?: string;
+          isHidden?: boolean;
         };
 
         let dist = Infinity;
@@ -338,13 +340,15 @@ export default function Home() {
           notes: data.notes,
           originalJsonId: data.originalJsonId,
           gps: gpsCoords,
+          isHidden: data.isHidden,
         });
       });
 
+      const visibleRestaurants = fetchedRestaurants.filter(r => r.isHidden !== true);
+
       // Filter restaurants within 1km radius
-      const nearbyRestaurants = fetchedRestaurants.filter(r => r.distance <= 1);
-      console.log(`Found ${fetchedRestaurants.length} total restaurants, ${nearbyRestaurants.length} within 
-1km radius`);
+      const nearbyRestaurants = visibleRestaurants.filter(r => r.distance <= 1);
+      console.log(`Found ${visibleRestaurants.length} total visible restaurants, ${nearbyRestaurants.length} within 1km radius`);
 
       // Sort by distance and limit to closest 10 (or fewer if less than 10 available within 1km)
       const sortedRestaurants = nearbyRestaurants

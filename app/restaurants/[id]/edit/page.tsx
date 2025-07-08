@@ -989,7 +989,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, justifyContent: 'space-between', paddingLeft: 12 }}>
           <div className="flex items-center gap-2">
             {isHidden ? <EyeOff className="w-4 h-4 text-gray-500" /> : <Eye className="w-4 h-4" style={{ color: 'var(--accent)'}} />}
-            <span className="text-sm font-mono" style={{ color: 'var(--text-primary)'}}>Restaurant Visibility</span>
+            <span className="text-sm font-mono" style={{ color: 'var(--text-primary)'}}>Visibility</span>
           </div>
           <div className="flex items-center">
             <Button
