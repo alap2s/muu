@@ -10,9 +10,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#6237FF",
-        "primary-light": "#FEFBFF",
-        "primary-border": "rgba(98, 55, 255, 0.2)",
+        primary: "var(--accent)",
+        "primary-light": "var(--background-secondary)",
+        "primary-border": "var(--border-secondary)",
         "dark-background-main": "#181818",
         "dark-background-light": "#232323",
         "dark-background-dark": "#000000",
@@ -22,12 +22,12 @@ module.exports = {
         "dark-text-primary": "#F8F6F4",
         "dark-text-secondary": "rgba(248, 246, 244, 0.7)",
         text: {
-          primary: "#1e1e1e",
-          secondary: "rgba(30, 30, 30, 0.5)",
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
         },
         background: {
-          DEFAULT: "#FEFBFF",
-          dark: "#181818",
+          DEFAULT: "var(--background-main)",
+          dark: "var(--background-main)",
         },
       },
       fontFamily: {

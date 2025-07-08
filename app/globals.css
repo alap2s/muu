@@ -6,8 +6,8 @@
   /* Light theme with brand colors */
   --font-main: 'JetBrains Mono', monospace;
   --accent: #6237FF;
-  --background-main: #FEFBFF;
-  --background-secondary: #FEFBFF;
+  --background-main: #F8F6F4;
+  --background-secondary: #F8F6F4;
   --background-tertiary: #F0EDEA;
   --text-primary: #1e1e1e;
   --text-secondary: rgba(30, 30, 30, 0.5);
@@ -108,8 +108,8 @@
 @media (prefers-color-scheme: light) {
   :root:not(.dark) {
     --accent: #6237FF;
-    --background-main: #FEFBFF;
-    --background-secondary: #FEFBFF;
+    --background-main: #F8F6F4;
+    --background-secondary: #F8F6F4;
     --background-tertiary: #F0EDEA;
     --text-primary: #1e1e1e;
     --text-secondary: rgba(30, 30, 30, 0.5);
