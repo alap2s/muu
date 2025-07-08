@@ -276,7 +276,7 @@ export default function Home() {
     try {
       // Create a query against the collection.
       const restaurantsRef = collection(db, 'restaurants');
-      const q = query(restaurantsRef, where("isHidden", "!=", true));
+      const q = query(restaurantsRef, where("isHidden", "in", [false, null]));
 
       const querySnapshot = await getDocs(q);
       
