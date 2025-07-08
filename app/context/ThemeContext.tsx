@@ -18,7 +18,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('auto')
+  const [themeMode, setThemeMode] = useState<ThemeMode>('dark')
   const [colorMode, setColorMode] = useState<ColorMode>('brand')
 
   // Initialize from localStorage on mount
