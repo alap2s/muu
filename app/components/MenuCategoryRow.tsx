@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { MenuItemRow } from './MenuItemRow'
-import type { MenuItem } from '../page'
+import type { MenuItem } from '../types'
 import type { ViewMode } from '../contexts/ViewModeContext'
 import { useIsMobile } from '../hooks/useIsMobile'
 
