@@ -27,11 +27,11 @@ export default function CreateListPage() {
     { id: crypto.randomUUID(), url: '', name: '', address: '', cuisine: '', isLoading: false }
   ])
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (!authLoading && !user) {
       router.replace('/login')
     }
-  }, [user, authLoading, router]) */
+  }, [user, authLoading, router])
 
   const handleUrlChange = (id: string, url: string) => {
     const newRestaurants = restaurants.map(r => r.id === id ? { ...r, url } : r)
@@ -67,10 +67,10 @@ export default function CreateListPage() {
     setRestaurants(restaurants.filter(r => r.id !== id))
   }
 
-  /* if (authLoading || !user) {
+  if (authLoading || !user) {
     // You can return a loading spinner or null here
     return null;
-  } */
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }}>
