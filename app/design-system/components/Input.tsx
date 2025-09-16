@@ -6,6 +6,7 @@ import { LucideIcon } from 'lucide-react'
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
   error?: boolean
+  errorMessage?: string
   warning?: boolean
   icon?: LucideIcon
   iconClassName?: string
@@ -14,6 +15,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Input({ 
   label, 
   error, 
+  errorMessage,
   warning,
   icon: Icon,
   iconClassName,
@@ -76,6 +78,9 @@ export function Input({
           }}
         />
       </div>
+      {error && errorMessage && (
+        <p className="text-red-500 text-xs mt-1 px-3">{errorMessage}</p>
+      )}
     </div>
   )
 } 

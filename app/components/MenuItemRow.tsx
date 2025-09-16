@@ -5,7 +5,7 @@ import { Currency } from '../context/CurrencyContext';
 interface MenuItem {
   id: string;
   name: string;
-  description?: string;
+  description?: string | React.ReactNode;
   price: number;
   currency?: Currency;
   category: string;
@@ -18,10 +18,12 @@ interface MenuItemRowProps {
   onClick: (id: string) => void;
   getDietaryIcons: (item: MenuItem) => React.ReactNode;
   viewMode: 'grid' | 'list';
+  endContent?: React.ReactNode;
 }
 
 // Function to properly capitalize text
 const capitalizeText = (text: string): string => {
+  if (typeof text !== 'string') return '';
   return text
     .toLowerCase()
     .split('. ')
@@ -29,7 +31,7 @@ const capitalizeText = (text: string): string => {
     .join('. ');
 };
 
-export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode }: MenuItemRowProps) {
+export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode, endContent }: MenuItemRowProps) {
   const { formattedPrice, isLoading } = usePrice(item.price, item.currency || 'EUR');
   return (
     <div
@@ -54,12 +56,18 @@ export function MenuItemRow({ item, expanded, onClick, getDietaryIcons, viewMode
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>{getDietaryIcons(item)}</div>
               </div>
               {item.description && (
-                <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }} className={expanded ? '' : 'line-clamp-2'}>{capitalizeText(item.description)}</p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }} className={expanded ? '' : 'line-clamp-2'}>
+                  {typeof item.description === 'string' ? capitalizeText(item.description) : item.description}
+                </p>
               )}
             </div>
-            <span style={{ color: 'var(--text-primary)', fontWeight: 500, marginLeft: 16, fontSize: 14 }}>
-              {isLoading ? '...' : formattedPrice}
-            </span>
+            {endContent ? (
+              <div style={{ marginLeft: 16 }}>{endContent}</div>
+            ) : (
+              <span style={{ color: 'var(--text-primary)', fontWeight: 500, marginLeft: 16, fontSize: 14 }}>
+                {isLoading ? '...' : formattedPrice}
+              </span>
+            )}
           </div>
         </div>
         <div

@@ -30,11 +30,10 @@ export function Button({
 
   if (variant === 'primary') {
     style.background = 'var(--accent)';
-    style.color = '#FFFFFF'; // Always white text for primary buttons
-    iconColor = '#FFFFFF';
+    style.color = 'var(--background-main)'; // Use a variable that adapts to the theme
+    iconColor = 'var(--background-main)';
     if (disabled) {
-      style.color = 'rgba(255, 255, 255, 0.65)'; // Dimmer white for disabled primary text
-      iconColor = 'rgba(255, 255, 255, 0.65)';
+      style.opacity = 0.5; // General dimming for disabled state
     }
   } else { // secondary
     style.background = selected ? 'var(--accent)' : 'var(--background-main)';

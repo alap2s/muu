@@ -1,7 +1,10 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu, Building2, Globe, Map, Send, Plus, Settings } from 'lucide-react'
+import {
+  MapPin, Leaf, Milk, Fish, Filter, ChevronDown, Bird, Egg, Beef, Nut, Layers, Store, Squirrel, List, Menu, Building2, Globe, Map, Send, Plus, Settings, MoreHorizontal,
+  Crown, Check, ChevronRight, ListStart
+} from 'lucide-react'
 import { Dropdown } from './design-system/components/Dropdown'
 import { SettingsMenu } from './components/SettingsMenu'
 import { A2HSBanner } from './components/A2HSBanner'
@@ -19,6 +22,9 @@ import { NoteRow } from './components/NoteRow'
 import { Currency } from './context/CurrencyContext'
 import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
+import { Tabs } from './design-system/components/Tabs'
+import { ListItem } from './design-system/components/ListItem'
+import { useAuth } from './context/AuthContext'
 
 import { db } from '../lib/firebase';
 import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
@@ -27,7 +33,7 @@ import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'fireba
 export interface MenuItem {
   id: string
   name: string
-  description?: string
+  description?: string | React.ReactNode
   price: number
   category: string
   dietaryRestrictions: string[]
@@ -80,6 +86,22 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return parseFloat(distance.toFixed(1)); // Return distance rounded to 1 decimal place
 }
 
+function formatDistance(distance: number): string {
+  if (distance < 1) {
+    return `(${distance.toFixed(1)} km)`;
+  }
+  if (distance <= 20) {
+    return `(${Math.round(distance)} km)`;
+  }
+  return '(Far)';
+}
+
+const dummyLists = [
+  { id: '1', name: 'Alap Shah', followers: 12, isFollowing: true },
+  { id: '2', name: 'John Doe', followers: 0, isFollowing: false },
+  { id: '3', name: 'Jane Smith', followers: 150, isFollowing: false },
+]
+
 export default function Home() {
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
@@ -88,6 +110,11 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<string>('all')
   const [selectedGroup, setSelectedGroup] = useState<string>('')
+  const [activeTab, setActiveTab] = useState('menus')
+  const [placesSource, setPlacesSource] = useState('all')
+  const [sortBy, setSortBy] = useState('distance')
+  const [listFilter, setListFilter] = useState('all')
+  const { user } = useAuth()
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set())
   const menuRef = useRef<HTMLDivElement>(null)
@@ -403,8 +430,8 @@ export default function Home() {
 
   const getDietaryIcons = (item: MenuItem) => {
     const icons = []
-    const name = item.name.toLowerCase()
-    const description = item.description?.toLowerCase() || ''
+    const name = typeof item.name === 'string' ? item.name.toLowerCase() : ''
+    const description = typeof item.description === 'string' ? item.description.toLowerCase() : ''
 
     if (item.dietaryRestrictions.includes('vegan')) {
       icons.push(<Leaf key="leaf" className="w-4 h-4" style={{ color: 'var(--text-primary)' }} />)
@@ -583,80 +610,170 @@ export default function Home() {
             background: 'var(--background-main)'
           }} />
         </div>
+        <div className="flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
+            <Tabs
+              tabs={[
+                { id: 'restaurants', label: 'Places' },
+                { id: 'lists', label: 'Lists' },
+                { id: 'menus', label: 'Menus' },
+              ]}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              equalWidth
+            />
+          </div>
+          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+        </div>
         <nav className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Restaurant navigation">
           <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div className="flex-1 flex min-w-0 max-w-[800px]">
-            <div className="flex-1 min-w-0">
-              <Dropdown
-                value={selectedRestaurant?.id || ''}
-                onChange={(value) => {
-                  const restaurant = restaurants.find(r => r.id === value)
-                  if (restaurant) setSelectedRestaurant(restaurant)
-                }}
-                options={restaurants.map(restaurant => ({
-                  value: restaurant.id,
-                  label: `${restaurant.name} (<${restaurant.distance} km)`
-                }))}
-                leftIcon={<Store className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                position="bottom"
-                aria-label="Select restaurant"
-              />
-            </div>
-            <div className="flex-none w-12">
-              <Dropdown
-                value={selectedGroup}
-                onChange={(value) => {
-                  setSelectedGroup(value)
-                  const element = categoryRefs.current[value]
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          {activeTab === 'menus' && (
+            <div className="flex-1 flex min-w-0 max-w-[800px]">
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={selectedRestaurant?.id || ''}
+                  onChange={(value) => {
+                    const restaurant = restaurants.find(r => r.id === value)
+                    if (restaurant) setSelectedRestaurant(restaurant)
+                  }}
+                  options={restaurants.map(restaurant => ({
+                    value: restaurant.id,
+                    label: `${restaurant.name} (<${restaurant.distance} km)`
+                  }))}
+                  leftIcon={<Store className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  aria-label="Select restaurant"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={selectedGroup}
+                  onChange={(value) => {
+                    setSelectedGroup(value)
+                    const element = categoryRefs.current[value]
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }}
+                  options={categories.map(category => ({
+                    value: category,
+                    label: category
+                  }))}
+                  leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Select menu category"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={filter}
+                  onChange={setFilter}
+                  options={[
+                    { 
+                      value: 'all', 
+                      label: 'All',
+                      leftContent: <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                    },
+                    { 
+                      value: 'vegetarian', 
+                      label: 'Vegetarian',
+                      leftContent: <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                    },
+                    { 
+                      value: 'vegan', 
+                      label: 'Vegan',
+                      leftContent: <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                    }
+                  ]}
+                  leftIcon={
+                    filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
+                    filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
+                    <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
                   }
-                }}
-                options={categories.map(category => ({
-                  value: category,
-                  label: category
-                }))}
-                leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                position="bottom"
-                hideChevron={true}
-                className="justify-center"
-                aria-label="Select menu category"
-              />
+                  position="bottom"
+                  align="right"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Filter menu items"
+                />
+              </div>
             </div>
-            <div className="flex-none w-12">
-              <Dropdown
-                value={filter}
-                onChange={setFilter}
-                options={[
-                  { 
-                    value: 'all', 
-                    label: 'All',
-                    leftContent: <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                  },
-                  { 
-                    value: 'vegetarian', 
-                    label: 'Vegetarian',
-                    leftContent: <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                  },
-                  { 
-                    value: 'vegan', 
-                    label: 'Vegan',
-                    leftContent: <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+          )}
+          {activeTab === 'restaurants' && (
+            <div className="flex-1 flex min-w-0 max-w-[800px]">
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={placesSource}
+                  onChange={setPlacesSource}
+                  options={[
+                    { value: 'all', label: 'From all' },
+                    { value: 'followed', label: 'From followed lists' },
+                    { value: 'mine', label: 'From my list' },
+                    { value: 'favorites', label: 'From my favorites' },
+                  ]}
+                  leftIcon={<ListStart className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  aria-label="Select places source"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={[
+                    { value: 'distance', label: 'By distance', leftContent: <MapPin className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> },
+                    { value: 'popularity', label: 'By popularity', leftContent: <Crown className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> },
+                  ]}
+                  leftIcon={
+                    sortBy === 'distance' ? <MapPin className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> : <Crown className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
                   }
-                ]}
-                leftIcon={
-                  filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
-                  filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
-                  <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                }
-                position="bottom"
-                align="right"
-                hideChevron={true}
-                className="justify-center"
-                aria-label="Filter menu items"
-              />
+                  position="bottom"
+                  align="right"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Sort places"
+                />
+              </div>
             </div>
-          </div>
+          )}
+          {activeTab === 'lists' && (
+            <div className="flex-1 flex min-w-0 max-w-[800px]">
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={listFilter}
+                  onChange={setListFilter}
+                  options={[
+                    { value: 'all', label: 'All lists' },
+                    { value: 'followed', label: 'Followed lists' },
+                  ]}
+                  leftIcon={<List className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  aria-label="Select list source"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={sortBy}
+                  onChange={setSortBy}
+                  options={[
+                    { value: 'distance', label: 'By distance', leftContent: <MapPin className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> },
+                    { value: 'popularity', label: 'By popularity', leftContent: <Crown className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> },
+                  ]}
+                  leftIcon={
+                    sortBy === 'popularity' ? <Crown className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> : <MapPin className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                  }
+                  position="bottom"
+                  align="right"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Sort places"
+                />
+              </div>
+            </div>
+          )}
           <div style={{ width: 32, background: 'var(--background-main)' }} />
         </nav>
       </header>
@@ -677,7 +794,90 @@ export default function Home() {
         </div>
       ) : restaurants.length > 0 ? (
         <div className="space-y-0">
-          {selectedRestaurant && (
+          {activeTab === 'restaurants' && (
+            <div className="space-y-0" role="list">
+              {restaurants.map(restaurant => {
+                const restaurantAsMenuItem: MenuItem = {
+                  id: restaurant.id,
+                  name: restaurant.name,
+                  description: `${restaurant.address} ${formatDistance(restaurant.distance)}`,
+                  price: 0, // Not used
+                  category: '', // Not used
+                  dietaryRestrictions: [], // Not used
+                };
+                return (
+                  <MenuItemRow
+                    key={restaurant.id}
+                    item={restaurantAsMenuItem}
+                    expanded={expandedItems.has(restaurant.id)}
+                    onClick={() => toggleItemExpansion(restaurant.id)}
+                    getDietaryIcons={() => []}
+                    viewMode={viewMode}
+                    endContent={<MoreHorizontal className="w-5 h-5" style={{ color: 'var(--text-tertiary)' }} />}
+                  />
+                );
+              })}
+            </div>
+          )}
+          {activeTab === 'lists' && (
+            <div className="space-y-0" role="list">
+              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+                <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48 }}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => {
+                      if (user) {
+                        console.log('Create new list clicked')
+                      } else {
+                        router.push('/login')
+                      }
+                    }}
+                    className="w-full justify-center"
+                  >
+                    Create your list
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              </div>
+              {dummyLists.map(list => {
+                let description;
+                if (list.isFollowing) {
+                  description = (
+                    <span className="flex items-center" style={{ fontSize: 12 }}>
+                      <Check className="w-3 h-3 mr-1" />
+                      Following
+                    </span>
+                  );
+                } else {
+                  description = list.followers > 0 ? `${list.followers} followers` : 'No followers';
+                }
+
+                const listAsMenuItem: MenuItem = {
+                  id: list.id,
+                  name: list.name,
+                  description: description,
+                  price: 0, // Not used
+                  category: '', // Not used
+                  dietaryRestrictions: [], // Not used
+                };
+
+                return (
+                  <MenuItemRow
+                    key={list.id}
+                    item={listAsMenuItem}
+                    expanded={expandedItems.has(list.id)}
+                    onClick={() => toggleItemExpansion(list.id)}
+                    getDietaryIcons={() => []}
+                    viewMode={viewMode}
+                    endContent={<ChevronRight className="w-5 h-5" style={{ color: 'var(--text-tertiary)' }} />}
+                  />
+                );
+              })}
+            </div>
+          )}
+          {activeTab === 'menus' && selectedRestaurant && (
             <div className="pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`} style={{ background: 'var(--background-main)' }}>
               <div className="space-y-0">
                 {/* Display notes if they exist */}
@@ -756,79 +956,157 @@ export default function Home() {
           <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
             <div className="max-w-4xl mx-auto">
               <div style={{ borderTop: '1px solid var(--border-main)' }}>
-                <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                  <div className="flex-1 flex min-w-0">
-                    <div className="flex-1 min-w-0">
-                      <Dropdown
-                        value={selectedRestaurant?.id || ''}
-                        onChange={(value) => {
-                          const restaurant = restaurants.find(r => r.id === value)
-                          if (restaurant) setSelectedRestaurant(restaurant)
-                        }}
-                        options={restaurants.map(restaurant => ({
-                          value: restaurant.id,
-                          label: `${restaurant.name} (<${restaurant.distance} km)`
-                        }))}
-                        leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
-                        position="top"
-                      />
-                    </div>
-                    <div className="flex-none w-12">
-                      <Dropdown
-                        value={selectedGroup}
-                        onChange={(value) => {
-                          setSelectedGroup(value)
-                          const element = categoryRefs.current[value]
-                          if (element) {
-                            element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                {activeTab === 'menus' && (
+                  <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                    <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                    <div className="flex-1 flex min-w-0">
+                      <div className="flex-1 min-w-0">
+                        <Dropdown
+                          value={selectedRestaurant?.id || ''}
+                          onChange={(value) => {
+                            const restaurant = restaurants.find(r => r.id === value)
+                            if (restaurant) setSelectedRestaurant(restaurant)
+                          }}
+                          options={restaurants.map(restaurant => ({
+                            value: restaurant.id,
+                            label: `${restaurant.name} (<${restaurant.distance} km)`
+                          }))}
+                          leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
+                          position="top"
+                        />
+                      </div>
+                      <div className="flex-none w-12">
+                        <Dropdown
+                          value={selectedGroup}
+                          onChange={(value) => {
+                            setSelectedGroup(value)
+                            const element = categoryRefs.current[value]
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                            }
+                          }}
+                          options={categories.map(category => ({
+                            value: category,
+                            label: category
+                          }))}
+                          leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
+                          position="top"
+                          hideChevron={true}
+                          className="justify-center"
+                        />
+                      </div>
+                      <div className="flex-none w-12">
+                        <Dropdown
+                          value={filter}
+                          onChange={setFilter}
+                          options={[
+                            { 
+                              value: 'all', 
+                              label: 'All',
+                              leftContent: <Filter className="w-4 h-4" strokeWidth={2} />
+                            },
+                            { 
+                              value: 'vegetarian', 
+                              label: 'Vegetarian',
+                              leftContent: <Milk className="w-4 h-4" strokeWidth={2} />
+                            },
+                            { 
+                              value: 'vegan', 
+                              label: 'Vegan',
+                              leftContent: <Leaf className="w-4 h-4" strokeWidth={2} />
+                            }
+                          ]}
+                          leftIcon={
+                            filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
+                            filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
+                            <Leaf className="w-4 h-4" strokeWidth={2} />
                           }
-                        }}
-                        options={categories.map(category => ({
-                          value: category,
-                          label: category
-                        }))}
-                        leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
-                        position="top"
-                        hideChevron={true}
-                        className="justify-center"
-                      />
+                          position="top"
+                          align="right"
+                          hideChevron={true}
+                          className="justify-center"
+                        />
+                      </div>
                     </div>
-                    <div className="flex-none w-12">
-                      <Dropdown
-                        value={filter}
-                        onChange={setFilter}
-                        options={[
-                          { 
-                            value: 'all', 
-                            label: 'All',
-                            leftContent: <Filter className="w-4 h-4" strokeWidth={2} />
-                          },
-                          { 
-                            value: 'vegetarian', 
-                            label: 'Vegetarian',
-                            leftContent: <Milk className="w-4 h-4" strokeWidth={2} />
-                          },
-                          { 
-                            value: 'vegan', 
-                            label: 'Vegan',
-                            leftContent: <Leaf className="w-4 h-4" strokeWidth={2} />
-                          }
-                        ]}
-                        leftIcon={
-                          filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
-                          filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
-                          <Leaf className="w-4 h-4" strokeWidth={2} />
-                        }
-                        position="top"
-                        align="right"
-                        hideChevron={true}
-                        className="justify-center"
-                      />
-                    </div>
+                    <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
                   </div>
-                  <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-                </div>
+                )}
+                {activeTab === 'restaurants' && (
+                  <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                    <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                    <div className="flex-1 flex min-w-0">
+                      <div className="flex-1 min-w-0">
+                        <Dropdown
+                          value={placesSource}
+                          onChange={setPlacesSource}
+                          options={[
+                            { value: 'all', label: 'From all' },
+                            { value: 'followed', label: 'From followed lists' },
+                            { value: 'mine', label: 'From my list' },
+                            { value: 'favorites', label: 'From my favorites' },
+                          ]}
+                          leftIcon={<ListStart className="w-4 h-4" strokeWidth={2} />}
+                          position="top"
+                        />
+                      </div>
+                      <div className="flex-none w-12">
+                        <Dropdown
+                          value={sortBy}
+                          onChange={setSortBy}
+                          options={[
+                            { value: 'distance', label: 'By distance', leftContent: <MapPin className="w-4 h-4" strokeWidth={2} /> },
+                            { value: 'popularity', label: 'By popularity', leftContent: <Crown className="w-4 h-4" strokeWidth={2} /> },
+                          ]}
+                          leftIcon={
+                            sortBy === 'distance' ? <MapPin className="w-4 h-4" strokeWidth={2} /> : <Crown className="w-4 h-4" strokeWidth={2} />
+                          }
+                          position="top"
+                          align="right"
+                          hideChevron={true}
+                          className="justify-center"
+                        />
+                      </div>
+                    </div>
+                    <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
+                  </div>
+                )}
+                {activeTab === 'lists' && (
+                  <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                    <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                    <div className="flex-1 flex min-w-0">
+                      <div className="flex-1 min-w-0">
+                        <Dropdown
+                          value={listFilter}
+                          onChange={setListFilter}
+                          options={[
+                            { value: 'all', label: 'All lists' },
+                            { value: 'followed', label: 'Followed lists' },
+                          ]}
+                          leftIcon={<List className="w-4 h-4" strokeWidth={2} />}
+                          position="top"
+                        />
+                      </div>
+                      <div className="flex-none w-12">
+                        <Dropdown
+                          value={sortBy}
+                          onChange={setSortBy}
+                          options={[
+                            { value: 'distance', label: 'By distance', leftContent: <MapPin className="w-4 h-4" strokeWidth={2} /> },
+                            { value: 'popularity', label: 'By popularity', leftContent: <Crown className="w-4 h-4" strokeWidth={2} /> },
+                          ]}
+                          leftIcon={
+                            sortBy === 'popularity' ? <Crown className="w-4 h-4" strokeWidth={2} /> : <MapPin className="w-4 h-4" strokeWidth={2} />
+                          }
+                          position="top"
+                          align="right"
+                          hideChevron={true}
+                          className="justify-center"
+                        />
+                      </div>
+                    </div>
+                    <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
+                  </div>
+                )}
               </div>
               <div style={{ borderBottom: '1px solid var(--border-main)' }}>
                 <div className="flex h-8">

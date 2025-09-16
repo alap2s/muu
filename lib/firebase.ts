@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-// import { getAuth } from "firebase/auth"; // If you plan to use Authentication
+import { getAuth } from "firebase/auth"; // If you plan to use Authentication
 // import { getStorage } from "firebase/storage"; // If you plan to use Storage
 // import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -24,7 +24,7 @@ if (!getApps().length) {
 }
 
 const db = getFirestore(app);
-// const auth = getAuth(app); // If using Auth
+const auth = getAuth(app); // If using Auth
 // const storage = getStorage(app); // If using Storage
 
 // Initialize Analytics and get a reference to the service
@@ -37,4 +37,4 @@ if (typeof window !== 'undefined') {
   });
 } */
 
-export { app, db, /* auth , storage, analytics */ }; 
+export { app, db, auth, /* storage, analytics */ }; 

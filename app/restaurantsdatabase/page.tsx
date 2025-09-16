@@ -10,6 +10,7 @@ import { ArrowLeft, Loader2, Plus, Search } from 'lucide-react'
 import { Input } from '../design-system/components/Input'
 import { ListItem } from '../design-system/components/ListItem'
 import { v4 as uuidv4 } from 'uuid';
+import { useIsMobile } from '../hooks/useIsMobile'
 
 interface RestaurantInfo {
   id: string
@@ -24,6 +25,7 @@ export default function RestaurantsDatabasePage() {
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const { viewMode } = useViewMode()
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -100,6 +102,10 @@ export default function RestaurantsDatabasePage() {
 
   const rowCount = Math.max(24, filteredRestaurants.length + 2) // Ensure at least 24 rows
 
+  const mainStyle: React.CSSProperties = isMobile
+    ? { height: 'calc(100vh - 96px - env(safe-area-inset-top))', overflowY: 'auto' }
+    : {}
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
       {/* Notch spacer */}
@@ -142,7 +148,7 @@ export default function RestaurantsDatabasePage() {
       </div>
 
       {/* Content */}
-      <main className="space-y-0" style={{ height: 'calc(100vh - 96px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Restaurant list">
+      <main className="space-y-0" style={mainStyle} role="region" aria-label="Restaurant list">
         {loading ? (
           <div className="flex justify-center items-center h-full">
              <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)'}}>
