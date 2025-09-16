@@ -28,19 +28,9 @@ import { useAuth } from './context/AuthContext'
 
 import { db } from '../lib/firebase';
 import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
+import { Restaurant, MenuItem } from '../types'
 
 
-export interface MenuItem {
-  id: string
-  name: string
-  description?: string | React.ReactNode
-  price: number
-  category: string
-  dietaryRestrictions: string[]
-  currency?: Currency
-}
-
-// This interface represents the structure of menu items as stored within menuCategories in Firestore
 interface MenuItemFirestore {
   id: string;
   name: string;
@@ -55,22 +45,6 @@ interface MenuCategoryFirestore {
   items: MenuItemFirestore[];
 }
 
-interface Restaurant {
-  id: string; // Firestore document ID
-  name: string;
-  address: string;
-  distance: number; // Calculated client-side
-  website?: string;
-  menu: MenuItem[]; // Reconstructed flat array for UI compatibility
-  menuSource?: 'database' | 'sample';
-  rating?: number;
-  totalRatings?: number;
-  notes?: string;
-  originalJsonId: string; // ID from the original JSON file
-  gps?: { latitude: number; longitude: number }; // For client-side use
-  isHidden?: boolean;
-  // menuCategories will be processed into the flat menu above
-}
 
 // Helper function to calculate distance using Haversine formula
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
