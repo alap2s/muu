@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Currency } from '../context/CurrencyContext';
 
 export interface MenuItem {
   id: string
@@ -6,6 +7,7 @@ export interface MenuItem {
   description?: string | ReactNode
   price: number
   category?: string
+  currency?: Currency
   dietaryRestrictions: string[]
 }
 
