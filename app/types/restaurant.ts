@@ -5,6 +5,7 @@ export interface MenuItem {
   name: string
   description?: string | ReactNode
   price: number
+  category?: string
   dietaryRestrictions: string[]
 }
 
