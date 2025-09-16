@@ -1,16 +1,7 @@
 import React from 'react';
 import { usePrice } from '../hooks/usePrice';
 import { Currency } from '../context/CurrencyContext';
-
-interface MenuItem {
-  id: string;
-  name: string;
-  description?: string | React.ReactNode;
-  price: number;
-  currency?: Currency;
-  category: string;
-  dietaryRestrictions: string[];
-}
+import { MenuItem } from '../types';
 
 interface MenuItemRowProps {
   item: MenuItem;
