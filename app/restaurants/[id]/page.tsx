@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { db } from '../../../lib/firebase'
 import { doc, getDoc, GeoPoint } from 'firebase/firestore'
@@ -10,8 +10,10 @@ import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef, WheatOff, Flame 
 import { MenuCategoryRow } from '../../components/MenuCategoryRow'
 import { DetailRow } from '../../components/DetailRow'
 import { NoteRow } from '../../components/NoteRow'
+import { MenuItem } from '../../types'
 
 // This is the shape of the data that getDietaryIcons expects
+/*
 interface MenuItem {
   id: string;
   name: string;
@@ -20,6 +22,7 @@ interface MenuItem {
   category: string; // The category name
   dietaryRestrictions: string[];
 }
+*/
 
 // Interfaces matching the Firestore structure
 interface MenuItemFirestore {

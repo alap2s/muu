@@ -1,7 +1,9 @@
+import { ReactNode } from 'react';
+
 export interface MenuItem {
   id: string
   name: string
-  description?: string
+  description?: string | ReactNode
   price: number
   dietaryRestrictions: string[]
 }
