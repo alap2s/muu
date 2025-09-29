@@ -51,7 +51,7 @@ export default function SettingsPage() {
   }
 
   const handlePrint = () => {
-    window.location.href = '/?print=1'
+    window.location.href = '/menu?print=1'
   }
 
   // Row 1: BellOff (selected), BellRing (disabled), [gap], SunMoon (auto), Sun (light), Moon (dark)
@@ -162,7 +162,7 @@ export default function SettingsPage() {
         <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
         <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, background: 'var(--background-main)', paddingRight: 0 }}>
           <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
+            <Button variant="secondary" onClick={() => router.push('/menu')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             </Button>
             <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Settings</h1>

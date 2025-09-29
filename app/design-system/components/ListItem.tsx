@@ -14,7 +14,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   title,
   subtitle,
   onClick,
-  endContent = <ChevronRight className="w-5 h-5" style={{ color: 'var(--text-tertiary)' }} />,
+  endContent = null,
 }) => {
   const isClickable = !!onClick
   const Component = isClickable ? 'button' : 'div'
@@ -22,7 +22,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   return (
     <Component
       onClick={onClick}
-      className="flex justify-between items-center w-full text-left px-4 py-2"
+      className="flex justify-between items-center w-full text-left px-4 py-6"
       disabled={!isClickable}
       style={{
         cursor: isClickable ? 'pointer' : 'default',

@@ -26,11 +26,13 @@ export function Tabs<T extends string>({ tabs, activeTab, onTabChange, className
           height: 48,
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           padding: '0 16px',
           background: isActive ? 'var(--accent)' : 'var(--background-main)',
           color: isActive ? 'var(--background-main)' : 'var(--accent)',
           border: '1px solid var(--border-main)',
-          borderRight: index === tabs.length - 1 ? '1px solid var(--border-main)' : 'none'
+          borderRight: index === tabs.length - 1 ? '1px solid var(--border-main)' : 'none',
+          flex: 1
         };
 
         return (
