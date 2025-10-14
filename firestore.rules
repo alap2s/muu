@@ -1,15 +1,46 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read and write to the 'restaurants' collection for now
-    // THIS IS INSECURE FOR PRODUCTION - SECURE IT LATER!
-    match /restaurants/{restaurantId} {
-      allow read, write: if true;
-    }
-    // Allow read/write access to all other collections for now
-    // THIS IS INSECURE - refine this based on your actual collections
+    
+    // Default deny all
     match /{document=**} {
-      allow read, write: if true;
+      allow read, write: if false;
+    }
+
+    // Restaurants are public
+    match /restaurants/{restaurantId} {
+      allow read: if true;
+      allow write: if false; // Or add admin-only rules
+    }
+
+    // Users can only manage their own profile
+    match /users/{userId} {
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Rules for collections
+    match /collections/{collectionId} {
+      // Public collections are readable by anyone
+      allow read: if resource.data.isPublic == true;
+      
+      // Logged-in users can read their own private collections
+      allow read: if request.auth != null && resource.data.ownerId == request.auth.uid;
+
+      // Logged-in users can create collections
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+
+      // Only the owner can update or delete a collection
+      allow update, delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+
+      // Rules for followers subcollection
+      match /followers/{userId} {
+        // Logged-in users can follow/unfollow a public collection
+        allow create, delete: if request.auth != null && request.auth.uid == userId && get(/databases/$(database)/documents/collections/$(collectionId)).data.isPublic == true;
+        
+        // Followers of a public collection are readable by anyone
+        allow read: if get(/databases/$(database)/documents/collections/$(collectionId)).data.isPublic == true;
+      }
     }
   }
 }

@@ -10,6 +10,7 @@ import { FontInitializer } from './components/FontInitializer'
 import { FontProvider } from './context/FontContext'
 import { LoadingProvider } from './contexts/LoadingContext'
 import { ClientLayout } from './components/ClientLayout'
+import { AuthProvider } from './context/AuthContext'
 
 const jetbrainsMono = JetBrains_Mono({ 
   subsets: ['latin'],
@@ -84,10 +85,12 @@ export default function RootLayout({
             <ThemeProvider>
               <ViewModeProvider>
                 <LoadingProvider>
-                  <ClientLayout>
-                    <Toaster position="bottom-center" />
-                    {children}
-                  </ClientLayout>
+                  <AuthProvider>
+                    <ClientLayout>
+                      <Toaster position="bottom-center" />
+                      {children}
+                    </ClientLayout>
+                  </AuthProvider>
                 </LoadingProvider>
               </ViewModeProvider>
             </ThemeProvider>

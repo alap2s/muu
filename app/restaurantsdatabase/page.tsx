@@ -6,7 +6,7 @@ import { db } from '../../lib/firebase'
 import { collection, getDocs, query, orderBy, addDoc, GeoPoint } from 'firebase/firestore'
 import { useViewMode } from '../contexts/ViewModeContext'
 import { Button } from '../design-system/components/Button'
-import { ArrowLeft, Loader2, Plus, Search } from 'lucide-react'
+import { ArrowLeft, Loader2, Plus, Search, ChevronRight } from 'lucide-react'
 import { Input } from '../design-system/components/Input'
 import { ListItem } from '../design-system/components/ListItem'
 import { v4 as uuidv4 } from 'uuid';
@@ -164,6 +164,7 @@ export default function RestaurantsDatabasePage() {
                     title={filteredRestaurants[i].name}
                     subtitle={filteredRestaurants[i].id}
                     onClick={() => router.push(`/restaurants/${filteredRestaurants[i].id}`)}
+                    endContent={<ChevronRight className="w-4 h-4" />}
                   />
                 )}
               </div>
