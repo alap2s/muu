@@ -6,7 +6,9 @@ import { db } from '../../../lib/firebase'
 import { doc, getDoc, GeoPoint } from 'firebase/firestore'
 import { useViewMode } from '../../contexts/ViewModeContext'
 import { Button } from '../../design-system/components/Button'
-import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef, WheatOff, Flame } from 'lucide-react'
+import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef, WheatOff, Flame, ArrowLeft, Heart, CornerUpRight, Layers, Filter } from 'lucide-react'
+import { Dropdown } from '../../design-system/components/Dropdown'
+import { ListItem } from '../../design-system/components/ListItem'
 import { MenuCategoryRow } from '../../components/MenuCategoryRow'
 import { DetailRow } from '../../components/DetailRow'
 import { NoteRow } from '../../components/NoteRow'
@@ -57,6 +59,11 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
   const router = useRouter()
   const { viewMode } = useViewMode()
   const { id: restaurantId } = params
+  const [likes, setLikes] = useState<number>(128)
+  const [liked, setLiked] = useState<boolean>(false)
+  const [dietaryFilter, setDietaryFilter] = useState<'all' | 'vegetarian' | 'vegan' | 'gluten-free' | 'spicy' | 'nuts'>('all')
+  const [categoryFilter, setCategoryFilter] = useState<string>('')
+  const categoryOptions = (restaurant?.menuCategories || []).map(c => ({ value: c.name, label: c.name }))
 
   const toggleItemExpansion = (itemId: string) => {
     const newExpandedItems = new Set(expandedItems);
@@ -151,8 +158,16 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
     fetchRestaurantDetails()
   }, [restaurantId])
   
-  const handleEditClick = () => {
-    router.push(`/restaurants/${restaurantId}/edit`);
+  const handleBack = () => router.back()
+  const toggleLike = () => {
+    setLiked(prev => !prev)
+    setLikes(prev => prev + (liked ? -1 : 1))
+  }
+  const openInMaps = () => {
+    if (!restaurant) return
+    const q = encodeURIComponent(restaurant.address || restaurant.name)
+    const url = `https://www.google.com/maps/search/?api=1&query=${q}`
+    if (typeof window !== 'undefined') window.open(url, '_blank', 'noopener,noreferrer')
   }
 
   const detailItems = restaurant ? [
@@ -170,15 +185,60 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
 
-      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 20, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
-          <h1 className="text-base font-semibold pl-4" style={{ color: 'var(--accent)' }}>Details</h1>
-          <Button variant="secondary" onClick={handleEditClick} aria-label="Edit restaurant details">
-            <Edit className="w-4 h-4" aria-hidden="true" />
-          </Button>
+      <header className="flex flex-col sticky top-0 z-50" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
+        <div className="flex justify-center">
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
+            <div className="flex items-center gap-2">
+              <Button variant="secondary" onClick={handleBack} aria-label="Go back">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+              <h1 className="text-base font-semibold" style={{ color: 'var(--accent)' }}>Details</h1>
+            </div>
+            <Button variant="secondary" onClick={toggleLike} aria-label="Like restaurant" className="px-3">
+              {liked ? <Heart className="w-4 h-4 mr-1" fill="currentColor" /> : <Heart className="w-4 h-4 mr-1" />}
+              <span className="text-sm" style={{ color: 'var(--accent)' }}>{likes}</span>
+            </Button>
+          </div>
+          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
         </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        {/* Sticky filters - desktop (reuse Dropdowns like Places) */}
+        <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Details navigation">
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          <div className="flex-1 flex min-w-0 max-w-[800px]">
+            <div className="flex-1 min-w-0">
+              <Dropdown
+                value={dietaryFilter}
+                onChange={(v) => setDietaryFilter(v as any)}
+                options={[
+                  { value: 'all', label: 'All' },
+                  { value: 'vegetarian', label: 'Vegetarian' },
+                  { value: 'vegan', label: 'Vegan' },
+                  { value: 'gluten-free', label: 'Gluten-free' },
+                  { value: 'spicy', label: 'Spicy' },
+                  { value: 'nuts', label: 'Nuts' },
+                ]}
+                leftIcon={<Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                position="bottom"
+                aria-label="Filter dietary"
+              />
+            </div>
+            <div className="flex-none w-12">
+              <Dropdown
+                value={categoryFilter}
+                onChange={(v) => setCategoryFilter(v)}
+                options={categoryOptions}
+                leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                position="bottom"
+                align="right"
+                hideChevron={true}
+                className="justify-center"
+                aria-label="Filter category"
+              />
+            </div>
+          </div>
+          <div style={{ width: 32, background: 'var(--background-main)' }} />
+        </div>
       </header>
 
       <main>
@@ -190,7 +250,26 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
         {error && <p className="text-red-500 p-4">{error}</p>}
         {restaurant && (
           <>
-            {detailItems.map(item => item.value ? <DetailRow key={item.label} label={item.label} value={item.value} viewMode={viewMode} /> : null)}
+            {/* Top info rows */}
+            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
+                <ListItem title={restaurant.name} onClick={undefined} />
+              </div>
+              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+            </div>
+            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
+                <ListItem
+                  title={restaurant.address}
+                  subtitle="Address"
+                  onClick={openInMaps}
+                  endContent={<CornerUpRight className="w-4 h-4" style={{ color: 'var(--accent)' }} />}
+                />
+              </div>
+              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+            </div>
             {restaurant.notes && (
               <NoteRow
                 id="restaurant-notes"
@@ -200,22 +279,88 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
                 viewMode={viewMode}
               />
             )}
-            {restaurant.menuCategories && restaurant.menuCategories.map(category => (
-              <MenuCategoryRow
-                key={category.name}
-                category={category.name}
-                items={category.items.map(item => ({ ...item, category: category.name }))} // Add category name to each item
-                expandedItems={expandedItems}
-                toggleItemExpansion={toggleItemExpansion}
-                getDietaryIcons={getDietaryIcons}
-                viewMode={viewMode}
-                categoryRef={() => {}} // Not needed for scrolling here
-                headerHeight={48}
-              />
-            ))}
+            {restaurant.menuCategories && restaurant.menuCategories
+              .map(category => ({
+                name: category.name,
+                items: category.items
+                  .filter(item => {
+                    if (dietaryFilter === 'all') return true
+                    if (dietaryFilter === 'vegetarian') return item.dietaryRestrictions.includes('vegetarian')
+                    if (dietaryFilter === 'vegan') return item.dietaryRestrictions.includes('vegan')
+                    if (dietaryFilter === 'gluten-free') return item.dietaryRestrictions.includes('gluten-free')
+                    if (dietaryFilter === 'spicy') return item.dietaryRestrictions.includes('spicy')
+                    if (dietaryFilter === 'nuts') return item.dietaryRestrictions.includes('nuts')
+                    return true
+                  })
+              }))
+              .filter(cat => (categoryFilter ? cat.name === categoryFilter : true))
+              .map(category => (
+                <MenuCategoryRow
+                  key={category.name}
+                  category={category.name}
+                  items={category.items.map(item => ({ ...item, category: category.name }))}
+                  expandedItems={expandedItems}
+                  toggleItemExpansion={toggleItemExpansion}
+                  getDietaryIcons={getDietaryIcons}
+                  viewMode={viewMode}
+                  categoryRef={() => {}}
+                  headerHeight={48}
+                />
+              ))}
           </>
         )}
       </main>
+
+      {/* Mobile bottom filters bar */}
+      {restaurant && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
+          <div className="max-w-4xl mx-auto">
+            <div style={{ borderTop: '1px solid var(--border-main)' }}>
+              <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                <div className="flex-1 flex min-w-0">
+                  <div className="flex-1 min-w-0">
+                    <Dropdown
+                      value={dietaryFilter}
+                      onChange={(v) => setDietaryFilter(v as any)}
+                      options={[
+                        { value: 'all', label: 'All' },
+                        { value: 'vegetarian', label: 'Vegetarian' },
+                        { value: 'vegan', label: 'Vegan' },
+                        { value: 'gluten-free', label: 'Gluten-free' },
+                        { value: 'spicy', label: 'Spicy' },
+                        { value: 'nuts', label: 'Nuts' },
+                      ]}
+                      leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
+                      position="top"
+                    />
+                  </div>
+                  <div className="flex-none w-12">
+                    <Dropdown
+                      value={categoryFilter}
+                      onChange={(v) => setCategoryFilter(v)}
+                      options={categoryOptions}
+                      leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
+                      position="top"
+                      align="right"
+                      hideChevron={true}
+                      className="justify-center"
+                    />
+                  </div>
+                </div>
+                <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
+              </div>
+            </div>
+            <div style={{ borderBottom: '1px solid var(--border-main)' }}>
+              <div className="flex h-8">
+                <div className="w-8" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                <div className="flex-1" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+                <div className="w-8" style={{ background: 'var(--background-main)' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 } 

@@ -2,7 +2,7 @@
 import { Button } from '../design-system/components/Button'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle } from 'lucide-react'
+import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle, MoreHorizontal } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../contexts/ViewModeContext'
@@ -10,6 +10,7 @@ import { useCurrency } from '../context/CurrencyContext'
 import { useFont } from '../context/FontContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
+import { ListItem } from '../design-system/components/ListItem'
 
 // Define theme and color mode options
 const THEME_MODES = ['auto', 'light', 'dark'] as const;
@@ -162,7 +163,7 @@ export default function SettingsPage() {
         <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
         <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, background: 'var(--background-main)', paddingRight: 0 }}>
           <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={() => router.push('/menu')} aria-label="Back to main menu">
+            <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             </Button>
             <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Settings</h1>
@@ -191,6 +192,28 @@ export default function SettingsPage() {
           </div>
         ))}
         
+        {/* Empty Row */}
+        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
+          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        </div>
+        
+        {/* Places Row */}
+        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          <div style={{ flex: 1, maxWidth: 800 }}>
+            <ListItem
+              title="My Places"
+              onClick={() => {
+                // Future implementation: router.push('/places')
+              }}
+              endContent={<MoreHorizontal className="w-4 h-4" />}
+            />
+          </div>
+          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        </div>
+
         {/* Empty Row */}
         <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
           <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
