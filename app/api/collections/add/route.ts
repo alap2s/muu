@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '../../../../lib/firebase'
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { RestaurantCollection } from '../../../../app/types'
+import { RestaurantCollection } from '../../../../app/types/collection'
 
 export async function POST(req: NextRequest) {
   try {
