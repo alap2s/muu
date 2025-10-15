@@ -7,12 +7,13 @@ import { useViewMode } from '../contexts/ViewModeContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
 import { auth } from '../../lib/firebase'
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth'
 
 export default function LoginPage() {
   const { viewMode } = useViewMode()
   const router = useRouter()
   const { setIsLoading } = useLoading()
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     setIsLoading(false)
@@ -21,13 +22,35 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider()
     try {
-      const result = await signInWithPopup(auth, provider)
+      let result
+      try {
+        result = await signInWithPopup(auth, provider)
+      } catch (popupErr) {
+        // Fallback for browsers blocking popups
+        await signInWithRedirect(auth, provider)
+        return
+      }
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result)
       const token = credential?.accessToken
       // The signed-in user info.
       const user = result.user
       console.log({ user, token })
+      // Upsert user profile
+      try {
+        await fetch('/api/user/upsert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          }),
+        })
+      } catch (e) {
+        console.error('Upsert failed', e)
+      }
       router.push('/') // Redirect to home page after login
     } catch (error: any) {
       // Handle Errors here.
@@ -38,6 +61,7 @@ export default function LoginPage() {
       // The AuthCredential type that was used.
       const credential = GoogleAuthProvider.credentialFromError(error)
       console.error({ errorCode, errorMessage, email, credential })
+      setError(errorMessage || 'Login failed. Please try again.')
     }
   }
 
@@ -66,6 +90,13 @@ export default function LoginPage() {
 
       {/* Content */}
       <div className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Login options">
+        {error && (
+          <div className="flex justify-center">
+            <div style={{ flex: 1, maxWidth: 800, padding: '8px 16px', color: 'var(--text-secondary)' }}>
+              <span className="text-xs">{error}</span>
+            </div>
+          </div>
+        )}
         {/* Empty Row */}
         <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
           <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
