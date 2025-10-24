@@ -7,60 +7,133 @@ import { useViewMode } from '../contexts/ViewModeContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
 import { auth } from '../../lib/firebase'
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult } from 'firebase/auth'
+import { useIsMobile } from '../hooks/useIsMobile'
+import { useAuth } from '../context/AuthContext'
 
 export default function LoginPage() {
   const { viewMode } = useViewMode()
   const router = useRouter()
   const { setIsLoading } = useLoading()
   const [error, setError] = useState<string | null>(null)
+  const isMobile = useIsMobile()
+  const [redirectTo, setRedirectTo] = useState<string>('/')
+  const { currentUser } = useAuth()
+  const [redirectHandled, setRedirectHandled] = useState(false)
+  // Remove auto-retry state to avoid redirect loops
 
   useEffect(() => {
     setIsLoading(false)
   }, [setIsLoading])
 
-  const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider()
+  // One-time debug: confirm Firebase config and env are what we expect
+  useEffect(() => {
     try {
-      let result
+      console.log('[Debug] Firebase app options', auth.app.options)
+      console.log('[Debug] Env', {
+        apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+        authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      })
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const next = params.get('next')
+      if (next) setRedirectTo(next)
+    }
+  }, [])
+
+  // Auto-redirect disabled to prevent loops; user must click the button
+
+  // Handle redirect sign-in result (for mobile or popup fallback)
+  useEffect(() => {
+    let cancelled = false
+    const handle = async () => {
       try {
-        result = await signInWithPopup(auth, provider)
-      } catch (popupErr) {
-        // Fallback for browsers blocking popups
-        await signInWithRedirect(auth, provider)
-        return
+        console.log('[Login] getRedirectResult: start')
+        const result = await getRedirectResult(auth)
+        if (cancelled) return
+        console.log('[Login] getRedirectResult: result', !!result, !!result?.user)
+        if (result?.user) {
+          try {
+            console.log('[Login] Upserting user after redirect')
+            const idToken = await result.user.getIdToken()
+            await fetch('/api/user/upsert', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+              body: JSON.stringify({
+                uid: result.user.uid,
+                displayName: result.user.displayName,
+                email: result.user.email,
+                photoURL: result.user.photoURL,
+              }),
+            })
+          } catch (e) {
+            console.error('Upsert failed after redirect', e)
+          }
+          setRedirectHandled(true)
+          console.log('[Login] Redirecting to', redirectTo || '/')
+          try { sessionStorage.removeItem('loginAttempted') } catch {}
+          router.replace(redirectTo || '/')
+        } else {
+          // If no redirect result but already signed in, the other effect will handle redirect
+          console.log('[Login] No redirect result user')
+          // Do nothing here; rely on onAuthStateChanged to handle redirect once state settles
+        }
+      } catch (e: any) {
+        console.error('Redirect result error', e)
+        setError(e?.message || 'Login failed. Please try again.')
       }
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result)
-      const token = credential?.accessToken
-      // The signed-in user info.
-      const user = result.user
-      console.log({ user, token })
-      // Upsert user profile
+    }
+    handle()
+    return () => { cancelled = true }
+  }, [redirectTo, router])
+
+  // If already signed in (e.g., returning from redirect and state is ready), go to next
+  useEffect(() => {
+    if (!currentUser || redirectHandled) return
+    console.log('[Login] currentUser detected, redirecting...', currentUser.uid)
+    const doRedirect = async () => {
       try {
+        const idToken = await currentUser.getIdToken()
         await fetch('/api/user/upsert', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
           body: JSON.stringify({
-            uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-          }),
-        })
-      } catch (e) {
-        console.error('Upsert failed', e)
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            email: currentUser.email,
+            photoURL: currentUser.photoURL,
+          })
+          })
+      } catch {}
+      setRedirectHandled(true)
+      router.replace(redirectTo || '/')
+    }
+    void doRedirect()
+  }, [currentUser, redirectHandled, redirectTo, router])
+
+  const handleGoogleLogin = async () => {
+    setError(null)
+    const provider = new GoogleAuthProvider()
+    try {
+      const host = typeof window !== 'undefined' ? window.location.hostname : ''
+      if (host === 'localhost' || host === '127.0.0.1') {
+        console.log('[Login] Click: using popup on localhost')
+        await signInWithPopup(auth, provider)
+        console.log('[Login] signInWithPopup resolved')
+        // onAuthStateChanged will handle redirect to next
+      } else {
+        console.log('[Login] Click: starting Google redirect')
+        await signInWithRedirect(auth, provider)
+        console.log('[Login] signInWithRedirect called')
       }
-      router.push('/') // Redirect to home page after login
     } catch (error: any) {
-      // Handle Errors here.
-      const errorCode = error.code
-      const errorMessage = error.message
-      // The email of the user's account used.
-      const email = error.customData?.email
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error)
-      console.error({ errorCode, errorMessage, email, credential })
+      const errorMessage = error?.message
+      console.error('[Login] signInWithRedirect error', error)
       setError(errorMessage || 'Login failed. Please try again.')
     }
   }
@@ -90,13 +163,7 @@ export default function LoginPage() {
 
       {/* Content */}
       <div className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Login options">
-        {error && (
-          <div className="flex justify-center">
-            <div style={{ flex: 1, maxWidth: 800, padding: '8px 16px', color: 'var(--text-secondary)' }}>
-              <span className="text-xs">{error}</span>
-            </div>
-          </div>
-        )}
+        
         {/* Empty Row */}
         <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
           <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
@@ -132,6 +199,17 @@ export default function LoginPage() {
           </div>
           <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         </div>
+
+        {/* Error Row under the login button row */}
+        {error && (
+          <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+            <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 16px' }}>
+              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{error}</span>
+            </div>
+            <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          </div>
+        )}
 
         {/* Empty Row */}
         <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>

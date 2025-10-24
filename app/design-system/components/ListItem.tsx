@@ -8,6 +8,7 @@ interface ListItemProps {
   subtitle?: string
   onClick?: () => void
   endContent?: React.ReactNode
+  wrapTitle?: boolean
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -15,6 +16,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   subtitle,
   onClick,
   endContent = null,
+  wrapTitle = false,
 }) => {
   const isClickable = !!onClick
   const Component = isClickable ? 'button' : 'div'
@@ -30,7 +32,7 @@ export const ListItem: React.FC<ListItemProps> = ({
       }}
     >
       <div className="flex flex-col flex-1 min-w-0 mr-4">
-        <span className="text-sm truncate" style={{ color: 'var(--text-primary)' }}>
+        <span className={`text-sm ${wrapTitle ? '' : 'truncate'}`} style={{ color: 'var(--text-primary)', whiteSpace: wrapTitle ? 'normal' : undefined }}>
           {title}
         </span>
         {subtitle && (

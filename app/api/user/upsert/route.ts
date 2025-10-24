@@ -1,30 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '../../../../lib/firebase'
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
-
-// NOTE: This endpoint expects the client to send the authenticated user's minimal profile.
-// In a production app, prefer verifying an ID token on the server with firebase-admin.
+import { getAdminDb, verifyIdToken } from '../../../../lib/firebaseAdmin'
 
 export async function POST(req: NextRequest) {
   try {
-    const { uid, displayName, email, photoURL } = await req.json()
-    if (!uid) return NextResponse.json({ error: 'Missing uid' }, { status: 400 })
+    const authHeader = req.headers.get('authorization') || ''
+    const idToken = authHeader.toLowerCase().startsWith('bearer ') ? authHeader.slice(7) : undefined
+    const decoded = await verifyIdToken(idToken)
+    if (!decoded) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const userRef = doc(db, 'users', uid)
-    await setDoc(userRef, {
-      uid,
-      displayName: displayName || '',
-      email: email || '',
-      photoURL: photoURL || '',
-      updatedAt: serverTimestamp(),
-      createdAt: serverTimestamp(),
-    }, { merge: true })
+    const body = await req.json()
+    const uid: string = decoded.uid
+    const { displayName = null, email = null, photoURL = null } = body || {}
 
-    return NextResponse.json({ ok: true }, { status: 200 })
-  } catch (err) {
-    console.error('Upsert user failed', err)
-    return NextResponse.json({ error: 'Upsert failed' }, { status: 500 })
+    const db = getAdminDb()
+    const userRef = db.collection('users').doc(uid)
+    const now = new Date()
+    await userRef.set(
+      {
+        uid,
+        displayName,
+        email,
+        photoURL,
+        updatedAt: now,
+        createdAt: now,
+      },
+      { merge: true }
+    )
+
+    return NextResponse.json({ ok: true })
+  } catch (e) {
+    console.error('User upsert failed:', e)
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
   }
 }
+
+// Removed client-SDK based implementation in favor of Admin-verified version above
 
 
