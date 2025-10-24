@@ -6,9 +6,10 @@ import { User, onAuthStateChanged } from 'firebase/auth'
 interface AuthContextType {
   currentUser: User | null
   loading: boolean
+  getIdToken: () => Promise<string | null>
 }
 
-const AuthContext = createContext<AuthContextType>({ currentUser: null, loading: true })
+const AuthContext = createContext<AuthContextType>({ currentUser: null, loading: true, getIdToken: async () => null })
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -34,7 +35,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const value = {
     currentUser,
     loading,
+    getIdToken: async () => {
+      try {
+        const u = auth.currentUser
+        if (!u) return null
+        return await u.getIdToken()
+      } catch {
+        return null
+      }
+    }
   }
 
-  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

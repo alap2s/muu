@@ -21,6 +21,7 @@ import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
 import { Tabs } from './design-system/components/Tabs'
 import { ListItem } from './design-system/components/ListItem'
+import { useAuth } from './context/AuthContext'
 
 import { db } from '../lib/firebase';
 import { collection, getDocs, query, GeoPoint as FirebaseGeoPoint } from 'firebase/firestore';
@@ -111,6 +112,7 @@ export default function Home() {
   const router = useRouter()
   const isMobile = useIsMobile()
   const { viewMode, setViewMode } = useViewMode()
+  const { currentUser } = useAuth()
   const [restaurantName, setRestaurantName] = useState('')
   const [restaurantAddress, setRestaurantAddress] = useState('')
   const [restaurantWebsite, setRestaurantWebsite] = useState('')
@@ -490,6 +492,30 @@ export default function Home() {
   const [listsFilter, setListsFilter] = useState('all'); // 'all' | 'followed'
   const [listsSort, setListsSort] = useState('popularity'); // 'popularity' | 'total'
   const [listsSearchQuery, setListsSearchQuery] = useState('');
+  const [lists, setLists] = useState<Array<{ id: string; ownerUid: string; ownerName: string | null; title: string | null; entries: any[]; likes: number }>>([])
+
+  // Load lists on mount and when Lists tab becomes active
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/lists')
+        if (!res.ok) return
+        const data = await res.json()
+        setLists(Array.isArray(data.lists) ? data.lists : [])
+      } catch {}
+    }
+    if (activeTab === 'collections') load()
+  }, [activeTab])
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('/api/lists')
+        if (!res.ok) return
+        const data = await res.json()
+        setLists(Array.isArray(data.lists) ? data.lists : [])
+      } catch {}
+    })()
+  }, [])
 
   const mockUsers = [
     { id: 'u1', firstName: 'Alice', lastName: 'Nguyen', followers: 0, isFollowed: false },
@@ -1067,36 +1093,39 @@ export default function Home() {
                 <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
               </div>
 
-              {/* Your List row (create) */}
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
-                  <Button variant="secondary" className="w-full" onClick={() => console.log('Create your list clicked')}>
-                    Create your list
-                    <Plus className="w-4 h-4 ml-2" />
-                  </Button>
+              {/* Your List row (create) - hidden if user already has a list */}
+              {!(currentUser && lists.some(l => l.ownerUid === currentUser.uid)) && (
+                <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                  <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+                  <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
+                    <Button variant="secondary" className="w-full" onClick={() => {
+                      if (!currentUser) {
+                        router.push('/login?next=/lists/create')
+                      } else {
+                        router.push('/lists/create')
+                      }
+                    }}>
+                      Create your list
+                      <Plus className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                  <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
                 </div>
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
+              )}
 
-              {mockUsers
-                .filter(u => (listsFilter === 'all' ? true : u.isFollowed))
-                .filter(u => !listsSearchQuery || (`${u.firstName} ${u.lastName}`).toLowerCase().includes(listsSearchQuery.toLowerCase()))
-                .sort((a, b) => {
-                  if (listsSort === 'popularity') {
-                    return b.followers - a.followers
-                  }
-                  // 'total' fallback: stable order by name
-                  return `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
-                })
-                .map((user) => (
-                <div key={user.id} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+              {/* Real lists: user's own on top, then others, with simple filtering */}
+              {[...lists]
+                .sort((a, b) => (currentUser && a.ownerUid === currentUser.uid ? -1 : currentUser && b.ownerUid === currentUser.uid ? 1 : 0))
+                .filter(l => (listsFilter === 'followed' ? false : true))
+                .filter(l => !listsSearchQuery || (l.ownerName || 'Anonymous').toLowerCase().includes(listsSearchQuery.toLowerCase()))
+                .map((l) => (
+                <div key={l.id} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
                   <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
                   <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
                     <ListItem
-                      title={`${user.firstName} ${user.lastName}`}
-                      subtitle={user.followers > 0 ? `${user.followers} follower${user.followers === 1 ? '' : 's'}` : undefined}
-                      onClick={() => console.log('List clicked:', user.id)}
+                      title={l.ownerName || 'Anonymous'}
+                      subtitle={l.entries?.length ? `${l.entries.length} spots` : undefined}
+                      onClick={() => console.log('List clicked:', l.id)}
                       endContent={<ChevronRight className="w-4 h-4 text-gray-500" />}
                     />
                   </div>

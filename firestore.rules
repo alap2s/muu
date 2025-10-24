@@ -1,6 +1,22 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnerOnCreate() {
+      return isSignedIn() && request.resource.data.ownerUid == request.auth.uid;
+    }
+
+    function isOwnerOnWrite() {
+      return isSignedIn() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Keep validation simple in rules; detailed checks are enforced server-side
+    function validListData(d) {
+      return d.entries is list && d.entries.size() > 0 && d.entries.size() <= 10;
+    }
     
     // Default deny all
     match /{document=**} {
@@ -17,6 +33,21 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, update: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Lists: public read; only owners can create/update/delete; validate payload
+    match /lists/{listId} {
+      allow read: if true;
+      allow create: if isOwnerOnCreate() && validListData(request.resource.data);
+      allow update: if isOwnerOnWrite() && validListData(request.resource.data);
+      allow delete: if isOwnerOnWrite();
+    }
+
+    // Restaurant likes: users can like/unlike under their own UID
+    match /restaurants/{restaurantId}/likes/{userId} {
+      allow read: if true; // or restrict as needed
+      allow create, delete: if request.auth != null && request.auth.uid == userId;
+      allow update: if false; // no direct updates
     }
 
     // Rules for collections

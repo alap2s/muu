@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth"; // If you plan to use Authentication
+import { getAuth, browserLocalPersistence, indexedDBLocalPersistence, setPersistence } from "firebase/auth"; // Authentication
 // import { getStorage } from "firebase/storage"; // If you plan to use Storage
 // import { getAnalytics, isSupported } from "firebase/analytics";
 
@@ -24,7 +24,13 @@ if (!getApps().length) {
 }
 
 const db = getFirestore(app);
-const auth = getAuth(app); // If using Auth
+// Initialize Auth once and configure persistence on the client
+const auth = getAuth(app);
+if (typeof window !== 'undefined') {
+  try { auth.useDeviceLanguage(); } catch {}
+  // Best-effort set persistence early; login flow also calls setPersistence
+  try { setPersistence(auth, indexedDBLocalPersistence).catch(() => setPersistence(auth, browserLocalPersistence)); } catch {}
+}
 // const storage = getStorage(app); // If using Storage
 
 // Initialize Analytics and get a reference to the service
