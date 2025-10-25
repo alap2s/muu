@@ -31,6 +31,13 @@ export async function POST(req: Request) {
     }
 
     const db = getAdminDb()
+    // enforce uniqueness by placeId if provided
+    const placeId: string | undefined = (data as any)?.placeId
+    if (placeId) {
+      const docRef = db.collection('restaurants').doc(placeId)
+      await docRef.set(data, { merge: true })
+      return NextResponse.json({ id: docRef.id })
+    }
     const ref = await db.collection('restaurants').add(data)
     return NextResponse.json({ id: ref.id })
   } catch (e) {

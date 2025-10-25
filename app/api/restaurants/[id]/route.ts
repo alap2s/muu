@@ -8,7 +8,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     if (!decoded) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
-    const allowed = ['name', 'address', 'website', 'notes', 'menuCategories', 'coordinates', 'isHidden'] as const
+    const allowed = ['name', 'address', 'website', 'notes', 'menuCategories', 'coordinates', 'isHidden', 'placeId'] as const
     const updateData: Record<string, any> = {}
     for (const k of allowed) {
       const v = body[k]
@@ -31,6 +31,22 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     const db = getAdminDb()
+    // if payload contains placeId and differs from params.id, write under placeId and delete old
+    const placeId: string | undefined = updateData.placeId
+    if (placeId && placeId !== params.id) {
+      const targetRef = db.doc(`restaurants/${placeId}`)
+      await targetRef.set(updateData, { merge: true })
+      // migrate likes subcollection best-effort
+      try {
+        const srcRef = db.doc(`restaurants/${params.id}`)
+        const likes = await srcRef.collection('likes').get()
+        const batch = db.batch()
+        likes.forEach(d => batch.set(targetRef.collection('likes').doc(d.id), d.data(), { merge: true }))
+        batch.delete(srcRef)
+        await batch.commit()
+      } catch {}
+      return NextResponse.json({ ok: true, id: placeId })
+    }
     await db.doc(`restaurants/${params.id}`).set(updateData, { merge: true })
     return NextResponse.json({ ok: true })
   } catch (e) {
