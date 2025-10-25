@@ -17,16 +17,17 @@ export async function GET(req: NextRequest) {
         ownerMap.set(uid, { displayName: null })
       }
     }))
-    const lists = raw.map(l => ({
+    const lists = await Promise.all(raw.map(async (l) => ({
       id: l.id,
       ownerUid: l.ownerUid,
       ownerName: ownerMap.get(l.ownerUid)?.displayName ?? null,
       title: l.title ?? null,
       entries: Array.isArray(l.entries) ? l.entries : [],
       likes: typeof l.likes === 'number' ? l.likes : 0,
+      followers: await db.collection('lists').doc(l.id).collection('followers').count().get().then(r => r.data().count).catch(() => 0),
       createdAt: l.createdAt ?? null,
       updatedAt: l.updatedAt ?? null,
-    }))
+    })))
     return NextResponse.json({ lists })
   } catch (e) {
     console.error('Fetch lists failed:', e)

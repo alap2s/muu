@@ -1,4 +1,44 @@
 import { NextResponse } from 'next/server'
+import { getAdminDb, verifyIdToken } from '../../../lib/firebaseAdmin'
+
+export async function POST(req: Request) {
+  try {
+    const idToken = req.headers.get('authorization')?.replace('Bearer ', '')
+    const decoded = await verifyIdToken(idToken || undefined)
+    if (!decoded) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    const body = await req.json()
+    const allowed = ['name', 'address', 'website', 'notes', 'menuCategories', 'coordinates', 'isHidden'] as const
+    const data: Record<string, any> = {}
+    for (const k of allowed) {
+      const v = body[k]
+      if (v !== undefined) data[k] = v
+    }
+    data.createdAt = new Date()
+    data.updatedAt = new Date()
+
+    if (typeof data.name !== 'string' || !data.name.trim()) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 })
+    }
+    if (typeof data.address !== 'string' || !data.address.trim()) {
+      return NextResponse.json({ error: 'Address is required' }, { status: 400 })
+    }
+    if (data.coordinates) {
+      const { lat, lng } = data.coordinates || {}
+      if (typeof lat !== 'number' || typeof lng !== 'number') {
+        return NextResponse.json({ error: 'Invalid coordinates' }, { status: 400 })
+      }
+    }
+
+    const db = getAdminDb()
+    const ref = await db.collection('restaurants').add(data)
+    return NextResponse.json({ id: ref.id })
+  } catch (e) {
+    console.error('REST POST /restaurants error', e)
+    return NextResponse.json({ error: 'Failed to create restaurant' }, { status: 500 })
+  }
+}
+
 import * as fs from 'fs'
 import * as path from 'path'
 
