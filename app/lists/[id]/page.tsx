@@ -71,7 +71,7 @@ export default function ListDetailsPage() {
         <div className="max-w-4xl mx-auto flex items-center" style={{ minHeight: 48 }}>
           <div style={{ width: 32 }} />
           <div className="flex items-center" style={{ width: 48 }}>
-            <Button variant="ghost" onClick={() => router.push('/')} aria-label="Back">
+            <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back">
               <ChevronLeft size={18} color="var(--accent)" />
             </Button>
           </div>
@@ -82,7 +82,7 @@ export default function ListDetailsPage() {
             {isOwn ? (
               <>
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   aria-label="Edit list"
                   onClick={() => {
                     // Navigate to create page for editing (prefill can read ?id)
@@ -92,7 +92,7 @@ export default function ListDetailsPage() {
                   <Pencil size={18} color="var(--accent)" />
                 </Button>
                 <Button
-                  variant="ghost"
+                  variant="secondary"
                   aria-label="Delete list"
                   onClick={async () => {
                     try {
@@ -118,7 +118,7 @@ export default function ListDetailsPage() {
               </>
             ) : (
               <Button
-                variant="ghost"
+                variant="secondary"
                 aria-label="Follow list"
                 onClick={async () => {
                   try {
