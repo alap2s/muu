@@ -7,7 +7,8 @@ export async function POST(req: NextRequest) {
     const token = authz.startsWith('Bearer ') ? authz.slice(7) : undefined
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const decoded = await verifyIdToken(token)
-    const uid = decoded.uid
+    const uid = decoded?.uid
+    if (!uid) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
     const { listId } = body as { listId?: string }
