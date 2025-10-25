@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { db } from '../../../../lib/firebase'
 import { doc, getDoc, GeoPoint, updateDoc, deleteDoc, addDoc, collection } from 'firebase/firestore'
+import { useAuth } from '../../../context/AuthContext'
 import { useViewMode } from '../../../contexts/ViewModeContext'
 import { Button } from '../../../design-system/components/Button'
 import { ArrowLeft, Edit, Loader2, Check, X, Plus, Trash2, Store, MapPin, Globe, NotepadText, FolderPlus, ListPlus, Undo2, LucideIcon, Copy, Filter, CookingPot, Milk, Leaf, Nut, Wheat, WheatOff, Flame, Droplet, Egg, Fish, Shell, Ban, Wine, Candy, Drumstick, Salad, Eye, EyeOff } from 'lucide-react'
@@ -350,6 +351,13 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const [jsonError, setJsonError] = useState<string | null>(null)
   const [jsonSuccess, setJsonSuccess] = useState<string | null>(null)
   const [isHidden, setIsHidden] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [resolvingName, setResolvingName] = useState<boolean>(false);
+  const [nameResolveError, setNameResolveError] = useState<string | null>(null);
+  const [nameSuggestions, setNameSuggestions] = useState<Array<{ placeId: string; primaryText: string; secondaryText: string }>>([]);
+  const [suggestOpen, setSuggestOpen] = useState<boolean>(false);
+  const [sessionToken, setSessionToken] = useState<string>('');
+  const nameTypingTimer = useRef<any>(null);
 
   // Refs and state for scrolling to new elements
   const categoryRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -360,6 +368,16 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
   const router = useRouter()
   const { viewMode } = useViewMode()
   const { id: restaurantId } = params
+  const { getIdToken } = useAuth()
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+        () => {}
+      )
+    }
+  }, [])
 
   useEffect(() => {
     if (!restaurantId) {
@@ -755,20 +773,15 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
             isHidden: isHidden,
         };
 
-        if (restaurantId === 'new') {
-            await addDoc(collection(db, 'restaurants'), restaurantData);
+        // Use secure server route to bypass client rules
+        const token = await getIdToken()
+        if (!restaurantId || restaurantId === 'new') {
+          // Create new via admin: let server generate id by adding to collection then returning id
+          const res = await fetch('/api/restaurants', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' }, body: JSON.stringify(restaurantData) })
+          if (!res.ok) throw new Error('Create failed')
         } else {
-            // Convert the data to the format Firestore expects for updates
-            const updateData = {
-                name: restaurantData.name,
-                address: restaurantData.address,
-                coordinates: restaurantData.coordinates,
-                menuCategories: restaurantData.menuCategories,
-                notes: restaurantData.notes,
-                updatedAt: restaurantData.updatedAt,
-                isHidden: restaurantData.isHidden,
-            };
-            await updateDoc(doc(db, 'restaurants', restaurantId), updateData);
+          const res = await fetch(`/api/restaurants/${restaurantId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' }, body: JSON.stringify(restaurantData) })
+          if (!res.ok) throw new Error('Update failed')
         }
         router.push('/restaurantsdatabase');
     } catch (err) {
@@ -948,7 +961,124 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     !formData.menuCategories[0]?.items[0]?.name;
 
   const allContent = [
-    renderDetailRow('Name', formData.name, 'name', Store, true),
+    (
+      <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
+          <div className="flex flex-col w-full">
+            <Input
+              name="name"
+              value={formData.name}
+              onFocus={() => {
+                if (!sessionToken) setSessionToken(crypto.randomUUID())
+                setSuggestOpen(true)
+              }}
+              onChange={(e) => {
+                const v = e.target.value
+                setFormData(prev => prev ? ({ ...prev, name: v }) : null)
+                if (formErrors['name']) handleBlur('name', v)
+                setNameResolveError(null)
+                if (nameTypingTimer.current) clearTimeout(nameTypingTimer.current)
+                nameTypingTimer.current = setTimeout(async () => {
+                  if (v.trim().length < 3) { setNameSuggestions([]); return }
+                  try {
+                    const res = await fetch('/api/places/suggest', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ input: v, lat: userLocation?.lat, lng: userLocation?.lng, sessionToken })
+                    })
+                    const data = await res.json()
+                    setNameSuggestions(data.predictions || [])
+                  } catch {
+                    setNameSuggestions([])
+                  }
+                }, 300)
+              }}
+              onBlur={async (e) => {
+                // validate field
+                handleBlur('name', e.target.value)
+                setTimeout(() => setSuggestOpen(false), 150)
+                if (!formData.address && formData.name) {
+                  setResolvingName(true)
+                  setNameResolveError(null)
+                  try {
+                    const res = await fetch('/api/places/resolve', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ name: formData.name, lat: userLocation?.lat, lng: userLocation?.lng })
+                    })
+                    if (!res.ok) {
+                      let err: any = null
+                      try { err = await res.json() } catch {}
+                      setNameResolveError(err?.error || 'No place found')
+                    } else {
+                      const data = await res.json()
+                      setFormData(prev => prev ? ({
+                        ...prev,
+                        name: data?.name || prev.name,
+                        address: data?.formattedAddress || prev.address,
+                        coordinates: (data?.lat !== undefined && data?.lng !== undefined)
+                          ? { lat: data.lat, lng: data.lng }
+                          : prev.coordinates
+                      }) : prev)
+                    }
+                  } catch {
+                    setNameResolveError('Failed to resolve place')
+                  } finally {
+                    setResolvingName(false)
+                  }
+                }
+              }}
+              className="w-full text-sm"
+              icon={resolvingName ? Loader2 : Store}
+              iconClassName={resolvingName ? 'animate-spin' : ''}
+              placeholder="Name *"
+              error={formErrors['name']}
+            />
+            {nameResolveError && (
+              <p className="text-red-500 text-xs mt-1 px-3">{nameResolveError}</p>
+            )}
+          </div>
+          {suggestOpen && (nameSuggestions?.length ?? 0) > 0 && (
+            <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 9998, background: 'var(--background-secondary)', border: '1px solid var(--accent)' }}>
+              {nameSuggestions.map((s, i) => (
+                <div
+                  key={s.placeId}
+                  style={{ padding: '12px 16px', borderBottom: i === nameSuggestions.length - 1 ? 'none' : '1px solid var(--border-main)', cursor: 'pointer' }}
+                  onMouseDown={async (e) => {
+                    e.preventDefault()
+                    setSuggestOpen(false)
+                    try { (document.activeElement as HTMLElement | null)?.blur() } catch {}
+                    setResolvingName(true)
+                    setFormData(prev => prev ? ({ ...prev, name: s.primaryText }) : null)
+                    try {
+                      const resp = await fetch('/api/places/resolve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ placeId: s.placeId }) })
+                      const data = await resp.json()
+                      setFormData(prev => prev ? ({
+                        ...prev,
+                        name: data?.name || s.primaryText,
+                        address: data?.formattedAddress || prev.address,
+                        coordinates: (data?.lat !== undefined && data?.lng !== undefined)
+                          ? { lat: data.lat, lng: data.lng }
+                          : prev.coordinates
+                      }) : prev)
+                    } catch {
+                      // ignore
+                    } finally {
+                      setResolvingName(false)
+                    }
+                  }}
+                >
+                  <div style={{ fontSize: 14, color: 'var(--accent)' }}>{s.primaryText}</div>
+                  {s.secondaryText && <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{s.secondaryText}</div>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+      </div>
+    ),
     <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>

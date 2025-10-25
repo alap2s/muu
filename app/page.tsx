@@ -492,7 +492,7 @@ export default function Home() {
   const [listsFilter, setListsFilter] = useState('all'); // 'all' | 'followed'
   const [listsSort, setListsSort] = useState('popularity'); // 'popularity' | 'total'
   const [listsSearchQuery, setListsSearchQuery] = useState('');
-  const [lists, setLists] = useState<Array<{ id: string; ownerUid: string; ownerName: string | null; title: string | null; entries: any[]; likes: number }>>([])
+  const [lists, setLists] = useState<Array<{ id: string; ownerUid: string; ownerName: string | null; title: string | null; entries: any[]; likes: number; followers?: number }>>([])
 
   // Load lists on mount and when Lists tab becomes active
   useEffect(() => {
@@ -1124,8 +1124,10 @@ export default function Home() {
                   <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
                     <ListItem
                       title={l.ownerName || 'Anonymous'}
-                      subtitle={l.entries?.length ? `${l.entries.length} spots` : undefined}
-                      onClick={() => console.log('List clicked:', l.id)}
+                      subtitle={(l.followers ? `${l.followers} followers · ` : '') + (l.entries?.length ? `${l.entries.length} spots` : '')}
+                      onClick={() => {
+                        try { window.location.href = `/lists/${l.id}` } catch {}
+                      }}
                       endContent={<ChevronRight className="w-4 h-4 text-gray-500" />}
                     />
                   </div>

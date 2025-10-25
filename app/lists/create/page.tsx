@@ -24,9 +24,8 @@ export default function CreateListPage() {
   const { viewMode } = useViewMode()
   const { currentUser, getIdToken } = useAuth()
 
-  const [entries, setEntries] = useState<ListEntry[]>([
-    { id: crypto.randomUUID(), name: '', mapsUrl: '', address: '', note: '' },
-  ])
+  const [entries, setEntries] = useState<ListEntry[]>([])
+  const [listId, setListId] = useState<string | null>(null)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [resolvingName, setResolvingName] = useState<Record<string, boolean>>({})
   const [resolvingUrl, setResolvingUrl] = useState<Record<string, boolean>>({})
@@ -47,7 +46,38 @@ export default function CreateListPage() {
     }
   }, [])
 
-  // Auth requirement removed temporarily for testing
+  // Load existing list if ?id provided (edit mode)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search)
+      const id = params.get('id')
+      if (id) {
+        setListId(id)
+        ;(async () => {
+          try {
+            const res = await fetch(`/api/lists/${id}`)
+            if (!res.ok) return
+            const data = await res.json()
+            const list = data.list
+            const es = (Array.isArray(list.entries) ? list.entries : []).map((e: any, i: number) => ({
+              id: crypto.randomUUID(),
+              name: e.name || '',
+              mapsUrl: e.mapsUrl || '',
+              address: e.address || '',
+              note: e.note || '',
+            }))
+            setEntries(es.length ? es : [{ id: crypto.randomUUID(), name: '', mapsUrl: '', address: '', note: '' }])
+          } catch {
+            setEntries([{ id: crypto.randomUUID(), name: '', mapsUrl: '', address: '', note: '' }])
+          }
+        })()
+      } else {
+        setEntries([{ id: crypto.randomUUID(), name: '', mapsUrl: '', address: '', note: '' }])
+      }
+    } catch {
+      setEntries([{ id: crypto.randomUUID(), name: '', mapsUrl: '', address: '', note: '' }])
+    }
+  }, [])
 
   const handleBack = () => router.back()
 
@@ -112,22 +142,23 @@ export default function CreateListPage() {
             }
             // prepare payload
             const payload = {
-              title: '', // reserved for future
+              title: '',
               entries: entries
                 .map((e, i) => ({ order: i + 1, name: e.name.trim(), mapsUrl: e.mapsUrl || undefined, address: e.address || undefined, note: e.note || undefined }))
                 .filter(e => e.name)
             }
             try {
               const token = await getIdToken()
-              const res = await fetch('/api/lists/create', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' }, body: JSON.stringify(payload) })
-              if (!res.ok) {
-                // basic feedback
-                alert('Failed to save list')
-                return
+              if (listId) {
+                const res = await fetch(`/api/lists/${listId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' }, body: JSON.stringify(payload) })
+                if (!res.ok) { alert('Failed to update list'); return }
+                router.push(`/lists/${listId}`)
+              } else {
+                const res = await fetch('/api/lists/create', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' }, body: JSON.stringify(payload) })
+                if (!res.ok) { alert('Failed to save list'); return }
+                const data = await res.json()
+                router.push(`/lists/${data.id || ''}`)
               }
-              const data = await res.json()
-              // navigate post-save
-              router.push('/')
             } catch {
               alert('Failed to save list')
             }

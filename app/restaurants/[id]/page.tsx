@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '../../context/AuthContext'
 import { db } from '../../../lib/firebase'
 import { doc, getDoc, GeoPoint } from 'firebase/firestore'
 import { useViewMode } from '../../contexts/ViewModeContext'
@@ -59,8 +60,9 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
   const router = useRouter()
   const { viewMode } = useViewMode()
   const { id: restaurantId } = params
-  const [likes, setLikes] = useState<number>(128)
+  const [likes, setLikes] = useState<number>(0)
   const [liked, setLiked] = useState<boolean>(false)
+  const { currentUser } = useAuth()
   const [dietaryFilter, setDietaryFilter] = useState<'all' | 'vegetarian' | 'vegan' | 'gluten-free' | 'spicy' | 'nuts'>('all')
   const [categoryFilter, setCategoryFilter] = useState<string>('')
   const categoryOptions = (restaurant?.menuCategories || []).map(c => ({ value: c.name, label: c.name }))
@@ -144,6 +146,8 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
         if (docSnap.exists()) {
           const restaurantData = { id: docSnap.id, ...docSnap.data() } as RestaurantDetails
           setRestaurant(restaurantData)
+          const likeCount = (docSnap.data() as any)?.likes
+          if (typeof likeCount === 'number') setLikes(likeCount)
         } else {
           setError('Restaurant not found.')
         }
@@ -159,9 +163,25 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
   }, [restaurantId])
   
   const handleBack = () => router.back()
-  const toggleLike = () => {
-    setLiked(prev => !prev)
-    setLikes(prev => prev + (liked ? -1 : 1))
+  const toggleLike = async () => {
+    try {
+      if (!currentUser) {
+        const next = encodeURIComponent(`/restaurants/${restaurantId}`)
+        router.push(`/login?next=${next}`)
+        return
+      }
+      const idToken = await currentUser.getIdToken()
+      const res = await fetch('/api/restaurants/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ restaurantId: restaurantId, like: !liked })
+      })
+      if (res.ok) {
+        const data = await res.json()
+        if (typeof data.likes === 'number') setLikes(data.likes)
+        setLiked(!liked)
+      }
+    } catch {}
   }
   const openInMaps = () => {
     if (!restaurant) return
