@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { ChevronLeft, Bookmark, ChevronRight, Heart, CornerUpRight, Utensils, Pencil, Trash } from 'lucide-react'
 import { ListItem } from '../../design-system/components/ListItem'
@@ -26,6 +26,7 @@ export default function ListDetailsPage() {
   const [openIdx, setOpenIdx] = useState<number | null>(null)
   const [anchorRects, setAnchorRects] = useState<Record<number, { top: number; left: number; width: number }>>({})
   const [entryLikes, setEntryLikes] = useState<Record<number, { likes: number; liked: boolean }>>({})
+  const entryRefs = useRef<Record<number, HTMLDivElement | null>>({})
 
   useEffect(() => {
     const load = async () => {
@@ -185,24 +186,27 @@ export default function ListDetailsPage() {
         {!loading && !error && entries.map((e, idx) => (
           <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', position: 'relative' }} key={idx}>
             <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+            <div ref={(el) => { entryRefs.current[idx] = el }} style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
               <ListItem
                 title={e.name}
                 subtitle={e.address}
-                onClick={async (ev: any) => {
-                  const target = (ev.currentTarget as HTMLElement)
-                  const rect = target.getBoundingClientRect()
-                  setAnchorRects(prev => ({ ...prev, [idx]: { top: rect.bottom + window.scrollY, left: rect.left + window.scrollX, width: rect.width } }))
+                onClick={() => {
+                  const target = entryRefs.current[idx]
+                  if (target) {
+                    const rect = target.getBoundingClientRect()
+                    setAnchorRects(prev => ({ ...prev, [idx]: { top: rect.bottom + window.scrollY, left: rect.left + window.scrollX, width: rect.width } }))
+                  }
                   setOpenIdx(openIdx === idx ? null : idx)
-                  // preload likes for this entry
-                  try {
-                    const authHeader = currentUser ? { Authorization: `Bearer ${await currentUser.getIdToken()}` } : {}
-                    const url = new URL('/api/restaurants/like', window.location.origin)
-                    if (e.mapsUrl) url.searchParams.set('mapsUrl', e.mapsUrl)
-                    const res = await fetch(url.toString(), { headers: { ...(authHeader as any) } })
-                    const data = await res.json()
-                    setEntryLikes(prev => ({ ...prev, [idx]: { likes: data.likes || 0, liked: !!data.liked } }))
-                  } catch {}
+                  ;(async () => {
+                    try {
+                      const authHeader = currentUser ? { Authorization: `Bearer ${await currentUser.getIdToken()}` } : {}
+                      const url = new URL('/api/restaurants/like', window.location.origin)
+                      if (e.mapsUrl) url.searchParams.set('mapsUrl', e.mapsUrl)
+                      const res = await fetch(url.toString(), { headers: { ...(authHeader as any) } })
+                      const data = await res.json()
+                      setEntryLikes(prev => ({ ...prev, [idx]: { likes: data.likes || 0, liked: !!data.liked } }))
+                    } catch {}
+                  })()
                 }}
                 endContent={<ChevronRight className="w-4 h-4 text-gray-500" />}
               />
