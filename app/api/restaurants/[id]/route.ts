@@ -60,6 +60,14 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     const idToken = req.headers.get('authorization')?.replace('Bearer ', '')
     const decoded = await verifyIdToken(idToken || undefined)
     if (!decoded) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Admin enforcement: allow only admins/allowlisted emails
+    const isAdminClaim = (decoded as any)?.admin === true
+    const allow = (process.env.ADMIN_EMAILS || '').split(',').map(s => s.trim()).filter(Boolean)
+    const email = (decoded as any)?.email as string | undefined
+    const isAllowlisted = !!email && allow.includes(email)
+    if (!isAdminClaim && !isAllowlisted) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
 
     const db = getAdminDb()
     await db.doc(`restaurants/${params.id}`).delete()

@@ -7,7 +7,7 @@ import { Button } from '../../design-system/components/Button'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { useAuth } from '../../context/AuthContext'
 
-type ListEntry = { name: string; mapsUrl?: string; address?: string; note?: string }
+type ListEntry = { name: string; mapsUrl?: string; address?: string; note?: string; placeId?: string; restaurantId?: string }
 
 export default function ListDetailsPage() {
   const router = useRouter()
@@ -201,7 +201,13 @@ export default function ListDetailsPage() {
                     try {
                       const authHeader = currentUser ? { Authorization: `Bearer ${await currentUser.getIdToken()}` } : {}
                       const url = new URL('/api/restaurants/like', window.location.origin)
-                      if (e.mapsUrl) url.searchParams.set('mapsUrl', e.mapsUrl)
+                      if (e.placeId) {
+                        url.searchParams.set('placeId', e.placeId)
+                      } else if (e.restaurantId) {
+                        url.searchParams.set('restaurantId', e.restaurantId as any)
+                      } else if (e.mapsUrl) {
+                        url.searchParams.set('mapsUrl', e.mapsUrl)
+                      }
                       const res = await fetch(url.toString(), { headers: { ...(authHeader as any) } })
                       const data = await res.json()
                       setEntryLikes(prev => ({ ...prev, [idx]: { likes: data.likes || 0, liked: !!data.liked } }))
@@ -245,7 +251,7 @@ export default function ListDetailsPage() {
                         const res = await fetch('/api/restaurants/like', {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                          body: JSON.stringify({ mapsUrl: e.mapsUrl, name: e.name, address: e.address, like: !liked })
+                          body: JSON.stringify({ placeId: e.placeId, restaurantId: e.restaurantId as any, mapsUrl: e.mapsUrl, name: e.name, address: e.address, like: !liked })
                         })
                         const data = await res.json()
                         if (res.ok) {
