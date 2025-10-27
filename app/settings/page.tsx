@@ -2,7 +2,7 @@
 import { Button } from '../design-system/components/Button'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle, MoreHorizontal } from 'lucide-react'
+import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle, LogOut, LogIn } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../contexts/ViewModeContext'
@@ -11,6 +11,9 @@ import { useFont } from '../context/FontContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
 import { ListItem } from '../design-system/components/ListItem'
+import { useAuth } from '../context/AuthContext'
+import { signOut, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { auth } from '../../lib/firebase'
 
 // Define theme and color mode options
 const THEME_MODES = ['auto', 'light', 'dark'] as const;
@@ -25,10 +28,65 @@ export default function SettingsPage() {
   const { font, setFont } = useFont();
   const router = useRouter();
   const { setIsLoading } = useLoading()
+  const { currentUser } = useAuth()
+  const [upsertedUid, setUpsertedUid] = useState<string | null>(null)
 
   useEffect(() => {
     setIsLoading(false)
   }, [setIsLoading])
+
+  // Upsert user when signed in (covers redirect/mobile flow too)
+  useEffect(() => {
+    const doUpsert = async () => {
+      if (!currentUser) return
+      if (upsertedUid === currentUser.uid) return
+      try {
+        const idToken = await currentUser.getIdToken()
+        await fetch('/api/user/upsert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({
+            uid: currentUser.uid,
+            displayName: currentUser.displayName,
+            email: currentUser.email,
+            photoURL: currentUser.photoURL,
+          }),
+        })
+        setUpsertedUid(currentUser.uid)
+      } catch {
+        // ignore
+      }
+    }
+    void doUpsert()
+  }, [currentUser, upsertedUid])
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider()
+    try {
+      const host = typeof window !== 'undefined' ? window.location.hostname : ''
+      if (host === 'localhost' || host === '127.0.0.1') {
+        const cred = await signInWithPopup(auth, provider)
+        try {
+          const idToken = await cred.user.getIdToken()
+          await fetch('/api/user/upsert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+            body: JSON.stringify({
+              uid: cred.user.uid,
+              displayName: cred.user.displayName,
+              email: cred.user.email,
+              photoURL: cred.user.photoURL,
+            }),
+          })
+          setUpsertedUid(cred.user.uid)
+        } catch {}
+      } else {
+        await signInWithRedirect(auth, provider)
+      }
+    } catch (e) {
+      // ignore for settings row
+    }
+  }
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -199,17 +257,35 @@ export default function SettingsPage() {
           <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         </div>
         
-        {/* Places Row */}
+        {/* Account / Logout Row (only when logged in) */}
         <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
           <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
           <div style={{ flex: 1, maxWidth: 800 }}>
-            <ListItem
-              title="My Places"
-              onClick={() => {
-                // Future implementation: router.push('/places')
-              }}
-              endContent={<MoreHorizontal className="w-4 h-4" />}
-            />
+            {currentUser ? (
+              <ListItem
+                title={currentUser.displayName || 'Account'}
+                subtitle={currentUser.email || ''}
+                onClick={async () => {
+                  try {
+                    await signOut(auth)
+                  } catch {}
+                  router.push('/')
+                }}
+                endContent={<LogOut className="w-4 h-4" />}
+              />
+            ) : (
+              <div className="flex items-center" style={{ height: 48 }}>
+                <Button
+                  variant="secondary"
+                  onClick={handleGoogleLogin}
+                  className="w-full justify-start"
+                  aria-label="Login with Google"
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Login with Google
+                </Button>
+              </div>
+            )}
           </div>
           <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
         </div>

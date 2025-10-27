@@ -215,10 +215,30 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
               </Button>
               <h1 className="text-base font-semibold" style={{ color: 'var(--accent)' }}>Details</h1>
             </div>
-            <Button variant="secondary" onClick={toggleLike} aria-label="Like restaurant" className="px-3">
-              {liked ? <Heart className="w-4 h-4 mr-1" fill="currentColor" /> : <Heart className="w-4 h-4 mr-1" />}
-              <span className="text-sm" style={{ color: 'var(--accent)' }}>{likes}</span>
-            </Button>
+            {(() => {
+              const admins = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '')
+                .split(',')
+                .map((s) => s.trim().toLowerCase())
+                .filter(Boolean)
+              const isAdmin = !!(currentUser?.email && admins.includes(currentUser.email.toLowerCase()))
+              return (
+                <div className="flex items-center gap-2">
+                  {isAdmin && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => router.push(`/restaurants/${restaurantId}/edit`)}
+                      aria-label="Edit restaurant"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button variant="secondary" onClick={toggleLike} aria-label="Like restaurant" className="px-3">
+                    {liked ? <Heart className="w-4 h-4 mr-1" fill="currentColor" /> : <Heart className="w-4 h-4 mr-1" />}
+                    <span className="text-sm" style={{ color: 'var(--accent)' }}>{likes}</span>
+                  </Button>
+                </div>
+              )
+            })()}
           </div>
           <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
         </div>

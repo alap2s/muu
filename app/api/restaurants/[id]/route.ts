@@ -8,7 +8,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     if (!decoded) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
-    const allowed = ['name', 'address', 'website', 'notes', 'menuCategories', 'coordinates', 'isHidden'] as const
+    const allowed = ['name', 'address', 'website', 'notes', 'menuCategories', 'coordinates', 'isHidden', 'placeId'] as const
     const updateData: Record<string, any> = {}
     for (const k of allowed) {
       const v = body[k]
@@ -31,6 +31,22 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     const db = getAdminDb()
+    // if payload contains placeId and differs from params.id, write under placeId and delete old
+    const placeId: string | undefined = updateData.placeId
+    if (placeId && placeId !== params.id) {
+      const targetRef = db.doc(`restaurants/${placeId}`)
+      await targetRef.set(updateData, { merge: true })
+      // migrate likes subcollection best-effort
+      try {
+        const srcRef = db.doc(`restaurants/${params.id}`)
+        const likes = await srcRef.collection('likes').get()
+        const batch = db.batch()
+        likes.forEach(d => batch.set(targetRef.collection('likes').doc(d.id), d.data(), { merge: true }))
+        batch.delete(srcRef)
+        await batch.commit()
+      } catch {}
+      return NextResponse.json({ ok: true, id: placeId })
+    }
     await db.doc(`restaurants/${params.id}`).set(updateData, { merge: true })
     return NextResponse.json({ ok: true })
   } catch (e) {
@@ -44,6 +60,14 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
     const idToken = req.headers.get('authorization')?.replace('Bearer ', '')
     const decoded = await verifyIdToken(idToken || undefined)
     if (!decoded) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Admin enforcement: allow only admins/allowlisted emails
+    const isAdminClaim = (decoded as any)?.admin === true
+    const allow = (process.env.ADMIN_EMAILS || '').split(',').map(s => s.trim()).filter(Boolean)
+    const email = (decoded as any)?.email as string | undefined
+    const isAllowlisted = !!email && allow.includes(email)
+    if (!isAdminClaim && !isAllowlisted) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
 
     const db = getAdminDb()
     await db.doc(`restaurants/${params.id}`).delete()

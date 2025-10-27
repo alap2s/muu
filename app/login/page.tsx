@@ -51,6 +51,22 @@ export default function LoginPage() {
   // Handle redirect sign-in result (for mobile or popup fallback)
   useEffect(() => {
     let cancelled = false
+    const computePostLoginPath = async (proposed: string, uid?: string | null) => {
+      try {
+        if (!uid) return proposed || '/'
+        const url = new URL('/api/lists', window.location.origin)
+        if (proposed?.startsWith('/lists/create')) {
+          url.searchParams.set('ownerUid', uid)
+          const resp = await fetch(url.toString())
+          if (resp.ok) {
+            const data = await resp.json()
+            const firstId = data?.lists?.[0]?.id as string | undefined
+            if (firstId) return `/lists/create?id=${firstId}`
+          }
+        }
+      } catch {}
+      return proposed || '/'
+    }
     const handle = async () => {
       try {
         console.log('[Login] getRedirectResult: start')
@@ -75,9 +91,10 @@ export default function LoginPage() {
             console.error('Upsert failed after redirect', e)
           }
           setRedirectHandled(true)
-          console.log('[Login] Redirecting to', redirectTo || '/')
+          const target = await computePostLoginPath(redirectTo || '/', result.user.uid)
+          console.log('[Login] Redirecting to', target)
           try { sessionStorage.removeItem('loginAttempted') } catch {}
-          router.replace(redirectTo || '/')
+          router.replace(target)
         } else {
           // If no redirect result but already signed in, the other effect will handle redirect
           console.log('[Login] No redirect result user')
@@ -111,6 +128,21 @@ export default function LoginPage() {
           })
       } catch {}
       setRedirectHandled(true)
+      try {
+        const url = new URL('/api/lists', window.location.origin)
+        if (redirectTo?.startsWith('/lists/create')) {
+          url.searchParams.set('ownerUid', currentUser.uid)
+          const resp = await fetch(url.toString())
+          if (resp.ok) {
+            const data = await resp.json()
+            const firstId = data?.lists?.[0]?.id as string | undefined
+            if (firstId) {
+              router.replace(`/lists/create?id=${firstId}`)
+              return
+            }
+          }
+        }
+      } catch {}
       router.replace(redirectTo || '/')
     }
     void doRedirect()

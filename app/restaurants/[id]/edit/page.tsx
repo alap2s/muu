@@ -306,6 +306,7 @@ interface RestaurantFormData {
         lat: number;
         lng: number;
     };
+    placeId?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -330,6 +331,7 @@ interface RestaurantFirestore {
   createdAt: Date;
   updatedAt: Date;
   isHidden?: boolean;
+  placeId?: string;
 }
 
 export default function RestaurantEditPage({ params }: { params: { id: string } }) {
@@ -436,6 +438,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
               address: restaurantData.address || '',
               website: restaurantData.website || '',
               notes: restaurantData.notes || '',
+              placeId: (restaurantData as any).placeId,
                 menuCategories: (restaurantData.menuCategories || []).map((category: any) => ({
                   ...category,
                   items: category.items.map((item: any) => ({
@@ -771,6 +774,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
             createdAt: formData.createdAt || new Date(),
             updatedAt: new Date(),
             isHidden: isHidden,
+            placeId: formData.placeId
         };
 
         // Use secure server route to bypass client rules
@@ -817,11 +821,20 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       setIsDeleting(true);
       setError(null);
       try {
-        await deleteDoc(doc(db, 'restaurants', restaurantId));
+        const token = await getIdToken()
+        const res = await fetch(`/api/restaurants/${restaurantId}`, {
+          method: 'DELETE',
+          headers: { Authorization: token ? `Bearer ${token}` : '' }
+        })
+        if (!res.ok) {
+          if (res.status === 403) throw new Error('Not authorized')
+          throw new Error('Delete failed')
+        }
         router.push('/restaurantsdatabase');
       } catch (err) {
         console.error('Error deleting restaurant:', err);
         setError('Failed to delete restaurant. Please try again.');
+      } finally {
         setIsDeleting(false);
       }
     }
@@ -1001,8 +1014,8 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                 if (!formData.address && formData.name) {
                   setResolvingName(true)
                   setNameResolveError(null)
-                  try {
-                    const res = await fetch('/api/places/resolve', {
+                    try {
+                      const res = await fetch('/api/places/resolve', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ name: formData.name, lat: userLocation?.lat, lng: userLocation?.lng })
@@ -1017,6 +1030,7 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                         ...prev,
                         name: data?.name || prev.name,
                         address: data?.formattedAddress || prev.address,
+                        placeId: data?.placeId || prev.placeId,
                         coordinates: (data?.lat !== undefined && data?.lng !== undefined)
                           ? { lat: data.lat, lng: data.lng }
                           : prev.coordinates
@@ -1052,12 +1066,13 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                     setResolvingName(true)
                     setFormData(prev => prev ? ({ ...prev, name: s.primaryText }) : null)
                     try {
-                      const resp = await fetch('/api/places/resolve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ placeId: s.placeId }) })
+                    const resp = await fetch('/api/places/resolve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ placeId: s.placeId }) })
                       const data = await resp.json()
                       setFormData(prev => prev ? ({
                         ...prev,
                         name: data?.name || s.primaryText,
                         address: data?.formattedAddress || prev.address,
+                      placeId: data?.placeId || prev.placeId,
                         coordinates: (data?.lat !== undefined && data?.lng !== undefined)
                           ? { lat: data.lat, lng: data.lng }
                           : prev.coordinates

@@ -4,7 +4,14 @@ import { getAdminDb } from '../../../lib/firebaseAdmin'
 export async function GET(req: NextRequest) {
   try {
     const db = getAdminDb()
-    const snap = await db.collection('lists').orderBy('createdAt', 'desc').limit(50).get()
+    const ownerUid = req.nextUrl.searchParams.get('ownerUid')
+    let query = db.collection('lists') as FirebaseFirestore.Query<FirebaseFirestore.DocumentData>
+    if (ownerUid) {
+      query = query.where('ownerUid', '==', ownerUid)
+    } else {
+      query = query.orderBy('createdAt', 'desc').limit(50)
+    }
+    const snap = await query.get()
     const raw = snap.docs.map(d => ({ id: d.id, ...(d.data() as any) }))
     // Fetch owner display names
     const ownerUids = Array.from(new Set(raw.map(l => l.ownerUid).filter(Boolean))) as string[]

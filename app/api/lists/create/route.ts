@@ -29,16 +29,46 @@ export async function POST(req: NextRequest) {
     const db = getAdminDb()
     const listsCol = db.collection('lists')
     const now = new Date()
-    const docRef = await listsCol.add({
-      ownerUid: decoded.uid,
-      title: body.title || null,
-      entries: body.entries.map(e => ({
+    // helper to get placeId from maps url
+    const extractPlaceId = (url?: string | null): string | null => {
+      if (!url) return null
+      try {
+        const m = /place_id:([A-Za-z0-9_-]+)/.exec(url)
+        if (m && m[1]) return m[1]
+      } catch {}
+      return null
+    }
+
+    // build entries with placeId and seed restaurant stubs
+    const entriesWithIds = [] as Array<{ order: number; name: string; mapsUrl?: string | null; address?: string | null; note?: string | null; placeId?: string | null; restaurantId?: string | null }>
+    for (const e of body.entries) {
+      const placeId = extractPlaceId(e.mapsUrl || undefined)
+      if (placeId) {
+        // seed/merge minimal restaurant doc under placeId
+        const restRef = db.collection('restaurants').doc(placeId)
+        await restRef.set({
+          placeId,
+          name: e.name || null,
+          address: e.address || null,
+          updatedAt: new Date(),
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        }, { merge: true })
+      }
+      entriesWithIds.push({
         order: e.order,
         name: e.name,
         mapsUrl: e.mapsUrl || null,
         address: e.address || null,
         note: e.note || null,
-      })),
+        placeId: placeId || null,
+        restaurantId: placeId || null,
+      })
+    }
+
+    const docRef = await listsCol.add({
+      ownerUid: decoded.uid,
+      title: body.title || null,
+      entries: entriesWithIds,
       createdAt: now,
       updatedAt: now,
       likes: 0,

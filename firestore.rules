@@ -23,10 +23,10 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // Restaurants are public
+    // Restaurants are public (writes via server only)
     match /restaurants/{restaurantId} {
       allow read: if true;
-      allow write: if false; // Or add admin-only rules
+      allow write: if false; // writes go through admin API which bypasses rules
     }
 
     // Users can only manage their own profile
