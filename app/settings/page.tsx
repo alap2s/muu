@@ -63,28 +63,29 @@ export default function SettingsPage() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider()
     try {
-      const host = typeof window !== 'undefined' ? window.location.hostname : ''
-      if (host === 'localhost' || host === '127.0.0.1') {
-        const cred = await signInWithPopup(auth, provider)
-        try {
-          const idToken = await cred.user.getIdToken()
-          await fetch('/api/user/upsert', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-            body: JSON.stringify({
-              uid: cred.user.uid,
-              displayName: cred.user.displayName,
-              email: cred.user.email,
-              photoURL: cred.user.photoURL,
-            }),
-          })
-          setUpsertedUid(cred.user.uid)
-        } catch {}
-      } else {
-        await signInWithRedirect(auth, provider)
-      }
+      try { sessionStorage.setItem('loginAttempted', '1') } catch {}
+      // popup-first everywhere, fallback to redirect
+      const cred = await signInWithPopup(auth, provider)
+      try {
+        const idToken = await cred.user.getIdToken()
+        await fetch('/api/user/upsert', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({
+            uid: cred.user.uid,
+            displayName: cred.user.displayName,
+            email: cred.user.email,
+            photoURL: cred.user.photoURL,
+          }),
+        })
+        setUpsertedUid(cred.user.uid)
+      } catch {}
     } catch (e) {
-      // ignore for settings row
+      try {
+        await signInWithRedirect(auth, provider)
+      } catch {
+        // ignore for settings row
+      }
     }
   }
 
@@ -303,7 +304,7 @@ export default function SettingsPage() {
           <div style={{ flex: 1, maxWidth: 800, padding: '12px 16px' }}>
             <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
             <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
-              A menu experiment (mostly for Berlin friends) — that shows you a standardized, accessible menu automatically when you sit down. This app provides dietary and allergen information for guidance only. For severe allergies or dietary needs, always check directly with the restaurant staff before ordering.
+              Crowdsourced best spots and lists in the town. It started as a standardized menu app and now doing much more.
             </p>
           </div>
           <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />

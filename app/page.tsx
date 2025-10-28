@@ -479,11 +479,11 @@ export default function Home() {
   }
 
   const mainTabs = [
-    { id: 'menus', label: 'Menus' },
-    { id: 'restaurants', label: 'Places' },
     { id: 'collections', label: 'Lists' },
+    { id: 'restaurants', label: 'Places' },
+    { id: 'menus', label: 'Menus' },
   ];
-  const [activeTab, setActiveTab] = useState('menus');
+  const [activeTab, setActiveTab] = useState('collections');
   const [placesFilter, setPlacesFilter] = useState('all');
   const [placesSort, setPlacesSort] = useState('distance');
   const [placesSearchQuery, setPlacesSearchQuery] = useState('');
