@@ -34,6 +34,7 @@ export default function CreateListPage() {
   const [suggestOpenFor, setSuggestOpenFor] = useState<string | null>(null)
   const [sessionTokenFor, setSessionTokenFor] = useState<Record<string, string>>({})
   const [typingTimers, setTypingTimers] = useState<Record<string, any>>({})
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
@@ -134,7 +135,8 @@ export default function CreateListPage() {
             </Button>
             <h1 className="text-base font-medium" style={{ color: 'var(--accent)' }}>Create List</h1>
           </div>
-          <Button variant="primary" aria-label="Save" onClick={async () => {
+          <Button variant="primary" aria-label="Save" loading={isSaving} disabled={isSaving} onClick={async () => {
+            if (isSaving) return
             // require login
             if (!currentUser) {
               router.push(`/login?next=/lists/create`)
@@ -148,6 +150,7 @@ export default function CreateListPage() {
                 .filter(e => e.name)
             }
             try {
+              setIsSaving(true)
               const token = await getIdToken()
               if (listId) {
                 const res = await fetch(`/api/lists/${listId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: token ? `Bearer ${token}` : '' }, body: JSON.stringify(payload) })
@@ -161,6 +164,8 @@ export default function CreateListPage() {
               }
             } catch {
               alert('Failed to save list')
+            } finally {
+              setIsSaving(false)
             }
           }}>
             <Check className="w-4 h-4" />

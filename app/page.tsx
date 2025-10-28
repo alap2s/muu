@@ -1015,6 +1015,17 @@ export default function Home() {
                   <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
                 </div>
               ))}
+              {/* Spacer rows so last item isn't hidden behind mobile bottom filter bar */}
+              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+                <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
+                <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              </div>
+              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
+                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+                <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
+                <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+              </div>
             </div>
           )}
           {activeTab === 'collections' && (
@@ -1082,16 +1093,7 @@ export default function Home() {
                 <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
               </div>
 
-              {/* Description row */}
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
-                  <div className="w-full" style={{ color: 'var(--text-secondary)', fontSize: 12, paddingLeft: 16, paddingRight: 16 }}>
-                    Here are some curated lists from foodies
-                  </div>
-                </div>
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
+              {/* Description row removed per request */}
 
               {/* Your List row (create) - hidden if user already has a list */}
               {!(currentUser && lists.some(l => l.ownerUid === currentUser.uid)) && (
@@ -1123,7 +1125,7 @@ export default function Home() {
                   <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
                   <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
                     <ListItem
-                      title={l.ownerName || 'Anonymous'}
+                      title={(l.ownerName ? (l.ownerName.split(' ')[0] || l.ownerName) : 'Anonymous')}
                       subtitle={(l.followers ? `${l.followers} followers · ` : '') + (l.entries?.length ? `${l.entries.length} spots` : '')}
                       onClick={() => {
                         try { window.location.href = `/lists/${l.id}` } catch {}

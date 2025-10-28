@@ -65,6 +65,18 @@ export async function POST(req: NextRequest) {
       })
     }
 
+    // Enforce one-list-per-user: if user already has a list, update it instead of creating a new one
+    const existingSnap = await listsCol.where('ownerUid', '==', decoded.uid).limit(1).get()
+    if (!existingSnap.empty) {
+      const existingRef = existingSnap.docs[0].ref
+      await existingRef.set({
+        title: body.title || null,
+        entries: entriesWithIds,
+        updatedAt: now,
+      }, { merge: true })
+      return NextResponse.json({ id: existingRef.id, updated: true })
+    }
+
     const docRef = await listsCol.add({
       ownerUid: decoded.uid,
       title: body.title || null,
