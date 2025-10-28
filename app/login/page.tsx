@@ -152,21 +152,22 @@ export default function LoginPage() {
     setError(null)
     const provider = new GoogleAuthProvider()
     try {
-      const host = typeof window !== 'undefined' ? window.location.hostname : ''
-      if (host === 'localhost' || host === '127.0.0.1') {
-        console.log('[Login] Click: using popup on localhost')
-        await signInWithPopup(auth, provider)
-        console.log('[Login] signInWithPopup resolved')
-        // onAuthStateChanged will handle redirect to next
-      } else {
-        console.log('[Login] Click: starting Google redirect')
+      try { sessionStorage.setItem('loginAttempted', '1') } catch {}
+      console.log('[Login] Click: trying popup first')
+      await signInWithPopup(auth, provider)
+      console.log('[Login] signInWithPopup resolved')
+      // onAuthStateChanged will handle redirect to next
+    } catch (error: any) {
+      const code = error?.code || ''
+      console.warn('[Login] Popup sign-in failed, falling back to redirect', code)
+      try {
         await signInWithRedirect(auth, provider)
         console.log('[Login] signInWithRedirect called')
+      } catch (e: any) {
+        console.error('[Login] signInWithRedirect error', e)
+        const errorMessage = e?.message
+        setError(errorMessage || 'Login failed. Please try again.')
       }
-    } catch (error: any) {
-      const errorMessage = error?.message
-      console.error('[Login] signInWithRedirect error', error)
-      setError(errorMessage || 'Login failed. Please try again.')
     }
   }
 
