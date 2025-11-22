@@ -17,6 +17,10 @@ import { TextArea } from '../../../design-system/components/TextArea'
 import { MultiSelectDropdown } from '../../../design-system/components/MultiSelectDropdown'
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { PageShell } from '../../../design-system/components/PageShell'
+import { Header as DSHeader } from '../../../design-system/components/Header'
+import { GridRow } from '../../../design-system/components/GridRow'
+import { PageContentStack } from '../../../design-system/components/PageContentStack'
 
 const DIETARY_OPTIONS = [
   // Lifestyles
@@ -1157,31 +1161,23 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
         </div>
         <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
     </div>,
-    <div key="spacer-above-tabs" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-    </div>,
-    <div key="tabs-row" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
-            <Tabs<TabType>
-              tabs={[
-                { id: 'manual', label: 'Manual' },
-                { id: 'json', label: 'JSON' }
-              ]}
-              activeTab={activeTab}
-              onTabChange={handleTabChange}
-              className="w-full"
-            />
-        </div>
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-    </div>,
-    <div key="spacer-below-tabs" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-    </div>,
+    <GridRow key="spacer-above-tabs" showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+      <div style={{ flex: 1, minHeight: 48 }} />
+    </GridRow>,
+    <GridRow key="tabs-row" showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+      <Tabs<TabType>
+        tabs={[
+          { id: 'manual', label: 'Manual' },
+          { id: 'json', label: 'JSON' }
+        ]}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        className="w-full"
+      />
+    </GridRow>,
+    <GridRow key="spacer-below-tabs" showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+      <div style={{ flex: 1, minHeight: 48 }} />
+    </GridRow>,
     activeTab === 'json' ? (
       <div key="json-input-row" className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
         <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
@@ -1232,120 +1228,151 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
       </div>
     ) : null,
     ...(activeTab === 'manual' ? (formData.menuCategories || []).flatMap((category, categoryIndex) => [
-      // Category Header
-      <div 
-        key={category.id}
-        ref={el => { if (el) categoryRefs.current[categoryIndex] = el; }}
-        className="flex justify-center" 
-        style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-alt)' }}
-      >
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, justifyContent: 'space-between' }}>
-            <div className="flex-1 flex items-center">
-                <Input 
-                  placeholder={categoryIndex === 0 ? "Category Name *" : "Category Name"}
-                  value={category.name} 
-                  onFocus={() => setActiveCategoryIndex(categoryIndex)}
-                  onChange={(e) => handleCategoryNameChange(categoryIndex, e.target.value)} 
-                  onBlur={categoryIndex === 0 ? () => handleBlur('name', category.name, category.id) : undefined}
-                  error={categoryIndex === 0 && formErrors[category.id]?.name}
-                  className="w-full text-base font-semibold" 
-                />
-                <Button variant="secondary" onClick={() => addItemToCategory(categoryIndex)} aria-label="Add item to category">
-                  <Plus className="w-4 h-4" />
-                </Button>
-                <Button variant="secondary" onClick={() => deleteCategory(categoryIndex)} aria-label="Delete category">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-            </div>
-        </div>
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </div>,
-      // Menu Items
-      ...category.items.map((item, itemIndex) => (
-        <div 
-          key={item.id || `item-${categoryIndex}-${itemIndex}`} 
-          ref={el => { if (el) itemRefs.current[`${categoryIndex}-${itemIndex}`] = el; }}
-          className="flex justify-center" 
-          style={{ borderBottom: '1px solid var(--border-main)' }}
+      // Category Header as a GridRow with separators between actions
+      (
+        <GridRow
+          key={category.id}
+          ref={el => { if (el) categoryRefs.current[categoryIndex] = el; }}
+          showRails={viewMode === 'grid'}
+          borderBottom
+          maxWidth={800}
+          separators
         >
-            <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
-                <div className="flex-1 flex items-start">
-                  <div className="flex-1 flex flex-col">
-                    <Input 
-                        placeholder={categoryIndex === 0 && itemIndex === 0 ? "Item Name *" : "Item Name"}
-                        value={item.name} 
-                        onFocus={() => setActiveCategoryIndex(categoryIndex)} 
-                        onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'name', e.target.value)} 
-                        onBlur={categoryIndex === 0 && itemIndex === 0 ? () => handleBlur('name', item.name, category.id, item.id) : undefined}
-                        error={categoryIndex === 0 && itemIndex === 0 && formErrors[category.id]?.items?.[item.id]?.name}
-                        className="w-full text-sm" 
-                    />
-                    <div className="flex-1 flex items-center">
-                      <Input 
-                        placeholder="Description" 
-                        value={item.description || ''} 
-                        onFocus={() => setActiveCategoryIndex(categoryIndex)} 
-                        onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'description', e.target.value)} 
-                        className="w-full text-sm" 
-                      />
-                      <DietaryDropdown
-                        value={item.dietaryRestrictions || []}
-                        onChange={(value) => handleMenuChange(categoryIndex, itemIndex, 'dietaryRestrictions', value)}
-                      />
-                    </div>
-                    <Input 
-                      type="text" 
-                      inputMode="decimal"
-                      placeholder="Price" 
-                      value={item.price || ''} 
-                      onFocus={() => setActiveCategoryIndex(categoryIndex)} 
-                      onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'price', e.target.value)}
-                      className="w-full text-sm" 
-                    />
-                  </div>
-                  <Button variant="secondary" onClick={() => deleteItem(categoryIndex, itemIndex)} aria-label={`Delete item ${item.name}`}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+            <Input
+              placeholder={categoryIndex === 0 ? 'Category Name *' : 'Category Name'}
+              value={category.name}
+              onFocus={() => setActiveCategoryIndex(categoryIndex)}
+              onChange={(e) => handleCategoryNameChange(categoryIndex, e.target.value)}
+              onBlur={categoryIndex === 0 ? () => handleBlur('name', category.name, category.id) : undefined}
+              error={categoryIndex === 0 && formErrors[category.id]?.name}
+              className="w-full text-base font-semibold"
+            />
+          </div>
+          <div className="flex-none" style={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Button variant="secondary" onClick={() => addItemToCategory(categoryIndex)} aria-label="Add item to category">
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+          <div className="flex-none" style={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Button variant="secondary" onClick={() => deleteCategory(categoryIndex)} aria-label="Delete category">
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
+        </GridRow>
+      ),
+
+      // Menu Items split into multiple GridRows with HDividers provided by PageContentStack
+      ...category.items.flatMap((item, itemIndex) => [
+        // Name row with delete action
+        (
+          <GridRow
+            key={`${category.id}-item-${item.id}-name`}
+            ref={el => { if (el) itemRefs.current[`${categoryIndex}-${itemIndex}`] = el; }}
+            showRails={viewMode === 'grid'}
+            borderBottom
+            maxWidth={800}
+            separators
+          >
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+              <Input
+                placeholder={categoryIndex === 0 && itemIndex === 0 ? 'Item Name *' : 'Item Name'}
+                value={item.name}
+                onFocus={() => setActiveCategoryIndex(categoryIndex)}
+                onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'name', e.target.value)}
+                onBlur={categoryIndex === 0 && itemIndex === 0 ? () => handleBlur('name', item.name, category.id, item.id) : undefined}
+                error={categoryIndex === 0 && itemIndex === 0 && formErrors[category.id]?.items?.[item.id]?.name}
+                className="w-full text-sm"
+              />
             </div>
-            <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
-      )),
+            <div className="flex-none" style={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Button variant="secondary" onClick={() => deleteItem(categoryIndex, itemIndex)} aria-label={`Delete item ${item.name}`}>
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
+          </GridRow>
+        ),
+
+        // Description + Dietary row (two elements with a VDivider between)
+        (
+          <GridRow
+            key={`${category.id}-item-${item.id}-desc`}
+            showRails={viewMode === 'grid'}
+            borderBottom
+            maxWidth={800}
+            separators
+          >
+            <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+              <Input
+                placeholder="Description"
+                value={item.description || ''}
+                onFocus={() => setActiveCategoryIndex(categoryIndex)}
+                onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'description', e.target.value)}
+                className="w-full text-sm"
+              />
+            </div>
+            <div className="flex-none" style={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <DietaryDropdown
+                value={item.dietaryRestrictions || []}
+                onChange={(value) => handleMenuChange(categoryIndex, itemIndex, 'dietaryRestrictions', value)}
+              />
+            </div>
+          </GridRow>
+        ),
+
+        // Price row
+        (
+          <GridRow
+            key={`${category.id}-item-${item.id}-price`}
+            showRails={viewMode === 'grid'}
+            borderBottom
+            maxWidth={800}
+          >
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+              <Input
+                type="text"
+                inputMode="decimal"
+                placeholder="Price"
+                value={item.price || ''}
+                onFocus={() => setActiveCategoryIndex(categoryIndex)}
+                onChange={(e) => handleMenuChange(categoryIndex, itemIndex, 'price', e.target.value)}
+                className="w-full text-sm"
+              />
+            </div>
+          </GridRow>
+        ),
+      ]),
+
       // Visual spacer after each category block
-      <div key={`spacer-${categoryIndex}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </div>
+      (
+        <GridRow key={`spacer-${categoryIndex}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, minHeight: 48 }} />
+        </GridRow>
+      )
     ]) : [])
   ].filter(Boolean);
 
   const rowCount = Math.max(24, allContent.length);
-
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800 }} />
-        <div style={{ width: 32 }} />
-      </div>
-
-      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
-          <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={handleCancel} aria-label="Cancel edit" disabled={isCancelling || isDeleting}>
-              {isCancelling ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
-            </Button>
-            <h1 className="text-base font-medium truncate" style={{ color: 'var(--accent)' }}>Edit Details</h1>
-          </div>
-          <div className="flex items-center">
-            <Button variant="secondary" onClick={handleDelete} disabled={isDeleting} aria-label="Delete restaurant">
+    <PageShell
+      header={
+        <DSHeader
+          left={
+          <Button variant="secondary" onClick={handleCancel} aria-label="Cancel edit" disabled={isCancelling || isDeleting}>
+            {isCancelling ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
+          </Button>
+          }
+          center={
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'left', padding: '0 16px' }}>
+              <h1 className="text-base font-medium truncate" style={{ color: 'var(--accent)' }}>Edit Details</h1>
+            </div>
+          }
+          right={[
+            <Button key="delete" variant="secondary" onClick={handleDelete} disabled={isDeleting} aria-label="Delete restaurant">
               {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-            </Button>
+            </Button>,
             <Button 
+              key="save"
               variant="primary" 
               onClick={handleSave} 
               disabled={isSaving || isDeleting || isSaveDisabled} 
@@ -1353,50 +1380,27 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             </Button>
-          </div>
-        </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </header>
-
-      <main className="space-y-0" style={{ height: `calc(100vh - 48px - env(safe-area-inset-top))`, overflowY: 'auto', paddingBottom: 'calc(48px + env(safe-area-inset-bottom))' }} role="region" aria-label="Restaurant editor">
-          <>
-            {[...Array(rowCount)].map((_, i) => {
-              const content = allContent[i];
-              if (content) {
-                return React.cloneElement(content, { key: `content-${i}` });
-              }
-              return (
-              <div key={`empty-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                  <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
-                  <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
-              );
-            })}
-          </>
-      </main>
-
-      {/* Bottom Bar */}
-      <footer className="fixed bottom-0 left-0 right-0" style={{ zIndex: 11000, borderTop: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-          <div className="flex justify-center">
-              <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48 }}>
-                {activeTab === 'manual' ? (
-                  <>
+          ]}
+        />
+      }
+      bottomBar={
+        activeTab === 'manual' ? (
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} separators>
                 <div className="flex-1">
                   <Button variant="secondary" onClick={addCategory} className="w-full" aria-label="Add a new category to the menu">
                     <FolderPlus className="w-4 h-4 mr-2" />
                     Add Category
                   </Button>
                 </div>
-                <div style={{ borderLeft: '1px solid var(--border-main)'}}>
+            <div className="flex-none">
                   <Button variant="secondary" onClick={() => { if (activeCategoryIndex !== null) addItemToCategory(activeCategoryIndex)}} disabled={activeCategoryIndex === null} aria-label="Add a new item to the active category">
                     <ListPlus className="w-4 h-4 mr-2" />
                     Add Item
                   </Button>
                 </div>
-                  </>
+          </GridRow>
                 ) : (
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
                   <div className="flex-1">
                     <Button 
                       variant="secondary" 
@@ -1443,16 +1447,23 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
                       Copy JSON Format
                     </Button>
                   </div>
-                )}
-              </div>
-              <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          </div>
-          <div className="flex justify-center" style={{ height: 'env(safe-area-inset-bottom)', background: 'var(--background-main)' }}>
-            <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800 }} />
-            <div style={{ width: 32 }} />
-          </div>
-      </footer>
-    </div>
+          </GridRow>
+        )
+      }
+    >
+      <PageContentStack className="space-y-0" role="region" aria-label="Restaurant editor">
+        {[...Array(rowCount)].map((_, i) => {
+          const content = allContent[i];
+          if (content) {
+            return React.cloneElement(content as any, { key: `content-${i}` });
+          }
+          return (
+            <GridRow key={`empty-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+              <div style={{ flex: 1, minHeight: 48 }} />
+            </GridRow>
+          );
+        })}
+      </PageContentStack>
+    </PageShell>
   )
 } 

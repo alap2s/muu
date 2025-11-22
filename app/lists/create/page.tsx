@@ -10,6 +10,10 @@ import { Input } from '../../design-system/components/Input'
 import { X, Check, MapPin, Plus, Trash2, Loader2, LucideIcon, LucideProps } from 'lucide-react'
 import { StickyNote } from 'lucide-react'
 import { Dropdown } from '../../design-system/components/Dropdown'
+import { GridRow } from '../../design-system/components/GridRow'
+import { PageShell } from '../../design-system/components/PageShell'
+import { Header as DSHeader } from '../../design-system/components/Header'
+import { PageContentStack } from '../../design-system/components/PageContentStack'
 
 interface ListEntry {
   id: string
@@ -94,15 +98,15 @@ export default function CreateListPage() {
         {...rest}
       >
         <text
-          x="50%"
+          x="65%"
           y="50%"
           dominantBaseline="central"
           textAnchor="middle"
-          fontSize="10"
-          fontWeight="700"
+          fontSize="12"
+          fontWeight="600"
           fill="currentColor"
         >
-          {n}
+          {`${n}.`}
         </text>
       </svg>
     )) as unknown as LucideIcon
@@ -117,25 +121,21 @@ export default function CreateListPage() {
   const removeEntry = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
-      {/* Notch spacer */}
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800 }} />
-        <div style={{ width: 32 }} />
-      </div>
-
-      {/* Header */}
-      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
-          <div className="flex items-center gap-2">
+    <PageShell
+      header={
+        <DSHeader
+          left={
             <Button variant="secondary" onClick={handleBack} aria-label="Cancel">
               <X className="w-4 h-4" />
             </Button>
-            <h1 className="text-base font-medium" style={{ color: 'var(--accent)' }}>Create List</h1>
-          </div>
-          <Button variant="primary" aria-label="Save" loading={isSaving} disabled={isSaving} onClick={async () => {
+          }
+          center={
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'left', padding: '0 16px' }}>
+              <h1 className="text-base font-medium" style={{ color: 'var(--accent)' }}>Create List</h1>
+            </div>
+          }
+          right={
+            <Button variant="primary" aria-label="Save" loading={isSaving} disabled={isSaving} onClick={async () => {
             if (isSaving) return
             // require login
             if (!currentUser) {
@@ -168,30 +168,26 @@ export default function CreateListPage() {
               setIsSaving(false)
             }
           }}>
-            <Check className="w-4 h-4" />
-          </Button>
-        </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </header>
-
-      {/* Content */}
-      <main className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto', paddingBottom: 'calc(48px + env(safe-area-inset-bottom))' }}>
+              <Check className="w-4 h-4" />
+            </Button>
+          }
+        />
+      }
+    >
+      <PageContentStack className="space-y-0">
         {/* Title row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
             <ListItem title="" subtitle="Create a list of your top 10 spots" />
           </div>
-          <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        </GridRow>
 
         {/* Entry rows */}
         {entries.map((entry, idx) => (
           <React.Fragment key={entry.id}>
             {/* Name row */}
-            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
                 <Input
                   icon={createNumberIcon(Math.min(idx + 1, 10))}
                   placeholder={`Restaurant name${idx === 0 ? '' : ''}`}
@@ -292,17 +288,17 @@ export default function CreateListPage() {
                   </div>
                 )}
                 {resolvingName[entry.id] && <Loader2 className="w-4 h-4 ml-2 animate-spin" />}
+              </div>
+              <div className="flex-none" style={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Button variant="secondary" onClick={() => removeEntry(entry.id)} aria-label="Remove entry">
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
+            </GridRow>
 
             {/* Maps URL row */}
-            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48 }}>
                 <Input
                   icon={MapPin}
                   placeholder="Address or Google Maps link"
@@ -345,13 +341,11 @@ export default function CreateListPage() {
                   className="w-full text-sm"
                 />
               </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
+            </GridRow>
 
             {/* Note row */}
-            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48 }}>
                 <Input
                   icon={StickyNote}
                   placeholder="Note (e.g. best dumplings in town)"
@@ -361,43 +355,36 @@ export default function CreateListPage() {
                 />
                 {resolvingUrl[entry.id] && <Loader2 className="w-4 h-4 ml-2 animate-spin" />}
               </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
+            </GridRow>
 
             {resolveError[entry.id] && (
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 32 }}>
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} minHeight={32}>
+                <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 32 }}>
                   <span className="text-xs" style={{ color: 'var(--accent)' }}>{resolveError[entry.id]}</span>
                 </div>
-                <div style={{ width: 32, minHeight: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
+              </GridRow>
             )}
 
             {/* Spacer row between entries */}
-            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+              <div style={{ flex: 1, minHeight: 48 }} />
+            </GridRow>
           </React.Fragment>
         ))}
 
         {/* Add row (after one empty spacer row above from last entry) */}
         {entries.length < 10 && (
-          <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48 }}>
               <Button variant="secondary" onClick={addEntry} className="w-full" aria-label="Add restaurant">
                 <Plus className="w-4 h-4 mr-2" />
                 Add restaurant
               </Button>
             </div>
-            <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          </div>
+          </GridRow>
         )}
-      </main>
-    </div>
+      </PageContentStack>
+    </PageShell>
   )
 }
 

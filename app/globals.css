@@ -12,7 +12,7 @@
   --text-primary: #1e1e1e;
   --text-secondary: rgba(30, 30, 30, 0.5);
   --text-brand: #6237FF;
-  --border-main: #EEEAFF;
+  --border-main: var(--accent);
   --border-secondary: #EEEAFF;
   --brand: #6237FF;
   --brand-light: #7B5AFF;
@@ -25,6 +25,12 @@
   --input: 214.3 31.8% 91.4%;
 }
 
+:root {
+  /* Design system border tokens */
+  --border-hairline: 0.4px;
+  --border-hairline-solid: 0.4px solid var(--border-main);
+}
+
 :root.dark {
   /* Dark theme with brand colors */
   --accent: #C6BBEF;
@@ -34,7 +40,7 @@
   --text-primary: #FFFFFF;
   --text-secondary: rgba(255, 255, 255, 0.5);
   --text-brand: #9B7AFF;
-  --border-main: #2A2A2A;
+  --border-main: var(--accent);
   --border-secondary: #2A2A2A;
   --brand: #9B7AFF;
   --brand-light: #B39AFF;
@@ -52,7 +58,7 @@
   /* Light theme with gray content */
   --accent: #6B7280;
   --text-brand: #1e1e1e;
-  --border-main: #E5E5E5;
+  --border-main: var(--accent);
   --border-secondary: #E5E5E5;
   --brand: #1e1e1e;
   --brand-light: #4A4A4A;
@@ -63,7 +69,7 @@
   /* Dark theme with gray content */
   --accent: #CCCCCC;
   --text-brand: #FFFFFF;
-  --border-main: #2A2A2A;
+  --border-main: var(--accent);
   --border-secondary: #2A2A2A;
   --brand: #FFFFFF;
   --brand-light: #CCCCCC;
@@ -80,7 +86,7 @@
     --text-primary: #FFFFFF;
     --text-secondary: rgba(255, 255, 255, 0.5);
     --text-brand: #9B7AFF;
-    --border-main: #2A2A2A;
+    --border-main: var(--accent);
     --border-secondary: #2A2A2A;
     --brand: #9B7AFF;
     --brand-light: #B39AFF;
@@ -97,7 +103,7 @@
   :root:not(.light).gray {
     --accent: #CCCCCC;
     --text-brand: #FFFFFF;
-    --border-main: #2A2A2A;
+    --border-main: var(--accent);
     --border-secondary: #2A2A2A;
     --brand: #FFFFFF;
     --brand-light: #CCCCCC;
@@ -114,7 +120,7 @@
     --text-primary: #1e1e1e;
     --text-secondary: rgba(30, 30, 30, 0.5);
     --text-brand: #6237FF;
-    --border-main: #EEEAFF;
+    --border-main: var(--accent);
     --border-secondary: #EEEAFF;
     --brand: #6237FF;
     --brand-light: #7B5AFF;
@@ -131,7 +137,7 @@
   :root:not(.dark).gray {
     --accent: #6B7280;
     --text-brand: #1e1e1e;
-    --border-main: #E5E5E5;
+    --border-main: var(--accent);
     --border-secondary: #E5E5E5;
     --brand: #1e1e1e;
     --brand-light: #4A4A4A;
@@ -143,6 +149,21 @@ body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
   font-family: var(--font-main);
+}
+
+/* Design system stacks: horizontal separators between direct children */
+.ds-stack > * + * {
+  position: relative;
+}
+.ds-stack > * + *::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-top: var(--border-hairline-solid);
+  z-index: 1;
+  pointer-events: none;
 }
 
 @media (prefers-color-scheme: dark) {

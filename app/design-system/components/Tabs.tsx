@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { VDivider } from './VDivider'
 
 interface Tab {
   id: string
@@ -17,9 +18,8 @@ interface TabsProps<T extends string> {
 export function Tabs<T extends string>({ tabs, activeTab, onTabChange, className = '' }: TabsProps<T>) {
   const baseStyles = "h-12 font-mono transition-colors flex items-center";
 
-  return (
-    <div className={`flex ${className}`}>
-      {tabs.map((tab, index) => {
+  const renderButtons = () =>
+    tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         const style: React.CSSProperties = {
           minWidth: 48,
@@ -30,8 +30,7 @@ export function Tabs<T extends string>({ tabs, activeTab, onTabChange, className
           padding: '0 16px',
           background: isActive ? 'var(--accent)' : 'var(--background-main)',
           color: isActive ? 'var(--background-main)' : 'var(--accent)',
-          border: '1px solid var(--border-main)',
-          borderRight: index === tabs.length - 1 ? '1px solid var(--border-main)' : 'none',
+        // No borders here; separators come from VDivider between buttons
           flex: 1
         };
 
@@ -45,7 +44,19 @@ export function Tabs<T extends string>({ tabs, activeTab, onTabChange, className
             <span className="text-[14px] font-mono">{tab.label}</span>
           </button>
         );
-      })}
+    });
+
+  // Interleave vertical dividers between tab buttons
+  const children = renderButtons();
+  const interleaved: React.ReactNode[] = [];
+  children.forEach((child, i) => {
+    if (i > 0) interleaved.push(<VDivider key={`tab-sep-${i}`} />);
+    interleaved.push(child);
+  });
+
+  return (
+    <div className={`flex ${className}`}>
+      {interleaved}
     </div>
   )
 } 

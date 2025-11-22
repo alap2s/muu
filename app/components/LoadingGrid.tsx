@@ -13,8 +13,8 @@ export function LoadingGrid() {
             style={{
               width: 32,
               height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
-              borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-              borderBottom: '1px solid var(--border-main)',
+              borderRight: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none',
+              borderBottom: 'var(--border-hairline-solid)',
               background: 'var(--background-main)'
             }}
             role="presentation"
@@ -23,7 +23,7 @@ export function LoadingGrid() {
             style={{ 
               flex: 1, 
               maxWidth: 1024, 
-              borderBottom: '1px solid var(--border-main)', 
+              borderBottom: 'var(--border-hairline-solid)', 
               background: 'var(--background-main)', 
               height: i >= 1 && i <= 8 ? 48 : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
               animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
@@ -33,8 +33,8 @@ export function LoadingGrid() {
             style={{
               width: 32,
               height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
-              borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-              borderBottom: '1px solid var(--border-main)',
+              borderLeft: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none',
+              borderBottom: 'var(--border-hairline-solid)',
               background: 'var(--background-main)'
             }}
             role="presentation"

@@ -4,7 +4,8 @@ import React from 'react'
 import { MenuItemRow } from './MenuItemRow'
 import type { MenuItem } from '../page'
 import type { ViewMode } from '../contexts/ViewModeContext'
-import { useIsMobile } from '../hooks/useIsMobile'
+import { GridRow } from '../design-system/components/GridRow'
+/* no local stack; parent PageContentStack will handle separators */
 
 interface MenuCategoryRowProps {
   category: string
@@ -25,42 +26,15 @@ export const MenuCategoryRow: React.FC<MenuCategoryRowProps> = ({
   getDietaryIcons,
   viewMode,
   categoryRef,
-  headerHeight,
+  headerHeight: _headerHeight,
 }) => {
-  const isMobile = useIsMobile()
-  // Desktop header is 48px (logo area) + 48px (nav) + 1px border = 97px
-  // Mobile header is just the logo area (48px)
-  const stickyTopOffsetValue = headerHeight !== undefined ? headerHeight : isMobile ? 48 : 97
-  const stickyTopOffset = `${stickyTopOffsetValue}px`
-
   return (
-    <div ref={categoryRef}>
-      <div
-        className="flex justify-center"
-        style={{
-          borderBottom: '1px solid var(--border-main)',
-          position: 'sticky',
-          top: stickyTopOffset,
-          zIndex: 10,
-          background: 'var(--background-main)',
-        }}
-      >
-        <div
-          style={{
-            width: 32,
-            height: 48,
-            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-            background: 'var(--background-main)',
-          }}
-        />
-        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
+    <>
+      <GridRow ref={categoryRef} showRails={viewMode === 'grid'} maxWidth={800} minHeight={48} centerStyle={{ paddingLeft: 16 }}>
+        <div style={{ width: '100%', display: 'flex', alignItems: 'center', minWidth: 0 }}>
           <h3
             style={{
               color: 'var(--text-primary)',
-              height: 48,
-              display: 'flex',
-              alignItems: 'center',
-              paddingLeft: 16,
               textTransform: 'uppercase',
               fontWeight: 800,
               fontSize: 10,
@@ -69,16 +43,7 @@ export const MenuCategoryRow: React.FC<MenuCategoryRowProps> = ({
             {category}
           </h3>
         </div>
-        <div
-          style={{
-            width: 32,
-            height: 48,
-            borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-            background: 'var(--background-main)',
-          }}
-        />
-      </div>
-      <div className="space-y-0" role="list">
+      </GridRow>
         {items.map((item) => (
           <MenuItemRow
             key={item.id}
@@ -89,7 +54,6 @@ export const MenuCategoryRow: React.FC<MenuCategoryRowProps> = ({
             viewMode={viewMode}
           />
         ))}
-      </div>
-    </div>
+    </>
   )
 } 

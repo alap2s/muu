@@ -1,4 +1,5 @@
-"use client"
+'use client'
+import { GridRow } from '../../design-system/components/GridRow'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { ChevronLeft, Bookmark, ChevronRight, Heart, CornerUpRight, Utensils, Pencil, Trash } from 'lucide-react'
@@ -6,6 +7,9 @@ import { ListItem } from '../../design-system/components/ListItem'
 import { Button } from '../../design-system/components/Button'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import { useAuth } from '../../context/AuthContext'
+import { PageShell } from '../../design-system/components/PageShell'
+import { Header as DSHeader } from '../../design-system/components/Header'
+import { PageContentStack } from '../../design-system/components/PageContentStack'
 
 type ListEntry = { name: string; mapsUrl?: string; address?: string; note?: string; placeId?: string; restaurantId?: string }
 
@@ -66,35 +70,58 @@ export default function ListDetailsPage() {
   }, [currentUser, params.id])
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--background-main)', color: 'var(--text-main)' }}>
-      {/* Header reused pattern from restaurant details page */}
-      <div className="sticky top-0 z-40" style={{ background: 'var(--background-main)', borderBottom: '1px solid var(--border-main)' }}>
-        <div className="max-w-4xl mx-auto flex items-center" style={{ minHeight: 48 }}>
-          <div style={{ width: 32 }} />
-          <div className="flex items-center" style={{ width: 48 }}>
+    <PageShell
+      header={
+        <DSHeader
+          left={
             <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back">
               <ChevronLeft size={18} color="var(--accent)" />
             </Button>
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="truncate" style={{ color: 'var(--accent)', fontWeight: 500, textAlign: 'left' }}>List</div>
-          </div>
-          <div className="flex items-center justify-end gap-1" style={{ width: 96 }}>
-            {isOwn ? (
-              <>
+          }
+          center={
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'left', padding: '0 16px' }}>
+              <div className="truncate" style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 16 }}>List</div>
+            </div>
+          }
+          right={
+            isOwn
+              ? [
+                  <Button
+                    key="edit"
+                    variant="secondary"
+                    aria-label="Edit list"
+                    onClick={() => { router.push(`/lists/create?id=${params.id}`) }}
+                  >
+                    <Pencil size={18} color="var(--accent)" />
+                  </Button>,
+                  <Button
+                    key="delete"
+                    variant="secondary"
+                    aria-label="Delete list"
+                    onClick={async () => {
+                      try {
+                        if (!currentUser) {
+                          const next = encodeURIComponent(`/lists/${params.id}`)
+                          router.push(`/login?next=${next}`)
+                          return
+                        }
+                        if (!confirm('Delete this list? This cannot be undone.')) return
+                        const idToken = await currentUser.getIdToken()
+                        const res = await fetch(`/api/lists/${params.id}`, {
+                          method: 'DELETE',
+                          headers: { Authorization: `Bearer ${idToken}` }
+                        })
+                        if (res.ok) router.push('/')
+                      } catch {}
+                    }}
+                  >
+                    <Trash size={18} color="var(--accent)" />
+                  </Button>,
+                ]
+              : (
                 <Button
                   variant="secondary"
-                  aria-label="Edit list"
-                  onClick={() => {
-                    // Navigate to create page for editing (prefill can read ?id)
-                    router.push(`/lists/create?id=${params.id}`)
-                  }}
-                >
-                  <Pencil size={18} color="var(--accent)" />
-                </Button>
-                <Button
-                  variant="secondary"
-                  aria-label="Delete list"
+                  aria-label="Follow list"
                   onClick={async () => {
                     try {
                       if (!currentUser) {
@@ -102,91 +129,56 @@ export default function ListDetailsPage() {
                         router.push(`/login?next=${next}`)
                         return
                       }
-                      if (!confirm('Delete this list? This cannot be undone.')) return
                       const idToken = await currentUser.getIdToken()
-                      const res = await fetch(`/api/lists/${params.id}`, {
-                        method: 'DELETE',
-                        headers: { Authorization: `Bearer ${idToken}` }
+                      const res = await fetch('/api/lists/follow', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+                        body: JSON.stringify({ listId: params.id })
                       })
+                      const data = await res.json()
                       if (res.ok) {
-                        router.push('/')
+                        setFollowed(!!data.followed)
+                        setFollowers(prev => Math.max(0, prev + (data.followed ? 1 : -1)))
                       }
                     } catch {}
                   }}
                 >
-                  <Trash size={18} color="var(--accent)" />
+                  <div className="flex items-center gap-1" style={{ color: 'var(--accent)' }}>
+                    <Bookmark size={18} fill={followed ? 'var(--accent)' : 'none'} color="var(--accent)" />
+                    <span style={{ fontSize: 12 }}>{followers}</span>
+                  </div>
                 </Button>
-              </>
-            ) : (
-              <Button
-                variant="secondary"
-                aria-label="Follow list"
-                onClick={async () => {
-                  try {
-                    if (!currentUser) {
-                      const next = encodeURIComponent(`/lists/${params.id}`)
-                      router.push(`/login?next=${next}`)
-                      return
-                    }
-                    const idToken = await currentUser.getIdToken()
-                    const res = await fetch('/api/lists/follow', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-                      body: JSON.stringify({ listId: params.id })
-                    })
-                    const data = await res.json()
-                    if (res.ok) {
-                      setFollowed(!!data.followed)
-                      setFollowers(prev => Math.max(0, prev + (data.followed ? 1 : -1)))
-                    }
-                  } catch {}
-                }}
-              >
-                <div className="flex items-center gap-1" style={{ color: 'var(--accent)' }}>
-                  <Bookmark size={18} fill={followed ? 'var(--accent)' : 'none'} color="var(--accent)" />
-                  <span style={{ fontSize: 12 }}>{followers}</span>
-                </div>
-              </Button>
-            )}
-          </div>
-          <div style={{ width: 32 }} />
-        </div>
-      </div>
-
-      {/* Body: replicate Places tab list styling */}
-      <div className="max-w-4xl mx-auto space-y-0">
+              )
+          }
+        />
+      }
+    >
+      <PageContentStack className="space-y-0">
         {/* Meta row: show owner full name with subtitle "List by" */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)' }} />
-          <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+        <GridRow showRails={true} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
             <ListItem title={ownerName || 'Anonymous'} subtitle="List by" />
           </div>
-          <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)' }} />
-        </div>
+        </GridRow>
 
         {/* Entries rendered exactly like Places rows */}
         {loading && (
-          <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+          <GridRow showRails={true} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
               <ListItem title="Loading..." />
             </div>
-            <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)' }} />
-          </div>
+          </GridRow>
         )}
         {error && (
-          <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+          <GridRow showRails={true} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
               <ListItem title={error} />
             </div>
-            <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)' }} />
-          </div>
+          </GridRow>
         )}
         {!loading && !error && entries.map((e, idx) => (
-          <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', position: 'relative' }} key={idx}>
-            <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)' }} />
-            <div ref={(el) => { entryRefs.current[idx] = el }} style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+          <GridRow key={idx} showRails={true} borderBottom maxWidth={800}>
+            <div ref={(el) => { entryRefs.current[idx] = el }} style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
               <ListItem
                 title={e.name}
                 subtitle={e.address}
@@ -217,8 +209,6 @@ export default function ListDetailsPage() {
                 endContent={<ChevronRight className="w-4 h-4 text-gray-500" />}
               />
             </div>
-            <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)' }} />
-
             {/* Flyout menu */}
             {openIdx === idx && (
               <div style={{ position: 'fixed', left: 0, top: 0, right: 0, bottom: 0, zIndex: 50 }}>
@@ -311,10 +301,10 @@ export default function ListDetailsPage() {
                 </div>
               </div>
             )}
-          </div>
+          </GridRow>
         ))}
-      </div>
-    </div>
+      </PageContentStack>
+    </PageShell>
   )
 }
 

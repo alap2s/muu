@@ -37,8 +37,9 @@ export function Input({
           width: '100%',
           height: 48,
           background: 'var(--background-main)',
-          border: `1px solid ${error ? 'hsl(var(--destructive))' : warning ? 'hsl(var(--warning))' : isFocused ? 'var(--accent)' : 'var(--border-main)'}`,
-          transition: 'border-color 0.2s',
+          // No component-level borders; rely on GridRow/HDivider for structure
+          border: 'none',
+          transition: 'background-color 0.2s',
         }}
       >
         {Icon && (

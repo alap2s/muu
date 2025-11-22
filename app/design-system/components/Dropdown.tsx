@@ -92,7 +92,8 @@ export function Dropdown({
           style={{
             width: 48,
             height: 48,
-            border: '1px solid var(--border-main)',
+            // No component-level border; rely on GridRow/VDivider for structure
+            border: 'none',
             background: isOpen ? 'var(--accent)' : 'var(--background-main)',
             display: 'flex',
             alignItems: 'center',
@@ -112,31 +113,35 @@ export function Dropdown({
           style={{
             width: '100%',
             height: 48,
-            borderLeft: '1px solid var(--border-main)',
-            borderRight: '1px solid var(--border-main)',
+            // No side borders; separators are provided by GridRow
+            borderLeft: 'none',
+            borderRight: 'none',
             paddingLeft: 16,
             paddingRight: 16,
             background: isOpen ? 'var(--accent)' : 'var(--background-main)',
             color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') ,
             fontFamily: 'var(--font-mono, monospace)',
             fontSize: 14,
-            display: 'flex',
+            display: 'grid',
+            gridTemplateColumns: hideChevron ? 'auto 1fr' : 'auto 1fr auto',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            columnGap: 8,
+            textAlign: 'left',
             zIndex: 9998,
             position: 'relative',
+            boxSizing: 'border-box',
           }}
           className={className}
           onClick={() => setIsOpen(!isOpen)}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
-            {leftIcon && <div style={{ flex: 'none', color: isOpen ? 'var(--background-main)' : (disabled ? '#B9A5FF' : 'var(--accent)') }}>{leftIcon}</div>}
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') }}>{selectedOption?.label || 'Select...'}</span>
-          </div>
+          {leftIcon && <div style={{ color: isOpen ? 'var(--background-main)' : (disabled ? '#B9A5FF' : 'var(--accent)') }}>{leftIcon}</div>}
+          <span style={{ minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: isOpen ? 'var(--background-main)' : (selectedOption ? 'var(--accent)' : 'var(--text-primary)') }}>
+            {selectedOption?.label || 'Select...'}
+          </span>
           {!hideChevron && (
             <ChevronDown
               className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-              style={{ color: isOpen ? 'var(--background-main)' : 'var(--accent)' }}
+              style={{ justifySelf: 'end', color: isOpen ? 'var(--background-main)' : 'var(--accent)' }}
             />
           )}
         </button>
@@ -160,7 +165,7 @@ export function Dropdown({
           maxWidth: 1024, 
           margin: '0 auto', 
           background: 'var(--background-secondary)', 
-          border: isOpen ? '1px solid var(--accent)' : '1px solid var(--border-main)',
+          border: isOpen ? 'var(--border-hairline-solid)' : 'var(--border-hairline-solid)',
         }}>
           {options.filter(option => !option.hideInList).map((option, index, filteredOptions) => (
             <div
@@ -172,7 +177,7 @@ export function Dropdown({
                 padding: '12px 16px',
                 cursor: option.disabled ? 'not-allowed' : 'pointer',
                 background: option.value === value ? 'var(--background-tertiary)' : 'var(--background-secondary)',
-                borderBottom: index === filteredOptions.length - 1 ? 'none' : '1px solid var(--border-main)',
+                borderBottom: index === filteredOptions.length - 1 ? 'none' : 'var(--border-hairline-solid)',
                 color: 'var(--text-primary)',
                 opacity: option.disabled ? 0.5 : 1,
                 transition: 'background 0.2s',

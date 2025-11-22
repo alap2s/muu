@@ -119,13 +119,13 @@ export default function RestaurantCard({ restaurant, onClose }: RestaurantCardPr
         <div ref={menuRef} className="overflow-y-auto max-h-[calc(90vh-120px)]">
           {menuGroups.map(group => (
             <div key={group.title} ref={el => { groupRefs.current[group.title] = el; }}>
-              <div className="font-bold text-lg mb-2" style={{ borderBottom: '1px solid var(--border-main)' }}>{group.title}</div>
+              <div className="font-bold text-lg mb-2" style={{ borderBottom: 'var(--border-hairline-solid)' }}>{group.title}</div>
               {group.items.map((item, idx) => (
                 <div
                   key={item.name}
                   className="flex items-center"
                   style={{
-                    borderBottom: '1px solid var(--border-main)',
+                    borderBottom: 'var(--border-hairline-solid)',
                   }}
                 >
                   <div

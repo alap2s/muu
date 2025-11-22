@@ -9,13 +9,13 @@ interface DetailRowProps {
 export function DetailRow({ label, value, viewMode }: DetailRowProps) {
   return (
     <div
-      style={{ borderBottom: '1px solid var(--border-main)' }}
+      style={{ borderBottom: 'var(--border-hairline-solid)' }}
     >
       <div className="flex justify-center">
         <div
           style={{
             width: 32,
-            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+            borderRight: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none',
             background: 'var(--background-main)'
           }}
         />
@@ -34,7 +34,7 @@ export function DetailRow({ label, value, viewMode }: DetailRowProps) {
         <div
           style={{
             width: 32,
-            borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
+            borderLeft: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none',
             background: 'var(--background-main)'
           }}
         />
