@@ -10,9 +10,13 @@ import { Button } from '../../design-system/components/Button'
 import { Edit, Loader2, Leaf, Milk, Fish, Nut, Bird, Egg, Beef, WheatOff, Flame, ArrowLeft, Heart, CornerUpRight, Layers, Filter } from 'lucide-react'
 import { Dropdown } from '../../design-system/components/Dropdown'
 import { ListItem } from '../../design-system/components/ListItem'
+import { GridRow } from '../../design-system/components/GridRow'
 import { MenuCategoryRow } from '../../components/MenuCategoryRow'
 import { DetailRow } from '../../components/DetailRow'
 import { NoteRow } from '../../components/NoteRow'
+import { Header as DSHeader } from '../../design-system/components/Header'
+import { PageShell } from '../../design-system/components/PageShell'
+import { PageContentStack } from '../../design-system/components/PageContentStack'
 
 // This is the shape of the data that getDietaryIcons expects
 interface MenuItem {
@@ -198,54 +202,54 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
   ] : []
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }}>
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
-        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }} />
-        <div style={{ width: 32, background: 'var(--background-main)' }} />
-      </div>
-
-      <header className="flex flex-col sticky top-0 z-50" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-        <div className="flex justify-center">
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48 }}>
-            <div className="flex items-center gap-2">
-              <Button variant="secondary" onClick={handleBack} aria-label="Go back">
-                <ArrowLeft className="w-4 h-4" />
-              </Button>
-              <h1 className="text-base font-semibold" style={{ color: 'var(--accent)' }}>Details</h1>
+    <PageShell
+      header={[
+        <DSHeader
+          key="hdr"
+          showRails={viewMode === 'grid'}
+          borderBottom={false}
+          left={
+            <Button variant="secondary" onClick={handleBack} aria-label="Go back">
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+          }
+          center={
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'left', padding: '0 16px' }}>
+              <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 16 }}>Details</h1>
             </div>
-            {(() => {
+          }
+          right={
+            (() => {
               const admins = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '')
                 .split(',')
                 .map((s) => s.trim().toLowerCase())
                 .filter(Boolean)
               const isAdmin = !!(currentUser?.email && admins.includes(currentUser.email.toLowerCase()))
-              return (
-                <div className="flex items-center gap-2">
-                  {isAdmin && (
-                    <Button
-                      variant="secondary"
-                      onClick={() => router.push(`/restaurants/${restaurantId}/edit`)}
-                      aria-label="Edit restaurant"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Button>
-                  )}
-                  <Button variant="secondary" onClick={toggleLike} aria-label="Like restaurant" className="px-3">
-                    {liked ? <Heart className="w-4 h-4 mr-1" fill="currentColor" /> : <Heart className="w-4 h-4 mr-1" />}
-                    <span className="text-sm" style={{ color: 'var(--accent)' }}>{likes}</span>
+              const actions: React.ReactNode[] = []
+              if (isAdmin) {
+                actions.push(
+                  <Button
+                    key="edit"
+                    variant="secondary"
+                    onClick={() => router.push(`/restaurants/${restaurantId}/edit`)}
+                    aria-label="Edit restaurant"
+                  >
+                    <Edit className="w-4 h-4" />
                   </Button>
-                </div>
+                )
+              }
+              actions.push(
+                <Button key="like" variant="secondary" onClick={toggleLike} aria-label="Like restaurant" className="px-3">
+                  {liked ? <Heart className="w-4 h-4 mr-1" fill="currentColor" /> : <Heart className="w-4 h-4 mr-1" />}
+                  <span className="text-sm" style={{ color: 'var(--accent)' }}>{likes}</span>
+                </Button>
               )
-            })()}
-          </div>
-          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-        </div>
-        {/* Sticky filters - desktop (reuse Dropdowns like Places) */}
-        <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Details navigation">
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          <div className="flex-1 flex min-w-0 max-w-[800px]">
+              return actions
+            })()
+          }
+        />,
+        <div key="desktop-filters" className="hidden md:flex justify-center" aria-label="Details navigation">
+          <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
             <div className="flex-1 min-w-0">
               <Dropdown
                 value={dietaryFilter}
@@ -272,44 +276,74 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
                 position="bottom"
                 align="right"
                 hideChevron={true}
-                className="justify-center"
                 aria-label="Filter category"
               />
-            </div>
-          </div>
-          <div style={{ width: 32, background: 'var(--background-main)' }} />
+      </div>
+          </GridRow>
         </div>
-      </header>
-
-      <main>
+      ]}
+      bottomBar={
+        restaurant ? (
+          <div className="md:hidden">
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} separators>
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={dietaryFilter}
+                  onChange={(v) => setDietaryFilter(v as any)}
+                  options={[
+                    { value: 'all', label: 'All' },
+                    { value: 'vegetarian', label: 'Vegetarian' },
+                    { value: 'vegan', label: 'Vegan' },
+                    { value: 'gluten-free', label: 'Gluten-free' },
+                    { value: 'spicy', label: 'Spicy' },
+                    { value: 'nuts', label: 'Nuts' },
+                  ]}
+                  leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
+                  position="top"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={categoryFilter}
+                  onChange={(v) => setCategoryFilter(v)}
+                  options={categoryOptions}
+                  leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
+                  position="top"
+                  align="right"
+                  hideChevron={true}
+                />
+              </div>
+            </GridRow>
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} minHeight={32}>
+              <div style={{ flex: 1, height: 32 }} />
+            </GridRow>
+          </div>
+        ) : null
+      }
+    >
         {loading && (
-          <div className="flex justify-center items-center" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))' }}>
+        <div className="flex justify-center items-center" style={{ height: '50vh' }}>
             <Loader2 className="w-8 h-8 animate-spin" />
           </div>
         )}
-        {error && <p className="text-red-500 p-4">{error}</p>}
+      {error && <div className="flex justify-center p-4"><span className="text-red-500">{error}</span></div>}
         {restaurant && (
-          <>
-            {/* Top info rows */}
-            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
-                <ListItem title={restaurant.name} onClick={undefined} />
-              </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <PageContentStack className="space-y-0">
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+              <ListItem title={restaurant.name} onClick={undefined} />
             </div>
-            <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
-                <ListItem
-                  title={restaurant.address}
-                  subtitle="Address"
-                  onClick={openInMaps}
-                  endContent={<CornerUpRight className="w-4 h-4" style={{ color: 'var(--accent)' }} />}
-                />
-              </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+          </GridRow>
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
+              <ListItem
+                title={restaurant.address}
+                subtitle="Address"
+                onClick={openInMaps}
+                endContent={<CornerUpRight className="w-4 h-4" style={{ color: 'var(--accent)' }} />}
+              />
             </div>
+          </GridRow>
             {restaurant.notes && (
               <NoteRow
                 id="restaurant-notes"
@@ -319,88 +353,36 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
                 viewMode={viewMode}
               />
             )}
-            {restaurant.menuCategories && restaurant.menuCategories
-              .map(category => ({
-                name: category.name,
-                items: category.items
-                  .filter(item => {
-                    if (dietaryFilter === 'all') return true
-                    if (dietaryFilter === 'vegetarian') return item.dietaryRestrictions.includes('vegetarian')
-                    if (dietaryFilter === 'vegan') return item.dietaryRestrictions.includes('vegan')
-                    if (dietaryFilter === 'gluten-free') return item.dietaryRestrictions.includes('gluten-free')
-                    if (dietaryFilter === 'spicy') return item.dietaryRestrictions.includes('spicy')
-                    if (dietaryFilter === 'nuts') return item.dietaryRestrictions.includes('nuts')
-                    return true
-                  })
-              }))
-              .filter(cat => (categoryFilter ? cat.name === categoryFilter : true))
-              .map(category => (
-                <MenuCategoryRow
-                  key={category.name}
-                  category={category.name}
-                  items={category.items.map(item => ({ ...item, category: category.name }))}
-                  expandedItems={expandedItems}
-                  toggleItemExpansion={toggleItemExpansion}
-                  getDietaryIcons={getDietaryIcons}
-                  viewMode={viewMode}
-                  categoryRef={() => {}}
-                  headerHeight={48}
-                />
-              ))}
-          </>
+          {restaurant.menuCategories && restaurant.menuCategories
+            .map(category => ({
+              name: category.name,
+              items: category.items
+                .filter(item => {
+                  if (dietaryFilter === 'all') return true
+                  if (dietaryFilter === 'vegetarian') return item.dietaryRestrictions.includes('vegetarian')
+                  if (dietaryFilter === 'vegan') return item.dietaryRestrictions.includes('vegan')
+                  if (dietaryFilter === 'gluten-free') return item.dietaryRestrictions.includes('gluten-free')
+                  if (dietaryFilter === 'spicy') return item.dietaryRestrictions.includes('spicy')
+                  if (dietaryFilter === 'nuts') return item.dietaryRestrictions.includes('nuts')
+                  return true
+                })
+            }))
+            .filter(cat => (categoryFilter ? cat.name === categoryFilter : true))
+            .map(category => (
+              <MenuCategoryRow
+                key={category.name}
+                category={category.name}
+              items={category.items.map(item => ({ ...item, category: category.name }))}
+                expandedItems={expandedItems}
+                toggleItemExpansion={toggleItemExpansion}
+                getDietaryIcons={getDietaryIcons}
+                viewMode={viewMode}
+              categoryRef={() => {}}
+                headerHeight={48}
+              />
+            ))}
+        </PageContentStack>
         )}
-      </main>
-
-      {/* Mobile bottom filters bar */}
-      {restaurant && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
-          <div className="max-w-4xl mx-auto">
-            <div style={{ borderTop: '1px solid var(--border-main)' }}>
-              <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                <div className="flex-1 flex min-w-0">
-                  <div className="flex-1 min-w-0">
-                    <Dropdown
-                      value={dietaryFilter}
-                      onChange={(v) => setDietaryFilter(v as any)}
-                      options={[
-                        { value: 'all', label: 'All' },
-                        { value: 'vegetarian', label: 'Vegetarian' },
-                        { value: 'vegan', label: 'Vegan' },
-                        { value: 'gluten-free', label: 'Gluten-free' },
-                        { value: 'spicy', label: 'Spicy' },
-                        { value: 'nuts', label: 'Nuts' },
-                      ]}
-                      leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
-                      position="top"
-                    />
-                  </div>
-                  <div className="flex-none w-12">
-                    <Dropdown
-                      value={categoryFilter}
-                      onChange={(v) => setCategoryFilter(v)}
-                      options={categoryOptions}
-                      leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
-                      position="top"
-                      align="right"
-                      hideChevron={true}
-                      className="justify-center"
-                    />
-                  </div>
-                </div>
-                <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-              </div>
-            </div>
-            <div style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div className="flex h-8">
-                <div className="w-8" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                <div className="flex-1" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                <div className="w-8" style={{ background: 'var(--background-main)' }} />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    </PageShell>
   )
 } 

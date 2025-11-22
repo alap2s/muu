@@ -1,4 +1,5 @@
 import React from 'react';
+import { GridRow } from '../design-system/components/GridRow';
 
 interface NoteRowProps {
   id: string;
@@ -19,20 +20,11 @@ const capitalizeText = (text: string): string => {
 
 export function NoteRow({ id, content, expanded, onClick, viewMode }: NoteRowProps) {
   return (
+    <GridRow showRails={viewMode === 'grid'} maxWidth={800} centerStyle={{ padding: '24px 16px' }}>
     <div
-      style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer', background: 'var(--background-main)' }}
+        style={{ width: '100%', background: 'var(--background-main)', cursor: 'pointer' }}
       onClick={() => onClick(id)}
     >
-      <div className="flex justify-center" style={{ background: 'var(--background-main)' }}>
-        <div
-          style={{
-            width: 32,
-            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-            background: 'var(--background-main)'
-          }}
-        />
-        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
-          <div style={{ padding: '24px 16px', background: 'var(--background-main)' }}>
             <p 
               style={{ color: 'var(--text-secondary)', fontSize: 12, margin: 0 }} 
               className={expanded ? '' : 'line-clamp-2'}
@@ -40,15 +32,6 @@ export function NoteRow({ id, content, expanded, onClick, viewMode }: NoteRowPro
               {capitalizeText(content)}
             </p>
           </div>
-        </div>
-        <div
-          style={{
-            width: 32,
-            borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-            background: 'var(--background-main)'
-          }}
-        />
-      </div>
-    </div>
+    </GridRow>
   );
 } 

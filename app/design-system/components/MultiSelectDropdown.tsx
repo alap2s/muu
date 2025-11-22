@@ -113,7 +113,8 @@ export function MultiSelectDropdown({
           justifyContent: 'center',
           background: isOpen ? 'var(--accent)' : 'var(--background-main)',
           color: isOpen ? 'var(--background-main)' : 'var(--text-primary)',
-          border: '1px solid var(--border-main)',
+          // Remove component-level border; rely on GridRow/VDividers
+          border: 'none',
           zIndex: 9998,
           position: 'relative',
         }}
@@ -181,7 +182,7 @@ export function MultiSelectDropdown({
             maxWidth: 1024, 
             margin: '0 auto', 
             background: 'var(--background-secondary)', 
-            border: '1px solid var(--accent)',
+            border: 'var(--border-hairline-solid)',
             maxHeight: '40vh',
             overflow: 'hidden',
             display: 'flex',
@@ -205,7 +206,7 @@ export function MultiSelectDropdown({
                     padding: '12px 16px',
                     cursor: option.disabled ? 'not-allowed' : 'pointer',
                     background: value.includes(option.value) ? 'var(--background-tertiary)' : 'var(--background-secondary)',
-                    borderBottom: index === filteredOptions.length - 1 ? 'none' : '1px solid var(--border-main)',
+                  borderBottom: index === filteredOptions.length - 1 ? 'none' : 'var(--border-hairline-solid)',
                     color: 'var(--text-primary)',
                     opacity: option.disabled ? 0.5 : 1,
                     transition: 'background 0.2s',

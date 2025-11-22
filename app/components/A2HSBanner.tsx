@@ -61,8 +61,8 @@ export function A2HSBanner() {
       <div className="fixed inset-0 z-[99]" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', background: 'rgba(0,0,0,0.08)' }} />
       <div className="fixed bottom-[80px] left-0 right-0 z-[100] flex justify-center" style={{ background: 'transparent' }}>
         <div className="max-w-4xl w-full px-4">
-          <div className="shadow-lg" style={{ border: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-            <div className="flex items-center justify-between" style={{ height: 48, borderBottom: '1px solid var(--border-main)' }}>
+          <div className="shadow-lg" style={{ border: 'var(--border-hairline-solid)', background: 'var(--background-main)' }}>
+            <div className="flex items-center justify-between" style={{ height: 48, borderBottom: 'var(--border-hairline-solid)' }}>
               <p className="text-sm px-4" style={{ color: 'var(--text-primary)' }}>
                 {isIos ? 'Use like an app' : 'Add to Home Screen'}
               </p>

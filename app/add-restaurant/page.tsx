@@ -119,8 +119,8 @@ export default function AddRestaurant() {
       {/* Sticky header */}
       <div className="sticky top-0 z-[100]" style={{ background: 'var(--background-main)' }}>
         <div className="flex justify-center">
-          <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-          <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
+          <div style={{ width: 32, minHeight: 48, borderRight: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
+          <div style={{ flex: 1, maxWidth: 1024, borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
             <Link href="/">
               <Button variant="secondary" className="mr-2">
                 <ArrowLeft className="w-4 h-4" />
@@ -128,7 +128,7 @@ export default function AddRestaurant() {
             </Link>
             <span className="font-mono font-bold" style={{ color: 'var(--accent)', fontSize: 18 }}>Add menu</span>
           </div>
-          <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+          <div style={{ width: 32, minHeight: 48, borderLeft: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
         </div>
       </div>
 
@@ -136,8 +136,8 @@ export default function AddRestaurant() {
       <div style={{ height: 'calc(100vh - 48px - 80px)', overflowY: 'auto' }}>
         {[...Array(24)].map((_, i) => (
           <div key={i} className="flex justify-center">
-            <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-            <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
+            <div style={{ width: 32, minHeight: 48, borderRight: 'var(--border-hairline-solid)', borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
+            <div style={{ flex: 1, maxWidth: 1024, borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
               {i === 0 && (
                 <div className="flex-1" />
               )}
@@ -351,7 +351,7 @@ export default function AddRestaurant() {
                 return null;
               })}
             </div>
-            <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+            <div style={{ width: 32, minHeight: 48, borderLeft: 'var(--border-hairline-solid)', borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
           </div>
         ))}
       </div>
@@ -359,10 +359,10 @@ export default function AddRestaurant() {
       {/* Sticky bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 z-[100]" style={{ background: 'var(--background-main)' }}>
         <div className="max-w-4xl mx-auto">
-          <div style={{ borderTop: '1px solid var(--border-main)' }}>
-            <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-              <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
+          <div style={{ borderTop: 'var(--border-hairline-solid)' }}>
+            <div className="flex w-full" style={{ borderBottom: 'var(--border-hairline-solid)' }}>
+              <div style={{ width: 32, minHeight: 48, borderRight: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
+              <div style={{ flex: 1, maxWidth: 1024, borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
                 <Button 
                   variant="secondary" 
                   className="w-12 h-12 flex items-center justify-center p-0"
@@ -389,12 +389,12 @@ export default function AddRestaurant() {
                   Preview menu
                 </Button>
               </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+              <div style={{ width: 32, minHeight: 48, borderLeft: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
             </div>
             {/* Empty row below */}
             <div className="flex w-full">
-              <div style={{ width: 32, height: 32, borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-              <div className="flex-1" style={{ borderRight: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+              <div style={{ width: 32, height: 32, borderRight: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
+              <div className="flex-1" style={{ borderRight: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
               <div style={{ width: 32, height: 32, background: 'var(--background-main)' }} />
             </div>
           </div>

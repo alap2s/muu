@@ -6,6 +6,10 @@ import { ArrowLeft, LogIn } from 'lucide-react'
 import { useViewMode } from '../contexts/ViewModeContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
+import { GridRow } from '../design-system/components/GridRow'
+import { Header as DSHeader } from '../design-system/components/Header'
+import { PageShell } from '../design-system/components/PageShell'
+import { PageContentStack } from '../design-system/components/PageContentStack'
 import { auth } from '../../lib/firebase'
 import { GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult } from 'firebase/auth'
 import { useIsMobile } from '../hooks/useIsMobile'
@@ -172,54 +176,44 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
-      {/* Notch spacer row for safe area */}
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
-        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }} />
-        <div style={{ width: 32, background: 'var(--background-main)' }} />
-      </div>
-
-      {/* Header */}
-      <header className="flex justify-center" style={{ position: 'sticky', top: 0, zIndex: 10, borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, background: 'var(--background-main)', paddingRight: 0 }}>
-          <div className="flex items-center gap-2">
+    <PageShell
+      header={
+        <DSHeader
+          showRails={viewMode === 'grid'}
+          borderBottom={false}
+          left={
             <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             </Button>
-            <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Login</h1>
-          </div>
-        </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-      </header>
-
-      {/* Content */}
-      <div className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Login options">
+          }
+          center={
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'left', padding: '0 16px' }}>
+              <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 16 }}>Login</h1>
+            </div>
+          }
+        />
+      }
+    >
+      <PageContentStack className="space-y-0" role="region" aria-label="Login options">
         
         {/* Empty Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, height: 48 }} />
+        </GridRow>
 
         {/* Info Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
           <div style={{ flex: 1, maxWidth: 800, padding: '24px 16px' }}>
             <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>Why Login?</span>
             <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
               Logging in allows you to create your own restaurant collections, follow collections from others, and mark your favorite restaurants.
             </p>
           </div>
-          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        </GridRow>
         
         {/* Login Button Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48, position: 'relative', padding: '0 0px' }}>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', height: 48, position: 'relative', padding: '0 0px' }}>
             <Button
               variant="secondary"
               onClick={handleGoogleLogin}
@@ -230,36 +224,29 @@ export default function LoginPage() {
               Login with Google
             </Button>
           </div>
-          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        </GridRow>
 
         {/* Error Row under the login button row */}
         {error && (
-          <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 16px' }}>
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0 16px' }}>
               <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>{error}</span>
-            </div>
-            <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          </div>
+        </div>
+          </GridRow>
         )}
 
         {/* Empty Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, height: 48 }} />
+        </GridRow>
         
         {/* Filler rows to push content up */}
         {[...Array(10)].map((_, i) => (
-            <div key={`filler-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-              <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
+          <GridRow key={`filler-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, height: 48 }} />
+          </GridRow>
         ))}
-      </div>
-    </div>
+      </PageContentStack>
+    </PageShell>
   )
 }

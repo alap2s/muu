@@ -40,15 +40,15 @@ export default function MenuRequest() {
 
       {/* Notch spacer row for safe area */}
       <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
+        <div style={{ width: 32, borderRight: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none', background: 'var(--background-main)', height: '100%' }} />
         <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }} />
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
 
       {/* Header */}
       <header className="flex justify-center" style={{ position: 'sticky', top: 0, zIndex: 10 }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
-        <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', paddingRight: 0 }}>
+        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none', borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
+        <div style={{ flex: 1, maxWidth: 1024, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)', paddingRight: 0 }}>
           <div className="flex items-center gap-2">
             <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -56,7 +56,7 @@ export default function MenuRequest() {
             <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Request Menu</h1>
           </div>
         </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }} />
+        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none', borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)' }} />
       </header>
 
       {/* Content */}
@@ -67,13 +67,13 @@ export default function MenuRequest() {
               style={{
                 width: 32,
                 height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
-                borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                borderBottom: '1px solid var(--border-main)',
+                borderRight: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none',
+                borderBottom: 'var(--border-hairline-solid)',
                 background: 'var(--background-main)'
               }}
               role="presentation"
             />
-            <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i >= 1 && i <= 8 ? 48 : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)', position: 'relative' }}>
+            <div style={{ flex: 1, maxWidth: 1024, borderBottom: 'var(--border-hairline-solid)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i >= 1 && i <= 8 ? 48 : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)', position: 'relative' }}>
               {i === 1 && (
                 <div className="flex flex-col w-full px-3">
                   <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500 }}>Request a new restaurant menu</p>
@@ -137,8 +137,8 @@ export default function MenuRequest() {
               style={{
                 width: 32,
                 height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
-                borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                borderBottom: '1px solid var(--border-main)',
+                borderLeft: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none',
+                borderBottom: 'var(--border-hairline-solid)',
                 background: 'var(--background-main)'
               }}
               role="presentation"

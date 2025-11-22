@@ -21,6 +21,11 @@ import { Input } from './design-system/components/Input'
 import { useLoading } from './contexts/LoadingContext'
 import { Tabs } from './design-system/components/Tabs'
 import { ListItem } from './design-system/components/ListItem'
+import { GridRow } from './design-system/components/GridRow'
+import { HDivider } from './design-system/components/HDivider'
+import { PageContentStack } from './design-system/components/PageContentStack'
+import { Header as DSHeader } from './design-system/components/Header'
+import { PageShell } from './design-system/components/PageShell'
 import { useAuth } from './context/AuthContext'
 
 import { db } from '../lib/firebase';
@@ -95,7 +100,6 @@ export default function Home() {
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set())
   const menuRef = useRef<HTMLDivElement>(null)
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
-  const headerRef = useRef<HTMLElement>(null)
   const [headerHeight, setHeaderHeight] = useState(0)
   const [language, setLanguage] = useState<'EN' | 'DE'>(() => {
     if (typeof window !== 'undefined') {
@@ -240,25 +244,7 @@ export default function Home() {
   // }, [])
 
   // Simple header height calculation for sticky positioning (no animation)
-  useEffect(() => {
-    const updateHeaderHeight = () => {
-      if (headerRef.current) {
-        setHeaderHeight(headerRef.current.offsetHeight)
-      }
-    }
-
-    updateHeaderHeight()
-    const resizeObserver = new ResizeObserver(updateHeaderHeight)
-    if (headerRef.current) {
-      resizeObserver.observe(headerRef.current)
-    }
-
-    return () => {
-      if (headerRef.current) {
-        resizeObserver.unobserve(headerRef.current)
-      }
-    }
-  }, []) // No dependencies - only runs once and on resize
+  // headerHeight no longer needed for sticky categories; keeping state for backward compatibility
 
   // FIXED VALUES - Collapsed state only (no animation)
   const logoHeight = 24 // Fixed collapsed height
@@ -526,47 +512,13 @@ export default function Home() {
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
-      {isMobile && <A2HSBanner />}
-      {/* Notch spacer row for safe area */}
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
-        <div style={{ flex: 1, maxWidth: 1024, background: 'var(--background-main)' }} />
-        <div style={{ width: 32, background: 'var(--background-main)' }} />
-      </div>
-
-      {/* Status announcements for screen readers */}
-      <div aria-live="polite" className="sr-only">
-        {loading ? 'Loading restaurants...' : 
-         error ? `Error: ${error}` :
-         restaurants.length > 0 ? `Found ${restaurants.length} restaurants nearby` :
-         'No restaurants found nearby'}
-      </div>
-
-      <header
-        ref={headerRef}
-        className="flex flex-col sticky top-0 z-50"
-        style={{ 
-          borderBottom: '1px solid var(--border-main)', 
-          background: 'var(--background-main)', 
-          paddingTop: 'env(safe-area-inset-top)'
-        }}
-      >
-        <div className="flex justify-center">
-          <div style={{ 
-            width: 32, 
-            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', 
-            background: 'var(--background-main)'
-          }} />
-          <div style={{ 
-            flex: 1, 
-            maxWidth: 800, 
-            display: 'flex', 
-            alignItems: 'flex-start', 
-            justifyContent: 'space-between', 
-            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', 
-            background: 'var(--background-main)'
-          }}>
+    <PageShell
+      header={[
+        <DSHeader
+          key="brand"
+          showRails={viewMode === 'grid'}
+          borderBottom={false}
+          center={
             <div style={{ 
               display: 'flex', 
               flexDirection: 'column', 
@@ -575,8 +527,8 @@ export default function Home() {
               paddingBottom: verticalPadding,
               paddingLeft: 16,
               paddingRight: 16,
-              borderRight: '1px solid var(--border-main)',
-              flex: 1
+              flex: 1,
+              background: 'var(--background-main)'
             }}>
               <svg 
                 width={logoWidth}
@@ -584,68 +536,189 @@ export default function Home() {
                 viewBox="0 0 210 73" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg" 
-                style={{ 
-                  display: 'block'
-                }}
+                style={{ display: 'block' }}
               >
                 <path d="M89.25 0.5V72.5H65.2933V21.4229H57.9343V72.5H31.3157V21.4229H23.9567V72.5H0V0.5H89.25Z" fill="var(--accent)"/>
                 <path d="M150.15 72.5V0.5H126.03V51.5771H118.62V0.5H94.5V72.5H150.15Z" fill="var(--accent)"/>
                 <path d="M210 72.5V0.5H186.335V51.5771H179.065V0.5H155.4V72.5H210Z" fill="var(--accent)"/>
               </svg>
-              <div style={{ 
-                height: descriptionHeight,
-                overflow: 'hidden'
-              }} ref={descriptionRef}>
-                <p style={{ 
-                  color: 'var(--text-secondary)', 
-                  fontSize: 12, 
-                  marginTop: 2, 
-                  marginBottom: 0,
-                  paddingTop: 8,
-                  paddingBottom: 8
-                }}>
+              <div style={{ height: descriptionHeight, overflow: 'hidden' }} ref={descriptionRef}>
+                <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0, paddingTop: 8, paddingBottom: 8 }}>
                   Standardized, accessible restaurant menus that remember your preferences.
                 </p>
               </div>
             </div>
-            <div style={{ 
-              width: 48, 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', 
-              background: 'var(--background-main)'
-            }}>
-              <Button 
-                variant="secondary" 
-                onClick={handleSettingsClick}
-                aria-label="Open settings menu"
-              >
+          }
+          right={
+            <div style={{ width: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background-main)' }}>
+              <Button variant="secondary" onClick={handleSettingsClick} aria-label="Open settings menu">
                 <Menu className="w-4 h-4" aria-hidden="true" />
               </Button>
             </div>
-          </div>
-          <div style={{ 
-            width: 32, 
-            background: 'var(--background-main)'
-          }} />
-        </div>
-        <div className="flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-            <div className="flex-1 flex min-w-0 max-w-[800px]">
+          }
+        />,
+        <GridRow key="tabs" showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800}>
               <Tabs
                 tabs={mainTabs}
                 activeTab={activeTab}
                 onTabChange={(tabId) => setActiveTab(tabId)}
                 className="w-full"
+          />
+        </GridRow>
+      ]}
+      bottomBar={
+        <div className="md:hidden">
+          {activeTab === 'menus' && (
+            <>
+                <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} separators>
+                  <div className="flex-1 min-w-0">
+                    <Dropdown
+                      value={selectedRestaurant?.id || ''}
+                      onChange={(value) => {
+                        const restaurant = restaurants.find(r => r.id === value)
+                        if (restaurant) setSelectedRestaurant(restaurant)
+                      }}
+                      options={restaurants.map(restaurant => ({
+                        value: restaurant.id,
+                        label: `${restaurant.name} (<${restaurant.distance} km)`
+                      }))}
+                      leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
+                      position="top"
               />
             </div>
-          <div style={{ width: 32, background: 'var(--background-main)' }} />
+                  <div className="flex-none w-12">
+                    <Dropdown
+                      value={selectedGroup}
+                      onChange={(value) => {
+                        setSelectedGroup(value)
+                        const element = categoryRefs.current[value]
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }
+                      }}
+                      options={categories.map(category => ({
+                        value: category,
+                        label: category
+                      }))}
+                      leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
+                      position="top"
+                      hideChevron={true}
+                    />
+                  </div>
+                  <div className="flex-none w-12">
+                    <Dropdown
+                      value={filter}
+                      onChange={setFilter}
+                      options={[
+                        { value: 'all', label: 'All', leftContent: <Filter className="w-4 h-4" strokeWidth={2} /> },
+                        { value: 'vegetarian', label: 'Vegetarian', leftContent: <Milk className="w-4 h-4" strokeWidth={2} /> },
+                        { value: 'vegan', label: 'Vegan', leftContent: <Leaf className="w-4 h-4" strokeWidth={2} /> }
+                      ]}
+                      leftIcon={
+                        filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
+                        filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
+                        <Leaf className="w-4 h-4" strokeWidth={2} />
+                      }
+                      position="top"
+                      align="right"
+                      hideChevron={true}
+                    />
+                  </div>
+                </GridRow>
+                <HDivider />
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} minHeight={32}>
+                <div style={{ flex: 1, height: 32 }} />
+              </GridRow>
+            </>
+          )}
+          {activeTab === 'collections' && (
+            <>
+                <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} separators>
+                  <div className="flex-1 min-w-0">
+                    <Dropdown
+                      value={listsFilter}
+                      onChange={setListsFilter}
+                      options={[
+                        { value: 'all', label: 'All' },
+                        { value: 'followed', label: 'Followed' },
+                      ]}
+                      leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
+                      position="top"
+                    />
+                  </div>
+                  <div className="flex-none w-12">
+                    <Dropdown
+                      value={listsSort}
+                      onChange={setListsSort}
+                      options={[
+                        { value: 'popularity', label: 'Popularity' },
+                        { value: 'total', label: 'Total' },
+                      ]}
+                      leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} />}
+                      position="top"
+                      align="right"
+                      hideChevron={true}
+                    />
+                  </div>
+                </GridRow>
+                <HDivider />
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} minHeight={32}>
+                <div style={{ flex: 1, height: 32 }} />
+              </GridRow>
+            </>
+          )}
+          {activeTab === 'restaurants' && (
+            <>
+                <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} separators>
+                    <div className="flex-1 min-w-0">
+                      <Dropdown
+                        value={placesFilter}
+                        onChange={setPlacesFilter}
+                        options={[
+                          { value: 'all', label: 'From all' },
+                          { value: 'followed', label: 'From followed' },
+                          { value: 'favorites', label: 'From favorites' },
+                          { value: 'me', label: 'From me' },
+                        ]}
+                        leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
+                        position="top"
+                      />
+                    </div>
+                    <div className="flex-none w-12">
+                      <Dropdown
+                        value={placesSort}
+                        onChange={setPlacesSort}
+                        options={[
+                          { value: 'distance', label: 'Near you' },
+                          { value: 'popular', label: 'Popular' },
+                        ]}
+                        leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} />}
+                        position="top"
+                      align="right"
+                      hideChevron={true}
+                      />
+                    </div>
+                </GridRow>
+                <HDivider />
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} minHeight={32}>
+                <div style={{ flex: 1, height: 32 }} />
+              </GridRow>
+            </>
+          )}
+        </div>
+      }
+    >
+      {isMobile && <A2HSBanner />}
+      {/* Status announcements for screen readers */}
+      <div aria-live="polite" className="sr-only">
+        {loading ? 'Loading restaurants...' : 
+         error ? `Error: ${error}` :
+         restaurants.length > 0 ? `Found ${restaurants.length} restaurants nearby` :
+         'No restaurants found nearby'}
         </div>
         {activeTab === 'menus' &&
-          <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Restaurant navigation">
-            <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-            <div className="flex-1 flex min-w-0 max-w-[800px]">
+          <div className="hidden md:flex justify-center" style={{ borderTop: 'var(--border-hairline-solid)' }} aria-label="Restaurant navigation">
+            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
               <div className="flex-1 min-w-0">
                 <Dropdown
                   value={selectedRestaurant?.id || ''}
@@ -716,14 +789,12 @@ export default function Home() {
                   aria-label="Filter menu items"
                 />
               </div>
-            </div>
-            <div style={{ width: 32, background: 'var(--background-main)' }} />
+            </GridRow>
           </div>
         }
         {activeTab === 'restaurants' &&
-          <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Places navigation">
-            <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-            <div className="flex-1 flex min-w-0 max-w-[800px]">
+          <div className="hidden md:flex justify-center" style={{ borderTop: 'var(--border-hairline-solid)' }} aria-label="Places navigation">
+            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
               <div className="flex-1 min-w-0">
                 <Dropdown
                   value={placesFilter}
@@ -755,14 +826,12 @@ export default function Home() {
                   aria-label="Sort places"
                 />
               </div>
+            </GridRow>
             </div>
-            <div style={{ width: 32, background: 'var(--background-main)' }} />
-          </div>
         }
         {activeTab === 'collections' &&
-          <div className="hidden md:flex justify-center" style={{ borderTop: '1px solid var(--border-main)' }} aria-label="Lists navigation">
-            <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-            <div className="flex-1 flex min-w-0 max-w-[800px]">
+          <div className="hidden md:flex justify-center" style={{ borderTop: 'var(--border-hairline-solid)' }} aria-label="Lists navigation">
+            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
               <div className="flex-1 min-w-0">
                 <Dropdown
                   value={listsFilter}
@@ -792,11 +861,10 @@ export default function Home() {
                   aria-label="Sort lists"
                 />
               </div>
-            </div>
-            <div style={{ width: 32, background: 'var(--background-main)' }} />
+            </GridRow>
           </div>
         }
-      </header>
+      
       
       {error && (
         <div className="flex justify-center" role="alert">
@@ -818,7 +886,7 @@ export default function Home() {
             <>
               {selectedRestaurant && (
                 <div className="pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`} style={{ background: 'var(--background-main)' }}>
-                  <div className="space-y-0">
+                  <PageContentStack className="space-y-0">
                     {/* Display notes if they exist */}
                     {selectedRestaurant.notes && (
                       <NoteRow
@@ -847,22 +915,11 @@ export default function Home() {
                         headerHeight={headerHeight}
                       />
                     ))}
-                  </div>
+                  </PageContentStack>
 
                   {selectedRestaurant.website && (
-                    <div
-                      style={{ borderBottom: '1px solid var(--border-main)', cursor: 'pointer', background: 'var(--background-main)' }}
-                    >
-                      <div className="flex justify-center" style={{ background: 'var(--background-main)' }}>
-                        <div
-                          style={{
-                            width: 32,
-                            borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                            background: 'var(--background-main)'
-                          }}
-                        />
-                        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background-main)' }}>
+                    <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--background-main)' }}>
                             <Button
                               variant="secondary"
                               onClick={() => window.open(selectedRestaurant.website, '_blank', 'noopener,noreferrer')}
@@ -872,120 +929,23 @@ export default function Home() {
                               Visit Restaurant Website
                             </Button>
                           </div>
-                        </div>
-                        <div
-                          style={{
-                            width: 32,
-                            borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                            background: 'var(--background-main)'
-                          }}
-                        />
-                      </div>
-                    </div>
+                    </GridRow>
                   )}
                   {/* Empty row below website link row for visual separation */}
-                  <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)' }}>
-                    <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div style={{ flex: 1, maxWidth: 800, height: 48, background: 'var(--background-main)' }} />
-                    <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                  </div>
+                  <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                    <div style={{ flex: 1, height: 48 }} />
+                  </GridRow>
                 </div>
               )}
-              <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
-                <div className="max-w-4xl mx-auto">
-                  <div style={{ borderTop: '1px solid var(--border-main)' }}>
-                    <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                      <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                      <div className="flex-1 flex min-w-0">
-                        <div className="flex-1 min-w-0">
-                          <Dropdown
-                            value={selectedRestaurant?.id || ''}
-                            onChange={(value) => {
-                              const restaurant = restaurants.find(r => r.id === value)
-                              if (restaurant) setSelectedRestaurant(restaurant)
-                            }}
-                            options={restaurants.map(restaurant => ({
-                              value: restaurant.id,
-                              label: `${restaurant.name} (<${restaurant.distance} km)`
-                            }))}
-                            leftIcon={<Store className="w-4 h-4" strokeWidth={2} />}
-                            position="top"
-                          />
-                        </div>
-                        <div className="flex-none w-12">
-                          <Dropdown
-                            value={selectedGroup}
-                            onChange={(value) => {
-                              setSelectedGroup(value)
-                              const element = categoryRefs.current[value]
-                              if (element) {
-                                element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                              }
-                            }}
-                            options={categories.map(category => ({
-                              value: category,
-                              label: category
-                            }))}
-                            leftIcon={<Layers className="w-4 h-4" strokeWidth={2} />}
-                            position="top"
-                            hideChevron={true}
-                            className="justify-center"
-                          />
-                        </div>
-                        <div className="flex-none w-12">
-                          <Dropdown
-                            value={filter}
-                            onChange={setFilter}
-                            options={[
-                              { 
-                                value: 'all', 
-                                label: 'All',
-                                leftContent: <Filter className="w-4 h-4" strokeWidth={2} />
-                              },
-                              { 
-                                value: 'vegetarian', 
-                                label: 'Vegetarian',
-                                leftContent: <Milk className="w-4 h-4" strokeWidth={2} />
-                              },
-                              { 
-                                value: 'vegan', 
-                                label: 'Vegan',
-                                leftContent: <Leaf className="w-4 h-4" strokeWidth={2} />
-                              }
-                            ]}
-                            leftIcon={
-                              filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} /> :
-                              filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} /> :
-                              <Leaf className="w-4 h-4" strokeWidth={2} />
-                            }
-                            position="top"
-                            align="right"
-                            hideChevron={true}
-                            className="justify-center"
-                          />
-                        </div>
-                      </div>
-                      <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-                    </div>
-                  </div>
-                  <div style={{ borderBottom: '1px solid var(--border-main)' }}>
-                    <div className="flex h-8">
-                      <div className="w-8" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                      <div className="flex-1" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                      <div className="w-8" style={{ background: 'var(--background-main)' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Mobile bottom bar moved to PageShell.bottomBar */}
             </>
           }
 
           {activeTab === 'restaurants' && (
-            <div className="space-y-0">
+            <PageContentStack className="space-y-0">
               {/* Search row inside content area (non-sticky) */}
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                <div className="w-full" style={{ display: 'flex', alignItems: 'center' }}>
                   <Input 
                     icon={Search}
                     placeholder="Search places..."
@@ -994,17 +954,15 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
+              </GridRow>
               {restaurants
                 .filter(r => (
                   !placesSearchQuery ||
                   r.name.toLowerCase().includes(placesSearchQuery.toLowerCase())
                 ))
                 .map((restaurant, i, arr) => (
-                <div key={restaurant.id} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                  <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
+                <GridRow key={restaurant.id} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
                     <ListItem
                       title={restaurant.name}
                       subtitle={`${restaurant.distance} km away`}
@@ -1012,94 +970,39 @@ export default function Home() {
                       endContent={<ChevronRight className="w-4 h-4 text-gray-500" />}
                     />
                   </div>
-                  <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                </div>
+                </GridRow>
               ))}
               {/* Spacer rows so last item isn't hidden behind mobile bottom filter bar */}
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-                <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-                <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
-            </div>
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                <div style={{ flex: 1, height: 48 }} />
+              </GridRow>
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                <div style={{ flex: 1, height: 48 }} />
+              </GridRow>
+            </PageContentStack>
           )}
+          {activeTab === 'collections' && null}
           {activeTab === 'collections' && (
-            <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
-              <div className="max-w-4xl mx-auto">
-                <div style={{ borderTop: '1px solid var(--border-main)' }}>
-                  <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                    <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div className="flex-1 flex min-w-0">
-                      <div className="flex-1 min-w-0">
-                        <Dropdown
-                          value={listsFilter}
-                          onChange={setListsFilter}
-                          options={[
-                            { value: 'all', label: 'All' },
-                            { value: 'followed', label: 'Followed' },
-                          ]}
-                          leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
-                          position="top"
-                        />
-                      </div>
-                      <div className="flex-none w-12">
-                        <Dropdown
-                          value={listsSort}
-                          onChange={setListsSort}
-                          options={[
-                            { value: 'popularity', label: 'Popularity' },
-                            { value: 'total', label: 'Total' },
-                          ]}
-                          leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} />}
-                          position="top"
-                          align="right"
-                          hideChevron={true}
-                          className="justify-center"
-                        />
-                      </div>
-                    </div>
-                    <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-                  </div>
-                </div>
-                <div style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div className="flex h-8">
-                    <div className="w-8" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div className="flex-1" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div className="w-8" style={{ background: 'var(--background-main)' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          {activeTab === 'collections' && (
-            <div className="space-y-0">
+            <PageContentStack className="space-y-0">
               {/* Search row inside content area (non-sticky) */}
-              <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
+              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                <div className="w-full" style={{ display: 'flex', alignItems: 'center' }}>
                   <Input 
                     icon={Search}
                     placeholder="Search lists..."
                     value={listsSearchQuery}
                     onChange={(e) => setListsSearchQuery(e.target.value)}
                     className="w-full"
-                  />
-                </div>
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              </div>
+                        />
+                      </div>
+              </GridRow>
 
               {/* Description row removed per request */}
 
               {/* Your List row (create) - hidden if user already has a list */}
               {!(currentUser && lists.some(l => l.ownerUid === currentUser.uid)) && (
-                <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                  <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
+                <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
                     <Button variant="secondary" className="w-full" onClick={() => {
                       if (!currentUser) {
                         router.push('/login?next=/lists/create')
@@ -1111,8 +1014,7 @@ export default function Home() {
                       <Plus className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
-                  <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                </div>
+                </GridRow>
               )}
 
               {/* Real lists: user's own on top, then others, with simple filtering */}
@@ -1121,9 +1023,8 @@ export default function Home() {
                 .filter(l => (listsFilter === 'followed' ? false : true))
                 .filter(l => !listsSearchQuery || (l.ownerName || 'Anonymous').toLowerCase().includes(listsSearchQuery.toLowerCase()))
                 .map((l) => (
-                <div key={l.id} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                  <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, padding: '0' }} className="min-w-0">
+                <GridRow key={l.id} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                  <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
                     <ListItem
                       title={(l.ownerName ? (l.ownerName.split(' ')[0] || l.ownerName) : 'Anonymous')}
                       subtitle={(l.followers ? `${l.followers} followers · ` : '') + (l.entries?.length ? `${l.entries.length} spots` : '')}
@@ -1131,79 +1032,18 @@ export default function Home() {
                         try { window.location.href = `/lists/${l.id}` } catch {}
                       }}
                       endContent={<ChevronRight className="w-4 h-4 text-gray-500" />}
-                    />
-                  </div>
-                  <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-                </div>
+                        />
+                      </div>
+                </GridRow>
               ))}
-            </div>
+            </PageContentStack>
           )}
-          {activeTab === 'restaurants' &&
-            <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden" style={{ background: 'var(--background-main)' }}>
-              <div className="max-w-4xl mx-auto">
-                <div style={{ borderTop: '1px solid var(--border-main)' }}>
-                  <div className="flex w-full" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                    <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div className="flex-1 flex min-w-0">
-                      <div className="flex-1 min-w-0">
-                        <Dropdown
-                          value={placesFilter}
-                          onChange={setPlacesFilter}
-                          options={[
-                            { value: 'all', label: 'From all' },
-                            { value: 'followed', label: 'From followed' },
-                            { value: 'favorites', label: 'From favorites' },
-                            { value: 'me', label: 'From me' },
-                          ]}
-                          leftIcon={<Filter className="w-4 h-4" strokeWidth={2} />}
-                          position="top"
-                        />
-                      </div>
-                      <div className="flex-none w-12">
-                        <Dropdown
-                          value={placesSort}
-                          onChange={setPlacesSort}
-                          options={[
-                            { value: 'distance', label: 'Near you' },
-                            { value: 'popular', label: 'Popular' },
-                          ]}
-                          leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} />}
-                          position="top"
-                          align="right"
-                          hideChevron={true}
-                          className="justify-center"
-                        />
-                      </div>
-                    </div>
-                    <div style={{ width: 32, height: 48, background: 'var(--background-main)' }} />
-                  </div>
-                </div>
-                <div style={{ borderBottom: '1px solid var(--border-main)' }}>
-                  <div className="flex h-8">
-                    <div className="w-8" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div className="flex-1" style={{ borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                    <div className="w-8" style={{ background: 'var(--background-main)' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          }
+          {activeTab === 'restaurants' && null}
         </div>
       ) : (
         <div className="space-y-0">
           {[...Array(24)].map((_, i) => (
-            <div key={i} className="flex justify-center">
-              <div
-                style={{
-                  width: 32,
-                  height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
-                  borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                  borderBottom: '1px solid var(--border-main)',
-                  background: 'var(--background-main)'
-                }}
-                role="presentation"
-              />
-              <div style={{ flex: 1, maxWidth: 1024, borderBottom: '1px solid var(--border-main)', background: 'var(--background-main)', display: 'flex', alignItems: 'center', height: i >= 1 && i <= 8 ? 48 : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)', position: 'relative' }}>
+            <GridRow key={i} showRails={viewMode === 'grid'} borderBottom maxWidth={1024} minHeight={i >= 1 && i <= 8 ? 48 : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)'}>
                 {i === 1 && (
                   <div className="flex flex-col w-full px-3">
                     <p style={{ color: 'var(--text-primary)', fontSize: 14, fontWeight: 500 }}>No restaurants found in your area.</p>
@@ -1222,21 +1062,10 @@ export default function Home() {
                     </Button>
                   </div>
                 )}
-              </div>
-              <div
-                style={{
-                  width: 32,
-                  height: i >= 1 && i <= 8 ? 'auto' : 'calc((100vh - 48px - env(safe-area-inset-top)) / 16)',
-                  borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none',
-                  borderBottom: '1px solid var(--border-main)',
-                  background: 'var(--background-main)'
-                }}
-                role="presentation"
-              />
-            </div>
+            </GridRow>
           ))}
         </div>
       )}
-    </div>
+    </PageShell>
   )
 } 

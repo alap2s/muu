@@ -9,6 +9,8 @@ import { MenuCategoryRow } from '../components/MenuCategoryRow'
 import { ListItem } from '../design-system/components/ListItem'
 import type { MenuItem } from '../page'
 import Link from 'next/link'
+import { GridRow } from '../design-system/components/GridRow'
+import { Header as DSHeader } from '../design-system/components/Header'
 import React, { useState } from 'react'
 import { ArrowLeft, Sun, Moon, Grid2x2, Rows3, Plus, Minus, Search, AlertCircle, CheckCircle, XCircle, Info, Settings, Edit2, Trash2, Copy, ExternalLink, Filter, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, ListFilter, SortAsc, SortDesc, Star, Heart, MapPin, User, ShoppingCart, LogOut, Eye, EyeOff, Layers, Store, UploadCloud, DownloadCloud, DollarSign, Euro, MessageSquare, Phone, Calendar, Clock, Home, FileText, Folder, Wifi, WifiOff, Zap, ZapOff, Volume2, VolumeX, Maximize, Minimize, Play, Pause, SkipBack, SkipForward, RotateCcw, RotateCw, RefreshCw, SearchSlash, List, Mail as MailIcon, Send, Leaf, Milk, Fish, Bird, Egg, Beef, Nut, SunMoon, Circle, CircleOff } from 'lucide-react'
 import { useViewMode } from '../contexts/ViewModeContext'
@@ -224,23 +226,23 @@ export default function ComponentsPage() {
     <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
       {/* Notch spacer row for safe area */}
       <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
+        <div style={{ width: 32, borderRight: viewMode === 'grid' ? 'var(--border-hairline-solid)' : 'none', background: 'var(--background-main)', height: '100%' }} />
         <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }} />
         <div style={{ width: 32, background: 'var(--background-main)' }} />
       </div>
 
       {/* Header */}
-      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, background: 'var(--background-main)', paddingRight: 0 }}>
-          <div className="flex items-center gap-2">
+      <header className="flex justify-center" style={{ position: 'sticky', top: 'env(safe-area-inset-top)', zIndex: 10, borderBottom: 'var(--border-hairline-solid)' }}>
+        <DSHeader
+          showRails={viewMode === 'grid'}
+          borderBottom={false}
+          left={
             <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
               <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             </Button>
-            <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Components</h1>
-          </div>
-        </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+          }
+          center={<h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Components</h1>}
+        />
       </header>
 
       {/* Content */}
@@ -249,15 +251,14 @@ export default function ComponentsPage() {
           const rows = [];
           // Title Row
           rows.push(
-            <div key={`title-${showcaseItem.id}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+            <GridRow key={`title-${showcaseItem.id}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
               <div style={{
                   flex: 1,
                   maxWidth: 800,
                   background: 'var(--background-main)',
                   display: 'flex',
                   flexDirection: 'column',
-                  padding: '12px 16px', // Padding for title row
+                  padding: '12px 16px',
                   minHeight: 48,
                   position: 'relative'
               }}>
@@ -266,8 +267,7 @@ export default function ComponentsPage() {
                   <p className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>{showcaseItem.description}</p>
                 </div>
               </div>
-              <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}/>
-            </div>
+            </GridRow>
           );
           currentRow++;
 
@@ -289,13 +289,11 @@ export default function ComponentsPage() {
             };
 
             rows.push(
-              <div key={`example-${showcaseItem.id}-${exampleIdx}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
+              <GridRow key={`example-${showcaseItem.id}-${exampleIdx}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
                 <div style={cellStyle}>
                   {example}
                 </div>
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}/>
-              </div>
+              </GridRow>
             );
             currentRow++;
           });
@@ -303,11 +301,9 @@ export default function ComponentsPage() {
           // Add an empty row after each component group
           if (componentIdx < componentShowcases.length - 1) { // Only add spacer if it's not the last item
             rows.push(
-              <div key={`spacer-after-${showcaseItem.id}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-                <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-                <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)', minHeight: 48 }} /> {/* Empty content cell */}
-                <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }}/>
-              </div>
+              <GridRow key={`spacer-after-${showcaseItem.id}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+                <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
+              </GridRow>
             );
             currentRow++;
           }
@@ -316,11 +312,9 @@ export default function ComponentsPage() {
         })}
         {/* Fill remaining rows if content is less than minTotalRows */}
         {Array.from({ length: Math.max(0, minTotalRows - currentRow) }).map((_, i) => (
-          <div key={`empty-row-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-            <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)', minHeight: 48 }} />
-            <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-          </div>
+          <GridRow key={`empty-row-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, maxWidth: 800, minHeight: 48 }} />
+          </GridRow>
         ))}
       </div>
     </div>

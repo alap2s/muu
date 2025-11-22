@@ -40,7 +40,8 @@ export function Button({
     style.background = selected ? 'var(--accent)' : 'var(--background-main)';
     style.color = selected ? 'var(--background-main)' : 'var(--accent)';
     iconColor = selected ? 'var(--background-main)' : 'var(--accent)';
-    style.border = '1px solid var(--border-main)';
+    // No component-level border; separators and grid rails provide structure
+    style.border = 'none';
     if (disabled) {
       // For secondary disabled, use text-secondary or a specific muted color that works on both accent and background-main
       // Current globals.css has --text-secondary which is semi-transparent, might be fine with opacity-50 too.

@@ -11,6 +11,10 @@ import { useFont } from '../context/FontContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
 import { ListItem } from '../design-system/components/ListItem'
+import { GridRow } from '../design-system/components/GridRow'
+import { Header as DSHeader } from '../design-system/components/Header'
+import { PageShell } from '../design-system/components/PageShell'
+import { PageContentStack } from '../design-system/components/PageContentStack'
 import { useAuth } from '../context/AuthContext'
 import { signOut, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth'
 import { auth } from '../../lib/firebase'
@@ -128,8 +132,7 @@ export default function SettingsPage() {
     [
       { icon: <Grid2x2 />, selected: viewMode === 'grid', onClick: () => setViewMode('grid'), label: 'Grid View' },
       { icon: <Rows3 />, selected: viewMode === 'list', onClick: () => setViewMode('list'), label: 'List View' },
-      null,
-      null,
+      null, // single flexible spacer between left and right clusters
       { icon: <span className="font-mono">JT</span>, selected: font === 'jetbrains', onClick: () => setFont('jetbrains'), label: 'JetBrains Font' },
       { icon: <span className="font-mono">AT</span>, selected: font === 'atkinson', onClick: () => setFont('atkinson'), label: 'Atkinson Font' }
     ],
@@ -152,11 +155,7 @@ export default function SettingsPage() {
     // New Row for Components link
     [
       { icon: <Puzzle className="w-5 h-5" />, selected: false, onClick: () => router.push('/components'), label: 'Components' },
-      null, // Spacer
-      null, // Spacer
-      null, // Spacer
-      null, // Spacer
-      null  // Spacer
+      null // single flexible spacer
     ]
   ];
 
@@ -170,14 +169,12 @@ export default function SettingsPage() {
   }
 
   function renderButtonRow(row: (ButtonGridItem | null)[]) {
-    return (
-      <div className="flex w-full h-full items-center">
-        {row.map((content: ButtonGridItem | null, j: number) => {
+    return row.map((content: ButtonGridItem | null, j: number) => {
           if (content === null) {
             // For null values, render a flexible spacer
             return <div key={j} className="flex-1 h-12" />;
           }
-          // Render button
+      // Render button (each as a fixed 48px square cell)
           return (
             <div key={j} className="w-12 h-12 flex items-center justify-center flex-shrink-0">
               <Button
@@ -194,15 +191,30 @@ export default function SettingsPage() {
               </Button>
             </div>
           );
-        })}
-      </div>
-    );
+    });
   }
 
   // 48px per row, fill at least 24 rows to cover most screens
   const rowCount = 24;
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--background-main)' }} role="main">
+    <PageShell
+      header={
+        <DSHeader
+          showRails={viewMode === 'grid'}
+          borderBottom={true}
+          left={
+            <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
+              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+            </Button>
+          }
+          center={
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', padding: '0 16px' }}>
+              <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Settings</h1>
+            </div>
+          }
+        />
+      }
+    >
       {/* Status announcements for screen readers */}
       <div aria-live="polite" className="sr-only">
         {themeMode === 'light' ? 'Light theme enabled' :
@@ -210,60 +222,30 @@ export default function SettingsPage() {
          themeMode === 'auto' ? 'System theme enabled' : ''}
       </div>
 
-      {/* Notch spacer row for safe area */}
-      <div className="flex justify-center" style={{ height: 'env(safe-area-inset-top)' }} role="presentation">
-        <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)', height: '100%' }} />
-        <div style={{ flex: 1, maxWidth: 800, background: 'var(--background-main)' }} />
-        <div style={{ width: 32, background: 'var(--background-main)' }} />
-      </div>
-
-      {/* Header */}
-      <header className="flex justify-center" style={{ position: 'sticky', top: 0, zIndex: 10, borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 48, background: 'var(--background-main)', paddingRight: 0 }}>
-          <div className="flex items-center gap-2">
-            <Button variant="secondary" onClick={() => router.push('/')} aria-label="Back to main menu">
-              <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-            </Button>
-            <h1 style={{ color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>Settings</h1>
-          </div>
-        </div>
-        <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none', background: 'var(--background-main)' }} />
-      </header>
-
       {/* Content */}
-      <div className="space-y-0" style={{ height: 'calc(100vh - 48px - env(safe-area-inset-top))', overflowY: 'auto' }} role="region" aria-label="Settings options">
+      <PageContentStack className="space-y-0" role="region" aria-label="Settings options">
         {/* Empty Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, height: 48 }} />
+        </GridRow>
 
         {/* Settings Rows */}
         {buttonGrid.map((row, i) => (
-          <div key={`settings-row-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-            <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', height: 48, position: 'relative' }}>
+          <GridRow key={`settings-row-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
               {renderButtonRow(row)}
-            </div>
-            <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          </div>
+          </GridRow>
         ))}
         
         {/* Empty Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, height: 48 }} />
+        </GridRow>
         
         {/* Account / Logout Row (only when logged in) */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800 }}>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1 }}>
             {currentUser ? (
-              <ListItem
+            <ListItem
                 title={currentUser.displayName || 'Account'}
                 subtitle={currentUser.email || ''}
                 onClick={async () => {
@@ -271,7 +253,7 @@ export default function SettingsPage() {
                     await signOut(auth)
                   } catch {}
                   router.push('/')
-                }}
+              }}
                 endContent={<LogOut className="w-4 h-4" />}
               />
             ) : (
@@ -288,48 +270,39 @@ export default function SettingsPage() {
               </div>
             )}
           </div>
-          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        </GridRow>
 
         {/* Empty Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-          <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-          <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, height: 48 }} />
+        </GridRow>
 
         {/* MUU Info Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
           <div style={{ flex: 1, maxWidth: 800, padding: '12px 16px' }}>
             <span className="font-mono font-bold" style={{ color: 'var(--text-primary)', fontSize: 14, lineHeight: '18px', marginBottom: 4 }}>MUU</span>
             <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0 }}>
               Crowdsourced best spots and lists in the town. It started as a standardized menu app and now doing much more.
             </p>
           </div>
-          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        </GridRow>
 
         {/* Credit Row */}
-        <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-          <div style={{ width: 32, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
           <div style={{ flex: 1, maxWidth: 800, padding: '12px 16px' }}>
             <p style={{ color: 'var(--text-secondary)', fontSize: 12 }}>
               Designed and vibe coded by <a href="https://www.linkedin.com/in/shahalap/" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>@alap</a> in Berlin, Europe.
             </p>
           </div>
-          <div style={{ width: 32, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        </div>
+        </GridRow>
 
         {/* Filler rows to push content up */}
         {[...Array(10)].map((_, i) => (
-            <div key={`filler-${i}`} className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-              <div style={{ width: 32, height: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-              <div style={{ flex: 1, maxWidth: 800, height: 48 }} />
-              <div style={{ width: 32, height: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-            </div>
+          <GridRow key={`filler-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, height: 48 }} />
+          </GridRow>
         ))}
-      </div>
-    </div>
+      </PageContentStack>
+    </PageShell>
   )
 } 
