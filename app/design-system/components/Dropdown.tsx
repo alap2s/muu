@@ -156,7 +156,9 @@ export function Dropdown({
           opacity: isOpen ? 1 : 0,
           pointerEvents: isOpen ? 'auto' : 'none',
           top: position === 'bottom' ? `${buttonRect?.bottom}px` : 'auto',
-          bottom: position === 'top' ? `${window.innerHeight - (buttonRect?.top || 0)}px` : 'auto',
+          bottom: position === 'top' && typeof window !== 'undefined' && buttonRect
+            ? `${window.innerHeight - buttonRect.top}px`
+            : 'auto',
           transition: 'opacity 0.2s',
         }}
       >
