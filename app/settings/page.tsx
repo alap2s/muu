@@ -223,7 +223,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Content */}
-      <PageContentStack className="space-y-0" role="region" aria-label="Settings options">
+      <PageContentStack className="space-y-0" role="region" aria-label="Settings options" autoPad>
         {/* Empty Row */}
         <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
           <div style={{ flex: 1, height: 48 }} />
@@ -296,12 +296,6 @@ export default function SettingsPage() {
           </div>
         </GridRow>
 
-        {/* Filler rows to push content up */}
-        {[...Array(10)].map((_, i) => (
-          <GridRow key={`filler-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
-            <div style={{ flex: 1, height: 48 }} />
-          </GridRow>
-        ))}
       </PageContentStack>
     </PageShell>
   )

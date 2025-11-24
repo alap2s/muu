@@ -47,6 +47,7 @@ export function PageShell({
           WebkitOverflowScrolling: 'touch',
           overscrollBehavior: 'contain',
         }}
+        data-pageshell-content="1"
       >
         {children}
       </div>

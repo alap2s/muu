@@ -897,8 +897,8 @@ export default function Home() {
           {activeTab === 'menus' &&
             <>
               {selectedRestaurant && (
-                <div className="pb-20" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`} style={{ background: 'var(--background-main)' }}>
-                  <PageContentStack className="space-y-0">
+                <div className="pb-0" ref={menuRef} role="region" aria-label={`${selectedRestaurant.name} menu`} style={{ background: 'var(--background-main)' }}>
+                  <PageContentStack className="space-y-0" autoPad>
                     {/* Display notes if they exist */}
                     {selectedRestaurant.notes && (
                       <NoteRow
@@ -943,10 +943,7 @@ export default function Home() {
                           </div>
                     </GridRow>
                   )}
-                  {/* Empty row below website link row for visual separation */}
-                  <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
-                    <div style={{ flex: 1, height: 48 }} />
-                  </GridRow>
+                  {/* Removed manual bottom spacer; autoPad handles fill */}
                 </div>
               )}
               {/* Mobile bottom bar moved to PageShell.bottomBar */}
@@ -954,7 +951,7 @@ export default function Home() {
           }
 
           {activeTab === 'restaurants' && (
-            <PageContentStack className="space-y-0">
+            <PageContentStack className="space-y-0" autoPad>
               {/* Search row inside content area (non-sticky) */}
               <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
                 <div className="w-full" style={{ display: 'flex', alignItems: 'center' }}>
@@ -984,18 +981,12 @@ export default function Home() {
                   </div>
                 </GridRow>
               ))}
-              {/* Spacer rows so last item isn't hidden behind mobile bottom filter bar */}
-              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
-                <div style={{ flex: 1, height: 48 }} />
-              </GridRow>
-              <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
-                <div style={{ flex: 1, height: 48 }} />
-              </GridRow>
+              {/* Removed manual bottom spacers; autoPad handles fill */}
             </PageContentStack>
           )}
           {activeTab === 'collections' && null}
           {activeTab === 'collections' && (
-            <PageContentStack className="space-y-0">
+            <PageContentStack className="space-y-0" autoPad>
               {/* Search row inside content area (non-sticky) */}
               <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
                 <div className="w-full" style={{ display: 'flex', alignItems: 'center' }}>
