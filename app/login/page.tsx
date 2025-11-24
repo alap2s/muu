@@ -1,8 +1,9 @@
 'use client'
 import { Button } from '../design-system/components/Button'
+import { Input } from '../design-system/components/Input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, LogIn } from 'lucide-react'
+import { ArrowLeft, Mail } from 'lucide-react'
 import { useViewMode } from '../contexts/ViewModeContext'
 import { useRouter } from 'next/navigation'
 import { useLoading } from '../contexts/LoadingContext'
@@ -11,7 +12,7 @@ import { Header as DSHeader } from '../design-system/components/Header'
 import { PageShell } from '../design-system/components/PageShell'
 import { PageContentStack } from '../design-system/components/PageContentStack'
 import { auth } from '../../lib/firebase'
-import { GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithRedirect, signInWithPopup, getRedirectResult, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
 import { useIsMobile } from '../hooks/useIsMobile'
 import { useAuth } from '../context/AuthContext'
 
@@ -24,6 +25,9 @@ export default function LoginPage() {
   const [redirectTo, setRedirectTo] = useState<string>('/')
   const { currentUser } = useAuth()
   const [redirectHandled, setRedirectHandled] = useState(false)
+  const [email, setEmail] = useState('')
+  const [emailLinkSending, setEmailLinkSending] = useState(false)
+  const [emailLinkSent, setEmailLinkSent] = useState(false)
   // Remove auto-retry state to avoid redirect loops
 
   useEffect(() => {
@@ -113,6 +117,50 @@ export default function LoginPage() {
     return () => { cancelled = true }
   }, [redirectTo, router])
 
+  // Handle email-link completion
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    let cancelled = false
+    const completeEmailLink = async () => {
+      try {
+        const href = window.location.href
+        if (!isSignInWithEmailLink(auth, href)) return
+        let emailForSignIn: string | null = null
+        try { emailForSignIn = window.localStorage.getItem('emailForSignIn') } catch {}
+        if (!emailForSignIn) {
+          // As a fallback, ask user for email if not available
+          emailForSignIn = window.prompt('Please confirm your email for sign-in') || ''
+        }
+        if (!emailForSignIn) return
+        const result = await signInWithEmailLink(auth, emailForSignIn, href)
+        if (cancelled) return
+        try { window.localStorage.removeItem('emailForSignIn') } catch {}
+        // Upsert basic user info
+        try {
+          const idToken = await result.user.getIdToken()
+          await fetch('/api/user/upsert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+            body: JSON.stringify({
+              uid: result.user.uid,
+              displayName: result.user.displayName,
+              email: result.user.email,
+              photoURL: result.user.photoURL,
+            }),
+          })
+        } catch {}
+        // Compute redirect
+        const target = redirectTo || '/'
+        router.replace(target)
+      } catch (e: any) {
+        console.error('Email link completion error', e)
+        setError(e?.message || 'Sign-in link is invalid or expired.')
+      }
+    }
+    void completeEmailLink()
+    return () => { cancelled = true }
+  }, [redirectTo, router])
+
   // If already signed in (e.g., returning from redirect and state is ready), go to next
   useEffect(() => {
     if (!currentUser || redirectHandled) return
@@ -175,6 +223,33 @@ export default function LoginPage() {
     }
   }
 
+  const handleEmailLinkLogin = async () => {
+    setError(null)
+    setEmailLinkSent(false)
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setError('Please enter a valid email address.')
+      return
+    }
+    try {
+      setEmailLinkSending(true)
+      const continueUrl = (typeof window !== 'undefined'
+        ? `${window.location.origin}/login`
+        : '/login')
+      const actionCodeSettings = {
+        url: process.env.NEXT_PUBLIC_EMAIL_LINK_CONTINUE_URL || continueUrl,
+        handleCodeInApp: true,
+      }
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+      try { window.localStorage.setItem('emailForSignIn', email) } catch {}
+      setEmailLinkSent(true)
+    } catch (e: any) {
+      console.error('sendSignInLinkToEmail error', e)
+      setError(e?.message || 'Failed to send sign-in link. Please try again.')
+    } finally {
+      setEmailLinkSending(false)
+    }
+  }
+
   return (
     <PageShell
       header={
@@ -213,17 +288,15 @@ export default function LoginPage() {
         
         {/* Login Button Row */}
         <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', height: 48, position: 'relative', padding: '0 0px' }}>
             <Button
               variant="secondary"
               onClick={handleGoogleLogin}
               className="w-full justify-start"
               aria-label="Login with Google"
             >
-              <LogIn className="mr-2 h-4 w-4" />
+              <img src="/google-g.svg" alt="" aria-hidden="true" />
               Login with Google
             </Button>
-          </div>
         </GridRow>
 
         {/* Error Row under the login button row */}
@@ -239,6 +312,45 @@ export default function LoginPage() {
         <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
           <div style={{ flex: 1, height: 48 }} />
         </GridRow>
+
+        {/* Email Input Row */}
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (emailLinkSent) setEmailLinkSent(false)
+              }}
+              placeholder="Enter your email"
+              aria-label="Email address"
+            />
+        </GridRow>
+
+        {/* Login with Email Button Row */}
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <Button
+              variant="secondary"
+              onClick={handleEmailLinkLogin}
+              className="w-full justify-start"
+              aria-label="Login with email"
+              disabled={emailLinkSending}
+            >
+              <Mail />
+              {emailLinkSending ? 'Sending link…' : 'Login with email'}
+            </Button>
+        </GridRow>
+
+        {/* Email link sent confirmation Row */}
+        {emailLinkSent && (
+          <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: '16px' }}>
+              <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                Magic link sent to {email}. Check Spam if it’s hiding.
+              </span>
+            </div>
+          </GridRow>
+        )}
         
         {/* Filler rows to push content up */}
         {[...Array(10)].map((_, i) => (

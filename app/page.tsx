@@ -542,11 +542,6 @@ export default function Home() {
                 <path d="M150.15 72.5V0.5H126.03V51.5771H118.62V0.5H94.5V72.5H150.15Z" fill="var(--accent)"/>
                 <path d="M210 72.5V0.5H186.335V51.5771H179.065V0.5H155.4V72.5H210Z" fill="var(--accent)"/>
               </svg>
-              <div style={{ height: descriptionHeight, overflow: 'hidden' }} ref={descriptionRef}>
-                <p style={{ color: 'var(--text-secondary)', fontSize: 12, marginTop: 2, marginBottom: 0, paddingTop: 8, paddingBottom: 8 }}>
-                  Standardized, accessible restaurant menus that remember your preferences.
-                </p>
-              </div>
             </div>
           }
           right={
@@ -565,6 +560,170 @@ export default function Home() {
                 className="w-full"
           />
         </GridRow>
+        ,
+        activeTab === 'menus' && (
+          <div
+            key="menus-filters-desktop"
+            className="hidden md:flex justify-center"
+            style={{ borderTop: 'var(--border-hairline-solid)' }}
+            aria-label="Restaurant navigation"
+          >
+            <GridRow showRails={viewMode === 'grid'}  maxWidth={800} separators>
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={selectedRestaurant?.id || ''}
+                  onChange={(value) => {
+                    const restaurant = restaurants.find(r => r.id === value)
+                    if (restaurant) setSelectedRestaurant(restaurant)
+                  }}
+                  options={restaurants.map(restaurant => ({
+                    value: restaurant.id,
+                    label: `${restaurant.name} (<${restaurant.distance} km)`
+                  }))}
+                  leftIcon={<Store className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  aria-label="Select restaurant"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={selectedGroup}
+                  onChange={(value) => {
+                    setSelectedGroup(value)
+                    const element = categoryRefs.current[value]
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }}
+                  options={categories.map(category => ({
+                    value: category,
+                    label: category
+                  }))}
+                  leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Select menu category"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={filter}
+                  onChange={setFilter}
+                  options={[
+                    { 
+                      value: 'all', 
+                      label: 'All',
+                      leftContent: <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                    },
+                    { 
+                      value: 'vegetarian', 
+                      label: 'Vegetarian',
+                      leftContent: <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                    },
+                    { 
+                      value: 'vegan', 
+                      label: 'Vegan',
+                      leftContent: <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                    }
+                  ]}
+                  leftIcon={
+                    filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
+                    filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
+                    <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
+                  }
+                  position="bottom"
+                  align="right"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Filter menu items"
+                />
+              </div>
+            </GridRow>
+          </div>
+        ),
+        activeTab === 'restaurants' && (
+          <div
+            key="places-filters-desktop"
+            className="hidden md:flex justify-center"
+            style={{ borderTop: 'var(--border-hairline-solid)' }}
+            aria-label="Places navigation"
+          >
+            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={placesFilter}
+                  onChange={setPlacesFilter}
+                  options={[
+                    { value: 'all', label: 'From all' },
+                    { value: 'favorites', label: 'From my favorites' },
+                    { value: 'followed', label: 'From followed users' },
+                    { value: 'me', label: 'From me' },
+                  ]}
+                  leftIcon={<Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  aria-label="Filter places"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={placesSort}
+                  onChange={setPlacesSort}
+                  options={[
+                    { value: 'distance', label: 'Near you' },
+                    { value: 'popular', label: 'Popular' },
+                  ]}
+                  leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  align="right"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Sort places"
+                />
+              </div>
+            </GridRow>
+          </div>
+        ),
+        activeTab === 'collections' && (
+          <div
+            key="lists-filters-desktop"
+            className="hidden md:flex justify-center"
+            style={{ borderTop: 'var(--border-hairline-solid)' }}
+            aria-label="Lists navigation"
+          >
+            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
+              <div className="flex-1 min-w-0">
+                <Dropdown
+                  value={listsFilter}
+                  onChange={setListsFilter}
+                  options={[
+                    { value: 'all', label: 'All' },
+                    { value: 'followed', label: 'Followed' },
+                  ]}
+                  leftIcon={<Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  aria-label="Filter lists"
+                />
+              </div>
+              <div className="flex-none w-12">
+                <Dropdown
+                  value={listsSort}
+                  onChange={setListsSort}
+                  options={[
+                    { value: 'popularity', label: 'Popularity' },
+                    { value: 'total', label: 'Total' },
+                  ]}
+                  leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
+                  position="bottom"
+                  align="right"
+                  hideChevron={true}
+                  className="justify-center"
+                  aria-label="Sort lists"
+                />
+              </div>
+            </GridRow>
+          </div>
+        )
       ]}
       bottomBar={
         <div className="md:hidden">
@@ -716,154 +875,7 @@ export default function Home() {
          restaurants.length > 0 ? `Found ${restaurants.length} restaurants nearby` :
          'No restaurants found nearby'}
         </div>
-        {activeTab === 'menus' &&
-          <div className="hidden md:flex justify-center" style={{ borderTop: 'var(--border-hairline-solid)' }} aria-label="Restaurant navigation">
-            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
-              <div className="flex-1 min-w-0">
-                <Dropdown
-                  value={selectedRestaurant?.id || ''}
-                  onChange={(value) => {
-                    const restaurant = restaurants.find(r => r.id === value)
-                    if (restaurant) setSelectedRestaurant(restaurant)
-                  }}
-                  options={restaurants.map(restaurant => ({
-                    value: restaurant.id,
-                    label: `${restaurant.name} (<${restaurant.distance} km)`
-                  }))}
-                  leftIcon={<Store className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                  position="bottom"
-                  aria-label="Select restaurant"
-                />
-              </div>
-              <div className="flex-none w-12">
-                <Dropdown
-                  value={selectedGroup}
-                  onChange={(value) => {
-                    setSelectedGroup(value)
-                    const element = categoryRefs.current[value]
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    }
-                  }}
-                  options={categories.map(category => ({
-                    value: category,
-                    label: category
-                  }))}
-                  leftIcon={<Layers className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                  position="bottom"
-                  hideChevron={true}
-                  className="justify-center"
-                  aria-label="Select menu category"
-                />
-              </div>
-              <div className="flex-none w-12">
-                <Dropdown
-                  value={filter}
-                  onChange={setFilter}
-                  options={[
-                    { 
-                      value: 'all', 
-                      label: 'All',
-                      leftContent: <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                    },
-                    { 
-                      value: 'vegetarian', 
-                      label: 'Vegetarian',
-                      leftContent: <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                    },
-                    { 
-                      value: 'vegan', 
-                      label: 'Vegan',
-                      leftContent: <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                    }
-                  ]}
-                  leftIcon={
-                    filter === 'all' ? <Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
-                    filter === 'vegetarian' ? <Milk className="w-4 h-4" strokeWidth={2} aria-hidden="true" /> :
-                    <Leaf className="w-4 h-4" strokeWidth={2} aria-hidden="true" />
-                  }
-                  position="bottom"
-                  align="right"
-                  hideChevron={true}
-                  className="justify-center"
-                  aria-label="Filter menu items"
-                />
-              </div>
-            </GridRow>
-          </div>
-        }
-        {activeTab === 'restaurants' &&
-          <div className="hidden md:flex justify-center" style={{ borderTop: 'var(--border-hairline-solid)' }} aria-label="Places navigation">
-            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
-              <div className="flex-1 min-w-0">
-                <Dropdown
-                  value={placesFilter}
-                  onChange={setPlacesFilter}
-                  options={[
-                    { value: 'all', label: 'From all' },
-                    { value: 'favorites', label: 'From my favorites' },
-                    { value: 'followed', label: 'From followed users' },
-                    { value: 'me', label: 'From me' },
-                  ]}
-                  leftIcon={<Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                  position="bottom"
-                  aria-label="Filter places"
-                />
-              </div>
-              <div className="flex-none w-12">
-                <Dropdown
-                  value={placesSort}
-                  onChange={setPlacesSort}
-                  options={[
-                    { value: 'distance', label: 'Near you' },
-                    { value: 'popular', label: 'Popular' },
-                  ]}
-                  leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                  position="bottom"
-                  align="right"
-                  hideChevron={true}
-                  className="justify-center"
-                  aria-label="Sort places"
-                />
-              </div>
-            </GridRow>
-            </div>
-        }
-        {activeTab === 'collections' &&
-          <div className="hidden md:flex justify-center" style={{ borderTop: 'var(--border-hairline-solid)' }} aria-label="Lists navigation">
-            <GridRow showRails={viewMode === 'grid'} borderBottom={false} maxWidth={800} separators>
-              <div className="flex-1 min-w-0">
-                <Dropdown
-                  value={listsFilter}
-                  onChange={setListsFilter}
-                  options={[
-                    { value: 'all', label: 'All' },
-                    { value: 'followed', label: 'Followed' },
-                  ]}
-                  leftIcon={<Filter className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                  position="bottom"
-                  aria-label="Filter lists"
-                />
-              </div>
-              <div className="flex-none w-12">
-                <Dropdown
-                  value={listsSort}
-                  onChange={setListsSort}
-                  options={[
-                    { value: 'popularity', label: 'Popularity' },
-                    { value: 'total', label: 'Total' },
-                  ]}
-                  leftIcon={<ArrowUpDown className="w-4 h-4" strokeWidth={2} aria-hidden="true" />}
-                  position="bottom"
-                  align="right"
-                  hideChevron={true}
-                  className="justify-center"
-                  aria-label="Sort lists"
-                />
-              </div>
-            </GridRow>
-          </div>
-        }
+        
       
       
       {error && (
