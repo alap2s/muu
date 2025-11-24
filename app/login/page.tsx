@@ -269,7 +269,7 @@ export default function LoginPage() {
         />
       }
     >
-      <PageContentStack className="space-y-0" role="region" aria-label="Login options">
+      <PageContentStack className="space-y-0" role="region" aria-label="Login options" autoPad>
         
         {/* Empty Row */}
         <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
@@ -352,12 +352,6 @@ export default function LoginPage() {
           </GridRow>
         )}
         
-        {/* Filler rows to push content up */}
-        {[...Array(10)].map((_, i) => (
-          <GridRow key={`filler-${i}`} showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
-            <div style={{ flex: 1, height: 48 }} />
-          </GridRow>
-        ))}
       </PageContentStack>
     </PageShell>
   )
