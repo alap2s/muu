@@ -73,7 +73,7 @@ export function Button({
       {loading ? (
         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
       ) : (
-        <span className={`flex items-center gap-2 ${isIconOnly ? '' : 'w-full'} text-[14px] font-mono`}>
+        <span className={`flex items-center gap-3 ${isIconOnly ? '' : 'w-full'} text-[14px] font-mono`}>
           {React.Children.map(children, child => {
             if (typeof child === 'string' || typeof child === 'number') {
               return <span className="text-[14px] font-mono text-left flex-1">{child}</span>;
