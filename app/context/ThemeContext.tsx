@@ -18,7 +18,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('dark')
+  const [themeMode, setThemeMode] = useState<ThemeMode>('auto')
   const [colorMode, setColorMode] = useState<ColorMode>('brand')
 
   // Initialize from localStorage on mount
@@ -30,14 +30,50 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (storedColor && COLOR_MODES.includes(storedColor)) setColorMode(storedColor)
   }, [])
 
-  // Apply theme mode
+  // Apply theme mode (+ follow system in auto)
   useEffect(() => {
     if (typeof window === 'undefined') return
-    document.documentElement.classList.remove('light', 'dark')
-    if (themeMode === 'light') document.documentElement.classList.add('light')
-    else if (themeMode === 'dark') document.documentElement.classList.add('dark')
-    // For auto, remove both and let system decide
+    const root = document.documentElement
+    const apply = () => {
+      root.classList.remove('light', 'dark')
+      if (themeMode === 'light') {
+        root.classList.add('light')
+      } else if (themeMode === 'dark') {
+        root.classList.add('dark')
+      } else {
+        // auto: mirror system preference
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches
+        if (prefersDark) root.classList.add('dark')
+      }
+    }
+    apply()
+
+    let mql: MediaQueryList | null = null
+    const handleChange = () => {
+      if (themeMode === 'auto') apply()
+    }
+    if (window.matchMedia) {
+      mql = window.matchMedia('(prefers-color-scheme: dark)')
+      try {
+        mql.addEventListener?.('change', handleChange)
+      } catch {
+        // Safari support
+        // @ts-ignore
+        mql.addListener?.(handleChange)
+      }
+    }
+
     localStorage.setItem('themeMode', themeMode)
+    return () => {
+      if (mql) {
+        try {
+          mql.removeEventListener?.('change', handleChange)
+        } catch {
+          // @ts-ignore
+          mql.removeListener?.(handleChange)
+        }
+      }
+    }
   }, [themeMode])
 
   // Apply theme-color meta tag for PWA notch area
