@@ -1014,7 +1014,7 @@ export default function Home() {
                       }
                     }}>
                       Create your list
-                      <Plus className="w-4 h-4 ml-2" />
+                      <ChevronRight className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
                 </GridRow>
