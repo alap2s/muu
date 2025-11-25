@@ -2,7 +2,7 @@
 import { Button } from '../design-system/components/Button'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle, LogOut, LogIn } from 'lucide-react'
+import { ArrowLeft, BellOff, BellRing, Sun, SunMoon, Moon, Grid2x2, Rows3, Mail, Share, Euro, DollarSign, CircleOff, Circle, Printer, BookPlus, Puzzle, LogOut, ChevronRight } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { ViewModeToggle } from '../components/ViewModeToggle'
 import { useViewMode } from '../contexts/ViewModeContext'
@@ -16,7 +16,7 @@ import { Header as DSHeader } from '../design-system/components/Header'
 import { PageShell } from '../design-system/components/PageShell'
 import { PageContentStack } from '../design-system/components/PageContentStack'
 import { useAuth } from '../context/AuthContext'
-import { signOut, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from 'firebase/auth'
+import { signOut } from 'firebase/auth'
 import { auth } from '../../lib/firebase'
 
 // Define theme and color mode options
@@ -64,34 +64,7 @@ export default function SettingsPage() {
     void doUpsert()
   }, [currentUser, upsertedUid])
 
-  const handleGoogleLogin = async () => {
-    const provider = new GoogleAuthProvider()
-    try {
-      try { sessionStorage.setItem('loginAttempted', '1') } catch {}
-      // popup-first everywhere, fallback to redirect
-      const cred = await signInWithPopup(auth, provider)
-      try {
-        const idToken = await cred.user.getIdToken()
-        await fetch('/api/user/upsert', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({
-            uid: cred.user.uid,
-            displayName: cred.user.displayName,
-            email: cred.user.email,
-            photoURL: cred.user.photoURL,
-          }),
-        })
-        setUpsertedUid(cred.user.uid)
-      } catch {}
-    } catch (e) {
-      try {
-        await signInWithRedirect(auth, provider)
-      } catch {
-        // ignore for settings row
-      }
-    }
-  }
+  // Login is handled on the dedicated /login page now
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -260,12 +233,12 @@ export default function SettingsPage() {
               <div className="flex items-center" style={{ height: 48 }}>
                 <Button
                   variant="secondary"
-                  onClick={handleGoogleLogin}
+                  onClick={() => router.push('/login')}
                   className="w-full justify-start"
-                  aria-label="Login with Google"
+                  aria-label="Login for more"
                 >
-                  <LogIn className="mr-2 h-4 w-4" />
-                  Login with Google
+                  Login for more
+                  <ChevronRight />
                 </Button>
               </div>
             )}
