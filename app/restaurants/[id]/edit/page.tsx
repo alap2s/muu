@@ -923,24 +923,20 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
     required?: boolean
   ) => {
     return (
-      <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
-            <div className="flex flex-col w-full">
-              <Input
-                name={fieldName}
-                value={value}
-                onChange={handleFormChange}
-                onBlur={required ? ((e) => handleBlur(fieldName, e.target.value)) : undefined}
-                className="w-full text-sm"
-                icon={IconComponent}
-                placeholder={required ? `${label} *` : label}
-                error={required ? formErrors[fieldName] : false}
-              />
-            </div>
+      <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+        <div className="flex flex-col w-full">
+          <Input
+            name={fieldName}
+            value={value}
+            onChange={handleFormChange}
+            onBlur={required ? ((e) => handleBlur(fieldName, e.target.value)) : undefined}
+            className="w-full text-sm"
+            icon={IconComponent}
+            placeholder={required ? `${label} *` : label}
+            error={required ? formErrors[fieldName] : false}
+          />
         </div>
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </div>
+      </GridRow>
     )
   }
   
@@ -979,188 +975,178 @@ export default function RestaurantEditPage({ params }: { params: { id: string } 
 
   const allContent = [
     (
-      <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
-          <div className="flex flex-col w-full">
-            <Input
-              name="name"
-              value={formData.name}
-              onFocus={() => {
-                if (!sessionToken) setSessionToken(crypto.randomUUID())
-                setSuggestOpen(true)
-              }}
-              onChange={(e) => {
-                const v = e.target.value
-                setFormData(prev => prev ? ({ ...prev, name: v }) : null)
-                if (formErrors['name']) handleBlur('name', v)
+      <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} centerStyle={{ position: 'relative', overflow: 'visible' }}>
+        <div className="flex flex-col w-full">
+          <Input
+            name="name"
+            value={formData.name}
+            onFocus={() => {
+              if (!sessionToken) setSessionToken(crypto.randomUUID())
+              setSuggestOpen(true)
+            }}
+            onChange={(e) => {
+              const v = e.target.value
+              setFormData(prev => prev ? ({ ...prev, name: v }) : null)
+              if (formErrors['name']) handleBlur('name', v)
+              setNameResolveError(null)
+              if (nameTypingTimer.current) clearTimeout(nameTypingTimer.current)
+              nameTypingTimer.current = setTimeout(async () => {
+                if (v.trim().length < 3) { setNameSuggestions([]); return }
+                try {
+                  const res = await fetch('/api/places/suggest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input: v, lat: userLocation?.lat, lng: userLocation?.lng, sessionToken })
+                  })
+                  const data = await res.json()
+                  setNameSuggestions(data.predictions || [])
+                } catch {
+                  setNameSuggestions([])
+                }
+              }, 300)
+            }}
+            onBlur={async (e) => {
+              // validate field
+              handleBlur('name', e.target.value)
+              setTimeout(() => setSuggestOpen(false), 150)
+              if (!formData.address && formData.name) {
+                setResolvingName(true)
                 setNameResolveError(null)
-                if (nameTypingTimer.current) clearTimeout(nameTypingTimer.current)
-                nameTypingTimer.current = setTimeout(async () => {
-                  if (v.trim().length < 3) { setNameSuggestions([]); return }
-                  try {
-                    const res = await fetch('/api/places/suggest', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ input: v, lat: userLocation?.lat, lng: userLocation?.lng, sessionToken })
-                    })
+                try {
+                  const res = await fetch('/api/places/resolve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: formData.name, lat: userLocation?.lat, lng: userLocation?.lng })
+                  })
+                  if (!res.ok) {
+                    let err: any = null
+                    try { err = await res.json() } catch {}
+                    setNameResolveError(err?.error || 'No place found')
+                  } else {
                     const data = await res.json()
-                    setNameSuggestions(data.predictions || [])
-                  } catch {
-                    setNameSuggestions([])
+                    setFormData(prev => prev ? ({
+                      ...prev,
+                      name: data?.name || prev.name,
+                      address: data?.formattedAddress || prev.address,
+                      placeId: data?.placeId || prev.placeId,
+                      coordinates: (data?.lat !== undefined && data?.lng !== undefined)
+                        ? { lat: data.lat, lng: data.lng }
+                        : prev.coordinates
+                    }) : prev)
                   }
-                }, 300)
-              }}
-              onBlur={async (e) => {
-                // validate field
-                handleBlur('name', e.target.value)
-                setTimeout(() => setSuggestOpen(false), 150)
-                if (!formData.address && formData.name) {
+                } catch {
+                  setNameResolveError('Failed to resolve place')
+                } finally {
+                  setResolvingName(false)
+                }
+              }
+            }}
+            className="w-full text-sm"
+            icon={resolvingName ? Loader2 : Store}
+            iconClassName={resolvingName ? 'animate-spin' : ''}
+            placeholder="Name *"
+            error={formErrors['name']}
+          />
+          {nameResolveError && (
+            <p className="text-red-500 text-xs mt-1 px-3">{nameResolveError}</p>
+          )}
+        </div>
+        {suggestOpen && (nameSuggestions?.length ?? 0) > 0 && (
+          <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 9998, background: 'var(--background-secondary)', border: '1px solid var(--accent)' }}>
+            {nameSuggestions.map((s, i) => (
+              <div
+                key={s.placeId}
+                style={{ padding: '12px 16px', borderBottom: i === nameSuggestions.length - 1 ? 'none' : '1px solid var(--border-main)', cursor: 'pointer' }}
+                onMouseDown={async (e) => {
+                  e.preventDefault()
+                  setSuggestOpen(false)
+                  try { (document.activeElement as HTMLElement | null)?.blur() } catch {}
                   setResolvingName(true)
-                  setNameResolveError(null)
-                    try {
-                      const res = await fetch('/api/places/resolve', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ name: formData.name, lat: userLocation?.lat, lng: userLocation?.lng })
-                    })
-                    if (!res.ok) {
-                      let err: any = null
-                      try { err = await res.json() } catch {}
-                      setNameResolveError(err?.error || 'No place found')
-                    } else {
-                      const data = await res.json()
-                      setFormData(prev => prev ? ({
-                        ...prev,
-                        name: data?.name || prev.name,
-                        address: data?.formattedAddress || prev.address,
-                        placeId: data?.placeId || prev.placeId,
-                        coordinates: (data?.lat !== undefined && data?.lng !== undefined)
-                          ? { lat: data.lat, lng: data.lng }
-                          : prev.coordinates
-                      }) : prev)
-                    }
+                  setFormData(prev => prev ? ({ ...prev, name: s.primaryText }) : null)
+                  try {
+                    const resp = await fetch('/api/places/resolve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ placeId: s.placeId }) })
+                    const data = await resp.json()
+                    setFormData(prev => prev ? ({
+                      ...prev,
+                      name: data?.name || s.primaryText,
+                      address: data?.formattedAddress || prev.address,
+                      placeId: data?.placeId || prev.placeId,
+                      coordinates: (data?.lat !== undefined && data?.lng !== undefined)
+                        ? { lat: data.lat, lng: data.lng }
+                        : prev.coordinates
+                    }) : prev)
                   } catch {
-                    setNameResolveError('Failed to resolve place')
+                    // ignore
                   } finally {
                     setResolvingName(false)
                   }
-                }
-              }}
-              className="w-full text-sm"
-              icon={resolvingName ? Loader2 : Store}
-              iconClassName={resolvingName ? 'animate-spin' : ''}
-              placeholder="Name *"
-              error={formErrors['name']}
-            />
-            {nameResolveError && (
-              <p className="text-red-500 text-xs mt-1 px-3">{nameResolveError}</p>
-            )}
-          </div>
-          {suggestOpen && (nameSuggestions?.length ?? 0) > 0 && (
-            <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 9998, background: 'var(--background-secondary)', border: '1px solid var(--accent)' }}>
-              {nameSuggestions.map((s, i) => (
-                <div
-                  key={s.placeId}
-                  style={{ padding: '12px 16px', borderBottom: i === nameSuggestions.length - 1 ? 'none' : '1px solid var(--border-main)', cursor: 'pointer' }}
-                  onMouseDown={async (e) => {
-                    e.preventDefault()
-                    setSuggestOpen(false)
-                    try { (document.activeElement as HTMLElement | null)?.blur() } catch {}
-                    setResolvingName(true)
-                    setFormData(prev => prev ? ({ ...prev, name: s.primaryText }) : null)
-                    try {
-                    const resp = await fetch('/api/places/resolve', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ placeId: s.placeId }) })
-                      const data = await resp.json()
-                      setFormData(prev => prev ? ({
-                        ...prev,
-                        name: data?.name || s.primaryText,
-                        address: data?.formattedAddress || prev.address,
-                      placeId: data?.placeId || prev.placeId,
-                        coordinates: (data?.lat !== undefined && data?.lng !== undefined)
-                          ? { lat: data.lat, lng: data.lng }
-                          : prev.coordinates
-                      }) : prev)
-                    } catch {
-                      // ignore
-                    } finally {
-                      setResolvingName(false)
-                    }
-                  }}
-                >
-                  <div style={{ fontSize: 14, color: 'var(--accent)' }}>{s.primaryText}</div>
-                  {s.secondaryText && <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{s.secondaryText}</div>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </div>
-    ),
-    <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48 }}>
-            <div className="flex flex-col w-full">
-              <Input
-                name="address"
-                value={formData.address}
-                onChange={handleFormChange}
-                onBlur={(e) => {
-                  handleAddressBlur();
-                  handleBlur(e.target.name, e.target.value);
                 }}
-                className="w-full text-sm"
-                icon={isPending ? Loader2 : MapPin}
-                iconClassName={isPending ? 'animate-spin' : ''}
-                placeholder="Address *"
-                error={!!addressError || formErrors.address}
-                warning={!!addressWarning}
-                disabled={isPending}
-              />
-              {addressError && (
-                <p className="text-red-500 text-xs mt-1 px-3">{addressError}</p>
-              )}
-              {formErrors.address && !addressError && (
-                <p className="text-red-500 text-xs mt-1 px-3">Address is required.</p>
-              )}
-              {addressWarning && !addressError && !formErrors.address && (
-                <p className="text-yellow-600 dark:text-yellow-400 text-xs mt-1 px-3">{addressWarning}</p>
-              )}
-            </div>
-        </div>
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-      </div>,
+              >
+                <div style={{ fontSize: 14, color: 'var(--accent)' }}>{s.primaryText}</div>
+                {s.secondaryText && <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>{s.secondaryText}</div>}
+              </div>
+            ))}
+          </div>
+        )}
+      </GridRow>
+    ),
+    <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+      <div className="flex flex-col w-full">
+        <Input
+          name="address"
+          value={formData.address}
+          onChange={handleFormChange}
+          onBlur={(e) => {
+            handleAddressBlur();
+            handleBlur(e.target.name, e.target.value);
+          }}
+          className="w-full text-sm"
+          icon={isPending ? Loader2 : MapPin}
+          iconClassName={isPending ? 'animate-spin' : ''}
+          placeholder="Address *"
+          error={!!addressError || formErrors.address}
+          warning={!!addressWarning}
+          disabled={isPending}
+        />
+        {addressError && (
+          <p className="text-red-500 text-xs mt-1 px-3">{addressError}</p>
+        )}
+        {formErrors.address && !addressError && (
+          <p className="text-red-500 text-xs mt-1 px-3">Address is required.</p>
+        )}
+        {addressWarning && !addressError && !formErrors.address && (
+          <p className="text-yellow-600 dark:text-yellow-400 text-xs mt-1 px-3">{addressWarning}</p>
+        )}
+      </div>
+    </GridRow>,
     renderDetailRow('Website', formData.website, 'website', Globe),
     renderDetailRow('Notes', formData.notes, 'notes', NotepadText),
-    <div className="flex justify-center" style={{ borderBottom: '1px solid var(--border-main)' }}>
-        <div style={{ width: 32, minHeight: 48, borderRight: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-        <div style={{ flex: 1, maxWidth: 800, display: 'flex', alignItems: 'center', minHeight: 48, justifyContent: 'space-between', paddingLeft: 12 }}>
-          <div className="flex items-center gap-2">
-            {isHidden ? <EyeOff className="w-4 h-4 text-gray-500" /> : <Eye className="w-4 h-4" style={{ color: 'var(--accent)'}} />}
-            <span className="text-sm font-mono" style={{ color: 'var(--text-primary)'}}>Visibility</span>
-          </div>
-          <div className="flex items-center">
-            <Button
-              variant={!isHidden ? 'primary' : 'secondary'}
-              onClick={() => setIsHidden(false)}
-              aria-pressed={!isHidden}
-              className="rounded-r-none"
-            >
-              Show
-            </Button>
-            <Button
-              variant={isHidden ? 'primary' : 'secondary'}
-              onClick={() => setIsHidden(true)}
-              aria-pressed={isHidden}
-              className="rounded-l-none"
-            >
-              Hide
-            </Button>
-          </div>
+    <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', paddingLeft: 12 }}>
+        <div className="flex items-center gap-2">
+          {isHidden ? <EyeOff className="w-4 h-4 text-gray-500" /> : <Eye className="w-4 h-4" style={{ color: 'var(--accent)'}} />}
+          <span className="text-sm font-mono" style={{ color: 'var(--text-primary)'}}>Visibility</span>
         </div>
-        <div style={{ width: 32, minHeight: 48, borderLeft: viewMode === 'grid' ? '1px solid var(--border-main)' : 'none' }} />
-    </div>,
+        <div className="flex items-center">
+          <Button
+            variant={!isHidden ? 'primary' : 'secondary'}
+            onClick={() => setIsHidden(false)}
+            aria-pressed={!isHidden}
+            className="rounded-r-none"
+          >
+            Show
+          </Button>
+          <Button
+            variant={isHidden ? 'primary' : 'secondary'}
+            onClick={() => setIsHidden(true)}
+            aria-pressed={isHidden}
+            className="rounded-l-none"
+          >
+            Hide
+          </Button>
+        </div>
+      </div>
+    </GridRow>,
     <GridRow key="spacer-above-tabs" showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
       <div style={{ flex: 1, minHeight: 48 }} />
     </GridRow>,
