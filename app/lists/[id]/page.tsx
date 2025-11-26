@@ -153,7 +153,7 @@ export default function ListDetailsPage() {
         />
       }
     >
-      <PageContentStack className="space-y-0">
+      <PageContentStack className="space-y-0" autoPad>
         {/* Meta row: show owner full name with subtitle "List by" */}
         <GridRow showRails={true} borderBottom maxWidth={800}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">

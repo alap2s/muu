@@ -117,7 +117,25 @@ export default function CreateListPage() {
     setEntries(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   }
 
-  const addEntry = () => setEntries(prev => prev.length >= 10 ? prev : [...prev, { id: crypto.randomUUID(), name: '', mapsUrl: '', address: '', cuisine: '' }])
+  const addEntry = () => {
+    setEntries(prev => {
+      if (prev.length >= 10) return prev
+      const newId = crypto.randomUUID()
+      const next = [...prev, { id: newId, name: '', mapsUrl: '', address: '', note: '' }]
+      // Defer focus/scroll to next tick so DOM has rendered
+      setTimeout(() => {
+        try {
+          const input = document.getElementById(`name-input-${newId}`) as HTMLInputElement | null
+          if (input) {
+            input.focus()
+            // Scroll the input into view, centering it to avoid being at the very bottom
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        } catch {}
+      }, 50)
+      return next
+    })
+  }
   const removeEntry = (id: string) => setEntries(prev => prev.filter(e => e.id !== id))
 
   return (
@@ -174,11 +192,11 @@ export default function CreateListPage() {
         />
       }
     >
-      <PageContentStack className="space-y-0">
+      <PageContentStack className="space-y-0" autoPad>
         {/* Title row */}
         <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 48, padding: 0 }} className="min-w-0">
-            <ListItem title="" subtitle="Create a list of your top 10 spots" />
+            <ListItem title="Your top 10" subtitle="Create a list of your top recommendations" />
           </div>
         </GridRow>
 
@@ -186,9 +204,10 @@ export default function CreateListPage() {
         {entries.map((entry, idx) => (
           <React.Fragment key={entry.id}>
             {/* Name row */}
-            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+            <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} centerStyle={{ overflow: 'visible' }}>
               <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', minHeight: 48, position: 'relative' }}>
                 <Input
+                  id={`name-input-${entry.id}`}
                   icon={createNumberIcon(Math.min(idx + 1, 10))}
                   placeholder={`Restaurant name${idx === 0 ? '' : ''}`}
                   value={entry.name}
@@ -383,6 +402,10 @@ export default function CreateListPage() {
             </div>
           </GridRow>
         )}
+        {/* Empty spacer row below add button for breathing room when list grows */}
+        <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800}>
+          <div style={{ flex: 1, minHeight: 48 }} />
+        </GridRow>
       </PageContentStack>
     </PageShell>
   )
