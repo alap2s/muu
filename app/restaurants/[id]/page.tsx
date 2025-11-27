@@ -17,6 +17,7 @@ import { NoteRow } from '../../components/NoteRow'
 import { Header as DSHeader } from '../../design-system/components/Header'
 import { PageShell } from '../../design-system/components/PageShell'
 import { PageContentStack } from '../../design-system/components/PageContentStack'
+import { HDivider } from '../../design-system/components/HDivider'
 
 // This is the shape of the data that getDietaryIcons expects
 interface MenuItem {
@@ -314,6 +315,7 @@ export default function RestaurantDetailPage({ params }: { params: { id: string 
                 />
               </div>
             </GridRow>
+            <HDivider />
             <GridRow showRails={viewMode === 'grid'} borderBottom maxWidth={800} minHeight={32}>
               <div style={{ flex: 1, height: 32 }} />
             </GridRow>
